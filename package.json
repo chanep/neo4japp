@@ -1,5 +1,5 @@
 {
-  "name": "patagonia-site",
+  "name": "skillsearch-page",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -9,7 +9,16 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "jquery": "^2.2.3",
-    "slick": "^1.12.2"
+    "grunt": "^1.0.1",
+    "grunt-browserify": "^5.0.0",
+    "grunt-cli": "^1.2.0",
+    "grunt-concurrent": "^2.3.0",
+    "grunt-contrib-clean": "^1.0.0",
+    "grunt-contrib-compass": "^1.1.1",
+    "grunt-contrib-connect": "^1.0.2",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-sass": "^1.0.0",
+    "grunt-contrib-watch": "^1.0.0",
+    "jquery": "^2.2.3"
   }
 }
