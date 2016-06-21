@@ -1,0 +1,11 @@
+@import 'variables';
+@import 'mixins';
+@import 'icomoon';
+
+*:focus {
+  outline: 0;
+}
+
+body {
+  margin: 0;
+}

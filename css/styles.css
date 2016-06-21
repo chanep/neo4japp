@@ -1,0 +1,450 @@
+@font-face {
+  font-family: 'AmsiProNarw-Black';
+  src: url("../fonts/AmsiProNarw-Black.eot");
+  /* IE9 Compat Modes */
+  src: url("../fonts/AmsiProNarw-Black.eot?#iefix") format("embedded-opentype"), url("../fonts/AmsiProNarw-Black.woff") format("woff"), url("../fonts/AmsiProNarw-Black.ttf") format("truetype"), url("../fonts/AmsiProNarw-Black.svg#interface_triallight") format("svg");
+  font-weight: normal;
+  font-style: normal; }
+@font-face {
+  font-family: 'AmsiProNarw-Bold';
+  src: url("../fonts/AmsiProNarw-Bold.eot");
+  /* IE9 Compat Modes */
+  src: url("../fonts/AmsiProNarw-Bold.eot?#iefix") format("embedded-opentype"), url("../fonts/AmsiProNarw-Bold.woff") format("woff"), url("../fonts/AmsiProNarw-Bold.ttf") format("truetype"), url("../fonts/AmsiProNarw-Bold.svg#interface_triallight") format("svg");
+  font-weight: normal;
+  font-style: normal; }
+@font-face {
+  font-family: 'icomoon';
+  src: url("../fonts/icomoon.eot?6rszrx");
+  src: url("../fonts/icomoon.eot?6rszrx#iefix") format("embedded-opentype"), url("../fonts/icomoon.ttf?6rszrx") format("truetype"), url("../fonts/icomoon.woff?6rszrx") format("woff"), url("../fonts/icomoon.svg?6rszrx#icomoon") format("svg");
+  font-weight: normal;
+  font-style: normal; }
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale; }
+
+.icon-arrow-down:before {
+  content: "\e900"; }
+
+*:focus {
+  outline: 0; }
+
+body {
+  margin: 0; }
+
+section {
+  margin: 0;
+  display: block;
+  padding: 38px 24px 33px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  text-align: center; }
+  section .common-cta-btn {
+    display: block;
+    font-family: "AmsiProNarw-Bold", "Helvetica", Arial, sans-serif;
+    font-size: 13px;
+    color: #000;
+    text-align: center;
+    text-transform: uppercase;
+    background-color: rgba(255, 255, 255, 0.7);
+    margin: 0 auto;
+    padding: 16px 5px;
+    max-width: 280px;
+    -webkit-transition: all 0.1s ease-in-out;
+    -moz-transition: all 0.1s ease-in-out;
+    -ms-transition: all 0.1s ease-in-out;
+    -o-transition: all 0.1s ease-in-out;
+    transition: all 0.1s ease-in-out; }
+    section .common-cta-btn:hover {
+      background-color: #fff; }
+  section a {
+    text-decoration: none; }
+  section .is-tablet {
+    display: none; }
+  section .main-info {
+    display: none; }
+  section li {
+    list-style-type: none; }
+  section h1, section h2 {
+    font-family: "AmsiProNarw-Black", "Arial", serif;
+    font-size: 37px;
+    font-weight: 200;
+    color: #fff;
+    line-height: 36px;
+    text-transform: uppercase;
+    margin: 0; }
+  section h1.section-title {
+    display: inline-block;
+    border-bottom: 1px solid #fff;
+    font-size: 24px;
+    margin-bottom: 26px; }
+  section h2 {
+    opacity: 0.8; }
+  section p {
+    font-family: "AmsiProNarw-Bold", "Helvetica", Arial, sans-serif;
+    font-size: 13px;
+    font-weight: 200;
+    color: #fff;
+    margin: 0;
+    opacity: 0.8; }
+  section .patagonia-logo-mobile {
+    display: block;
+    margin: 0 auto 123px;
+    width: 150px; }
+    section .patagonia-logo-mobile img {
+      display: block;
+      width: 100%; }
+
+section.age-confirmation {
+  display: none;
+  background: url("../img/mobile/edad-bg.jpg") no-repeat;
+  background-size: cover;
+  height: 569px;
+  position: relative; }
+  section.age-confirmation .big-logo {
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    width: 280px; }
+  section.age-confirmation .common-cta-btn {
+    position: absolute;
+    left: 50%;
+    -webkit-transform: translate(-50%, 0);
+    -moz-transform: translate(-50%, 0);
+    -ms-transform: translate(-50%, 0);
+    transform: translate(-50%, 0);
+    bottom: 33px;
+    width: 200px; }
+
+section.loading {
+  display: none;
+  background: url("../img/mobile/loading-bg.jpg") no-repeat;
+  background-size: cover;
+  height: 569px;
+  position: relative; }
+  section.loading .big-logo {
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    width: 280px; }
+
+section.home {
+  display: block;
+  background: url("../img/mobile/home-bg.jpg") no-repeat;
+  background-size: cover;
+  padding: 38px 24px 12px; }
+  section.home h1, section.home p {
+    color: #fff; }
+  section.home h1 {
+    margin: 0 auto 12px;
+    max-width: 276px; }
+  section.home p {
+    max-width: 229px;
+    margin: 0 auto; }
+  section.home .common-cta-btn {
+    margin: 29px auto 0; }
+  section.home .arrow-down {
+    display: inline-block;
+    font-weight: 700;
+    font-size: 25px;
+    color: #fff;
+    margin-top: 5px;
+    vertical-align: top;
+    width: 34px;
+    height: 19px; }
+  section.home video {
+    display: none; }
+
+section.microcerveceria {
+  background: url("../img/mobile/microcerveceria-bg.jpg") no-repeat;
+  background-size: cover; }
+  section.microcerveceria h2 {
+    max-width: 240px; }
+
+section.bar {
+  background: url("../img/mobile/bar-bg.jpg") no-repeat;
+  background-size: cover; }
+  section.bar h2 {
+    max-width: 292px; }
+
+section.lugar {
+  background: url("../img/mobile/lugar-bg.jpg") no-repeat;
+  background-size: cover; }
+  section.lugar h2 {
+    max-width: 255px; }
+
+section.microcerveceria h2, section.bar h2, section.lugar h2 {
+  margin: 0 auto 15px; }
+section.microcerveceria p, section.bar p, section.lugar p {
+  max-width: 280px;
+  margin: 0 auto;
+  line-height: 16px;
+  opacity: 0.9; }
+section.microcerveceria .common-cta-btn, section.bar .common-cta-btn, section.lugar .common-cta-btn {
+  margin: 29px auto 0; }
+section.microcerveceria .main-menu, section.bar .main-menu, section.lugar .main-menu {
+  display: none; }
+
+.sections-wrapper {
+  position: relative; }
+  .sections-wrapper .slick-dots {
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    top: 163px;
+    left: 50%;
+    -webkit-transform: translate(-50%, 0);
+    -moz-transform: translate(-50%, 0);
+    -ms-transform: translate(-50%, 0);
+    transform: translate(-50%, 0);
+    text-align: center;
+    z-index: 2; }
+    .sections-wrapper .slick-dots li {
+      list-style-type: none;
+      display: inline-block;
+      margin-right: 6px; }
+      .sections-wrapper .slick-dots li:last-child {
+        margin-right: 0; }
+      .sections-wrapper .slick-dots li.slick-active button {
+        background: #fff; }
+      .sections-wrapper .slick-dots li button {
+        background-color: rgba(255, 255, 255, 0.4);
+        border: 0;
+        font-size: 0;
+        cursor: pointer;
+        border-top-right-radius: 200px;
+        border-top-left-radius: 200px;
+        border-bottom-right-radius: 200px;
+        border-bottom-left-radius: 200px;
+        -webkit-top-right-radius: 200px;
+        -webkit-top-left-radius: 200px;
+        -webkit-bottom-right-radius: 200px;
+        -webkit-bottom-left-radius: 200px;
+        -moz-border-radius-topright: 200px;
+        -moz-border-radius-topleft: 200px;
+        -moz-border-radius-bottomright: 200px;
+        -moz-border-radius-bottomleft: 200px;
+        -ms-top-right-radius: 200px;
+        -ms-top-left-radius: 200px;
+        -ms-bottom-right-radius: 200px;
+        -ms-bottom-left-radius: 200px;
+        -o-top-right-radius: 200px;
+        -o-top-left-radius: 200px;
+        -o-bottom-right-radius: 200px;
+        -o-bottom-left-radius: 200px;
+        width: 12px;
+        height: 12px; }
+
+@media all and (min-width: 768px) {
+  section .is-tablet {
+    display: inline-block; }
+  section .patagonia-logo-mobile {
+    width: 200px; }
+  section .common-cta-btn {
+    background: transparent;
+    border: 2px solid #fff;
+    color: #fff;
+    -webkit-transition: all 0.1s ease-in-out;
+    -moz-transition: all 0.1s ease-in-out;
+    -ms-transition: all 0.1s ease-in-out;
+    -o-transition: all 0.1s ease-in-out;
+    transition: all 0.1s ease-in-out; }
+    section .common-cta-btn:hover {
+      background: #fff;
+      color: #000; }
+  section h1 {
+    font-size: 63px;
+    line-height: 60px; }
+  section .main-info {
+    display: block;
+    font-family: "AmsiProNarw-Bold", "Helvetica", Arial, sans-serif;
+    font-size: 12px;
+    font-weight: 200;
+    color: #fff;
+    text-transform: uppercase;
+    margin-top: 100px; }
+  section.home {
+    background: url("../img/home-bg.jpg") no-repeat;
+    background-size: cover; }
+    section.home h1 {
+      max-width: 843px; }
+    section.home p {
+      font-size: 18px;
+      line-height: 20px;
+      max-width: 563px; }
+    section.home .common-cta-btn {
+      margin: 120px auto 0; }
+    section.home .arrow-down {
+      font-size: 27px; }
+  section.microcerveceria h1, section.bar h1, section.lugar h1 {
+    display: none; }
+  section.microcerveceria h2, section.bar h2, section.lugar h2 {
+    font-size: 50px;
+    line-height: 60px;
+    max-width: 757px;
+    margin-top: 150px; }
+  section.microcerveceria p, section.bar p, section.lugar p {
+    font-size: 18px;
+    line-height: 20px;
+    max-width: 640px; }
+  section.microcerveceria .common-cta-btn, section.bar .common-cta-btn, section.lugar .common-cta-btn {
+    margin: 29px auto 60px;
+    max-width: 200px; }
+  section.microcerveceria .header-wrapper, section.bar .header-wrapper, section.lugar .header-wrapper {
+    margin: 0 auto;
+    width: 100%;
+    text-align: center; }
+    section.microcerveceria .header-wrapper .patagonia-logo-mobile, section.bar .header-wrapper .patagonia-logo-mobile, section.lugar .header-wrapper .patagonia-logo-mobile {
+      display: inline-block;
+      margin: 0; }
+  section.microcerveceria .main-menu, section.bar .main-menu, section.lugar .main-menu {
+    display: block;
+    margin: 0;
+    padding: 0; }
+    section.microcerveceria .main-menu li, section.bar .main-menu li, section.lugar .main-menu li {
+      display: inline-block;
+      font-family: "AmsiProNarw-Bold", "Helvetica", Arial, sans-serif;
+      font-size: 14px;
+      color: #fff;
+      text-transform: uppercase;
+      margin-right: 30px; }
+      section.microcerveceria .main-menu li:last-child, section.bar .main-menu li:last-child, section.lugar .main-menu li:last-child {
+        margin-right: 0; }
+      section.microcerveceria .main-menu li a, section.bar .main-menu li a, section.lugar .main-menu li a {
+        display: inline-block;
+        cursor: pointer; }
+        section.microcerveceria .main-menu li a.active, section.bar .main-menu li a.active, section.lugar .main-menu li a.active {
+          border-bottom: 1px solid #fff;
+          padding-bottom: 6px; }
+  section.microcerveceria {
+    background: url("../img/microcerveceria-bg.jpg") no-repeat;
+    background-size: cover; }
+    section.microcerveceria h2 {
+      max-width: 600px; }
+    section.microcerveceria p {
+      max-width: 900px; }
+  section.bar {
+    background: url("../img/bar-bg.jpg") no-repeat;
+    background-size: cover; }
+    section.bar p {
+      max-width: 930px; }
+  section.lugar {
+    background: url("../img/lugar-bg.jpg") no-repeat;
+    background-size: cover; }
+    section.lugar p {
+      max-width: 690px; } }
+@media all and (min-width: 1024px) {
+  section {
+    padding: 60px 24px 58px; }
+    section .patagonia-logo-mobile {
+      margin: 0 auto 0;
+      position: absolute;
+      top: 60px;
+      left: 0;
+      right: 0;
+      width: 220px; }
+    section .common-cta-btn {
+      font-size: 15px;
+      padding: 17px 10px; }
+    section .main-info {
+      font-size: 12px;
+      line-height: 20px;
+      margin-top: 100px; }
+    section.home {
+      background-image: none;
+      padding: 80px 40px 100px;
+      position: relative;
+      height: 100vh;
+      overflow: hidden; }
+      section.home video {
+        display: block;
+        height: 100%;
+        object-fit: cover;
+        width: 100%;
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0; }
+      section.home .info-wrapper {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        -webkit-transform: translate(-50%, -50%);
+        -moz-transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+        width: 100%; }
+      section.home h1 {
+        font-size: 50px;
+        line-height: 58px;
+        margin: 0 auto 21px;
+        max-width: 670px; }
+      section.home p {
+        font-size: 20px;
+        line-height: 25px;
+        max-width: 680px; }
+      section.home .common-cta-btn {
+        margin: 0 auto 0;
+        max-width: 380px;
+        position: absolute;
+        bottom: 100px;
+        left: 0;
+        right: 0; }
+      section.home .arrow-down {
+        position: absolute;
+        bottom: 45px;
+        left: 50;
+        -webkit-transform: translate(-50%, 0);
+        -moz-transform: translate(-50%, 0);
+        -ms-transform: translate(-50%, 0);
+        transform: translate(-50%, 0);
+        font-size: 60px;
+        margin: 0;
+        width: 76px;
+        height: 46px; }
+    section.microcerveceria h2, section.bar h2, section.lugar h2 {
+      font-size: 50px;
+      line-height: 58px;
+      margin: 183px auto 11px; }
+    section.microcerveceria .header-wrapper, section.bar .header-wrapper, section.lugar .header-wrapper {
+      max-width: 1341px; }
+      section.microcerveceria .header-wrapper .patagonia-logo-mobile, section.bar .header-wrapper .patagonia-logo-mobile, section.lugar .header-wrapper .patagonia-logo-mobile {
+        position: static; }
+      section.microcerveceria .header-wrapper .main-menu li, section.bar .header-wrapper .main-menu li, section.lugar .header-wrapper .main-menu li {
+        font-size: 15px;
+        margin-right: 68px; }
+    section.microcerveceria .common-cta-btn, section.bar .common-cta-btn, section.lugar .common-cta-btn {
+      font-size: 15px;
+      margin: 32px auto 106px;
+      padding: 17px 10px;
+      width: 200px; }
+    section.microcerveceria p {
+      max-width: 914px; }
+    section.bar p {
+      max-width: 936px; }
+    section.lugar h2 {
+      max-width: 890px; }
+    section.lugar p {
+      max-width: 680px; } }
+
+/*# sourceMappingURL=styles.css.map */
