@@ -24,6 +24,21 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-envelope:before {
+    content: "\e904";
+}
+.icon-close .path1:before {
+    content: "\e902";
+    color: rgb(102, 103, 103);
+}
+.icon-close .path2:before {
+    content: "\e903";
+    margin-left: -0.9892578125em;
+    color: rgb(255, 255, 255);
+}
+.icon-search:before {
+    content: "\e901";
+}
 .icon-arrow-down:before {
     content: "\e900";
 }
