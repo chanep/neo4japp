@@ -24,6 +24,15 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-password:before {
+    content: "\e906";
+}
+.icon-user:before {
+    content: "\e907";
+}
+.icon-view:before {
+    content: "\e905";
+}
 .icon-envelope:before {
     content: "\e904";
 }
