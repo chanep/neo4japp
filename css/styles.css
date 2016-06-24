@@ -31,6 +31,12 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale; }
 
+.icon-right-arrow:before {
+  content: "\e908"; }
+
+.icon-down-arrow:before {
+  content: "\e909"; }
+
 .icon-password:before {
   content: "\e906"; }
 
@@ -68,6 +74,32 @@ body {
 
 a {
   text-decoration: none; }
+
+ul {
+  padding: 0; }
+
+li {
+  list-style-type: none; }
+
+.arrow-btn {
+  font-size: 12px;
+  font-weight: bold;
+  color: #000;
+  text-transform: uppercase; }
+  .arrow-btn span {
+    font-size: 10px;
+    font-weight: bold;
+    margin-left: 24px; }
+
+.two-col-wrapper {
+  clear: both;
+  overflow: hidden; }
+  .two-col-wrapper .left-col {
+    float: left;
+    width: 20%; }
+  .two-col-wrapper .right-col {
+    float: right;
+    width: 75%; }
 
 header {
   display: block;
@@ -146,7 +178,8 @@ header {
       margin: 0 auto; }
 
 .main-content {
-  height: 500px; }
+  height: 500px;
+  padding: 40px 0; }
 
 footer {
   background: #e7e7e8;
@@ -211,5 +244,105 @@ section {
     padding: 18px 19px;
     vertical-align: top;
     display: inline-block; }
+
+.resource-manager-map .left-col h2 {
+  font-size: 12px;
+  color: #666767;
+  border-bottom: 1px solid #e7e7e8;
+  margin: 0;
+  padding: 4px 0 11px 20px; }
+.resource-manager-map .left-col ul {
+  padding-left: 20px; }
+  .resource-manager-map .left-col ul li {
+    margin-bottom: 6px; }
+    .resource-manager-map .left-col ul li:last-child {
+      margin-bottom: 0; }
+    .resource-manager-map .left-col ul li a {
+      color: #000; }
+      .resource-manager-map .left-col ul li a.selected {
+        font-weight: bold; }
+.resource-manager-map .left-col .arrow-btn {
+  display: block;
+  margin-top: 142px;
+  padding-left: 20px; }
+.resource-manager-map .right-col h2 {
+  font-size: 16px;
+  color: #000;
+  border-bottom: 1px solid #e7e7e8;
+  margin: 0;
+  padding: 0 0 11px 10px; }
+.resource-manager-map .right-col .map-wrapper {
+  position: relative;
+  background: url("../img/map.png") no-repeat;
+  height: 440px; }
+  .resource-manager-map .right-col .map-wrapper li {
+    position: absolute; }
+    .resource-manager-map .right-col .map-wrapper li a {
+      background-color: #e7e7e8;
+      height: 65px;
+      width: 65px;
+      display: block;
+      border-top-right-radius: 100px;
+      border-top-left-radius: 100px;
+      border-bottom-right-radius: 100px;
+      border-bottom-left-radius: 100px;
+      -webkit-top-right-radius: 100px;
+      -webkit-top-left-radius: 100px;
+      -webkit-bottom-right-radius: 100px;
+      -webkit-bottom-left-radius: 100px;
+      -moz-border-radius-topright: 100px;
+      -moz-border-radius-topleft: 100px;
+      -moz-border-radius-bottomright: 100px;
+      -moz-border-radius-bottomleft: 100px;
+      -ms-top-right-radius: 100px;
+      -ms-top-left-radius: 100px;
+      -ms-bottom-right-radius: 100px;
+      -ms-bottom-left-radius: 100px;
+      -o-top-right-radius: 100px;
+      -o-top-left-radius: 100px;
+      -o-bottom-right-radius: 100px;
+      -o-bottom-left-radius: 100px;
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+      padding: 14px 0; }
+      .resource-manager-map .right-col .map-wrapper li a span {
+        border-bottom: 1px solid #c9c9ca;
+        color: #000;
+        text-align: center;
+        display: block;
+        margin: 0 auto;
+        width: 28px; }
+        .resource-manager-map .right-col .map-wrapper li a span.location {
+          font-size: 10px;
+          font-weight: bold; }
+        .resource-manager-map .right-col .map-wrapper li a span.amount {
+          font-size: 20px;
+          font-weight: bold; }
+    .resource-manager-map .right-col .map-wrapper li.ny {
+      top: 167px;
+      left: 221px; }
+    .resource-manager-map .right-col .map-wrapper li.lnd {
+      top: 136px;
+      left: 315px; }
+      .resource-manager-map .right-col .map-wrapper li.lnd a {
+        background-color: #bcbdc0; }
+        .resource-manager-map .right-col .map-wrapper li.lnd a span {
+          border-bottom: 1px solid #a4a5a7; }
+    .resource-manager-map .right-col .map-wrapper li.sp {
+      top: 284px;
+      left: 256px;
+      z-index: 2; }
+    .resource-manager-map .right-col .map-wrapper li.ba {
+      top: 335px;
+      left: 236px;
+      z-index: 1; }
+      .resource-manager-map .right-col .map-wrapper li.ba a {
+        background-color: #bcbdc0; }
+        .resource-manager-map .right-col .map-wrapper li.ba a span {
+          border-bottom: 1px solid #a4a5a7; }
+    .resource-manager-map .right-col .map-wrapper li.au {
+      right: 90px;
+      top: 293px; }
 
 /*# sourceMappingURL=styles.css.map */

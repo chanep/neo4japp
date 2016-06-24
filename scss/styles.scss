@@ -16,6 +16,41 @@ a {
   text-decoration: none;
 }
 
+ul {
+  padding: 0;
+}
+
+li {
+  list-style-type: none;
+}
+
+.arrow-btn {
+  font-size: 12px;
+  font-weight: bold;
+  color: #000;
+  text-transform: uppercase;
+  span {
+    font-size: 10px;
+    font-weight: bold;
+    margin-left: 24px;
+  }
+}
+
+//Two Columns Module
+.two-col-wrapper {
+  clear: both;
+  overflow: hidden;
+  .left-col {
+    float: left;
+    width: 20%;
+  }
+
+  .right-col {
+    float: right;
+    width: 75%;
+  }
+}
+
 header {
   display: block;
 
@@ -115,6 +150,7 @@ header {
 
 .main-content {
   height: 500px;
+  padding: 40px 0;
 }
 
 footer {
@@ -197,5 +233,126 @@ section {
     padding: 18px 19px;
     vertical-align: top;
     display: inline-block;
+  }
+}
+
+//Resource Manager Map
+.resource-manager-map {
+  .left-col {
+    h2 {
+      font-size: 12px;
+      color: #666767;
+      border-bottom: 1px solid #e7e7e8;
+      margin: 0;
+      padding: 4px 0 11px 20px;
+    }
+
+    ul {
+      padding-left: 20px;
+      li {
+        margin-bottom: 6px;
+        &:last-child {
+          margin-bottom: 0;
+        }
+        a {
+          color: #000;
+          &.selected {
+            font-weight: bold;
+          }
+        }
+      }
+    }
+
+    .arrow-btn {
+      display: block;
+      margin-top: 142px;
+      padding-left: 20px;
+    }
+  }
+  .right-col {
+    h2 {
+      font-size: 16px;
+      color: #000;
+      border-bottom: 1px solid #e7e7e8;
+      margin: 0;
+      padding: 0 0 11px 10px;
+    }
+
+    .map-wrapper {
+      position: relative;
+      background: url('../img/map.png') no-repeat;
+      height: 440px;
+        
+      li {
+        position: absolute;
+
+        a {
+          background-color: #e7e7e8;
+          height: 65px;
+          width: 65px;
+          display: block;
+          @include BorderRadius(100px, 100px, 100px, 100px);
+          @include box-sizing(border-box);
+          padding: 14px 0;
+
+          span {
+            border-bottom: 1px solid #c9c9ca;
+            color: #000;
+            text-align: center;
+            display: block;
+            margin: 0 auto;
+            width: 28px;
+            &.location {
+              font-size: 10px;
+              font-weight: bold;
+            }
+
+            &.amount {
+              font-size: 20px;
+              font-weight: bold;
+            }
+          }
+        }
+
+        &.ny {
+          top: 167px;
+          left: 221px;
+        }
+
+        &.lnd {
+          top: 136px;
+          left: 315px;
+          a {
+            background-color: #bcbdc0;
+            span {
+              border-bottom: 1px solid #a4a5a7;
+            }
+          }
+        }
+
+        &.sp {
+          top: 284px;
+          left: 256px;
+          z-index: 2;
+        }
+
+        &.ba {
+          top: 335px;
+          left: 236px;
+          z-index: 1;
+          a {
+            background-color: #bcbdc0;
+            span {
+              border-bottom: 1px solid #a4a5a7;
+            }
+          }
+        }
+
+        &.au {
+          right: 90px;
+          top: 293px;
+        }
+      }
+    }
   }
 }

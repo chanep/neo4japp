@@ -4,6 +4,62 @@
 		{
 			"icon": {
 				"paths": [
+					"M697.158 512l-522.043 508.837-46.272-46.272 475.794-462.565-475.794-462.565 46.272-46.272z"
+				],
+				"attrs": [],
+				"isMulticolor": false,
+				"width": 826,
+				"grid": 0,
+				"tags": [
+					"right-arrow"
+				],
+				"colorPermutations": {
+					"10210310312552552551": []
+				}
+			},
+			"attrs": [],
+			"properties": {
+				"order": 13,
+				"id": 8,
+				"prevSize": 32,
+				"code": 59656,
+				"name": "right-arrow"
+			},
+			"setIdx": 0,
+			"setId": 1,
+			"iconIdx": 0
+		},
+		{
+			"icon": {
+				"paths": [
+					"M700.986 856l-615.997-631.993 56.007-56.007 560.005 576.007 560.005-576.007 56.007 56.007z"
+				],
+				"attrs": [],
+				"isMulticolor": false,
+				"width": 1402,
+				"grid": 0,
+				"tags": [
+					"down-arrow"
+				],
+				"colorPermutations": {
+					"10210310312552552551": []
+				}
+			},
+			"attrs": [],
+			"properties": {
+				"order": 11,
+				"id": 7,
+				"prevSize": 32,
+				"code": 59657,
+				"name": "down-arrow"
+			},
+			"setIdx": 0,
+			"setId": 1,
+			"iconIdx": 1
+		},
+		{
+			"icon": {
+				"paths": [
 					"M557.367 447.19c-25.924 0-45.367-19.443-45.367-51.848v-149.063c0-84.253-64.81-149.063-149.063-149.063s-149.063 64.81-149.063 149.063v129.62c0 25.924-19.443 51.848-51.848 51.848s-45.367-25.924-45.367-51.848v-129.62c0-136.101 110.177-246.278 246.278-246.278s246.278 110.177 246.278 246.278v155.544c0 25.924-25.924 45.367-51.848 45.367z",
 					"M719.392 375.899h-719.392v648.101h719.392v-648.101z"
 				],
@@ -28,7 +84,7 @@
 			},
 			"setIdx": 0,
 			"setId": 1,
-			"iconIdx": 0
+			"iconIdx": 2
 		},
 		{
 			"icon": {
@@ -56,7 +112,7 @@
 			},
 			"setIdx": 0,
 			"setId": 1,
-			"iconIdx": 1
+			"iconIdx": 3
 		},
 		{
 			"icon": {
@@ -84,7 +140,7 @@
 			},
 			"setIdx": 0,
 			"setId": 1,
-			"iconIdx": 2
+			"iconIdx": 4
 		},
 		{
 			"icon": {
@@ -113,7 +169,7 @@
 			},
 			"setIdx": 0,
 			"setId": 1,
-			"iconIdx": 3
+			"iconIdx": 5
 		},
 		{
 			"icon": {
@@ -163,7 +219,7 @@
 			},
 			"setIdx": 0,
 			"setId": 1,
-			"iconIdx": 4
+			"iconIdx": 6
 		},
 		{
 			"icon": {
@@ -192,7 +248,7 @@
 			},
 			"setIdx": 0,
 			"setId": 1,
-			"iconIdx": 5
+			"iconIdx": 7
 		},
 		{
 			"icon": {
@@ -220,7 +276,7 @@
 			},
 			"setIdx": 0,
 			"setId": 1,
-			"iconIdx": 6
+			"iconIdx": 8
 		}
 	],
 	"height": 1024,
