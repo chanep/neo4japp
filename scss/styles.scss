@@ -140,10 +140,43 @@ header {
 
     &__results {
       background: #f3f3f4;
-      padding: 20px 30px;
+      padding: 30px 30px 46px;
       @include box-sizing(border-box);
       max-width: 962px;
       margin: 0 auto;
+
+      > ul {
+        margin: 0 0 28px;
+        &:last-child {
+          margin: 0;
+        }
+        li {
+          &.category-list {
+            display: inline-block;
+            font-size: 13px;
+            color: #666767;
+            padding-right: 30px;
+            vertical-align: top;
+            width: 145px;
+            @include box-sizing(border-box);
+          }
+
+          &.subcategory-list {
+            display: inline-block;
+            vertical-align: top;
+            ul {
+              li {
+                font-size: 16px;
+                color: #000;
+                margin-bottom: 6px;
+                &.selected {
+                  color: #e71d39;
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 }
