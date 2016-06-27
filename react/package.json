@@ -16,7 +16,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "server": "./node_modules/.bin/webpack-dev-server --content-base src --inline --hot",
+    "server": "webpack-dev-server --content-base src --inline --hot",
     "styles": "grunt watch"
   },
   "author": "",
