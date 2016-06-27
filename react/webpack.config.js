@@ -8,7 +8,7 @@ module.exports = {
   module: {
     loaders: [
       {
-        test: /\.js?$/,
+        test: /\.js$/,
         exclude: /(node_modules)/,
         loader: 'babel-loader',
         query: {
@@ -18,7 +18,7 @@ module.exports = {
     ]
   },
   output: {
-    path: __dirname + "/src/js",
+    path: __dirname + "/src/js/",
     filename: "client.min.js"
   },
   plugins: debug ? [] : [
