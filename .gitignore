@@ -1,2 +1,6 @@
 node_modules
-react/.sass-cache
+npm-debug.log
+.sass-cache
+src/js/client.min.js
+css/styles.css
+css/styles.css.map
