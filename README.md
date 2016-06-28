@@ -1,12 +1,12 @@
 # Skill Search #
 
-## Versión en React
+## React version
 
-1. Para instalar las dependencias:
+1. To install the dependencies:
 `npm install`
 
-2. Para compilar React y levantar el servidor:
+2. To compile React and run the server:
 `npm start`
 
-3. Para compilar los archivos SASS y 'escuchar' los cambios:
+3. To compile SASS files and 'watch' for changes:
 `grunt watch`
