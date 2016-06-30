@@ -8,7 +8,7 @@ export default class ResourceHotspot extends React.Component {
     render () {
         return (
             <div>
-                <Header search={false} loggedIn={true} />
+                <Header search={true} loggedIn={true} />
                 <section className="main-content">
                   <div className="two-col-wrapper resource-manager-map">
                     <div className="left-col">
