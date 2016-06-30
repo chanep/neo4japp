@@ -9,7 +9,7 @@ export default class Allocations extends React.Component {
         return (
             <div>
                 <Header search={true} loggedIn={true} />
-                <section className="allocations">
+                <section className="main-content">
                     <h1>Allocations</h1>
                 </section>
             </div>
