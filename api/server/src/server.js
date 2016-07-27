@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const routes = require('./routes');
+require('dotenv').load();
 
 const app = express();
 
@@ -11,6 +12,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // enable CORS - Cross Origin Resource Sharing
 app.use(cors());
+
+app.use('/apidoc', express.static('apidoc'));
 
 // mount all routes on /api path
 app.use('/api', routes);
