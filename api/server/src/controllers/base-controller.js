@@ -1,3 +1,4 @@
+'use strict'
 class BaseController {
     constructor(){
         //make 'this' be the actual 'this' when instance functions are used as callbacks

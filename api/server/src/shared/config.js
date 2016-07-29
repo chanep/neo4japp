@@ -1,3 +1,4 @@
+'use strict'
 let config = {
     db: {
         server: process.env.DB_SERVER,
