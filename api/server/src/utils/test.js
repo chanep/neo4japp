@@ -9,7 +9,7 @@ const SkillGroupDa = require('../data-access/skill-group');
 
 var da = new SkillGroupDa();
 
-da.findAll({name: '*rup*'})
+da.findAll({name: '*gRup*'})
     .then(console.log)
     .catch(console.error)
 

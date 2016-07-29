@@ -27,7 +27,7 @@ class BaseDa {
             let value = query[k];
             if(typeof value === 'string' && value.indexOf('*') >= 0){
                 value = value.replace(/\*/g, '.*');
-                conditions.push(`${alias}.${k} =~ '${value}'`);
+                conditions.push(`${alias}.${k} =~ '(?i)${value}'`);
             } else{
                 conditions.push(`${alias}.${k} = ${value}`);
             }
