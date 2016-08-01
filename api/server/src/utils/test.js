@@ -1,5 +1,4 @@
 'use strict'
-
 var path = require('path');
 var envFile = path.resolve(__dirname, "../.env");
 require('dotenv').config({path: envFile});
@@ -9,7 +8,7 @@ const SkillGroupDa = require('../data-access/skill-group');
 
 var da = new SkillGroupDa();
 
-da.findAll({name: '*gRup*'})
+da.findAll({name: '*gruPO*'})
     .then(console.log)
     .catch(console.error)
 
