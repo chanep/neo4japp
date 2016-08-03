@@ -1,0 +1,9 @@
+[
+	{
+		"name" : "reutersImporter",
+		"path" : "./tasks/reuters/importer",
+		"cronPattern" : "0 1 * * 0",
+		"args" : {
+		}
+	}
+]

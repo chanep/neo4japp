@@ -21,6 +21,8 @@
     "express": "^4.14.0",
     "joi": "^9.0.4",
     "lodash": "^4.14.1",
+    "neo4j-driver": "^1.1.0-M01",
+    "node-schedule": "^1.1.1",
     "qs": "^6.2.1",
     "seraph": "^0.15.2",
     "seraph-model": "^0.9.0"

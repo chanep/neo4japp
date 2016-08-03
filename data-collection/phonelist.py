@@ -162,10 +162,12 @@ class AggregateRGAPhonelistEmployeeData(luigi.Task):
             raise Exception('Cannot find employee tenure given a user ID', 'username=' + self.username)
         employeeTenure = employeeTenures[0]
 
+
         details = DownloadRGAPhonelistEmployeeDetails(date=self.date, employee_id=employee['ID'])
         projects = DownloadRGAPhonelistEmployeeProjectsHistory(date=self.date, employee_id=employee['ID'])
         yield details
         yield projects
+
 
         with details.output().open('r') as jsonFile:
             inputdata2 = json.load(jsonFile)
@@ -201,7 +203,7 @@ class GenerateRGAPhonelistAllEmployeesData(luigi.Task):
             inputdata0 = json.load(jsonFile)
 
         #deps = [AggregateRGAPhonelistEmployeeData(username=employee['ADkey']) for employee in inputdata0['employees']]
-        deps = [AggregateRGAPhonelistEmployeeData(username=employee['ADkey']) for employee in inputdata0['employees'][0:5]]
+        deps = [AggregateRGAPhonelistEmployeeData(username=employee['ADkey']) for employee in inputdata0['employees'][0:3]]
         yield deps
 
         with self.output().open('w') as outfile:

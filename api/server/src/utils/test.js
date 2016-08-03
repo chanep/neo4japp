@@ -8,9 +8,44 @@ const SkillGroupDa = require('../data-access/skill-group');
 
 var da = new SkillGroupDa();
 
-da.findAll({name: '*gruPO*'})
-    .then(console.log)
+// da.create({name: "nombre", k1: "v1", k2: "v2" })
+//     // .then(node => {
+//     //     let data = {
+//     //         id: node.id,
+//     //         k1: "v1b"
+//     //     }
+//     //     return da.save(data);
+//     // })
+//     .then(r => {
+//         console.log(JSON.stringify(r));
+//     })
+//     .catch(console.error)
+//     .then(() => {
+//         db.close();
+//     })
+
+console.log("da", da)
+
+da.update({id: 290, k1: "v1modificado"})
+    // .then(node => {
+    //     let data = {
+    //         id: node.id,
+    //         k1: "v1b"
+    //     }
+    //     return da.save(data);
+    // })
+    .then(r => {
+        console.log(JSON.stringify(r));
+    })
     .catch(console.error)
+    .then(() => {
+        db.close();
+    })
+
+
+// da.findAll({name: '*gruPO*'})
+//     .then(console.log)
+//     .catch(console.error)
 
 // da.find(292)
 //     .then(console.log)

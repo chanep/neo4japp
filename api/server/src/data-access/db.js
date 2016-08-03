@@ -1,13 +1,8 @@
 'use strict'
-const Promise = require('bluebird');
 const seraph = require('seraph');
 const config = require('../shared/config').db;
-const db = seraph(config);
 
-db.save = Promise.promisify(db.save);
-db.delete = Promise.promisify(db.delete);
-db.query = Promise.promisify(db.query);
-db.queryRaw = Promise.promisify(db.queryRaw);
+const neo4j = require('neo4j-driver').v1;
+const driver = neo4j.driver(config.server, neo4j.auth.basic(config.user, config.pass));
 
-
-module.exports = db;
+module.exports = driver;
