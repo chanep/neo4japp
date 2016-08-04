@@ -1,12 +1,13 @@
 'use strict'
 const _ = require('lodash');
+const neo4j = require('neo4j-driver').v1;
 const db = require('./db');
 const Joi = require('joi');
 const errors = require('../shared/errors');
 const P = require('bluebird');
 
 class BaseDa {
-    constructor(labels){
+    constructor(labels, schema){
         if(!labels){
             this._labels = [];
         } else if(!Array.isArray(labels)){
@@ -14,15 +15,25 @@ class BaseDa {
         } else{
             this._labels = labels;
         }
+        let aux = [""].concat(this._labels);
+        this._labelCypher = aux.join(':');
+
+        this._schema = schema;
         this._tx = null;
+        
     }
-    _validate(data, schema){
+    _validateSchema(data, schema){
         let options = schema._options || {stripUnknown: true};
         let errorMessage = schema._errorMessage || "Validation error";
         var result = Joi.validate(data, schema, options);
 		if(result.error)
             return P.reject(new errors.GenericError(errorMessage + "(" + result.error + ")"));
 		return P.resolve(result.value);
+    }
+    _validate(data){
+        if(!this._schema)
+            return P.resolve(data);
+        return this._validateSchema(data, this._schema);
     }
     _getWhereCypher(query, alias){
         alias = alias || 'n'; 
@@ -59,32 +70,22 @@ class BaseDa {
         let cypher = " WHERE " + conditions.join(' AND ');
         return cypher;
     }
-    _getLabelCypher(){
-        let aux = [""].concat(this._label);
-        return aux.join(':');
+    _toEntity(result){
+        var entities = [];
+        result.records.forEach(r => {
+            let f = r._fields[0];
+            let e = {id: f.identity.low};
+            _.merge(e, f.properties);
+            entities.push(e);
+        })
+        if(entities.length == 0){
+            return null;
+        } else if(entities.length == 1){
+            return entities[0];
+        } else{
+            return entities;
+        }
     }
-    // find(id){
-    //     let cypher = `MATCH (n:${this._label}) 
-    //                     WHERE id(n) = {id}
-    //                     RETURN n`; 
-    //     return this._db().query(cypher, {id: id})
-    //             .then(result => {
-    //                 if(result.length == 0)
-    //                     return null;
-    //                 return result[0];
-    //             });
-    // }
-    // findAll(query){
-    //     let where = this._getWhere(query);
-    //     let cypher = `MATCH (n:${this._label}) 
-    //                     ${where}
-    //                     RETURN n`;
-    //     return this._db().query(cypher);
-    // }
-    // save(data, label){
-    //     label = label || this._label;
-    //     return this._db().save(data);
-    // }
     _session(){
         return this._tx || db.session();
     }
@@ -96,25 +97,6 @@ class BaseDa {
         // } else{
         //     return session.close()
         // }     
-    }
-    create(data){
-        let labelStr = this._getLabelCypher();
-        let cypher = `CREATE (n${labelStr} {data}) 
-                        RETURN n`;
-        let session = this._session();
-        return this._run(cypher, {data: data})
-            .then(r => {
-                let node = {id: r.records[0]._fields[0].identity.low};
-                return _.merge(node, data);
-            });
-    }
-    update(data){
-        let dataAux = _.omit(data, ['id']);
-        let labelStr = this._getLabelCypher(this._label);
-        let cypher = `MATCH (n${labelStr}) WHERE ID(n) = {id} 
-                      SET n += {data}
-                        RETURN n`;
-        return this._run(cypher, {id: data.id, data: dataAux});
     }
     _run(cypher, params) {
         let session = this._session();
@@ -130,12 +112,73 @@ class BaseDa {
             promise.then(resolve).catch(reject);
         });
     }
-    update(data, replace){
-
+    find(id){
+        let cypher = `MATCH (n${this._labelCypher}) 
+                        WHERE id(n) = {id}
+                        RETURN n`; 
+        return this._run(cypher, {id: id})
+                .then(this._toEntity);
+    }
+    findAll(query){
+        let where = this._getWhereCypher(query);
+        let cypher = `MATCH (n${this._labelCypher}) 
+                        ${where}
+                        RETURN n`;
+        return this._db().query(cypher);
+    }
+    create(data){
+        let cypher = `CREATE (n${this._labelCypher} {data}) 
+                        RETURN n`;
+        return this._validate(data)
+            .then(d => {
+                return this._run(cypher, {data: d})
+            })
+            .then(this._toEntity);
+    }
+    update(data){
+        let dataAux = _.omit(data, ['id']);
+        let cypher = `MATCH (n${this._labelCypher}) WHERE ID(n) = {id} 
+                      SET n += {data}
+                        RETURN n`;
+        return this._validate(data)
+            .then(d => {
+                this._run(cypher, {id: data.id, data: dataAux})
+            })
+            .then(this._toEntity);
     }
     //force: if true delete relations before
     delete(id, force){
+        let cypher = `
+            MATCH (n${this._labelCypher}) WHERE ID(n) = {id} 
+            DELETE n
+            RETURN count(n) as affected`;
+        if(force){
+            cypher = `
+                MATCH (n${this._labelCypher}) WHERE ID(n) = {id} 
+                OPTIONAL MATCH (n${this._labelCypher})-[r]-() WHERE ID(n) = {id} 
+                DELETE n,r
+                RETURN count(n) as affected`;
+        }
         
+        return this._run(cypher, {id: id})
+            .then(this._toEntity);
+    }
+    createAndRelate(data, otherId, relName, relData, ingoing){
+        let dir1 = '';
+        let dir2 = '>';
+        if(ingoing){
+            dir1 = '<';
+            dir2 = '';
+        }
+        relData = relData || {};
+        let cypher = `
+            MATCH (m) WHERE id(m) = {otherId}
+            CREATE (n${this._labelCypher} {data})${dir1}-[r:${relName} {relData}]-${dir2}(m)
+            RETURN n`
+        let params = {otherId: neo4j.int(otherId), data: data, relData: relData};
+
+        return this._run(cypher, params)
+            .then(this._toEntity);
     }
     enlistTx(tx){
         this._tx = tx;

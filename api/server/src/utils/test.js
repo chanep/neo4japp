@@ -4,8 +4,17 @@ var envFile = path.resolve(__dirname, "../.env");
 require('dotenv').config({path: envFile});
 
 var db = require('../data-access/db');
-const SkillGroupDa = require('../data-access/skill-group');
 
+
+// var session  = db.session();
+// var cypher = `MATCH (n), (m) where ID(n) = 290 AND ID(m)=292 RETURN n, m`
+
+// session.run(cypher)
+//     .then(r => {
+//         console.log(JSON.stringify(r))
+//     })
+
+const SkillGroupDa = require('../data-access/skill-group');
 var da = new SkillGroupDa();
 
 // da.create({name: "nombre", k1: "v1", k2: "v2" })
@@ -24,26 +33,36 @@ var da = new SkillGroupDa();
 //         db.close();
 //     })
 
-console.log("da", da)
 
-da.update({id: 290, k1: "v1modificado"})
-    // .then(node => {
-    //     let data = {
-    //         id: node.id,
-    //         k1: "v1b"
-    //     }
-    //     return da.save(data);
-    // })
-    .then(r => {
-        console.log(JSON.stringify(r));
-    })
+// da.update({id: 290, k1: "v1xx"})
+//     // .then(node => {
+//     //     let data = {
+//     //         id: node.id,
+//     //         k1: "v1b"
+//     //     }
+//     //     return da.save(data);
+//     // })
+//     .then(r => {
+//         console.log(JSON.stringify(r));
+//     })
+//     .catch(console.error)
+//     .then(() => {
+//         db.close();
+//     })
+
+// da.create({name: "grupo2"})
+//     .then(console.log)
+//     .catch(console.error)
+
+// da.find(297)
+//     .then(console.log)
+//     .catch(console.error)
+
+da.createAndRelate({name: "grupo23"}, 297, 'BELONGS_TO', {k1: 'v1'}, true)
+    .then(console.log)
     .catch(console.error)
-    .then(() => {
-        db.close();
-    })
 
-
-// da.findAll({name: '*gruPO*'})
+// da.findAll({name: '*nom*'})
 //     .then(console.log)
 //     .catch(console.error)
 
@@ -57,24 +76,6 @@ da.update({id: 290, k1: "v1modificado"})
 
 
 
-// db.save({name: 'Languages'}, 'Category', (err, r) =>{
-//         console.log("err", err);
-//         console.log("r", r);
-// })
-
-
-// db.save({name: 'Languages'}, 'SkillCategory')
-//     .then((sc) => {
-//         console.log("sc", sc);
-//     })
-//     .catch((err) => {
-//         console.log("err", err)
-//     });
-
-// MATCH (n:Skill)
-// OPTIONAL MATCH (n:Skill)-[r]-()
-// DELETE n,r
-// RETURN count(n) as deletedNodesCount
 
 // var cypher = `MATCH (sc:SkillCategory) WHERE id(sc) = {scid} 
 //                 CREATE (s:Skill {skill})-[r:BELONGS_TO]->(sc) 
