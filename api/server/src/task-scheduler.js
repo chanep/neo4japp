@@ -13,7 +13,7 @@ if(taskName){
 function setupSchedule() {
 	console.log("Task scheduler started...");
 	tasksConf.forEach(function(taskConf) {
-		var task = require(taskConf.path);
+		var task = new require(taskConf.path);
 		var j = schedule.scheduleJob(taskConf.cronPattern, function() {
 			task.run(taskConf.args);
 		});
@@ -26,7 +26,7 @@ function runTask(taskName){
 	})[0];
 
 	if(taskConf){
-		var task = require(taskConf.path);
+		var task = new require(taskConf.path);
 		task.run(taskConf.args);
 	} else {
 		console.log("Task " + taskName + " does not exist");

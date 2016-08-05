@@ -69,14 +69,14 @@ class BaseDa {
             promise.then(resolve).catch(reject);
         });
     }
-    find(id){
+    findById(id){
         let cmd = `MATCH (n${this._labelCypher}) 
                         WHERE id(n) = {id}
                         RETURN n`; 
         return this._run(cmd, {id: id})
                 .then(cypher.toEntity);
     }
-    findAll(query){
+    find(query){
         let where = cypher.getWhere(query);
         let cmd = `MATCH (n${this._labelCypher}) 
                         ${where}
@@ -93,10 +93,11 @@ class BaseDa {
             })
             .then(cypher.toEntity);
     }
-    update(data){
+    update(data, mergeKeys){
         let dataAux = _.omit(data, ['id']);
+        let operator = mergeKeys? '+=' : '=';
         let cmd = `MATCH (n${this._labelCypher}) WHERE ID(n) = {id} 
-                      SET n += {data}
+                      SET n ${operator} {data}
                         RETURN n`;
         return this._validate(data, true)
             .then(d => {
@@ -121,7 +122,7 @@ class BaseDa {
         return this._run(cmd, {id: id})
             .then(cypher.toEntity);
     }
-    relate(id, otherId, relName, relData, ingoing){
+    relate(id, otherId, relName, relData, ingoing, replace){
         let dir1 = '';
         let dir2 = '>';
         if(ingoing){
@@ -134,7 +135,17 @@ class BaseDa {
             MATCH (n${this._labelCypher}),(m)
             WHERE ID(n) = {id} AND ID(m) = {otherId}
             MERGE (n)${dir1}-[r:${relName} ${relDataStr}]-${dir2}(m)
-            RETURN r`
+            RETURN r`;
+
+        if(replace){
+            cmd = `
+                MATCH (n${this._labelCypher}),(m)
+                WHERE ID(n) = {id} AND ID(m) = {otherId}
+                CREATE UNIQUE (n)${dir1}-[r:${relName}]-${dir2}(m)
+                SET r = {relData}
+                RETURN r`;
+        }
+        
         let params = {id: neo4j.int(id), otherId: neo4j.int(otherId), relData: relData};
 
         return this._run(cmd, params)

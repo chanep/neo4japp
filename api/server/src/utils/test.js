@@ -19,11 +19,11 @@ var da = new SkillGroupDa();
 
 let sg1, sg2;
 
-// da.create({name: "grupo31"})
+// da.create({name: "grupo31", type: "skill"})
 //     .then(sg => {
 //         console.log("sg1", sg);
 //         sg1 = sg;
-//         return da.create({name: "grupo32"})
+//         return da.create({name: "grupo32", type: "skill"})
 //     })
 //     .then(sg => {
 //         console.log("sg2", sg);
@@ -41,7 +41,7 @@ let sg1, sg2;
 //         db.close();
 //     })
 
-da.relate(349, 350, "HAS", {relKey: "relValue2"}, false)
+da.relate(351, 352, "HAS", {relKey2: "relValue2"}, false)
     .then(console.log)
     .catch(console.error);
 

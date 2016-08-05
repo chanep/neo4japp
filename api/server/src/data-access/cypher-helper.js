@@ -4,6 +4,8 @@ const _ = require('lodash');
 
 module.exports = {
     getWhere: function(query, alias){
+        if(!query)
+            return "";
         alias = alias || 'n'; 
         let conditions = [];
         for(let k in query){
