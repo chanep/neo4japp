@@ -8,6 +8,13 @@ let SkillGroup = {
     _errorMessage: "SkillGroup is not valid "
 };
 
+let Skill = {
+    id: Joi.number(),
+	name: Joi.string().required(),
+    _errorMessage: "Skill is not valid "
+};
+
 module.exports = {
-    SkillGroup: SkillGroup
+    SkillGroup: SkillGroup,
+    Skill: Skill
 }
