@@ -4,7 +4,7 @@ const schema = require('./schemas').SkillGroup;
 
 class SkillGroupDa extends BaseDa{
     constructor(tx){
-        super(tx, 'SkillGroup');
+        super(tx, 'SkillGroup', schema);
     }
 }
 
