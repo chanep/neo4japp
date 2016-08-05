@@ -25,11 +25,11 @@ class BaseTask {
             })
             .then(info => {
                 console.log(`Task ${this.name} finished ok`);
-			    return taskStatusService.setFinishOk(taskName, info);
+			    return taskStatusDa.setFinishOk(taskName, info);
             })
             .catch(info => {
                 console.log(`Task ${this.name} finished with error`);
-			    return taskStatusService.setFinishError(taskName, info);
+			    return taskStatusDa.setFinishError(taskName, info);
             })
     }
 }
