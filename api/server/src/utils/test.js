@@ -17,6 +17,34 @@ var db = require('../data-access/db');
 const SkillGroupDa = require('../data-access/skill-group');
 var da = new SkillGroupDa();
 
+let sg1, sg2;
+
+// da.create({name: "grupo31"})
+//     .then(sg => {
+//         console.log("sg1", sg);
+//         sg1 = sg;
+//         return da.create({name: "grupo32"})
+//     })
+//     .then(sg => {
+//         console.log("sg2", sg);
+//         sg2 = sg;
+//         //return da.relate(sg1.id, sg2.id, "HAS", null, false);
+//         return da.relate(sg1.id, sg2.id, "HAS", {relKey: "relValue"}, false);
+//     })
+//     .then(r => {
+//         console.log("rel result", JSON.stringify(r));
+//     })
+//     .catch(err =>{
+//         console.log(err)
+//     })
+//     .then(() => {
+//         db.close();
+//     })
+
+da.relate(349, 350, "HAS", {relKey: "relValue2"}, false)
+    .then(console.log)
+    .catch(console.error);
+
 // da.create({name: "nombre", k1: "v1", k2: "v2" })
 //     // .then(node => {
 //     //     let data = {
@@ -58,9 +86,9 @@ var da = new SkillGroupDa();
 //     .then(console.log)
 //     .catch(console.error)
 
-da.createAndRelate({name: "grupo23"}, 297, 'BELONGS_TO', {k1: 'v1'}, true)
-    .then(console.log)
-    .catch(console.error)
+// da.createAndRelate({name: "grupo23"}, 297, 'BELONGS_TO', {k1: 'v1'}, true)
+//     .then(console.log)
+//     .catch(console.error)
 
 // da.findAll({name: '*nom*'})
 //     .then(console.log)

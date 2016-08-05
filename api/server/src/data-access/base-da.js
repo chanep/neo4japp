@@ -5,9 +5,12 @@ const db = require('./db');
 const Joi = require('joi');
 const errors = require('../shared/errors');
 const P = require('bluebird');
+const cypher = require('./cypher-helper');
+
+
 
 class BaseDa {
-    constructor(labels, schema){
+    constructor(tx, labels, schema){
         if(!labels){
             this._labels = [];
         } else if(!Array.isArray(labels)){
@@ -19,7 +22,7 @@ class BaseDa {
         this._labelCypher = aux.join(':');
 
         this._schema = schema;
-        this._tx = null;
+        this._tx = tx;
         
     }
     _validateSchema(data, schema){
@@ -30,62 +33,16 @@ class BaseDa {
             return P.reject(new errors.GenericError(errorMessage + "(" + result.error + ")"));
 		return P.resolve(result.value);
     }
-    _validate(data){
+    _validate(data, onlyDataKeys){
         if(!this._schema)
             return P.resolve(data);
-        return this._validateSchema(data, this._schema);
-    }
-    _getWhereCypher(query, alias){
-        alias = alias || 'n'; 
-        let conditions = [];
-        for(let k in query){
-            let value = query[k];
-            if(typeof value === 'string' && value.indexOf('*') >= 0){
-                value = value.replace(/\*/g, '.*');
-                conditions.push(`${alias}.${k} =~ '(?i)${value}'`);
-            } else{
-                conditions.push(`${alias}.${k} = ${value}`);
-            }
+        let schema = this._schema;
+        if(onlyDataKeys){
+            schema = _.pick(schema, _.keys(data));
         }
-
-        let cypher = " WHERE " + conditions.join(' AND ');
-        return cypher;
+        return this._validateSchema(data, schema, onlyDataKeys);
     }
-    _getSetCypher(data, alias){
-        alias = alias || 'n'; 
-        let conditions = [];
-        for(let k in data){
-            let value = data[k];
-            if(k != 'id'){
-
-            }
-            if(typeof value === 'string' && value.indexOf('*') >= 0){
-                value = value.replace(/\*/g, '.*');
-                conditions.push(`${alias}.${k} =~ '(?i)${value}'`);
-            } else{
-                conditions.push(`${alias}.${k} = ${value}`);
-            }
-        }
-
-        let cypher = " WHERE " + conditions.join(' AND ');
-        return cypher;
-    }
-    _toEntity(result){
-        var entities = [];
-        result.records.forEach(r => {
-            let f = r._fields[0];
-            let e = {id: f.identity.low};
-            _.merge(e, f.properties);
-            entities.push(e);
-        })
-        if(entities.length == 0){
-            return null;
-        } else if(entities.length == 1){
-            return entities[0];
-        } else{
-            return entities;
-        }
-    }
+    
     _session(){
         return this._tx || db.session();
     }
@@ -98,9 +55,9 @@ class BaseDa {
         //     return session.close()
         // }     
     }
-    _run(cypher, params) {
+    _run(cmd, params) {
         let session = this._session();
-        var p = session.run(cypher, params)
+        var p = session.run(cmd, params)
             .then(result => {
                 this._disposeSession(session);
                 return result;
@@ -113,55 +70,75 @@ class BaseDa {
         });
     }
     find(id){
-        let cypher = `MATCH (n${this._labelCypher}) 
+        let cmd = `MATCH (n${this._labelCypher}) 
                         WHERE id(n) = {id}
                         RETURN n`; 
-        return this._run(cypher, {id: id})
-                .then(this._toEntity);
+        return this._run(cmd, {id: id})
+                .then(cypher.toEntity);
     }
     findAll(query){
-        let where = this._getWhereCypher(query);
-        let cypher = `MATCH (n${this._labelCypher}) 
+        let where = cypher.getWhere(query);
+        let cmd = `MATCH (n${this._labelCypher}) 
                         ${where}
                         RETURN n`;
-        return this._db().query(cypher);
+        return this._run(cmd)
+                .then(cypher.toEntity);
     }
     create(data){
-        let cypher = `CREATE (n${this._labelCypher} {data}) 
+        let cmd = `CREATE (n${this._labelCypher} {data}) 
                         RETURN n`;
         return this._validate(data)
             .then(d => {
-                return this._run(cypher, {data: d})
+                return this._run(cmd, {data: d})
             })
-            .then(this._toEntity);
+            .then(cypher.toEntity);
     }
     update(data){
         let dataAux = _.omit(data, ['id']);
-        let cypher = `MATCH (n${this._labelCypher}) WHERE ID(n) = {id} 
+        let cmd = `MATCH (n${this._labelCypher}) WHERE ID(n) = {id} 
                       SET n += {data}
                         RETURN n`;
-        return this._validate(data)
+        return this._validate(data, true)
             .then(d => {
-                this._run(cypher, {id: data.id, data: dataAux})
+                this._run(cmd, {id: data.id, data: dataAux})
             })
-            .then(this._toEntity);
+            .then(cypher.toEntity);
     }
     //force: if true delete relations before
     delete(id, force){
-        let cypher = `
+        let cmd = `
             MATCH (n${this._labelCypher}) WHERE ID(n) = {id} 
             DELETE n
             RETURN count(n) as affected`;
         if(force){
-            cypher = `
+            cmd = `
                 MATCH (n${this._labelCypher}) WHERE ID(n) = {id} 
                 OPTIONAL MATCH (n${this._labelCypher})-[r]-() WHERE ID(n) = {id} 
                 DELETE n,r
                 RETURN count(n) as affected`;
         }
         
-        return this._run(cypher, {id: id})
-            .then(this._toEntity);
+        return this._run(cmd, {id: id})
+            .then(cypher.toEntity);
+    }
+    relate(id, otherId, relName, relData, ingoing){
+        let dir1 = '';
+        let dir2 = '>';
+        if(ingoing){
+            dir1 = '<';
+            dir2 = '';
+        }
+        relData = relData || {};
+        let relDataStr = cypher.mapToStr(relData, "relData");
+        let cmd = `
+            MATCH (n${this._labelCypher}),(m)
+            WHERE ID(n) = {id} AND ID(m) = {otherId}
+            MERGE (n)${dir1}-[r:${relName} ${relDataStr}]-${dir2}(m)
+            RETURN r`
+        let params = {id: neo4j.int(id), otherId: neo4j.int(otherId), relData: relData};
+
+        return this._run(cmd, params)
+            .then(cypher.toEntity);
     }
     createAndRelate(data, otherId, relName, relData, ingoing){
         let dir1 = '';
@@ -171,14 +148,14 @@ class BaseDa {
             dir2 = '';
         }
         relData = relData || {};
-        let cypher = `
-            MATCH (m) WHERE id(m) = {otherId}
+        let cmd = `
+            MATCH (m) WHERE ID(m) = {otherId}
             CREATE (n${this._labelCypher} {data})${dir1}-[r:${relName} {relData}]-${dir2}(m)
             RETURN n`
         let params = {otherId: neo4j.int(otherId), data: data, relData: relData};
 
-        return this._run(cypher, params)
-            .then(this._toEntity);
+        return this._run(cmd, params)
+            .then(cypher.toEntity);
     }
     enlistTx(tx){
         this._tx = tx;

@@ -1,9 +1,22 @@
 'use strict'
+Error.prototype.toString = function(){
+		return this.stack.toString();
+}
+
 class GenericError extends Error{
     constructor(msg, innerError){
         super(msg);
         if(innerError)
             this.innerError = innerError;
+    }
+    toString(){
+        var s = this.stack.toString();
+        var inner = error.innerError;
+        while(inner && inner.stack){
+            s += "\n\n    innerError: " + inner.stack.toString();
+            inner = inner.innerError;
+        }
+        return s;
     }
 }
 
