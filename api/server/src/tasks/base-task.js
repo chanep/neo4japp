@@ -11,10 +11,12 @@ class BaseTask {
         return P.reject(new errors.GenericError("Task must override _doRun"));
     }
     run(args){
+        let running = false;
         let taskStatusDa = new TaskStatusDa();
         taskStatusDa.findByName(this.name)
             .then(taskStatus => {
                 if(taskStatus && taskStatus.status == 'running'){
+                    running = true;
 				    throw new errors.GenericError("task is already running...");
                 } else{
                     return taskStatusDa.setRunning(this.name);
@@ -25,11 +27,17 @@ class BaseTask {
             })
             .then(info => {
                 console.log(`Task ${this.name} finished ok`);
-			    return taskStatusDa.setFinishOk(taskName, info);
+			    return taskStatusDa.setFinishOk(this.name, info);
             })
-            .catch(info => {
-                console.log(`Task ${this.name} finished with error`);
-			    return taskStatusDa.setFinishError(taskName, info);
+            .catch(error => {
+                let info = error;
+                if(typeof error == 'Error'){
+                    info = error.message;
+                }
+                if(!running){
+                    console.log(`Task ${this.name} finished with error`, error);
+                    return taskStatusDa.setFinishError(this.name, info);
+                }
             })
     }
 }

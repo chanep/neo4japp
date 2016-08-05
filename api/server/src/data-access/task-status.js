@@ -1,4 +1,5 @@
 'use strict'
+const _ = require('lodash');
 const BaseDa = require('./base-da');
 const errors = require('../shared/errors');
 
@@ -10,7 +11,7 @@ class TaskStatusDa extends BaseDa{
         let data = {
             name: taskName,
             status: "running",
-            lastStart: new Date(),
+            lastStart: Date(),
             info: info
         };
         return this._upsert(data);
@@ -19,7 +20,7 @@ class TaskStatusDa extends BaseDa{
         let data = {
             name: taskName,
             status: "ok",
-            lastFinish: new Date(),
+            lastFinish: Date(),
             info: info
         };
         return this._upsert(data);
@@ -28,7 +29,7 @@ class TaskStatusDa extends BaseDa{
         let data = {
             name: taskName,
             status: "error",
-            lastFinish: new Date(),
+            lastFinish: Date(),
             info: info
         };
         return this._upsert(data);
@@ -37,8 +38,25 @@ class TaskStatusDa extends BaseDa{
         let query = {name: name};
         return this.find(query);
     }
+    _toEntity(node){
+        let entity = _.clone(node);
+        if(node.info)
+            entity.info = JSON.parse(entity.info);
+        if(node.lastFinish)
+            entity.lastFinish = new Date(node.lastFinish);
+        if(node.lastStart)
+            entity.lastStart = new Date(node.lastStart);
+        return entity;
+    }
+    _toNode(entity){
+        let node = _.clone(entity);
+        if(entity.info){
+            node.info = JSON.stringify(entity.info);
+        }
+        return node;
+    }
     _upsert(data){
-        let query = {name: taskname};
+        let query = {name: data.name};
         return this.find(query)
             .then(tasks => {
                 if(tasks.length == 0){

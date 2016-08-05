@@ -1,6 +1,16 @@
 'use strict'
 const _ = require('lodash');
 
+let parseResultArray = function(result){
+        var entities = [];
+        result.records.forEach(r => {
+            let f = r._fields[0];
+            let e = {id: f.identity.low};
+            _.merge(e, f.properties);
+            entities.push(e);
+        })
+        return entities;
+    };
 
 module.exports = {
     getWhere: function(query, alias){
@@ -13,6 +23,8 @@ module.exports = {
             if(typeof value === 'string' && value.indexOf('*') >= 0){
                 value = value.replace(/\*/g, '.*');
                 conditions.push(`${alias}.${k} =~ '(?i)${value}'`);
+            } else if(typeof value === 'string'){
+                conditions.push(`${alias}.${k} = '${value}'`);
             } else{
                 conditions.push(`${alias}.${k} = ${value}`);
             }
@@ -22,14 +34,8 @@ module.exports = {
         return cypher;
     },
 
-    toEntity: function(result){
-        var entities = [];
-        result.records.forEach(r => {
-            let f = r._fields[0];
-            let e = {id: f.identity.low};
-            _.merge(e, f.properties);
-            entities.push(e);
-        })
+    parseResult: function(result){
+        var entities = parseResultArray(result);
         if(entities.length == 0){
             return null;
         } else if(entities.length == 1){
@@ -38,6 +44,8 @@ module.exports = {
             return entities;
         }
     },
+
+    parseResultArray: parseResultArray,
 
     mapToStr: function(map, mapName){
         let terms = [];

@@ -2,6 +2,7 @@
 const _ = require('lodash');
 const neo4j = require('neo4j-driver').v1;
 const db = require('./db');
+const config = require('../shared/config').db;
 const Joi = require('joi');
 const errors = require('../shared/errors');
 const P = require('bluebird');
@@ -55,8 +56,15 @@ class BaseDa {
         //     return session.close()
         // }     
     }
+    _logCmd(cmd, params){
+        if(config.logCommands){
+            console.log("Command: ", cmd);
+            console.log("params: ", params);
+        }
+    }
     _run(cmd, params) {
         let session = this._session();
+        this._logCmd(cmd, params);
         var p = session.run(cmd, params)
             .then(result => {
                 this._disposeSession(session);
@@ -69,12 +77,22 @@ class BaseDa {
             promise.then(resolve).catch(reject);
         });
     }
+    _toEntity(node){
+        return node;
+    }
+    _toEntityArray(nodes){
+        return nodes.map(n => this._toEntity(n));
+    }
+    _toNode(entity){
+        return entity;
+    }
     findById(id){
         let cmd = `MATCH (n${this._labelCypher}) 
                         WHERE id(n) = {id}
                         RETURN n`; 
         return this._run(cmd, {id: id})
-                .then(cypher.toEntity);
+                .then(cypher.parseResult)
+                .then(n => this._toEntity(n));
     }
     find(query){
         let where = cypher.getWhere(query);
@@ -82,16 +100,17 @@ class BaseDa {
                         ${where}
                         RETURN n`;
         return this._run(cmd)
-                .then(cypher.toEntity);
+                .then(cypher.parseResultArray)
+                .then(n => this._toEntityArray(n));
     }
     create(data){
         let cmd = `CREATE (n${this._labelCypher} {data}) 
                         RETURN n`;
         return this._validate(data)
             .then(d => {
-                return this._run(cmd, {data: d})
+                return this._run(cmd, {data: this._toNode(d)})
             })
-            .then(cypher.toEntity);
+            .then(cypher.parseResult);
     }
     update(data, mergeKeys){
         let dataAux = _.omit(data, ['id']);
@@ -101,9 +120,9 @@ class BaseDa {
                         RETURN n`;
         return this._validate(data, true)
             .then(d => {
-                this._run(cmd, {id: data.id, data: dataAux})
+                this._run(cmd, {id: data.id, data: this._toNode(dataAux)})
             })
-            .then(cypher.toEntity);
+            .then(cypher.parseResult);
     }
     //force: if true delete relations before
     delete(id, force){
@@ -120,7 +139,7 @@ class BaseDa {
         }
         
         return this._run(cmd, {id: id})
-            .then(cypher.toEntity);
+            .then(cypher.parseResult);
     }
     relate(id, otherId, relName, relData, ingoing, replace){
         let dir1 = '';
@@ -149,7 +168,7 @@ class BaseDa {
         let params = {id: neo4j.int(id), otherId: neo4j.int(otherId), relData: relData};
 
         return this._run(cmd, params)
-            .then(cypher.toEntity);
+            .then(cypher.parseResult);
     }
     createAndRelate(data, otherId, relName, relData, ingoing){
         let dir1 = '';
@@ -163,10 +182,11 @@ class BaseDa {
             MATCH (m) WHERE ID(m) = {otherId}
             CREATE (n${this._labelCypher} {data})${dir1}-[r:${relName} {relData}]-${dir2}(m)
             RETURN n`
-        let params = {otherId: neo4j.int(otherId), data: data, relData: relData};
+        let params = {otherId: neo4j.int(otherId), data: this._toNode(data), relData: relData};
 
         return this._run(cmd, params)
-            .then(cypher.toEntity);
+            .then(cypher.parseResult)
+            .then(n => this._toEntity(n));
     }
     enlistTx(tx){
         this._tx = tx;
