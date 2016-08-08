@@ -1,10 +1,18 @@
 'use strict'
+const _ = require('lodash');
 const BaseDa = require('./base-da');
 const errors = require('../shared/errors');
 
 class TaskStatusDa extends BaseDa{
     constructor(tx){
         super(tx, 'TaskStatus');
+    }
+    _nonNativeKeys(){
+        return {
+            lastFinish: "date",
+            lastStart: "date",
+            info: "object"
+        }
     }
     setRunning(taskName, info){
         let data = {
@@ -38,7 +46,7 @@ class TaskStatusDa extends BaseDa{
         return this.find(query);
     }
     _upsert(data){
-        let query = {name: taskname};
+        let query = {name: data.name};
         return this.find(query)
             .then(tasks => {
                 if(tasks.length == 0){

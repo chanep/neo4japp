@@ -15,9 +15,15 @@ var db = require('../data-access/db');
 //     })
 
 const SkillGroupDa = require('../data-access/skill-group');
+const TaskStatusDa = require('../data-access/task-status');
 var da = new SkillGroupDa();
+var ts = new TaskStatusDa();
 
-let sg1, sg2;
+ts.find()
+    .then(console.log)
+    .catch(console.error);
+
+// let sg1, sg2;
 
 // da.create({name: "grupo31", type: "skill"})
 //     .then(sg => {
@@ -41,9 +47,9 @@ let sg1, sg2;
 //         db.close();
 //     })
 
-da.relate(351, 352, "HAS", {relKey2: "relValue2"}, false)
-    .then(console.log)
-    .catch(console.error);
+// da.relate(351, 352, "HAS", {relKey2: "relValue2"}, false)
+//     .then(console.log)
+//     .catch(console.error);
 
 // da.create({name: "nombre", k1: "v1", k2: "v2" })
 //     // .then(node => {
