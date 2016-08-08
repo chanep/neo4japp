@@ -43,7 +43,9 @@ class BaseDa {
         }
         return this._validateSchema(data, schema, onlyDataKeys);
     }
-    
+    _nonNativeKeys(){
+        return {};
+    }
     _session(){
         return this._tx || db.session();
     }
@@ -72,26 +74,60 @@ class BaseDa {
             });
         return this._wrapPromise(p);
     }
-    _wrapPromise(promise){
+    _wrapPromise(promise) {
         return new P(function (resolve, reject) {
-            promise.then(resolve).catch(reject);
+            promise.then(function (result) {
+                resolve(result);
+            }, function (err) {
+                reject(err);
+            });
         });
     }
     _toEntity(node){
-        return node;
+        let entity = _.clone(node);
+        let nonNative = this._nonNativeKeys();
+        for(let k in nonNative){
+            if(node[k]){
+                let type = nonNative[k];
+                switch(type){
+                    case "date":
+                        entity[k] = new Date(node[k]);
+                        break;
+                    case "object":
+                        entity[k] = JSON.parse(node[k]);
+                        break;                   
+                }
+            }
+        }
+        return entity;
     }
     _toEntityArray(nodes){
         return nodes.map(n => this._toEntity(n));
     }
     _toNode(entity){
-        return entity;
+        let node = _.clone(entity);
+        let nonNative = this._nonNativeKeys();
+        for(let k in nonNative){
+            if(node[k]){
+                let type = nonNative[k];
+                switch(type){
+                    case "date":
+                        node[k] = entity[k].getTime();
+                        break;
+                    case "object":
+                        node[k] = JSON.stringify(entity[k]);
+                        break;                   
+                }
+            }
+        }
+        return node;
     }
     findById(id){
         let cmd = `MATCH (n${this._labelCypher}) 
                         WHERE id(n) = {id}
                         RETURN n`; 
         return this._run(cmd, {id: id})
-                .then(cypher.parseResult)
+                .then(r => cypher.parseResult(r))
                 .then(n => this._toEntity(n));
     }
     find(query){
@@ -100,7 +136,7 @@ class BaseDa {
                         ${where}
                         RETURN n`;
         return this._run(cmd)
-                .then(cypher.parseResultArray)
+                .then(r => cypher.parseResultArray(r))
                 .then(n => this._toEntityArray(n));
     }
     create(data){
@@ -110,7 +146,8 @@ class BaseDa {
             .then(d => {
                 return this._run(cmd, {data: this._toNode(d)})
             })
-            .then(cypher.parseResult);
+            .then(r => cypher.parseResult(r))
+            .then(n => this._toEntity(n));
     }
     update(data, mergeKeys){
         let dataAux = _.omit(data, ['id']);
@@ -120,9 +157,10 @@ class BaseDa {
                         RETURN n`;
         return this._validate(data, true)
             .then(d => {
-                this._run(cmd, {id: data.id, data: this._toNode(dataAux)})
+                return this._run(cmd, {id: data.id, data: this._toNode(dataAux)})
             })
-            .then(cypher.parseResult);
+            .then(r => cypher.parseResult(r))
+            .then(n => this._toEntity(n));
     }
     //force: if true delete relations before
     delete(id, force){
@@ -138,8 +176,7 @@ class BaseDa {
                 RETURN count(n) as affected`;
         }
         
-        return this._run(cmd, {id: id})
-            .then(cypher.parseResult);
+        return this._run(cmd, {id: id});
     }
     relate(id, otherId, relName, relData, ingoing, replace){
         let dir1 = '';
@@ -168,7 +205,7 @@ class BaseDa {
         let params = {id: neo4j.int(id), otherId: neo4j.int(otherId), relData: relData};
 
         return this._run(cmd, params)
-            .then(cypher.parseResult);
+            .then(r => cypher.parseResult(r));
     }
     createAndRelate(data, otherId, relName, relData, ingoing){
         let dir1 = '';
@@ -185,7 +222,7 @@ class BaseDa {
         let params = {otherId: neo4j.int(otherId), data: this._toNode(data), relData: relData};
 
         return this._run(cmd, params)
-            .then(cypher.parseResult)
+            .then(r => cypher.parseResult(r))
             .then(n => this._toEntity(n));
     }
     enlistTx(tx){

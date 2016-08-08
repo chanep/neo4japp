@@ -2,6 +2,7 @@
 const _ = require('lodash');
 
 let parseResultArray = function(result){
+        console.log("result",JSON.stringify(result))
         var entities = [];
         result.records.forEach(r => {
             let f = r._fields[0];
@@ -35,7 +36,7 @@ module.exports = {
     },
 
     parseResult: function(result){
-        var entities = parseResultArray(result);
+        var entities = this.parseResultArray(result);
         if(entities.length == 0){
             return null;
         } else if(entities.length == 1){
@@ -45,7 +46,16 @@ module.exports = {
         }
     },
 
-    parseResultArray: parseResultArray,
+    parseResultArray: function(result){
+        var entities = [];
+        result.records.forEach(r => {
+            let f = r._fields[0];
+            let e = {id: f.identity.low};
+            _.merge(e, f.properties);
+            entities.push(e);
+        })
+        return entities;
+    },
 
     mapToStr: function(map, mapName){
         let terms = [];

@@ -32,7 +32,7 @@ class BaseTask {
             .catch(error => {
                 let info = error;
                 if(typeof error == 'Error'){
-                    info = error.message;
+                    info = {error: error.message};
                 }
                 if(!running){
                     console.log(`Task ${this.name} finished with error`, error);

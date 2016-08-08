@@ -7,11 +7,18 @@ class TaskStatusDa extends BaseDa{
     constructor(tx){
         super(tx, 'TaskStatus');
     }
+    _nonNativeKeys(){
+        return {
+            lastFinish: "date",
+            lastStart: "date",
+            info: "object"
+        }
+    }
     setRunning(taskName, info){
         let data = {
             name: taskName,
             status: "running",
-            lastStart: Date(),
+            lastStart: new Date(),
             info: info
         };
         return this._upsert(data);
@@ -20,7 +27,7 @@ class TaskStatusDa extends BaseDa{
         let data = {
             name: taskName,
             status: "ok",
-            lastFinish: Date(),
+            lastFinish: new Date(),
             info: info
         };
         return this._upsert(data);
@@ -29,7 +36,7 @@ class TaskStatusDa extends BaseDa{
         let data = {
             name: taskName,
             status: "error",
-            lastFinish: Date(),
+            lastFinish: new Date(),
             info: info
         };
         return this._upsert(data);
@@ -37,23 +44,6 @@ class TaskStatusDa extends BaseDa{
     findByName(name){
         let query = {name: name};
         return this.find(query);
-    }
-    _toEntity(node){
-        let entity = _.clone(node);
-        if(node.info)
-            entity.info = JSON.parse(entity.info);
-        if(node.lastFinish)
-            entity.lastFinish = new Date(node.lastFinish);
-        if(node.lastStart)
-            entity.lastStart = new Date(node.lastStart);
-        return entity;
-    }
-    _toNode(entity){
-        let node = _.clone(entity);
-        if(entity.info){
-            node.info = JSON.stringify(entity.info);
-        }
-        return node;
     }
     _upsert(data){
         let query = {name: data.name};
