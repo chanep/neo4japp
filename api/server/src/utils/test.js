@@ -1,10 +1,14 @@
 'use strict'
-var path = require('path');
-var envFile = path.resolve(__dirname, "../.env");
+let path = require('path');
+let envFile = path.resolve(__dirname, "../.env");
+let errors = require('../shared/errors');
+
 require('dotenv').config({path: envFile});
 
-var db = require('../data-access/db');
+let db = require('../data-access/db');
 
+
+let e = errors.GenericError("hola");
 
 // var session  = db.session();
 // var cypher = `MATCH (n), (m) where ID(n) = 290 AND ID(m)=292 RETURN n, m`
@@ -14,14 +18,14 @@ var db = require('../data-access/db');
 //         console.log(JSON.stringify(r))
 //     })
 
-const SkillGroupDa = require('../data-access/skill-group');
-const TaskStatusDa = require('../data-access/task-status');
-var da = new SkillGroupDa();
-var ts = new TaskStatusDa();
+// const SkillGroupDa = require('../data-access/skill-group');
+// const TaskStatusDa = require('../data-access/task-status');
+// let da = new SkillGroupDa();
+// let ts = new TaskStatusDa();
 
-ts.find()
-    .then(console.log)
-    .catch(console.error);
+// ts.find()
+//     .then(console.log)
+//     .catch(console.error);
 
 // let sg1, sg2;
 

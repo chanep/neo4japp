@@ -13,7 +13,7 @@ class GenericError extends Error{
         var s = this.stack.toString();
         var inner = error.innerError;
         while(inner && inner.stack){
-            s += "\n\n    innerError: " + inner.stack.toString();
+            s += "\n\n    innerError: " + JSON.stringify(inner.stack);
             inner = inner.innerError;
         }
         return s;

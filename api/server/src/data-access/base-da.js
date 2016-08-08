@@ -60,8 +60,10 @@ class BaseDa {
     }
     _logCmd(cmd, params){
         if(config.logCommands){
+            console.log("----------------------");
             console.log("Command: ", cmd);
             console.log("params: ", params);
+            console.log("----------------------");
         }
     }
     _run(cmd, params) {
@@ -71,6 +73,9 @@ class BaseDa {
             .then(result => {
                 this._disposeSession(session);
                 return result;
+            })
+            .catch(err =>{
+                throw new errors.GenericError("db command error: " + JSON.stringify(err), err);
             });
         return this._wrapPromise(p);
     }
@@ -157,10 +162,27 @@ class BaseDa {
                         RETURN n`;
         return this._validate(data, true)
             .then(d => {
-                return this._run(cmd, {id: data.id, data: this._toNode(dataAux)})
+                return this._run(cmd, {id: neo4j.int(data.id), data: this._toNode(dataAux)})
             })
             .then(r => cypher.parseResult(r))
             .then(n => this._toEntity(n));
+    }
+    upsert(data, mergeKeys, uniqueKeys){
+        let query = _.pick(data, uniqueKeys);
+        return this.find(query)
+            .then(entities => {
+                if(entities.length > 1){
+                    throw new errors.GenericError(`keys ${uniqueKeys} must be unique. Matching entities ${JSON.stringify(entities)}`);
+                }
+                else if(entities.length == 0){
+                    return this.create(data)
+                        .then(e => {return {data: e, created: true}});
+                } else{
+                    data.id = entities[0].id;
+                    return this.update(data, mergeKeys)
+                        .then(e => {return {data: e, updated: true}});
+                }
+            });
     }
     //force: if true delete relations before
     delete(id, force){
