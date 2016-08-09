@@ -37,6 +37,7 @@ let skillGroup = new Model(
     ['SkillGroup'],
     {
         id: Joi.number(),
+        level: Joi.number().required(),
         name: Joi.string().required(),
         type: Joi.string().required()
     }
@@ -69,6 +70,7 @@ let employee = new Model(
 
 skill.relateWithOne(skillGroup, "BELONGS_TO", "group", true, {})
 skillGroup.relateWithOne(skill, "BELONGS_TO", "skills", false, {})
+skillGroup.relateWithOne(skillGroup, "BELONGS_TO", "group", false, {})
 
 module.exports = {
     skill: skill,

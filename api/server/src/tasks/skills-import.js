@@ -9,11 +9,15 @@ class SkillImportTask extends BaseTask{
         super('tasks-import');
     }
 
-    _checkLevels(args) {
-
-    }
-
     _doRun(){
+    	let _this = this;
+
+        let info = {
+            updated: 0,
+            created: 0,
+            errors: 0
+        };
+
 		var GoogleSpreadsheet = require('google-spreadsheet');
 		var async = require('async');
 		var doc = new GoogleSpreadsheet('1ExPMQwoHZEvXrcxEwxROfWZH1AmPWySqY4_tD58aZ04');
@@ -35,59 +39,19 @@ class SkillImportTask extends BaseTask{
 						'return-empty': true
 					}, function(err, rows) {
 						var cells = [];
-						for(var index = 0; index < rows.length; index++) {
-							var row = rows[index];
+						
+						async.eachSeries = P.promisify(async.eachSeries);
+						return async.eachSeries(rows, function (row, callback) {
+							let skillGroup = _this._transformSkillGroup(row);
 							
-							this._checkLevels({
-								'level1': {
-									'value': rows['level1']
-								},
-								'level2': {
-									'value': rows['level2']
-								},
-								'level3': {
-									'value': rows['level3']
-								}
-							});
+							let skillGroupDa = new SkillGroupDa();
 
-							/*
-							if (cell.value && cell.row > 1) {
-								if (currentLevel != cell.col) {
-									currentLevel = cell.col;
-									if (currentLevel == 1) {
-										parent['id'] = 0;
-										parent['level'] = 0;
-										parent['name'] = '';
-									} else {
-										parent['id'] = last['id'];
-										parent['level'] = last['level'];
-										parent['name'] = last['name'];
-									}
-								}
-							
-								var current = {
-									'id': 0,
-									'level': cell.col,
-									'name': cell.value
-								};
 
-								console.log("Parent: " + parent['name'] + ', Current: ' + current['name']);
-
-								last['id'] = current['id'];
-								last['level'] = current['level'];
-								last['name'] = current['name'];
-							*/
-								
-
-																/*
-								levels[cell.col - 1] = cell.value;
-								for(var index = levels.length - 1; index > cell.col; index--)
-									levels.splice(index, 1);
-
-								console.log(levels);
-								console.log('Cell(' + cell.row + ',' + cell.col + ') --> ' + cell.value);
-								*/
-						};
+							callback();
+						}).then(() => {
+            				console.log("info", info)
+            				return info;
+    					});
 					});
 				});
 
@@ -96,6 +60,13 @@ class SkillImportTask extends BaseTask{
 		]);
 
 		return P.resolve("Done");
+    }
+
+    _transformSkillGroup(row) {
+        let skillGroup = _.pick(row, ['level1']);
+        skillGroup.name = row['level1'];
+        skillGroup.level = 1;
+        return skillGroup;
     }
 }
 
