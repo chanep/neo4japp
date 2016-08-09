@@ -1,8 +1,29 @@
 [
 	{
+		"name" : "cw-import",
+		"path" : "./tasks/cw-import",
+		"cronPattern" : "0 1 * * 0",
+		"args" : {
+		}
+	},
+	{
 		"name" : "offices-import",
 		"path" : "./tasks/offices-import",
-		"cronPattern" : "0 1 * * 0",
+		"cronPattern" : null,
+		"args" : {
+		}
+	},
+	{
+		"name" : "departments-import",
+		"path" : "./tasks/departments-import",
+		"cronPattern" : null,
+		"args" : {
+		}
+	},
+	{
+		"name" : "positions-import",
+		"path" : "./tasks/positions-import",
+		"cronPattern" : null,
 		"args" : {
 		}
 	}

@@ -8,7 +8,42 @@ require('dotenv').config({path: envFile});
 let db = require('../data-access/db');
 
 
-let e = errors.GenericError("hola");
+let [a, b] = ["hola, chau"];
+console.log("a", a)
+console.log("b", b)
+
+//let cmd = `match (n:Skill) optional match (n)-[r:BELONGS_TO]->(m) return {identity: id(n), name: n.name, group: m}`;
+// let cmd = `match (n:SkillGroup)
+//             optional match (n)<-[r:BELONGS_TO]-(m)
+//             return {identity: id(n), name: n.name, skills: collect(m)}`;
+// let session = db.session();
+
+// session.run(cmd)
+//     .then(r =>{
+//         console.log("result", JSON.stringify(r));
+//         session.close();
+//         db.close();
+//     })
+//     .catch(console.error);
+
+
+// const EmployeeDa = require('../data-access/employee');
+// let employeeDa = new EmployeeDa();
+
+// employeeDa.create({username: "estebanc"})
+//     .then(e => {
+//         return employeeDa.setOffice(e.id, 389);
+//     })
+
+// let cypher = `MATCH (e:Employee)-[:OF_OFFICE]->(o) 
+//                 WHERE e.username = 'estebanc'
+//                 RETURN {id: id(e), username: e.username, office: o}`; 
+// employeeDa.query(cypher)
+//     .then(r => {
+//         console.log(JSON.stringify(r))
+//     })
+//     .catch(console.error)
+
 
 // var session  = db.session();
 // var cypher = `MATCH (n), (m) where ID(n) = 290 AND ID(m)=292 RETURN n, m`

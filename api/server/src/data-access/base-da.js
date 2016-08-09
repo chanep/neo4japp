@@ -144,6 +144,11 @@ class BaseDa {
                 .then(r => cypher.parseResultArray(r))
                 .then(n => this._toEntityArray(n));
     }
+    query(cmd){
+        return this._run(cmd);
+                // .then(r => cypher.parseResultArray(r))
+                // .then(n => this._toEntityArray(n));
+    }
     create(data){
         let cmd = `CREATE (n${this._labelCypher} {data}) 
                         RETURN n`;
