@@ -1,6 +1,7 @@
 'use strict'
 const _ = require('lodash');
 const errors = require('../shared/errors');
+const neo4j = require('neo4j-driver').v1;
 
 
 class CypherHelper {
@@ -9,19 +10,93 @@ class CypherHelper {
         let aux = [""].concat(this.model.labels);
         this._labelsCypher = aux.join(':');
     }
+    findByIdCmd(id, includes){
+        let match = this.getMatch(includes);
+        let ret = this.getReturn(includes);
+        let cmd = `${match}
+                    WHERE ID(n) = {id}
+                    ${ret}`;
+        let param = {id: id};
+        return [cmd, params];
+    }
     findCmd(query){
+        let includes = [];
+        if(query && query.includes)
+            includes = query.includes;
         let where = this.getWhere(query);
-        let match = this.getMatch(query);
-        let ret = this.getReturn(query);
+        let match = this.getMatch(includes);
+        let ret = this.getReturn(includes);
         let cmd = `${match}
                     ${where}
                     ${ret}`;
+        return [cmd, {}];
+    }
+    createCmd(data){
+        let cmd = `CREATE (n${this._labelCypher} {data}) 
+                   RETURN n`
+        let params = {data: this.convertToNative(data)};
+        return [cmd, params];
+    }
+    updateCmd(data, mergeKeys){
+        let operator = mergeKeys? '+=' : '=';
+        let cmd = `MATCH (n${this._labelCypher}) WHERE ID(n) = {id} 
+                      SET n ${operator} {data}
+                        RETURN n`;
+        let dataAux = _.omit(data, ["id"]);
+        let params = {data: this.convertToNative(dataAux)};
+        return [cmd, params];
+    }
+    deleteCmd(id, force){
+        let cmd = `
+            MATCH (n${this._labelCypher}) WHERE ID(n) = {id} 
+            DELETE n
+            RETURN count(n) as affected`;
+        if(force){
+            cmd = `
+                MATCH (n${this._labelCypher}) WHERE ID(n) = {id} 
+                OPTIONAL MATCH (n${this._labelCypher})-[r]-() WHERE ID(n) = {id} 
+                DELETE n,r
+                RETURN count(n) as affected`;
+        }
+        let params = {id: id};
+        return [cmd, params];
     }
     relateCmd(id, otherId, relKey, relData, replace){
+        let r = this.model.getRelationByKey(key);
+
+        let dir1 = '>';
+        let dir2 = '';
+        if(!r.outgoing){
+            dir1 = '<';
+            dir2 = '';
+        }
+
+        relData = relData || {};
+        let relDataStr = this.mapToStr(relData, "relData");
+        let cmd = `
+            MATCH (n${this._labelsCypher}),(m)
+            WHERE ID(n) = {id} AND ID(m) = {otherId}
+            MERGE (n)${dir1}-[r:${r.label} ${relDataStr}]-${dir2}(m)
+            RETURN r`;
+
+        if(replace){
+            cmd = `
+                MATCH (n${this._labelsCypher}),(m)
+                WHERE ID(n) = {id} AND ID(m) = {otherId}
+                CREATE UNIQUE (n)${dir1}-[r:${r.label}]-${dir2}(m)
+                SET r = {relData}
+                RETURN r`;
+        }
         
+        let params = {id: neo4j.int(id), otherId: neo4j.int(otherId), relData: relData};
+
+        return [cmd, params];
     }
-    parseResult(result){
-        var nodes = this.parseResultArray(result);
+    createAndRelateCmd(
+        
+    )
+    parseResult(result, includes){
+        var nodes = this.parseResultArray(result, includes);
         if(nodes.length == 0){
             return null;
         } else if(nodes.length == 1){
@@ -30,23 +105,20 @@ class CypherHelper {
             return nodes;
         }
     }
-    parseResultArray(result, query){
+    parseResultArray(result, includes){
         var nodes = [];
         result.records.forEach(r => {
             let f = r._fields[0];
-            let n = this.parseField(f);
+            let n = this.parseField(f, this.model.schema);
 
-            let include = [];
-            if(query && query.include)
-                include = query.include;   
-            include.forEach(key => {
+            includes = includes || []; 
+            includes.forEach(key => {
                 let r = this.model.getRelationByKey(key);
-                if(!r) throw new errors.GenericError(`Model ${this.model.name} does not have a relationship with key ${key}`);
                 if(r.type == 'one'){
-                    n[r.key] = this.parseField(f[key]);
+                    n[r.key] = this.parseField(f[key], r.schema);
                 } else{
                     n[r.key] = f[key].map(f2 =>{
-                        return this.parseField(f2);
+                        return this.parseField(f2, r.schema);
                     }) 
                 }
             })
@@ -55,24 +127,23 @@ class CypherHelper {
         })
         return entities;
     }
-    parseField(f){
+    parseField(f, schema){
         let parsed = {
             id: f.identity.low
         }
         for(let k in f.properties){
             parsed[k] = f.properties[k];
         }
-        return parsed;
+        return this.convertFromNative(parsed, schema);
     }
-    getMatch(query){
+    getMatch(includes){
         let match = `MATCH (n${this._labelsCypher})`;
-        let include = query.include || [];
+        includes = includes || [];
 
         let i = 1;
-        include.forEach(key => {
+        includes.forEach(key => {
             i++;
             let r = this.model.getRelationByKey(key);
-            if(!r) throw new errors.GenericError(`Model ${this.model.name} does not have a relationship with key ${key}`);
             let rel = `-[r${i}:${r.label}]->`;
             if(!r.outgoing){
                 rel = `<-[r${i}:${r.label}]-`;
@@ -82,19 +153,18 @@ class CypherHelper {
 
         return match;
     }
-    getReturn(query){
+    getReturn(includes){
         let ret = `RETURN {identity: ID(n)`;
-        let include = query.include || [];
+        includes = includes || [];
 
         for(let key in this.model.schema){
             ret += `, ${key}: n.${key}`;
         }
 
         let i = 1;
-        include.forEach(key => {
+        includes.forEach(key => {
             i++;
             let r = this.model.getRelationByKey(key);
-            if(!r) throw new errors.GenericError(`Model ${this.model.name} does not have a relationship with key ${key}`);
             let rel = `, ${r.key}: n${i}`;
             if(r.type == 'many'){
                 rel = ` ,${r.key}: COLLECT(n${i})`;
@@ -107,6 +177,7 @@ class CypherHelper {
     getWhere(query, alias){
         if(!query)
             return "";
+        query = _.omit(query, ["includes"]);
         alias = alias || 'n'; 
         let conditions = [];
         for(let k in query){
@@ -124,69 +195,45 @@ class CypherHelper {
         let cypher = " WHERE " + conditions.join(' AND ');
         return cypher;
     }
-}
-
-let parseResultArray = function(result){
-        console.log("result",JSON.stringify(result))
-        var entities = [];
-        result.records.forEach(r => {
-            let f = r._fields[0];
-            let e = {id: f.identity.low};
-            _.merge(e, f.properties);
-            entities.push(e);
-        })
-        return entities;
-    };
-
-module.exports = {
-    getWhere: function(query, alias){
-        if(!query)
-            return "";
-        alias = alias || 'n'; 
-        let conditions = [];
-        for(let k in query){
-            let value = query[k];
-            if(typeof value === 'string' && value.indexOf('*') >= 0){
-                value = value.replace(/\*/g, '.*');
-                conditions.push(`${alias}.${k} =~ '(?i)${value}'`);
-            } else if(typeof value === 'string'){
-                conditions.push(`${alias}.${k} = '${value}'`);
-            } else{
-                conditions.push(`${alias}.${k} = ${value}`);
-            }
-        }
-
-        let cypher = " WHERE " + conditions.join(' AND ');
-        return cypher;
-    },
-
-    parseResult: function(result){
-        var entities = this.parseResultArray(result);
-        if(entities.length == 0){
-            return null;
-        } else if(entities.length == 1){
-            return entities[0];
-        } else{
-            return entities;
-        }
-    },
-
-    parseResultArray: function(result){
-        var entities = [];
-        result.records.forEach(r => {
-            let f = r._fields[0];
-            let e = {id: f.identity.low};
-            _.merge(e, f.properties);
-            entities.push(e);
-        })
-        return entities;
-    },
-
-    mapToStr: function(map, mapName){
+    mapToStr(map, mapName){
         let terms = [];
         for(let k in map){
             terms.push(`${k}: {${mapName}}.${k}`);
         }
         return '{' + terms.join(', ') + '}';
+    }
+    convertToNative(data, shcema){
+        if(!schema)
+            return data;
+        let nativeData = _.clone(data);
+        for(let k in schema){
+            let type = schema[k]._type;
+            switch (type) {
+                case "date":
+                    nativeData[k] = data[k].getTime();
+                    break;
+                case "object":
+                    nativeData[k] = JSON.stringify(data[k]);
+                    break;
+            }
+        }
+        return nativeData;
+    }
+    convertFromNative(nativeData, shcema){
+        if(!schema)
+            return nativeData;
+        let data = _.clone(nativeData);
+        for(let k in schema){
+            let type = schema[k]._type;
+            switch(type){
+                case "date":
+                    data[k] = new Date(nativeData[k]);
+                    break;
+                case "object":
+                    data[k] = JSON.parse(nativeData[k]);
+                    break;                   
+            }
+        }
+        return data;
     }
 }

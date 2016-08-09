@@ -1,18 +1,12 @@
 'use strict'
 const _ = require('lodash');
 const BaseDa = require('./base-da');
+const model = require('./models').skillGroup;
 const errors = require('../shared/errors');
 
 class TaskStatusDa extends BaseDa{
     constructor(tx){
-        super(tx, 'TaskStatus');
-    }
-    _nonNativeKeys(){
-        return {
-            lastFinish: "date",
-            lastStart: "date",
-            info: "object"
-        }
+        super(model, tx);
     }
     setRunning(taskName, info){
         let data = {
@@ -21,7 +15,7 @@ class TaskStatusDa extends BaseDa{
             lastStart: new Date(),
             info: info
         };
-        return this._upsert(data);
+        return this.upsert(data, ["name"]);
     }
     setFinishOk(taskName, info){
         let data = {
@@ -30,7 +24,7 @@ class TaskStatusDa extends BaseDa{
             lastFinish: new Date(),
             info: info
         };
-        return this._upsert(data);
+        return this.upsert(data);
     }
     setFinishError(taskName, info){
         let data = {
@@ -39,23 +33,11 @@ class TaskStatusDa extends BaseDa{
             lastFinish: new Date(),
             info: info
         };
-        return this._upsert(data);
+        return this.upsert(data, ["name"]);
     }
     findByName(name){
         let query = {name: name};
         return this.find(query);
-    }
-    _upsert(data){
-        let query = {name: data.name};
-        return this.find(query)
-            .then(tasks => {
-                if(tasks.length == 0){
-                    return this.create(data);
-                } else{
-                    data.id = tasks[0].id;
-                    return this.update(data, true);
-                }
-            });
     }
 }
 

@@ -6,45 +6,32 @@ const config = require('../shared/config').db;
 const Joi = require('joi');
 const errors = require('../shared/errors');
 const P = require('bluebird');
-const cypher = require('./cypher-helper');
+const Cypher = require('./cypher-helper');
 
 
 
 class BaseDa {
-    constructor(tx, labels, schema){
-        if(!labels){
-            this._labels = [];
-        } else if(!Array.isArray(labels)){
-            this._labels = [labels];
-        } else{
-            this._labels = labels;
-        }
-        let aux = [""].concat(this._labels);
-        this._labelCypher = aux.join(':');
-
-        this._schema = schema;
+    constructor(model, tx){
+        this.model = model;
+        this._cypher = new Cypher(model);
         this._tx = tx;
         
     }
-    _validateSchema(data, schema){
+    _validateSchema(data, schema, schemaName){
         let options = schema._options || {stripUnknown: true};
-        let errorMessage = schema._errorMessage || "Validation error";
+        let errorMessage = `Error in ${schemaName} schema`;
         var result = Joi.validate(data, schema, options);
 		if(result.error)
             return P.reject(new errors.GenericError(errorMessage + "(" + result.error + ")"));
 		return P.resolve(result.value);
     }
     _validate(data, onlyDataKeys){
-        if(!this._schema)
-            return P.resolve(data);
-        let schema = this._schema;
+        let schema = this.model.schema;
+        let schemaName = this.model.name;
         if(onlyDataKeys){
             schema = _.pick(schema, _.keys(data));
         }
-        return this._validateSchema(data, schema, onlyDataKeys);
-    }
-    _nonNativeKeys(){
-        return {};
+        return this._validateSchema(data, schema, schemaName);
     }
     _session(){
         return this._tx || db.session();
@@ -88,61 +75,21 @@ class BaseDa {
             });
         });
     }
-    _toEntity(node){
-        let entity = _.clone(node);
-        let nonNative = this._nonNativeKeys();
-        for(let k in nonNative){
-            if(node[k]){
-                let type = nonNative[k];
-                switch(type){
-                    case "date":
-                        entity[k] = new Date(node[k]);
-                        break;
-                    case "object":
-                        entity[k] = JSON.parse(node[k]);
-                        break;                   
-                }
-            }
-        }
-        return entity;
-    }
-    _toEntityArray(nodes){
-        return nodes.map(n => this._toEntity(n));
-    }
-    _toNode(entity){
-        let node = _.clone(entity);
-        let nonNative = this._nonNativeKeys();
-        for(let k in nonNative){
-            if(node[k]){
-                let type = nonNative[k];
-                switch(type){
-                    case "date":
-                        node[k] = entity[k].getTime();
-                        break;
-                    case "object":
-                        node[k] = JSON.stringify(entity[k]);
-                        break;                   
-                }
-            }
-        }
-        return node;
-    }
-    findById(id){
-        let cmd = `MATCH (n${this._labelCypher}) 
-                        WHERE id(n) = {id}
-                        RETURN n`; 
-        return this._run(cmd, {id: id})
-                .then(r => cypher.parseResult(r))
-                .then(n => this._toEntity(n));
+    findById(id, includes){
+        let cypher = this._cypher.findByIdCmd(id, includes);
+        let cmd = cypher[0];
+        let params = cypher[1];
+        return this._run(cmd, params)
+                .then(r => this._cypher.parseResult(r, includes));
     }
     find(query){
-        let where = cypher.getWhere(query);
-        let cmd = `MATCH (n${this._labelCypher}) 
-                        ${where}
-                        RETURN n`;
-        return this._run(cmd)
-                .then(r => cypher.parseResultArray(r))
-                .then(n => this._toEntityArray(n));
+        query = query || {};
+        let includes = query.includes || [];
+        let cypher = this._cypher.findCmd(query);
+        let cmd = cypher[0];
+        let params = cypher[1];
+        return this._run(cmd, params)
+                .then(r => this._cypher.parseResultArray(r, includes));
     }
     query(cmd){
         return this._run(cmd);
@@ -150,29 +97,26 @@ class BaseDa {
                 // .then(n => this._toEntityArray(n));
     }
     create(data){
-        let cmd = `CREATE (n${this._labelCypher} {data}) 
-                        RETURN n`;
         return this._validate(data)
             .then(d => {
-                return this._run(cmd, {data: this._toNode(d)})
+                let cypher = this._cypher.createCmd(d);
+                let cmd = cypher[0];
+                let params = cypher[1];
+                return this._run(cmd, params)
             })
-            .then(r => cypher.parseResult(r))
-            .then(n => this._toEntity(n));
+            .then(r => this._cypher.parseResult(r));
     }
     update(data, mergeKeys){
-        let dataAux = _.omit(data, ['id']);
-        let operator = mergeKeys? '+=' : '=';
-        let cmd = `MATCH (n${this._labelCypher}) WHERE ID(n) = {id} 
-                      SET n ${operator} {data}
-                        RETURN n`;
         return this._validate(data, true)
             .then(d => {
-                return this._run(cmd, {id: neo4j.int(data.id), data: this._toNode(dataAux)})
+                let cypher = this._cypher.updateCmd(d, mergeKeys);
+                let cmd = cypher[0];
+                let params = cypher[1];
+                return this._run(cmd, params)
             })
-            .then(r => cypher.parseResult(r))
-            .then(n => this._toEntity(n));
+            .then(r => this._cypher.parseResult(r));
     }
-    upsert(data, mergeKeys, uniqueKeys){
+    upsert(data, uniqueKeys, mergeKeys){
         let query = _.pick(data, uniqueKeys);
         return this.find(query)
             .then(entities => {
@@ -191,50 +135,20 @@ class BaseDa {
     }
     //force: if true delete relations before
     delete(id, force){
-        let cmd = `
-            MATCH (n${this._labelCypher}) WHERE ID(n) = {id} 
-            DELETE n
-            RETURN count(n) as affected`;
-        if(force){
-            cmd = `
-                MATCH (n${this._labelCypher}) WHERE ID(n) = {id} 
-                OPTIONAL MATCH (n${this._labelCypher})-[r]-() WHERE ID(n) = {id} 
-                DELETE n,r
-                RETURN count(n) as affected`;
-        }
-        
-        return this._run(cmd, {id: id});
+        let cypher = this_cypher.deleteCmd(mergeKeys);
+        let cmd = cypher[0];
+        let params = cypher[1];  
+        return this._run(cmd, params);
     }
-    relate(id, otherId, relName, relData, ingoing, replace){
-        let dir1 = '';
-        let dir2 = '>';
-        if(ingoing){
-            dir1 = '<';
-            dir2 = '';
-        }
-        relData = relData || {};
-        let relDataStr = cypher.mapToStr(relData, "relData");
-        let cmd = `
-            MATCH (n${this._labelCypher}),(m)
-            WHERE ID(n) = {id} AND ID(m) = {otherId}
-            MERGE (n)${dir1}-[r:${relName} ${relDataStr}]-${dir2}(m)
-            RETURN r`;
-
-        if(replace){
-            cmd = `
-                MATCH (n${this._labelCypher}),(m)
-                WHERE ID(n) = {id} AND ID(m) = {otherId}
-                CREATE UNIQUE (n)${dir1}-[r:${relName}]-${dir2}(m)
-                SET r = {relData}
-                RETURN r`;
-        }
-        
-        let params = {id: neo4j.int(id), otherId: neo4j.int(otherId), relData: relData};
+    relate(id, otherId, relKey, relData, replace){
+        let cypher = this._cypher.relateCmd(id, otherId, relKey, relData, replace);
+        let cmd = cypher[0];
+        let params = cypher[1];
 
         return this._run(cmd, params)
             .then(r => cypher.parseResult(r));
     }
-    createAndRelate(data, otherId, relName, relData, ingoing){
+    createAndRelate(data, otherId, relKey, relData){
         let dir1 = '';
         let dir2 = '>';
         if(ingoing){
@@ -249,8 +163,7 @@ class BaseDa {
         let params = {otherId: neo4j.int(otherId), data: this._toNode(data), relData: relData};
 
         return this._run(cmd, params)
-            .then(r => cypher.parseResult(r))
-            .then(n => this._toEntity(n));
+            .then(r => cypher.parseResult(r));
     }
     enlistTx(tx){
         this._tx = tx;
