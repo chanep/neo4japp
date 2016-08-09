@@ -1,9 +1,9 @@
 'use strict'
 require('dotenv').load();
-var schedule = require('node-schedule');
-var tasksConf = require('./task-config.json');
+const schedule = require('node-schedule');
+const tasksConf = require('./task-config.json');
 
-var taskName = process.argv[2];
+let taskName = process.argv[2];
 if(taskName){
 	runTask(taskName);
 } else{
@@ -14,10 +14,12 @@ if(taskName){
 function setupSchedule() {
 	console.log("Task scheduler started...");
 	tasksConf.forEach(function(taskConf) {
-		var task = new (require(taskConf.path));
-		var j = schedule.scheduleJob(taskConf.cronPattern, function() {
-			task.run(taskConf.args);
-		});
+		if(taskConf.cronPattern){
+			let task = new (require(taskConf.path));
+			let j = schedule.scheduleJob(taskConf.cronPattern, function() {
+				task.run(taskConf.args);
+			});
+		}
 	})
 }
 
