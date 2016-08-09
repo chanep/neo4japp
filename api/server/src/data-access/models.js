@@ -89,13 +89,7 @@ let employee = new Model(
 )
 
 skill.relateWithOne(skillGroup, "BELONGS_TO", "group", true, {})
-<<<<<<< HEAD
 skillGroup.relateWithMany(skill, "BELONGS_TO", "skills", false, {})
-=======
-skillGroup.relateWithOne(skill, "BELONGS_TO", "skills", false, {})
-skillGroup.relateWithOne(skillGroup, "BELONGS_TO", "group", true, {})
-skillGroup.relateWithOne(skillGroup, "BELONGS_TO", "group", false, {})
->>>>>>> fb6fccf21801d9908f18b4f6b283da674bd9938a
 
 module.exports = {
     skill: skill,
