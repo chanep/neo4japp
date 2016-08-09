@@ -92,9 +92,9 @@ class CypherHelper {
 
         return [cmd, params];
     }
-    createAndRelateCmd(
-        
-    )
+    
+    createAndRelateCmd() {}
+
     parseResult(result, includes){
         var nodes = this.parseResultArray(result, includes);
         if(nodes.length == 0){
@@ -172,7 +172,7 @@ class CypherHelper {
             ret += rel;
         })
 
-        return match;
+        //return match;
     }
     getWhere(query, alias){
         if(!query)
@@ -237,3 +237,5 @@ class CypherHelper {
         return data;
     }
 }
+
+module.exports = CypherHelper;

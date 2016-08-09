@@ -43,9 +43,6 @@ class SkillImportTask extends BaseTask{
 						async.eachSeries = P.promisify(async.eachSeries);
 						return async.eachSeries(rows, function (row, callback) {
 							let skillGroup = _this._transformSkillGroup(row);
-							
-							let skillGroupDa = new SkillGroupDa();
-
 
 							callback();
 						}).then(() => {
@@ -63,10 +60,9 @@ class SkillImportTask extends BaseTask{
     }
 
     _transformSkillGroup(row) {
-        let skillGroup = _.pick(row, ['level1']);
-        skillGroup.name = row['level1'];
-        skillGroup.level = 1;
-        return skillGroup;
+        var group = new SkillGroupDa();
+        var exists = group.checkExistsByName(row['level1'], row['level2']);
+        console.log(exists);
     }
 }
 
