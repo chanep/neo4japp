@@ -26,12 +26,16 @@ class BaseDa {
 		return P.resolve(result.value);
     }
     _validate(data, onlyDataKeys){
-        let schema = this.model.schema;
-        let schemaName = this.model.name;
-        if(onlyDataKeys){
-            schema = _.pick(schema, _.keys(data));
+        try{
+            let schema = this.model.schema;
+            let schemaName = this.model.name;
+            if(onlyDataKeys){
+                schema = _.pick(schema, _.keys(data));
+            }
+            return this._validateSchema(data, schema, schemaName);
+        } catch(err){
+            return P.reject(errors.GenericError("Error validating model data", err));
         }
-        return this._validateSchema(data, schema, schemaName);
     }
     _session(){
         return this._tx || db.session();
@@ -102,7 +106,7 @@ class BaseDa {
                 let cypher = this._cypher.createCmd(d);
                 let cmd = cypher[0];
                 let params = cypher[1];
-                return this._run(cmd, params)
+                return this._run(cmd, params);
             })
             .then(r => this._cypher.parseResult(r));
     }
@@ -135,10 +139,18 @@ class BaseDa {
     }
     //force: if true delete relations before
     delete(id, force){
-        let cypher = this_cypher.deleteCmd(mergeKeys);
+        let cypher = this._cypher.deleteCmd(id, force);
         let cmd = cypher[0];
         let params = cypher[1];  
-        return this._run(cmd, params);
+        return this._run(cmd, params)
+            .then(r => this._cypher.parseResultAffected(r));
+    }
+    deleteAll(){
+        let cypher = this._cypher.deleteAllCmd();
+        let cmd = cypher[0];
+        let params = cypher[1];  
+        return this._run(cmd, params)
+            .then(r => this._cypher.parseResultAffected(r));
     }
     relate(id, otherId, relKey, relData, replace){
         let cypher = this._cypher.relateCmd(id, otherId, relKey, relData, replace);
@@ -146,24 +158,15 @@ class BaseDa {
         let params = cypher[1];
 
         return this._run(cmd, params)
-            .then(r => cypher.parseResult(r));
+            .then(r => this._cypher.parseResult(r));
     }
     createAndRelate(data, otherId, relKey, relData){
-        let dir1 = '';
-        let dir2 = '>';
-        if(ingoing){
-            dir1 = '<';
-            dir2 = '';
-        }
-        relData = relData || {};
-        let cmd = `
-            MATCH (m) WHERE ID(m) = {otherId}
-            CREATE (n${this._labelCypher} {data})${dir1}-[r:${relName} {relData}]-${dir2}(m)
-            RETURN n`
-        let params = {otherId: neo4j.int(otherId), data: this._toNode(data), relData: relData};
+        let cypher = this._cypher.createAndRelateCmd(data, otherId, relKey, relData);
+        let cmd = cypher[0];
+        let params = cypher[1];
 
         return this._run(cmd, params)
-            .then(r => cypher.parseResult(r));
+            .then(r => this._cypher.parseResult(r));
     }
     enlistTx(tx){
         this._tx = tx;

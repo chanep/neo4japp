@@ -1,5 +1,6 @@
 'use strict'
 const Joi = require('joi');
+const _ = require('lodash');
 const errors = require('../shared/errors')
 
 class Relationship {
@@ -40,7 +41,7 @@ class Model {
 }
 
 let skillGroup = new Model(
-    'SkillGroup'
+    'SkillGroup',
     ['SkillGroup'],
     {
         id: Joi.number(),
@@ -88,7 +89,7 @@ let employee = new Model(
 )
 
 skill.relateWithOne(skillGroup, "BELONGS_TO", "group", true, {})
-skillGroup.relateWithOne(skill, "BELONGS_TO", "skills", false, {})
+skillGroup.relateWithMany(skill, "BELONGS_TO", "skills", false, {})
 
 module.exports = {
     skill: skill,

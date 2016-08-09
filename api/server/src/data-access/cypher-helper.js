@@ -16,7 +16,7 @@ class CypherHelper {
         let cmd = `${match}
                     WHERE ID(n) = {id}
                     ${ret}`;
-        let param = {id: id};
+        let params = {id: id};
         return [cmd, params];
     }
     findCmd(query){
@@ -32,40 +32,49 @@ class CypherHelper {
         return [cmd, {}];
     }
     createCmd(data){
-        let cmd = `CREATE (n${this._labelCypher} {data}) 
+        let cmd = `CREATE (n${this._labelsCypher} {data}) 
                    RETURN n`
-        let params = {data: this.convertToNative(data)};
+        let params = {data: this.convertToNative(data, this.model.schema)};
         return [cmd, params];
     }
     updateCmd(data, mergeKeys){
         let operator = mergeKeys? '+=' : '=';
-        let cmd = `MATCH (n${this._labelCypher}) WHERE ID(n) = {id} 
+        let cmd = `MATCH (n${this._labelsCypher}) WHERE ID(n) = {id} 
                       SET n ${operator} {data}
                         RETURN n`;
         let dataAux = _.omit(data, ["id"]);
-        let params = {data: this.convertToNative(dataAux)};
+        let params = {data: this.convertToNative(dataAux, this.model.schema)};
         return [cmd, params];
     }
     deleteCmd(id, force){
         let cmd = `
-            MATCH (n${this._labelCypher}) WHERE ID(n) = {id} 
+            MATCH (n${this._labelsCypher}) WHERE ID(n) = {id} 
             DELETE n
             RETURN count(n) as affected`;
         if(force){
             cmd = `
-                MATCH (n${this._labelCypher}) WHERE ID(n) = {id} 
-                OPTIONAL MATCH (n${this._labelCypher})-[r]-() WHERE ID(n) = {id} 
+                MATCH (n${this._labelsCypher}) WHERE ID(n) = {id} 
+                OPTIONAL MATCH (n${this._labelsCypher})-[r]-() WHERE ID(n) = {id} 
                 DELETE n,r
                 RETURN count(n) as affected`;
         }
         let params = {id: id};
         return [cmd, params];
     }
+    deleteAllCmd(){
+        let cmd = `
+                MATCH (n${this._labelsCypher}) 
+                OPTIONAL MATCH (n${this._labelsCypher})-[r]-() 
+                DELETE n,r
+                RETURN count(n) as affected`;
+        let params = {};
+        return [cmd, params];
+    }
     relateCmd(id, otherId, relKey, relData, replace){
-        let r = this.model.getRelationByKey(key);
+        let r = this.model.getRelationByKey(relKey);
 
-        let dir1 = '>';
-        let dir2 = '';
+        let dir1 = '';
+        let dir2 = '>';
         if(!r.outgoing){
             dir1 = '<';
             dir2 = '';
@@ -92,9 +101,23 @@ class CypherHelper {
 
         return [cmd, params];
     }
-    createAndRelateCmd(
-        
-    )
+    createAndRelateCmd(data, otherId, relKey, relData){
+        let r = this.model.getRelationByKey(relKey);
+        let dir1 = '';
+        let dir2 = '>';
+        if(!r.outgoing){
+            dir1 = '<';
+            dir2 = '';
+        }
+
+        relData = relData || {};
+        let cmd = `
+            MATCH (m) WHERE ID(m) = {otherId}
+            CREATE (n${this._labelsCypher} {data})${dir1}-[r:${r.label} {relData}]-${dir2}(m)
+            RETURN n`
+        let params = {otherId: neo4j.int(otherId), data: this.convertToNative(data, this.model.schema), relData: this.convertToNative(relData, r.schema)};
+        return [cmd, params];
+    }
     parseResult(result, includes){
         var nodes = this.parseResultArray(result, includes);
         if(nodes.length == 0){
@@ -115,26 +138,45 @@ class CypherHelper {
             includes.forEach(key => {
                 let r = this.model.getRelationByKey(key);
                 if(r.type == 'one'){
-                    n[r.key] = this.parseField(f[key], r.schema);
+                    n[r.key] = this.parseField(f[key], r.model.schema);
                 } else{
                     n[r.key] = f[key].map(f2 =>{
-                        return this.parseField(f2, r.schema);
+                        return this.parseField(f2, r.model.schema);
                     }) 
                 }
             })
 
-            nodes.push(e);
+            nodes.push(n);
         })
-        return entities;
+        return nodes;
+    }
+    parseResultAffected(result){
+        return result.records[0]._fields[0].low;
     }
     parseField(f, schema){
-        let parsed = {
-            id: f.identity.low
+        let parsed = {};
+        if(this.isNodeField(f)){
+            parsed.id = this.getId(f.identity);
+            for(let k in f.properties){
+                parsed[k] = f.properties[k];
+            }
+        } else {
+            for(let k in schema){
+                if(k == 'id'){
+                    parsed[k] = this.getId(f[k]);
+                } else{
+                    parsed[k] = f[k];
+                }   
+            }
         }
-        for(let k in f.properties){
-            parsed[k] = f.properties[k];
-        }
+
         return this.convertFromNative(parsed, schema);
+    }
+    isNodeField(f){
+        return (f.identity && f.properties);
+    }
+    getId(identity){
+        return identity.low;
     }
     getMatch(includes){
         let match = `MATCH (n${this._labelsCypher})`;
@@ -154,11 +196,12 @@ class CypherHelper {
         return match;
     }
     getReturn(includes){
-        let ret = `RETURN {identity: ID(n)`;
+        let ret = `RETURN {id: ID(n)`;
         includes = includes || [];
 
         for(let key in this.model.schema){
-            ret += `, ${key}: n.${key}`;
+            if(key != 'id')
+                ret += `, ${key}: n.${key}`;
         }
 
         let i = 1;
@@ -171,8 +214,8 @@ class CypherHelper {
             }
             ret += rel;
         })
-
-        return match;
+        ret += '}';
+        return ret;
     }
     getWhere(query, alias){
         if(!query)
@@ -202,7 +245,7 @@ class CypherHelper {
         }
         return '{' + terms.join(', ') + '}';
     }
-    convertToNative(data, shcema){
+    convertToNative(data, schema){
         if(!schema)
             return data;
         let nativeData = _.clone(data);
@@ -219,7 +262,7 @@ class CypherHelper {
         }
         return nativeData;
     }
-    convertFromNative(nativeData, shcema){
+    convertFromNative(nativeData, schema){
         if(!schema)
             return nativeData;
         let data = _.clone(nativeData);
@@ -237,3 +280,5 @@ class CypherHelper {
         return data;
     }
 }
+
+module.exports = CypherHelper;

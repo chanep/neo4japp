@@ -1,4 +1,5 @@
 'use strict'
+const _ = require('lodash');
 let path = require('path');
 let envFile = path.resolve(__dirname, "../.env");
 let errors = require('../shared/errors');
@@ -8,9 +9,9 @@ require('dotenv').config({path: envFile});
 let db = require('../data-access/db');
 
 
-let [a, b] = ["hola, chau"];
-console.log("a", a)
-console.log("b", b)
+// let [a, b] = ["hola, chau"];
+// console.log("a", a)
+// console.log("b", b)
 
 //let cmd = `match (n:Skill) optional match (n)-[r:BELONGS_TO]->(m) return {identity: id(n), name: n.name, group: m}`;
 // let cmd = `match (n:SkillGroup)
