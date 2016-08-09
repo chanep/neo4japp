@@ -10,6 +10,11 @@ let config = {
         apiBase: process.env.CW_API_BASE,
         user: process.env.CW_USER,
         pass: process.env.CW_PASS
+    },
+    googlespreadsheet: {
+        skills_spreadsheet_key: process.env.SKILLS_SPREADSHEET_KEY,
+        skills_client_email: process.env.SKILLS_CLIENT_EMAIL,
+        skills_private_key: process.env.SKILLS_PRIVATE_KEY
     }
 };
 
