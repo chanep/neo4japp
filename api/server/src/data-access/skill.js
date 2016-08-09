@@ -1,10 +1,10 @@
 'use strict'
 const BaseDa = require('./base-da');
-const schema = require('./schemas').Skill; 
+const model = require('./models').skill; 
 
 class SkillDa extends BaseDa{
     constructor(tx){
-        super(tx, 'Skill', schema);
+        super(model, tx);
     }
 }
 
