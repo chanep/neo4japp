@@ -101,6 +101,7 @@ class CypherHelper {
 
         return [cmd, params];
     }
+<<<<<<< HEAD
     createAndRelateCmd(data, otherId, relKey, relData){
         let r = this.model.getRelationByKey(relKey);
         let dir1 = '';
@@ -118,6 +119,11 @@ class CypherHelper {
         let params = {otherId: neo4j.int(otherId), data: this.convertToNative(data, this.model.schema), relData: this.convertToNative(relData, r.schema)};
         return [cmd, params];
     }
+=======
+    
+    createAndRelateCmd() {}
+
+>>>>>>> fb6fccf21801d9908f18b4f6b283da674bd9938a
     parseResult(result, includes){
         var nodes = this.parseResultArray(result, includes);
         if(nodes.length == 0){
@@ -214,8 +220,13 @@ class CypherHelper {
             }
             ret += rel;
         })
+<<<<<<< HEAD
         ret += '}';
         return ret;
+=======
+
+        //return match;
+>>>>>>> fb6fccf21801d9908f18b4f6b283da674bd9938a
     }
     getWhere(query, alias){
         if(!query)
