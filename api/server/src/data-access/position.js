@@ -1,9 +1,10 @@
 'use strict'
 const BaseDa = require('./base-da');
+const model = require('./models').position;
 
 class PositionDa extends BaseDa{
     constructor(tx){
-        super(tx, 'Position');
+        super(model, tx);
     }
 }
 

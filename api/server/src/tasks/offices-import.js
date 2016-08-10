@@ -26,7 +26,7 @@ class OfficesImportTask extends CwBaseTask{
         async.eachSeries = P.promisify(async.eachSeries);
         return async.eachSeries(offices, function (o, callback) {
             let office = _this._transformOffice(o);
-            officeDa.upsert(office, false, ["sourceId"])
+            officeDa.upsert(office, ["sourceId"])
                 .then(r => {
                     if (r.created) {
                         info.created++;

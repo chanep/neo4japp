@@ -1,7 +1,9 @@
 'use strict'
 const Joi = require('joi');
 const _ = require('lodash');
-const errors = require('../shared/errors')
+const errors = require('../shared/errors');
+const config = require('../shared/config');
+const partition = config.db.partition;
 
 class Relationship {
     constructor(model, label, key, type, outgoing, schema){
@@ -20,6 +22,9 @@ class Model {
         this.labels = labels;
         this.schema = schema;
         this.relationships = [];
+        if(partition){
+            this.labels.push(partition);
+        }
     }
     relateWithOne(model, label, key, outgoing, schema){
         let r = new Relationship(model, label, key, "one", outgoing, schema)
@@ -48,7 +53,7 @@ let skillGroup = new Model(
         name: Joi.string().required(),
         type: Joi.string().required()
     }
-)
+);
 
 let skill = new Model(
     'Skill',
@@ -57,7 +62,7 @@ let skill = new Model(
         id: Joi.number(),
         name: Joi.string().required()
     }
-)
+);
 
 let taskStatus = new Model(
     'TaskStatus',
@@ -70,13 +75,53 @@ let taskStatus = new Model(
         lastFinish: Joi.date(),
         info: Joi.object()
     }
-)
+);
+
+let office = new Model(
+    'Office',
+    ['Office'],
+    {
+        id: Joi.number(),
+        sourceId: Joi.string().required(),
+        name: Joi.string().required(),
+        description: Joi.string(),
+        acronym: Joi.string().required(),
+        counrty: Joi.string().required(),
+        latitude: Joi.number().required(),
+        longitude: Joi.number().required(),
+        address: Joi.string(),
+        phone: Joi.string(),
+        zip: Joi.string(),
+        uri: Joi.string()
+    }
+);
+
+let department = new Model(
+    'Department',
+    ['Department'],
+    {
+        id: Joi.number(),
+        sourceId: Joi.string(),
+        name: Joi.string().required()
+    }
+);
+
+let position = new Model(
+    'Position',
+    ['Position'],
+    {
+        id: Joi.number(),
+        sourceId: Joi.string(),
+        name: Joi.string().required()
+    }
+);
 
 let employee = new Model(
     'Employee',
     ['Employee'],
     {
         id: Joi.number(),
+        sourceId: Joi.string(),
         username: Joi.string().required(),
         email: Joi.string().required(),
         fullname: Joi.string().required(),
@@ -86,15 +131,33 @@ let employee = new Model(
         roles: Joi.string(),
         image: Joi.string()
     }
-)
+);
+
+let knowledgeSchema = {
+        id: Joi.number(),
+        level: Joi.number(),
+        want: Joi.boolean().default(false),
+        approved: Joi.boolean().default(false),
+        approverId: Joi.number(),
+        approverFullname: Joi.string()
+    };
+
 
 skill.relateWithOne(skillGroup, "BELONGS_TO", "group", true, {})
 skillGroup.relateWithMany(skill, "BELONGS_TO", "skills", false, {})
 skillGroup.relateWithOne(skillGroup, "BELONGS_TO", "group", true, {})
 
+employee.relateWithMany(skill, "KNOWS", "skills", true, knowledgeSchema);
+employee.relateWithOne(office, "OF_OFFICE", "office", true, null);
+employee.relateWithOne(department, "OF_DEPARTMENT", "department", true, null);
+employee.relateWithOne(position, "OF_POSITION", "position", true, null);
+
 module.exports = {
     skill: skill,
     skillGroup: skillGroup,
     taskStatus: taskStatus,
-    employee: employee
+    employee: employee,
+    office: office,
+    department: department,
+    position: position
 }
