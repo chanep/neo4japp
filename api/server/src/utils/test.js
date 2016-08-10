@@ -26,29 +26,21 @@ let db = require('../data-access/db');
 //         db.close();
 //     })
 //     .catch(console.error);
-        sourceId: Joi.string(),
-        username: Joi.string().required(),
-        email: Joi.string().required(),
-        fullname: Joi.string().required(),
 
-let employeeData = {
-    sourceId: Joi.string(),
-    username: Joi.string().required(),
-    email: Joi.string().required(),
-    fullname: Joi.string().required(),
-}
-
-let position = {
-
-}
 
 const EmployeeDa = require('../data-access/employee');
 let employeeDa = new EmployeeDa();
 
-employeeDa.create(employeeData)
-    .then(e => {
-        return employeeDa.setOffice(e.id, 389);
+employeeDa.query(`match (n:Employee:Test) optional match (n)-[r:KNOWS]->(m) return {id: id(n), name: n.name, knowledges: collect({id: ID(r), level: r.level, skill: m})}`)
+    .then(r => {
+        console.log("result", JSON.stringify(r));
     })
+
+
+// employeeDa.create(employeeData)
+//     .then(e => {
+//         return employeeDa.setOffice(e.id, 389);
+//     })
 
 
 

@@ -15,6 +15,9 @@ class EmployeeDa extends BaseDa{
     setPostion(id, positionId){
         return this.relate(id, positionId, 'position', null, true);
     }
+    setKnowledge(id, skillId, knowledgeData){
+        return this.relate(id, skillId, 'knowledges', knowledgeData, true);
+    }
 }
 
 module.exports = EmployeeDa;

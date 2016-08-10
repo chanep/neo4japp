@@ -30,6 +30,7 @@ vows.describe('Employee data access test')
         },
         'should create employee': function (err, result) {
             if(err){
+                console.log("error", err)
                 throw err;
             }
             employee.id = result.id;
@@ -46,8 +47,10 @@ vows.describe('Employee data access test')
         },
         'should create deaprtment': function (err, result) {
             if(err){
+                console.log("error", err)
                 throw err;
             }
+            console.log("department result", result)
             department.id = result.id;
         }
     }

@@ -143,11 +143,11 @@ let knowledgeSchema = {
     };
 
 
-skill.relateWithOne(skillGroup, "BELONGS_TO", "group", true, {})
-skillGroup.relateWithMany(skill, "BELONGS_TO", "skills", false, {})
-skillGroup.relateWithOne(skillGroup, "BELONGS_TO", "group", true, {})
+skill.relateWithOne(skillGroup, "BELONGS_TO", "group", true, null)
+skillGroup.relateWithMany(skill, "BELONGS_TO", "skills", false, null)
+skillGroup.relateWithOne(skillGroup, "BELONGS_TO", "group", true, null)
 
-employee.relateWithMany(skill, "KNOWS", "skills", true, knowledgeSchema);
+employee.relateWithMany(skill, "KNOWS", "knowledges", true, knowledgeSchema);
 employee.relateWithOne(office, "OF_OFFICE", "office", true, null);
 employee.relateWithOne(department, "OF_DEPARTMENT", "department", true, null);
 employee.relateWithOne(position, "OF_POSITION", "position", true, null);
