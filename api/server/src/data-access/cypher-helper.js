@@ -81,21 +81,22 @@ class CypherHelper {
         }
 
         relData = relData || {};
-        let relDataStr = this.mapToStr(relData, "relData");
+        // let relDataStr = this.mapToStr(relData, "relData");
+        // let cmd = `
+        //     MATCH (n${this._labelsCypher}),(m)
+        //     WHERE ID(n) = {id} AND ID(m) = {otherId}
+        //     MERGE (n)${dir1}-[r:${r.label} ${relDataStr}]-${dir2}(m)
+        //     RETURN r`;
+        let unique = ''
+        if(replace)
+            unique = 'UNIQUE ';
+        
         let cmd = `
             MATCH (n${this._labelsCypher}),(m)
             WHERE ID(n) = {id} AND ID(m) = {otherId}
-            MERGE (n)${dir1}-[r:${r.label} ${relDataStr}]-${dir2}(m)
+            CREATE ${unique}(n)${dir1}-[r:${r.label}]-${dir2}(m)
+            SET r = {relData}
             RETURN r`;
-
-        if(replace){
-            cmd = `
-                MATCH (n${this._labelsCypher}),(m)
-                WHERE ID(n) = {id} AND ID(m) = {otherId}
-                CREATE UNIQUE (n)${dir1}-[r:${r.label}]-${dir2}(m)
-                SET r = {relData}
-                RETURN r`;
-        }
         
         let params = {id: neo4j.int(id), otherId: neo4j.int(otherId), relData: relData};
 

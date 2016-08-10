@@ -2,7 +2,7 @@
 const _ = require('lodash');
 const vows = require('vows');
 const assert = require('assert'); 
-const testHelper = require('./test-helper'); 
+const testHelper = require('../test-helper'); 
 const taskStatusDa = new (require('../../data-access/task-status'));
 
 
@@ -17,22 +17,7 @@ let info = {
 
 vows.describe('Task Status data access test')
 
-.addBatch({
-    '1. delete all task status': {
-        topic: function () {
-            taskStatusDa.deleteAll()
-                .then(r => this.callback(null, r))
-                .catch(err => this.callback(err))
-        },
-        'should delete all taskStatus': function (err, result) {
-            if(err){
-                throw err;
-            }
-                
-            
-        }
-    }
-})
+.addBatch(testHelper.resetTestDbBatch())
 
 .addBatch({
     '2. set taskStatus to running': {

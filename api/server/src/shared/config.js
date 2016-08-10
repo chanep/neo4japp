@@ -4,7 +4,8 @@ let config = {
         server: process.env.DB_SERVER,
         user: process.env.DB_USER,
         pass: process.env.DB_PASS,
-        logCommands: process.env.DB_LOG_COMMANDS  === 'true'
+        logCommands: process.env.DB_LOG_COMMANDS  === 'true',
+        partition: process.env.DB_PARTITION || null
     },
     cw: {
         apiBase: process.env.CW_API_BASE,

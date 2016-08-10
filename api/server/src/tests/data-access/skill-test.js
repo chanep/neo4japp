@@ -2,7 +2,7 @@
 const _ = require('lodash');
 const vows = require('vows');
 const assert = require('assert'); 
-const testHelper = require('./test-helper'); 
+const testHelper = require('../test-helper'); 
 const skillDa = new (require('../../data-access/skill'));
 const skillGroupDa = new (require('../../data-access/skill-group'));
 
@@ -25,42 +25,7 @@ let skillGroup2Data = {
 
 vows.describe('Skill data access test')
 
-.addBatch({
-    '1. delete all skills': {
-        topic: function () {
-            skillDa.deleteAll()
-                .then(r => this.callback(null, r))
-                .catch(err => this.callback(err))
-        },
-        'skills deleted': function (err, result) {
-            if(err){
-                console.log("error", err);
-            } else{
-                console.log("result", JSON.stringify(result))
-            }
-                
-            
-        }
-    }
-})
-
-.addBatch({
-    '2. delete all skillGroups': {
-        topic: function () {
-            skillGroupDa.deleteAll()
-                .then(r => this.callback(null, r))
-                .catch(err => this.callback(err))
-        },
-        'skill groups deleted': function (err, result) {
-            if(err){
-                console.log("error", err);
-                return;
-            }
-            
-            console.log("result", result)
-        }
-    }
-})
+.addBatch(testHelper.resetTestDbBatch())
 
 .addBatch({
     '3. create parent skill group': {

@@ -26,7 +26,7 @@ class DepartmentsImportTask extends CwBaseTask{
         async.eachSeries = P.promisify(async.eachSeries);
         return async.eachSeries(departments, function (d, callback) {
             let department = _this._transformDepartment(d);
-            departmentDa.upsert(department, false, ["sourceId"])
+            departmentDa.upsert(department, ["sourceId"])
                 .then(r => {
                     if (r.created) {
                         info.created++;

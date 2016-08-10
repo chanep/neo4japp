@@ -1,18 +1,19 @@
 'use strict'
 const BaseDa = require('./base-da');
+const model = require('./models').employee;
 
 class EmployeeDa extends BaseDa{
     constructor(tx){
-        super(tx, 'Employee');
+        super(model, tx);
     }
     setOffice(id, officeId){
-        return this.relate(id, officeId, 'OF_OFFICE', null, false, true);
+        return this.relate(id, officeId, 'office', null, true);
     }
     setDepartment(id, departmentId){
-        return this.relate(id, departmentId, 'OF_DEPARTMENT', null, false, true);
+        return this.relate(id, departmentId, 'department', null, true);
     }
     setPostion(id, positionId){
-        return this.relate(id, positionId, 'OF_POSITION', null, false, true);
+        return this.relate(id, positionId, 'position', null, true);
     }
 }
 
