@@ -1,7 +1,7 @@
 'use strict'
 const _ = require('lodash');
 const BaseDa = require('./base-da');
-const model = require('./models').skillGroup;
+const model = require('./models').taskStatus;
 const errors = require('../shared/errors');
 
 class TaskStatusDa extends BaseDa{
@@ -24,7 +24,7 @@ class TaskStatusDa extends BaseDa{
             lastFinish: new Date(),
             info: info
         };
-        return this.upsert(data);
+        return this.upsert(data, ["name"]);
     }
     setFinishError(taskName, info){
         let data = {
@@ -37,7 +37,7 @@ class TaskStatusDa extends BaseDa{
     }
     findByName(name){
         let query = {name: name};
-        return this.find(query);
+        return this.findOne(query);
     }
 }
 

@@ -17,6 +17,11 @@ let skillGroupData = {
     type: 'skill'
 };
 
+let skillGroup2Data = {
+    name: 'technology',
+    type: 'skill'
+};
+
 
 vows.describe('Skill data access test')
 
@@ -58,9 +63,27 @@ vows.describe('Skill data access test')
 })
 
 .addBatch({
-    '3. create skill group': {
+    '3. create parent skill group': {
         topic: function () {
-            skillGroupDa.create(skillGroupData)
+            skillGroupDa.create(skillGroup2Data)
+                .then(r => this.callback(null, r))
+                .catch(err => this.callback(err))
+        },
+        'skill group created': function (err, result) {
+            if (err) {
+                console.log("error", err);
+                return;
+            }
+            assert.isNumber(result.id);
+            skillGroup2Data.id = result.id;
+        }
+    }
+})
+
+.addBatch({
+    '3b. create child skill group': {
+        topic: function () {
+            skillGroupDa.createAndRelate(skillGroupData, skillGroup2Data.id, "group", null)
                 .then(r => this.callback(null, r))
                 .catch(err => this.callback(err))
         },
@@ -129,12 +152,38 @@ vows.describe('Skill data access test')
                 console.error("error", err);
                 return;
             }
-            console.error("result", result);
             assert.isArray(result);
             assert.equal(result.length, 1);
             assert.isTrue(!!result[0].group);
             assert.equal(result[0].name, skillData.name);
             assert.equal(result[0].group.name, skillGroupData.name);
+        }
+    }
+})
+
+.addBatch({
+    '7. find skill group with parent group included': {
+        topic: function () {
+            let query = {
+                name: skillGroupData.name,
+                includes: ["group"]
+            }
+            skillGroupDa.find(query)
+                .then(r => this.callback(null, r))
+                .catch(err => this.callback(err))
+        },
+        'should find skill': function (err, result) {
+            if (err) {
+                console.error("error", err);
+                return;
+            }
+            assert.isArray(result);
+            assert.equal(result.length, 2);
+
+            let childGroup = _.find(result, {name: skillGroupData.name});
+            assert.isTrue(!!childGroup.group);
+            assert.equal(childGroup.name, skillGroupData.name);
+            assert.equal(childGroup.group.name, skillGroup2Data.name);
         }
     }
 })

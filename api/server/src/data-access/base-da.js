@@ -84,7 +84,18 @@ class BaseDa {
         let cmd = cypher[0];
         let params = cypher[1];
         return this._run(cmd, params)
-                .then(r => this._cypher.parseResult(r, includes));
+                .then(r => this._cypher.parseResult(r, includes))
+                .catch(err => {throw new errors.GenericError("Error finding by id " + this.model.name, err)});
+    }
+    findOne(query){
+        return this.find(query)
+            .then(list => {
+                if(list.length == 0){
+                    return null;
+                } else {
+                    return list[0];
+                }
+            })
     }
     find(query){
         query = query || {};
@@ -93,7 +104,8 @@ class BaseDa {
         let cmd = cypher[0];
         let params = cypher[1];
         return this._run(cmd, params)
-                .then(r => this._cypher.parseResultArray(r, includes));
+                .then(r => this._cypher.parseResultArray(r, includes))
+                .catch(err => {throw new errors.GenericError("Error finding " + this.model.name, err)});
     }
     query(cmd){
         return this._run(cmd);
@@ -108,7 +120,8 @@ class BaseDa {
                 let params = cypher[1];
                 return this._run(cmd, params);
             })
-            .then(r => this._cypher.parseResult(r));
+            .then(r => this._cypher.parseResult(r))
+            .catch(err => {throw new errors.GenericError("Error creating " + this.model.name, err)});
     }
     update(data, mergeKeys){
         return this._validate(data, true)
@@ -116,9 +129,10 @@ class BaseDa {
                 let cypher = this._cypher.updateCmd(d, mergeKeys);
                 let cmd = cypher[0];
                 let params = cypher[1];
-                return this._run(cmd, params)
+                return this._run(cmd, params);
             })
-            .then(r => this._cypher.parseResult(r));
+            .then(r => this._cypher.parseResult(r))
+            .catch(err => {throw new errors.GenericError("Error updating " + this.model.name, err)});
     }
     upsert(data, uniqueKeys, mergeKeys){
         let query = _.pick(data, uniqueKeys);
@@ -143,14 +157,16 @@ class BaseDa {
         let cmd = cypher[0];
         let params = cypher[1];  
         return this._run(cmd, params)
-            .then(r => this._cypher.parseResultAffected(r));
+            .then(r => this._cypher.parseResultAffected(r))
+            .catch(err => {throw new errors.GenericError("Error deleting " + this.model.name, err)});
     }
     deleteAll(){
         let cypher = this._cypher.deleteAllCmd();
         let cmd = cypher[0];
         let params = cypher[1];  
         return this._run(cmd, params)
-            .then(r => this._cypher.parseResultAffected(r));
+            .then(r => this._cypher.parseResultAffected(r))
+            .catch(err => {throw new errors.GenericError("Error deleting all " + this.model.name, err)});
     }
     relate(id, otherId, relKey, relData, replace){
         let cypher = this._cypher.relateCmd(id, otherId, relKey, relData, replace);
@@ -158,7 +174,8 @@ class BaseDa {
         let params = cypher[1];
 
         return this._run(cmd, params)
-            .then(r => this._cypher.parseResult(r));
+            .then(r => this._cypher.parseResult(r))
+            .catch(err => {throw new errors.GenericError("Error relating " + this.model.name, err)});
     }
     createAndRelate(data, otherId, relKey, relData){
         let cypher = this._cypher.createAndRelateCmd(data, otherId, relKey, relData);
@@ -166,7 +183,8 @@ class BaseDa {
         let params = cypher[1];
 
         return this._run(cmd, params)
-            .then(r => this._cypher.parseResult(r));
+            .then(r => this._cypher.parseResult(r))
+            .catch(err => {throw new errors.GenericError("Error creating and relating " + this.model.name, err)});
     }
     enlistTx(tx){
         this._tx = tx;

@@ -43,7 +43,7 @@ class CypherHelper {
                       SET n ${operator} {data}
                         RETURN n`;
         let dataAux = _.omit(data, ["id"]);
-        let params = {data: this.convertToNative(dataAux, this.model.schema)};
+        let params = {id: data.id, data: this.convertToNative(dataAux, this.model.schema)};
         return [cmd, params];
     }
     deleteCmd(id, force){
@@ -154,6 +154,8 @@ class CypherHelper {
         return result.records[0]._fields[0].low;
     }
     parseField(f, schema){
+        if(!f)
+            return null;
         let parsed = {};
         if(this.isNodeField(f)){
             parsed.id = this.getId(f.identity);
@@ -253,10 +255,12 @@ class CypherHelper {
             let type = schema[k]._type;
             switch (type) {
                 case "date":
-                    nativeData[k] = data[k].getTime();
+                    if(data[k])
+                        nativeData[k] = data[k].getTime();
                     break;
                 case "object":
-                    nativeData[k] = JSON.stringify(data[k]);
+                    if(data[k])
+                        nativeData[k] = JSON.stringify(data[k]);
                     break;
             }
         }
@@ -270,10 +274,12 @@ class CypherHelper {
             let type = schema[k]._type;
             switch(type){
                 case "date":
-                    data[k] = new Date(nativeData[k]);
+                    if(nativeData[k])
+                        data[k] = new Date(nativeData[k]);
                     break;
                 case "object":
-                    data[k] = JSON.parse(nativeData[k]);
+                    if(nativeData[k])
+                        data[k] = JSON.parse(nativeData[k]);
                     break;                   
             }
         }
