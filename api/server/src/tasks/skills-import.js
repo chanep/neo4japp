@@ -1,4 +1,6 @@
 'use strict'
+const _ = require('lodash');
+const async = require('async');
 const errors = require('../shared/errors');
 const P = require('bluebird');
 const BaseTask = require('./base-task');
@@ -12,18 +14,17 @@ class SkillImportTask extends BaseTask{
     _doRun(){
     	let _this = this;
 
-        let info = {
+        let inforeturn = {
             updated: 0,
             created: 0,
             errors: 0
         };
 
 		var GoogleSpreadsheet = require('google-spreadsheet');
-		var async = require('async');
 		var doc = new GoogleSpreadsheet('1ExPMQwoHZEvXrcxEwxROfWZH1AmPWySqY4_tD58aZ04');
 		var sheet;
 
-		async.series([
+		return async.series([
 			function setAuth(step) {
 				var creds = require('../googledriveaccess.json');
 				doc.useServiceAccountAuth(creds, step);
@@ -38,31 +39,37 @@ class SkillImportTask extends BaseTask{
 						'orderby': 'level1',
 						'return-empty': true
 					}, function(err, rows) {
-						var cells = [];
-						
 						async.eachSeries = P.promisify(async.eachSeries);
 						return async.eachSeries(rows, function (row, callback) {
-							let skillGroup = _this._transformSkillGroup(row);
+							var skDa = new SkillGroupDa();
 
-							callback();
-						}).then(() => {
-            				console.log("info", info)
-            				return info;
-    					});
+	        				skDa.checkLevel1({
+    							'name': row['level1'].trim(),
+    							'type': row['type'].toLowerCase().trim()
+    						}).then(result => {
+    							if (result.action == 'inserted')
+    								inforeturn.created++;
+
+			        			return result;
+			        		}).then(result => {
+			        			return skDa.checkLevel2({
+
+			        			}).then(result => {
+			        				callback();
+			        			});
+			        		});
+				        }).then(() => {
+    	    				console.log("Proc. completed", inforeturn)
+							return inforeturn;
+				        });
 					});
 				});
 
-				step();
+				return step();
 			}
 		]);
 
 		return P.resolve("Done");
-    }
-
-    _transformSkillGroup(row) {
-        var group = new SkillGroupDa();
-        var exists = group.checkExistsByName(row['level1'], row['level2']);
-        console.log(exists);
     }
 }
 
