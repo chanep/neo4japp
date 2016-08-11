@@ -27,17 +27,24 @@ let db = require('../data-access/db');
 //     })
 //     .catch(console.error);
 
+let parts = ["x", "", "y"];
 
-let include = {
-                key : "knowledges",
-                includes : ["group"]
-            }
-const employeeModel = require('../data-access/models').employee;
-const CypherHelper = require('../data-access/cypher-helper');
-let cypher = new CypherHelper(employeeModel);
+console.log("parts", parts)
 
-let parsed = cypher.parseIncludes([include], employeeModel, 'n');
-console.log("parsed", JSON.stringify(parsed))
+_.remove(parts, p => (p == ""));
+
+console.log("parts", parts)
+
+// let include = {
+//                 key : "knowledges",
+//                 includes : ["group"]
+//             }
+// const employeeModel = require('../data-access/models').employee;
+// const CypherHelper = require('../data-access/cypher-helper');
+// let cypher = new CypherHelper(employeeModel);
+
+// let parsed = cypher.parseIncludes([include], employeeModel, 'n');
+// console.log("parsed", JSON.stringify(parsed))
 
 // const EmployeeDa = require('../data-access/employee');
 // let employeeDa = new EmployeeDa();

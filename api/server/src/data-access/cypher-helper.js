@@ -2,6 +2,7 @@
 const _ = require('lodash');
 const errors = require('../shared/errors');
 const neo4j = require('neo4j-driver').v1;
+const queryHelper = require('./query-helper');
 
 
 class CypherHelper {
@@ -285,27 +286,30 @@ class CypherHelper {
         });
         return match;
     }
-    getWhere(query, alias){
+    getWhere(query){ 
         if(!query)
             return "";
-        query = _.omit(query, ["includes"]);
-        alias = alias || 'n'; 
-        let conditions = [];
-        for(let k in query){
-            let value = query[k];
-            if(typeof value === 'string' && value.indexOf('*') >= 0){
-                value = value.replace(/\*/g, '.*');
-                conditions.push(`${alias}.${k} =~ '(?i)${value}'`);
-            } else if(typeof value === 'string'){
-                conditions.push(`${alias}.${k} = '${value}'`);
-            } else{
-                conditions.push(`${alias}.${k} = ${value}`);
-            }
-        }
+        let cypher = "";
 
-        let cypher = " WHERE " + conditions.join(' AND ');
+        query = _.omit(query, ["include"])   
+        let includes = query.includes || [];
+        alias = 'n';
+
+        let parts = [];
+        parts.push(queryHelper.getWherePart(query, alias));
+
+        includes.forEach(i => {
+            let part = queryHelper.getWherePart(i.query, i.dataAlias);
+            parts.push(part);
+        });
+
+        _.remove(pars, p => (p == ''));
+
+        if(parts.length > 0)
+            cypher = " WHERE " + parts.join(' AND\n');
         return cypher;
     }
+
     getReturn(includes){
         let ret = `RETURN `;
         ret += this.modelToMapStr(this.model, includes, 'n');

@@ -122,8 +122,8 @@ class BaseDa {
                 .then(r => this._cypher.parseResultArray(r, includes))
                 .catch(err => {throw new errors.GenericError("Error finding " + this.model.name, err)});
     }
-    query(cmd){
-        return this._run(cmd)
+    query(cmd, params){
+        return this._run(cmd, params)
                 .then(r => cypher.parseResultArrayRaw(r));
                 // .then(n => this._toEntityArray(n));
     }
