@@ -1,6 +1,7 @@
 'use strict'
 const BaseDa = require('./base-da');
 const model = require('./models').skillGroup;
+const neo4j = require('neo4j-driver').v1;
 
 class SkillGroupDa extends BaseDa{
     constructor(tx){
@@ -14,12 +15,13 @@ class SkillGroupDa extends BaseDa{
     		'level1type': level1.type
     	};
 
-    	return super._run(queryStmt, params).then(r => {
+    	return super.query(queryStmt, params).then(r => {
     		var resultReturn = {
     			'action': '',
     			'id': 0
     		};
 
+console.log('rrrrrrrrrfdsgdsgdsgdsgdsgdsgdsgds', r);
     		if (r.records.length == 0) {
     			var newLevel1 = new SkillGroupDa();
 				let obj = {
@@ -33,15 +35,16 @@ class SkillGroupDa extends BaseDa{
 
 					return resultReturn;
 				}).catch(err => {
-					let e = new errors.GenericError("Error importing skill group level 1:" + obj, err);
-					console.log(e);
+					//let e = new errors.GenericError("Error importing skill group level 1:" + obj, err);
+					//console.log(e);
 
 					resultReturn.action = 'error';
 					return resultReturn;
 				});
     		}
     		else {
-    			resultReturn.action = '';    			
+    			resultReturn.action = '';
+                console.log('level 1', r.records[0].get('level1')['identity']);
     			resultReturn.id = r.records[0].get('level1')['identity'].low;
     			return resultReturn;
     		}
@@ -51,7 +54,7 @@ class SkillGroupDa extends BaseDa{
     checkLevel2(levelsData) {
     	var queryStmt = "MATCH (child:SkillGroup)-[BELONGS_TO]->(parent:SkillGroup) WHERE ID(parent) = {parentID} AND child.name = {childName} AND child.type = {childType} RETURN child";
     	var params = {
-    		'parentID': levelsData.level1Id,
+    		'parentID': neo4j.int(levelsData.level1Id),
     		'childName': levelsData.name,
     		'childType': levelsData.type
     	};
@@ -78,13 +81,16 @@ class SkillGroupDa extends BaseDa{
 				});
     		}
     		else {
-    			resultReturn.action = '';    			
-    			resultReturn.id = r.records[0].get('child')['identity'].low;
+    			resultReturn.action = '';
+    			resultReturn.id = r.records[0].get('child').identity.low;
     			return resultReturn;
     		}
     	}).catch(err => {
-			let e = new errors.GenericError("Error importing skill group level 2:" + levelsData, err);
-			console.log(e);
+            console.log('queryStmt', queryStmt);
+            console.log('params', params);
+            console.log("eeeeerrrror", err, err.innerError);
+			//let e = new errors.GenericError("Error importing skill group level 2:" + levelsData, err);
+			//console.log(e);
 
 			resultReturn.action = 'error';
 			return resultReturn;

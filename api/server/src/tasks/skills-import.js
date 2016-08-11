@@ -5,6 +5,7 @@ const errors = require('../shared/errors');
 const P = require('bluebird');
 const BaseTask = require('./base-task');
 const SkillGroupDa = require('../data-access/skill-group');
+const SkillDa = require('../data-access/skill');
 
 class SkillImportTask extends BaseTask{
     constructor(){
@@ -68,13 +69,20 @@ class SkillImportTask extends BaseTask{
 				        				return result.id;
 				        			}
 				        		}).then(parentId => {
-				        			//Check and create
+				        			var skillName = row['level2'];
+				        			if (row['level3'].trim() != '')
+				        				skillName = row['level3'].trim();
 
-									callback();
-				        		}).catch(err => {
-									let e = new errors.GenericError("Error importing skill groups", row, err);
-									console.log(e);
-								});
+				        			var skillDa = new SkillDa();
+				        			return skillDa.checkOrCreateSkill({
+				        				'name': skillName
+				        			}).then(result => {
+    									if (result.action == 'inserted')
+    										inforeturn.created++;
+
+    									callback();
+				        			});
+				        		});
 							}
 				        }).then(() => {
     	    				console.log("Proc. completed", inforeturn)
