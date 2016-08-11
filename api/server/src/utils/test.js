@@ -8,6 +8,18 @@ require('dotenv').config({path: envFile});
 
 let db = require('../data-access/db');
 
+const queryHelper = require('../data-access/query-helper')
+
+let query = {
+    id: 4,
+    a: 'hola',
+    b: {$in:[5,6]},
+    c: new Date()
+};
+
+let cypherStr = queryHelper.queryMapToCypher(query, 'n');
+
+console.log(cypherStr)
 
 // let [a, b] = ["hola, chau"];
 // console.log("a", a)
@@ -39,8 +51,8 @@ let db = require('../data-access/db');
 // let parsed = cypher.parseIncludes([include], employeeModel, 'n');
 // console.log("parsed", JSON.stringify(parsed))
 
-const EmployeeDa = require('../data-access/employee');
-let employeeDa = new EmployeeDa();
+// const EmployeeDa = require('../data-access/employee');
+// let employeeDa = new EmployeeDa();
 
 
 
