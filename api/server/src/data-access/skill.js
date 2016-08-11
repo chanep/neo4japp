@@ -1,6 +1,7 @@
 'use strict'
 const BaseDa = require('./base-da');
-const model = require('./models').skill; 
+const model = require('./models').skill;
+const neo4j = require('neo4j-driver').v1;
 
 class SkillDa extends BaseDa{
     constructor(tx){
@@ -12,11 +13,10 @@ class SkillDa extends BaseDa{
     }
 
     checkOrCreateSkill(skill) {
-        var queryStmt = "MATCH (skill:Skill)-[BELONGS_TO]->(group:SkillGroup) WHERE ID(group) = {groupID} AND skill.name = {skillName} AND skill.type = {skillType} RETURN skill";
+        var queryStmt = "MATCH (skill:Skill)-[BELONGS_TO]->(group:SkillGroup) WHERE ID(group) = {groupID} AND skill.name = {skillName} RETURN skill";
         var params = {
-            'groupID': skill.groupId,
-            'skillName': skill.name,
-            'skillType': skill.type
+            'groupID': neo4j.int(skill.groupId),
+            'skillName': skill.name
         };
 
         var resultReturn = {
@@ -24,10 +24,10 @@ class SkillDa extends BaseDa{
             'id': 0
         };
 
-        return super._run(queryStmt, params).then(r => {
+        return super.query(queryStmt, params).then(r => {
         	var skillDa = new SkillDa();
 
-            if (r.records.length == 0) {
+            if (r.length == 0) {
                 var newSkill = new SkillDa();
                 let obj = {
                     'name': skill.name
@@ -48,7 +48,7 @@ class SkillDa extends BaseDa{
             }
             else {
                 resultReturn.action = '';
-                resultReturn.id = r.records[0].get('skill')['identity'].low;
+                resultReturn.id = r[0].id;
                 return resultReturn;
             }
         });

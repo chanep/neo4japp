@@ -75,6 +75,7 @@ class SkillImportTask extends BaseTask{
 
 				        			var skillDa = new SkillDa();
 				        			return skillDa.checkOrCreateSkill({
+				        				'groupId': parentId,
 				        				'name': skillName
 				        			}).then(result => {
     									if (result.action == 'inserted')

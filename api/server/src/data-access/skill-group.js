@@ -21,8 +21,7 @@ class SkillGroupDa extends BaseDa{
     			'id': 0
     		};
 
-console.log('rrrrrrrrrfdsgdsgdsgdsgdsgdsgdsgds', r);
-    		if (r.records.length == 0) {
+    		if (r.length == 0) {
     			var newLevel1 = new SkillGroupDa();
 				let obj = {
 					'name': level1.name,
@@ -44,8 +43,7 @@ console.log('rrrrrrrrrfdsgdsgdsgdsgdsgdsgdsgds', r);
     		}
     		else {
     			resultReturn.action = '';
-                console.log('level 1', r.records[0].get('level1')['identity']);
-    			resultReturn.id = r.records[0].get('level1')['identity'].low;
+    			resultReturn.id = r[0].id;
     			return resultReturn;
     		}
     	});
@@ -64,8 +62,8 @@ console.log('rrrrrrrrrfdsgdsgdsgdsgdsgdsgdsgds', r);
 			'id': 0
 		};
 
-    	return super._run(queryStmt, params).then(r => {
-    		if (r.records.length == 0) {
+    	return super.query(queryStmt, params).then(r => {
+    		if (r.length == 0) {
     			var newLevel2 = new SkillGroupDa();
 				let obj = {
 					'name': levelsData.name,
@@ -82,15 +80,12 @@ console.log('rrrrrrrrrfdsgdsgdsgdsgdsgdsgdsgds', r);
     		}
     		else {
     			resultReturn.action = '';
-    			resultReturn.id = r.records[0].get('child').identity.low;
+    			resultReturn.id = r[0].id;
     			return resultReturn;
     		}
     	}).catch(err => {
-            console.log('queryStmt', queryStmt);
-            console.log('params', params);
-            console.log("eeeeerrrror", err, err.innerError);
-			//let e = new errors.GenericError("Error importing skill group level 2:" + levelsData, err);
-			//console.log(e);
+			let e = new errors.GenericError("Error importing skill group level 2:" + levelsData, err);
+			console.log(e);
 
 			resultReturn.action = 'error';
 			return resultReturn;
