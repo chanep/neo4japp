@@ -21,7 +21,7 @@ function getWherePart(query, alias){
         }
     }
 
-    let cypher = " WHERE " + conditions.join(' AND ');
+    let cypher = conditions.join(' AND ');
     return cypher;
 }
 

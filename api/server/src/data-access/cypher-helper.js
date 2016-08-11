@@ -303,7 +303,7 @@ class CypherHelper {
             parts.push(part);
         });
 
-        _.remove(pars, p => (p == ''));
+        _.remove(parts, p => (p == ''));
 
         if(parts.length > 0)
             cypher = " WHERE " + parts.join(' AND\n');
