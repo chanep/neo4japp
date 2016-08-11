@@ -8,7 +8,7 @@ module.exports = {
 function getWherePart(query, alias){
     if(!query || _.isEmpty(query))
         return "";
-    
+    let conditions = [];
     for(let k in query){
         let value = query[k];
         if(typeof value === 'string' && value.indexOf('*') >= 0){
