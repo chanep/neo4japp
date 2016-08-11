@@ -53,7 +53,7 @@ class OfficesImportTask extends CwBaseTask{
         });
     }
     _transformOffice(source){
-        let office = _.pick(source, ["name", "description", "acronym", "counrty", "latitude", 
+        let office = _.pick(source, ["name", "description", "acronym", "country", "latitude", 
                                     "longitude", "address", "phone", "zip", "uri"]);
         office.sourceId = source._id;
         return office;
