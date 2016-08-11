@@ -34,7 +34,22 @@ class BaseDa {
             }
             return this._validateSchema(data, schema, schemaName);
         } catch(err){
-            return P.reject(errors.GenericError("Error validating model data", err));
+            return P.reject(new errors.GenericError("Error validating model data", err));
+        }
+    }
+    _validateRelationship(relData, relKey, onlyDataKeys){
+        try{
+            let r = this.model.getRelationByKey(relKey);
+            if(!r.schema)
+                return P.resolve(null);
+            let schema = r.schema;
+            let schemaName = r.label;
+            if(onlyDataKeys){
+                schema = _.pick(schema, _.keys(relData));
+            }
+            return this._validateSchema(relData, schema, schemaName);
+        } catch(err){
+            return P.reject(new errors.GenericError("Error validating relationship data", err));
         }
     }
     _session(){
@@ -169,11 +184,13 @@ class BaseDa {
             .catch(err => {throw new errors.GenericError("Error deleting all " + this.model.name, err)});
     }
     relate(id, otherId, relKey, relData, replace){
-        let cypher = this._cypher.relateCmd(id, otherId, relKey, relData, replace);
-        let cmd = cypher[0];
-        let params = cypher[1];
-
-        return this._run(cmd, params)
+        return this._validateRelationship(relData, relKey)
+            .then(d => {
+                let cypher = this._cypher.relateCmd(id, otherId, relKey, d, replace);
+                let cmd = cypher[0];
+                let params = cypher[1];
+                return this._run(cmd, params);
+            })
             .then(r => this._cypher.parseResult(r))
             .catch(err => {throw new errors.GenericError("Error relating " + this.model.name, err)});
     }

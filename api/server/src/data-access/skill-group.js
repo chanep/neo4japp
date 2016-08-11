@@ -14,6 +14,7 @@ class SkillGroupDa extends BaseDa{
     		'level1type': level1.type
     	};
 
+    	console.log('Checking level1: ', level1.name);
     	return super._run(queryStmt, params).then(r => {
     		var resultReturn = {
     			'action': '',
@@ -28,6 +29,8 @@ class SkillGroupDa extends BaseDa{
 	        	};
 
 				return newLevel1.create(obj).then(result => {
+					console.log('Creating level1: ', level1.name);
+
 					resultReturn.id = result.id;
 					resultReturn.action = 'inserted';
 
@@ -52,9 +55,11 @@ class SkillGroupDa extends BaseDa{
     	var queryStmt = "MATCH (level2:SkillGroup)-[BELLONGS_TO]->(level1:SkillGroup) WHERE level1.id = {level1id} AND level2.name = {level2name} AND level2.type = {level2type} RETURN level2";
     	var params = {
     		'level1id': levelsData.level1Id,
-    		'level2name': levelsData.level2name,
-    		'level2type': levelsData.level2type
+    		'level2name': levelsData.name,
+    		'level2type': levelsData.type
     	};
+
+    	console.log('Checking level2: ', levelsData.level1Id, levelsData.name);
     	return super._run(queryStmt, params).then(r => {
     		var resultReturn = {
     			'action': '',
@@ -64,10 +69,11 @@ class SkillGroupDa extends BaseDa{
     		if (r.records.length == 0) {
     			var newLevel2 = new SkillGroupDa();
 				let obj = {
-					'name': levelsData.level2name,
-	        		'type': levelsData.level2type
+					'name': levelsData.name,
+	        		'type': levelsData.type
 	        	};
 
+				console.log('Creating level2: ', levelsData.level1Id, levelsData.name);
 				return newLevel2.createAndRelate(obj, levelsData.level1Id, "skillparent", null).then(result => {
 					resultReturn.id = result.id;
 					resultReturn.action = 'inserted';

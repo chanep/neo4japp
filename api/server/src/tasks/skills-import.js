@@ -69,7 +69,12 @@ class SkillImportTask extends BaseTask{
 			        		}).then(parentId => {
 			        			//Check and create
 
-			        		});
+			        		}).catch(err => {
+								let e = new errors.GenericError("Error importing skill groups", err);
+								console.log(e);
+
+								return;
+							});
 				        }).then(() => {
     	    				console.log("Proc. completed", inforeturn)
 							return inforeturn;

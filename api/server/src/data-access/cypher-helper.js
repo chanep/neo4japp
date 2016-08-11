@@ -11,6 +11,7 @@ class CypherHelper {
         this._labelsCypher = aux.join(':');
     }
     findByIdCmd(id, includes){
+        includes = this.parseIncludes(includes);
         let match = this.getMatch(includes);
         let ret = this.getReturn(includes);
         let cmd = `${match}
@@ -21,8 +22,8 @@ class CypherHelper {
     }
     findCmd(query){
         let includes = [];
-        if(query && query.includes)
-            includes = query.includes;
+        if(query)
+            includes = this.parseIncludes(query.includes);
         let where = this.getWhere(query);
         let match = this.getMatch(includes);
         let ret = this.getReturn(includes);
@@ -119,8 +120,8 @@ class CypherHelper {
         let params = {otherId: neo4j.int(otherId), data: this.convertToNative(data, this.model.schema), relData: this.convertToNative(relData, r.schema)};
         return [cmd, params];
     }
-    parseResult(result, includes){
-        var nodes = this.parseResultArray(result, includes);
+    parseResult(result){
+        var nodes = this.parseResultArray(result);
         if(nodes.length == 0){
             return null;
         } else if(nodes.length == 1){
@@ -129,96 +130,120 @@ class CypherHelper {
             return nodes;
         }
     }
-    parseResultArray(result, includes){
+    parseResultArray(result){
         var nodes = [];
         result.records.forEach(r => {
             let f = r._fields[0];
-            let n = this.parseField(f, this.model.schema);
-
-            includes = includes || []; 
-            includes.forEach(key => {
-                let r = this.model.getRelationByKey(key);
-                if(r.type == 'one'){
-                    n[r.key] = this.parseField(f[key], r.model.schema);
-                } else{
-                    n[r.key] = f[key].map(f2 =>{
-                        return this.parseField(f2, r.model.schema);
-                    }) 
-                }
-            })
-
+            let n = this.parseModelField(f, this.model);
             nodes.push(n);
         })
         return nodes;
     }
     parseResultAffected(result){
-        return result.records[0]._fields[0].low;
+        return this.getInt(result.records[0]._fields[0]);
     }
-    parseField(f, schema){
+    parseModelField(f, model){
         if(!f)
             return null;
-        let parsed = {};
-        if(this.isNodeField(f)){
-            parsed.id = this.getId(f.identity);
-            for(let k in f.properties){
-                parsed[k] = f.properties[k];
-            }
-        } else {
-            for(let k in schema){
-                if(k == 'id'){
-                    parsed[k] = this.getId(f[k]);
+        if(this.isNodeField(f))
+            return this.parseNodeField(f);
+        let parsed = this.parseField(f, model.schema);
+        for(let k in f){
+            if(parsed[k])
+                continue;
+            if(this.isRelationship(model, k)){
+                let r = model.getRelationByKey(k);
+                if(r.type == 'one'){
+                    parsed[k] = this.parseRelationshipField(f[k], r);
                 } else{
-                    parsed[k] = f[k];
-                }   
+                    parsed[k] = f[k].map(fi => this.parseRelationshipField(fi, r));
+                }
             }
         }
+        return parsed;
+    }
 
-        return this.convertFromNative(parsed, schema);
+    parseRelationshipField(f, r){
+        let parsed = {};
+        if(r.schema){
+            parsed = this.parseField(f, r.schema);
+            let modelKey = r.model.name.toLowerCase();
+            parsed[modelKey] = this.parseModelField(f[modelKey], r.model);
+        } else{
+            parsed = this.parseModelField(f, r.model);
+        }
+        return parsed;
+    }
+    isRelationship(model, key){
+        return !!(_.find(model.relationships, {key: key}));
+    }
+    parseField(f, schema){
+        let parsed = {};
+        for(let k in schema){
+            if(!f[k])
+                continue;
+            if(k == 'id'){
+                parsed.id = this.getInt(f[k]);
+            } else{
+                let type = schema[k]._type;
+                parsed[k] = this.convertFromNativeValue(f[k]);
+            }  
+        }
+        return parsed;
+    }
+    parseNodeField(f){
+        let parsed = {};
+        parsed.id = this.getInt(f.identity);
+        for(let k in f.properties){
+            parsed[k] = this.convertFromNativeValue(f.properties[k]);
+        }
+        return parsed;
+    }
+    convertFromNativeValue(value, type){
+        if(!value)
+            return value;
+        switch(type){
+            case "date":
+                return new Date(f[k]);
+            case "object":
+                return JSON.parse(f[k]);
+            default:
+                return value;                 
+        } 
     }
     isNodeField(f){
         return (f.identity && f.properties);
     }
-    getId(identity){
+    getInt(identity){
         return identity.low;
     }
     getMatch(includes){
-        let match = `MATCH (n${this._labelsCypher})`;
-        includes = includes || [];
-
+        let alias = 'n';
+        let match = `MATCH (${alias}${this.labels(this.model)})`;
         let i = 1;
-        includes.forEach(key => {
+        includes.forEach(include => {
             i++;
-            let r = this.model.getRelationByKey(key);
-            let rel = `-[r${i}:${r.label}]->`;
-            if(!r.outgoing){
-                rel = `<-[r${i}:${r.label}]-`;
-            }
-            match += `\nOPTIONAL MATCH (n)${rel}(n${i})`
-        })
-
+            let r = this.model.getRelationByKey(include.key);
+            match += '\n' + this.includeToMatch(r, include.includes, `${alias}`, `${alias}${i}`);
+        });
         return match;
     }
-    getReturn(includes){
-        let ret = `RETURN {id: ID(n)`;
-        includes = includes || [];
-
-        for(let key in this.model.schema){
-            if(key != 'id')
-                ret += `, ${key}: n.${key}`;
+    includeToMatch(r, includes, alias, otherAlias){
+        let match = `OPTIONAL MATCH (${alias})`;
+        let rel;
+        if(r.outgoing){
+            rel = `-[${alias}r:${r.label}]->`;
+        }else {
+            rel = `<-[${alias}r:${r.label}]-`;
         }
-
+        match += rel + `(${otherAlias})`
         let i = 1;
-        includes.forEach(key => {
+        includes.forEach(include => {
             i++;
-            let r = this.model.getRelationByKey(key);
-            let rel = `, ${r.key}: n${i}`;
-            if(r.type == 'many'){
-                rel = ` ,${r.key}: COLLECT(n${i})`;
-            }
-            ret += rel;
-        })
-        ret += '}';
-        return ret;
+            let r2 = r.model.getRelationByKey(include.key);
+            match += '\n' + this.includeToMatch(r2, include.includes, `${otherAlias}`, `${otherAlias}${i}`);
+        });
+        return match;
     }
     getWhere(query, alias){
         if(!query)
@@ -241,12 +266,75 @@ class CypherHelper {
         let cypher = " WHERE " + conditions.join(' AND ');
         return cypher;
     }
-    mapToStr(map, mapName){
+    getReturn(includes){
+        let ret = `RETURN `;
+        ret += this.modelToMapStr(this.model, includes, 'n');
+        return ret;
+    }
+    includeToMapStr(r, includes, alias, otherAlias){
+        let map = `${r.key}: `;
+        let innerMap = '';
+
+        let modelMap = this.modelToMapStr(r.model, includes, otherAlias);
+
+        if(r.schema){  
+            innerMap += '{';
+            innerMap += this.mapToStr(r.schema, `${alias}r`);
+            innerMap += `, ${r.model.name.toLowerCase()}: ${modelMap}`;
+            innerMap += '}';
+        } else{
+            innerMap += modelMap;
+        }
+
+        if(r.type == 'many'){
+            map += `COLLECT(${innerMap})`;
+        } else{
+            map += `${innerMap}`
+        }
+
+        return map;
+
+    }
+    modelToMapStr(model, includes, alias){
+        let map = `{`;
+        map += this.mapToStr(model.schema, alias);
+        let i = 1;
+        includes.forEach(include => {
+            i++;
+            let r = model.getRelationByKey(include.key);
+            map += ', ' + this.includeToMapStr(r, include.includes, alias, alias + i);
+        })
+
+        map += `}`;
+        return map;
+    }
+
+    mapToStr(map, alias){
         let terms = [];
         for(let k in map){
-            terms.push(`${k}: {${mapName}}.${k}`);
+            if(k == 'id'){
+                terms.push(`id: ID(${alias})`)
+            } else{
+                terms.push(`${k}: ${alias}.${k}`);
+            }       
         }
-        return '{' + terms.join(', ') + '}';
+        return terms.join(', ');
+    }
+    labels(model){
+        let aux = [""].concat(model.labels);
+        return aux.join(':');
+    }
+    parseIncludes(includes){
+        if(!includes)
+            return [];
+        return includes.map(i => this.parseInclude(i));
+    }
+    parseInclude(include){
+        if(include && (typeof include === 'string')){
+            return {key: include, includes: []}
+        } else{
+            return {key: include.key, includes: this.parseIncludes(include.includes)};
+        }
     }
     convertToNative(data, schema){
         if(!schema)
@@ -266,25 +354,6 @@ class CypherHelper {
             }
         }
         return nativeData;
-    }
-    convertFromNative(nativeData, schema){
-        if(!schema)
-            return nativeData;
-        let data = _.clone(nativeData);
-        for(let k in schema){
-            let type = schema[k]._type;
-            switch(type){
-                case "date":
-                    if(nativeData[k])
-                        data[k] = new Date(nativeData[k]);
-                    break;
-                case "object":
-                    if(nativeData[k])
-                        data[k] = JSON.parse(nativeData[k]);
-                    break;                   
-            }
-        }
-        return data;
     }
 }
 

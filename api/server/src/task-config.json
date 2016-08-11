@@ -30,6 +30,8 @@
 	{
 		"name" : "skill-import",
 		"path" : "./tasks/skills-import",
-		"cronPattern" : "0 0 0 1/1 * ? *"
+		"cronPattern" : "0 0 0 1/1 * ? *",
+		"args" : {
+		}
 	}
 ]
