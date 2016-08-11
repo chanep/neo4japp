@@ -145,7 +145,7 @@ let knowledgeSchema = {
 
 skill.relateWithOne(skillGroup, "BELONGS_TO", "group", true, {})
 skillGroup.relateWithMany(skill, "BELONGS_TO", "skills", false, {})
-skillGroup.relateWithOne(skillGroup, "BELONGS_TO", "group", true, {})
+skillGroup.relateWithOne(skillGroup, "BELONGS_TO", "skillparent", true, {})
 
 employee.relateWithMany(skill, "KNOWS", "skills", true, knowledgeSchema);
 employee.relateWithOne(office, "OF_OFFICE", "office", true, null);

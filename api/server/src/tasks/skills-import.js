@@ -52,11 +52,23 @@ class SkillImportTask extends BaseTask{
 
 			        			return result;
 			        		}).then(result => {
-			        			return skDa.checkLevel2({
+			        			if (row['level3'].trim() != '') {
+				        			return skDa.checkLevel2({
+				        				'level1Id': result.id,
+		    							'name': row['level2'].trim(),
+		    							'type': row['type'].toLowerCase().trim()
+				        			}).then(result => {
+    									if (result.action == 'inserted')
+    										inforeturn.created++;
 
-			        			}).then(result => {
-			        				callback();
-			        			});
+				        				return result.id;
+				        			});
+			        			} else {
+			        				return result.id;
+			        			}
+			        		}).then(parentId => {
+			        			//Check and create
+
 			        		});
 				        }).then(() => {
     	    				console.log("Proc. completed", inforeturn)
