@@ -41,40 +41,41 @@ class SkillImportTask extends BaseTask{
 					}, function(err, rows) {
 						async.eachSeries = P.promisify(async.eachSeries);
 						return async.eachSeries(rows, function (row, callback) {
-							var skDa = new SkillGroupDa();
+							if (row['level1'].trim() != '' && row['level2'].trim() != '') {
+								var skDa = new SkillGroupDa();
 
-	        				skDa.checkLevel1({
-    							'name': row['level1'].trim(),
-    							'type': row['type'].toLowerCase().trim()
-    						}).then(result => {
-    							if (result.action == 'inserted')
-    								inforeturn.created++;
+		        				skDa.checkLevel1({
+	    							'name': row['level1'].trim(),
+	    							'type': row['type'].toLowerCase().trim()
+	    						}).then(result => {
+	    							if (result.action == 'inserted')
+	    								inforeturn.created++;
 
-			        			return result;
-			        		}).then(result => {
-			        			if (row['level3'].trim() != '') {
-				        			return skDa.checkLevel2({
-				        				'level1Id': result.id,
-		    							'name': row['level2'].trim(),
-		    							'type': row['type'].toLowerCase().trim()
-				        			}).then(result => {
-    									if (result.action == 'inserted')
-    										inforeturn.created++;
+				        			return result;
+				        		}).then(result => {
+				        			if (row['level3'].trim() != '') {
+					        			return skDa.checkLevel2({
+					        				'level1Id': result.id,
+			    							'name': row['level2'].trim(),
+			    							'type': row['type'].toLowerCase().trim()
+					        			}).then(result => {
+	    									if (result.action == 'inserted')
+	    										inforeturn.created++;
 
+					        				return result.id;
+					        			});
+				        			} else {
 				        				return result.id;
-				        			});
-			        			} else {
-			        				return result.id;
-			        			}
-			        		}).then(parentId => {
-			        			//Check and create
+				        			}
+				        		}).then(parentId => {
+				        			//Check and create
 
-			        		}).catch(err => {
-								let e = new errors.GenericError("Error importing skill groups", err);
-								console.log(e);
-
-								return;
-							});
+									callback();
+				        		}).catch(err => {
+									let e = new errors.GenericError("Error importing skill groups", row, err);
+									console.log(e);
+								});
+							}
 				        }).then(() => {
     	    				console.log("Proc. completed", inforeturn)
 							return inforeturn;

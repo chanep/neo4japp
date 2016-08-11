@@ -8,13 +8,12 @@ class SkillGroupDa extends BaseDa{
     }
 
     checkLevel1(level1) {
-    	var queryStmt = "MATCH (level1:SkillGroup) WHERE NOT ((level1)-[:BELLONGS_TO]->()) AND level1.name = {level1name} AND level1.type = {level1type} RETURN level1";
+    	var queryStmt = "MATCH (level1:SkillGroup) WHERE NOT ((level1)-[:BELONGS_TO]->()) AND level1.name = {level1name} AND level1.type = {level1type} RETURN level1";
     	var params = {
     		'level1name': level1.name,
     		'level1type': level1.type
     	};
 
-    	console.log('Checking level1: ', level1.name);
     	return super._run(queryStmt, params).then(r => {
     		var resultReturn = {
     			'action': '',
@@ -29,8 +28,6 @@ class SkillGroupDa extends BaseDa{
 	        	};
 
 				return newLevel1.create(obj).then(result => {
-					console.log('Creating level1: ', level1.name);
-
 					resultReturn.id = result.id;
 					resultReturn.action = 'inserted';
 
@@ -52,20 +49,19 @@ class SkillGroupDa extends BaseDa{
     }
 
     checkLevel2(levelsData) {
-    	var queryStmt = "MATCH (level2:SkillGroup)-[BELLONGS_TO]->(level1:SkillGroup) WHERE level1.id = {level1id} AND level2.name = {level2name} AND level2.type = {level2type} RETURN level2";
+    	var queryStmt = "MATCH (child:SkillGroup)-[BELONGS_TO]->(parent:SkillGroup) WHERE ID(parent) = {parentID} AND child.name = {childName} AND child.type = {childType} RETURN child";
     	var params = {
-    		'level1id': levelsData.level1Id,
-    		'level2name': levelsData.name,
-    		'level2type': levelsData.type
+    		'parentID': levelsData.level1Id,
+    		'childName': levelsData.name,
+    		'childType': levelsData.type
     	};
 
-    	console.log('Checking level2: ', levelsData.level1Id, levelsData.name);
-    	return super._run(queryStmt, params).then(r => {
-    		var resultReturn = {
-    			'action': '',
-    			'id': 0
-    		};
+		var resultReturn = {
+			'action': '',
+			'id': 0
+		};
 
+    	return super._run(queryStmt, params).then(r => {
     		if (r.records.length == 0) {
     			var newLevel2 = new SkillGroupDa();
 				let obj = {
@@ -79,19 +75,19 @@ class SkillGroupDa extends BaseDa{
 					resultReturn.action = 'inserted';
 
 					return resultReturn;
-				}).catch(err => {
-					let e = new errors.GenericError("Error importing skill group level 2:" + obj, err);
-					console.log(e);
-
-					resultReturn.action = 'error';
-					return resultReturn;
 				});
     		}
     		else {
     			resultReturn.action = '';    			
-    			resultReturn.id = r.records[0].get('level2')['identity'].low;
+    			resultReturn.id = r.records[0].get('child')['identity'].low;
     			return resultReturn;
     		}
+    	}).catch(err => {
+			let e = new errors.GenericError("Error importing skill group level 2:" + levelsData, err);
+			console.log(e);
+
+			resultReturn.action = 'error';
+			return resultReturn;
     	});
     }
 }
