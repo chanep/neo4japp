@@ -86,7 +86,7 @@ let office = new Model(
         name: Joi.string().required(),
         description: Joi.string(),
         acronym: Joi.string().required(),
-        counrty: Joi.string().required(),
+        country: Joi.string().required(),
         latitude: Joi.number().required(),
         longitude: Joi.number().required(),
         address: Joi.string(),

@@ -26,7 +26,7 @@ class BaseTask {
                 return this._doRun(args);
             })
             .then(info => {
-                console.log(`Task ${this.name} finished ok`);
+                console.log(`Task ${this.name} finished ok. Info: ${info}`);
 			    return taskStatusDa.setFinishOk(this.name, info);
             })
             .catch(error => {
@@ -37,6 +37,8 @@ class BaseTask {
                 if(!running){
                     console.log(`Task ${this.name} finished with error`, error);
                     return taskStatusDa.setFinishError(this.name, info);
+                } else{
+                    console.log(`Task ${this.name} is already running...`);
                 }
             })
     }

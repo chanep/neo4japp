@@ -34,7 +34,7 @@ class BaseDa {
             }
             return this._validateSchema(data, schema, schemaName);
         } catch(err){
-            return P.reject(new errors.GenericError("Error validating model data", err));
+            return P.reject(new errors.GenericError("Error validating model data: " + data, err));
         }
     }
     _validateRelationship(relData, relKey, onlyDataKeys){
@@ -123,8 +123,8 @@ class BaseDa {
                 .catch(err => {throw new errors.GenericError("Error finding " + this.model.name, err)});
     }
     query(cmd){
-        return this._run(cmd);
-                // .then(r => cypher.parseResultArray(r))
+        return this._run(cmd)
+                .then(r => cypher.parseResultArrayRaw(r));
                 // .then(n => this._toEntityArray(n));
     }
     create(data){
@@ -191,7 +191,7 @@ class BaseDa {
                 let params = cypher[1];
                 return this._run(cmd, params);
             })
-            .then(r => this._cypher.parseResult(r))
+            .then(r => this._cypher.parseResultRaw(r, null))
             .catch(err => {throw new errors.GenericError("Error relating " + this.model.name, err)});
     }
     createAndRelate(data, otherId, relKey, relData){

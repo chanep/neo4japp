@@ -78,9 +78,6 @@ class PositionsImportTask extends CwBaseTask{
                     info.created += partialInfo.created;
                     info.updated += partialInfo.updated;
                     info.errors += partialInfo.errors;
-                    console.log("page", page)
-                    console.log("partialinfo", partialInfo)
-                    console.log("total", partialInfo.total())
                     return (partialInfo.total() == 0);
                 })
                 .then(() => {
