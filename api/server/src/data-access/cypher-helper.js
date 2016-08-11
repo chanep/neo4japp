@@ -293,7 +293,7 @@ class CypherHelper {
 
         query = _.omit(query, ["include"])   
         let includes = query.includes || [];
-        alias = 'n';
+        let alias = 'n';
 
         let parts = [];
         parts.push(queryHelper.getWherePart(query, alias));
