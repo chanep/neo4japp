@@ -27,13 +27,6 @@ let db = require('../data-access/db');
 //     })
 //     .catch(console.error);
 
-let parts = ["x", "", "y"];
-
-console.log("parts", parts)
-
-_.remove(parts, p => (p == ""));
-
-console.log("parts", parts)
 
 // let include = {
 //                 key : "knowledges",
@@ -46,8 +39,10 @@ console.log("parts", parts)
 // let parsed = cypher.parseIncludes([include], employeeModel, 'n');
 // console.log("parsed", JSON.stringify(parsed))
 
-// const EmployeeDa = require('../data-access/employee');
-// let employeeDa = new EmployeeDa();
+const EmployeeDa = require('../data-access/employee');
+let employeeDa = new EmployeeDa();
+
+
 
 // employeeDa.query(`match (n:Employee:Test) optional match (n)-[r:KNOWS]->(m) return {id: id(n), name: n.name, knowledges: collect({id: ID(r), level: r.level, skill: m})}`)
 //     .then(r => {
