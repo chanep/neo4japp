@@ -124,7 +124,7 @@ class BaseDa {
     }
     query(cmd, params){
         return this._run(cmd, params)
-                .then(r => cypher.parseResultArrayRaw(r));
+                .then(r => this._cypher.parseResultArrayRaw(r));
                 // .then(n => this._toEntityArray(n));
     }
     create(data){
