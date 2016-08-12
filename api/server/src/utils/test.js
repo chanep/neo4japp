@@ -22,23 +22,23 @@ const CypherHelper = require('../data-access/cypher-helper')
 // };
 
 
-let query = {
-    id: 4,
-    username: 'estebanc',
-    emaqil: {$like: '%.com'},
-    knowledges: {$relExists: false},
-    c: new Date(),
-    includes: [{key: "office", query: {acronym: "BA"}}]
-};
+// let query = {
+//     id: 4,
+//     username: 'estebanc',
+//     emaqil: {$like: '%.com'},
+//     knowledges: {$relExists: false},
+//     c: new Date(),
+//     includes: [{key: "office", query: {acronym: "BA"}}]
+// };
 
 
-let model = require("../data-access/models").employee;
+// let model = require("../data-access/models").employee;
 
-const cypherHelper = new CypherHelper(model);
+// const cypherHelper = new CypherHelper(model);
 
-let cmd = cypherHelper.findCmd(query)[0];
+// let cmd = cypherHelper.findCmd(query)[0];
 
-console.log(cmd)
+// console.log(cmd)
 
 // let [a, b] = ["hola, chau"];
 // console.log("a", a)
@@ -70,9 +70,21 @@ console.log(cmd)
 // let parsed = cypher.parseIncludes([include], employeeModel, 'n');
 // console.log("parsed", JSON.stringify(parsed))
 
-// const EmployeeDa = require('../data-access/employee');
-// let employeeDa = new EmployeeDa();
+const EmployeeDa = require('../data-access/employee');
+let employeeDa = new EmployeeDa();
+let employee = {
+    username: 'estebant',
+    email: 'esteban.test@rga.com',
+    fullname: 'Esteban Test',
+    type: "EmployeeUser",
+    phone: null
+};
 
+employeeDa._validate(employee)
+.then(r =>{
+        console.log("result", JSON.stringify(r));
+    })
+    .catch(console.error);
 
 
 // employeeDa.query(`match (n:Employee:Test) optional match (n)-[r:KNOWS]->(m) return {id: id(n), name: n.name, knowledges: collect({id: ID(r), level: r.level, skill: m})}`)

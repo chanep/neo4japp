@@ -26,7 +26,7 @@ class BaseTask {
                 return this._doRun(args);
             })
             .then(info => {
-                console.log(`Task ${this.name} finished ok. Info: ${info}`);
+                console.log(`Task ${this.name} finished ok. Info: ${JSON.stringify(info)}`);
 			    return taskStatusDa.setFinishOk(this.name, info);
             })
             .catch(error => {

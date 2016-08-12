@@ -12,15 +12,15 @@ let office = new Model(
         id: Joi.number(),
         sourceId: Joi.string().required(),
         name: Joi.string().required(),
-        description: Joi.string(),
+        description: Joi.string().allow(null),
         acronym: Joi.string().required(),
         country: Joi.string().required(),
         latitude: Joi.number().required(),
         longitude: Joi.number().required(),
-        address: Joi.string(),
-        phone: Joi.string(),
-        zip: Joi.string(),
-        uri: Joi.string()
+        address: Joi.string().allow(null),
+        phone: Joi.string().allow(null),
+        zip: Joi.string().allow(null),
+        uri: Joi.string().allow(null)
     }
 );
 
@@ -39,7 +39,7 @@ let position = new Model(
     ['Position'],
     {
         id: Joi.number(),
-        sourceId: Joi.string(),
+        sourceId: Joi.string().allow(null),
         name: Joi.string().required()
     }
 );
@@ -51,23 +51,24 @@ let employee = new Model(
         id: Joi.number(),
         sourceId: Joi.string(),
         username: Joi.string().required(),
+        type: Joi.string().required(),
         email: Joi.string().required(),
         fullname: Joi.string().required(),
-        first: Joi.string(),
-        last: Joi.string(),
-        phone: Joi.string(),
-        roles: Joi.string(),
-        image: Joi.string()
+        first: Joi.string().allow(null),
+        last: Joi.string().allow(null),
+        phone: Joi.string().allow(null),
+        roles: Joi.string().allow(null),
+        image: Joi.string().allow(null)
     }
 );
 
 let knowledgeSchema = {
         id: Joi.number(),
-        level: Joi.number(),
+        level: Joi.number().allow(null),
         want: Joi.boolean().default(false),
         approved: Joi.boolean().default(false),
-        approverId: Joi.number(),
-        approverFullname: Joi.string()
+        approverId: Joi.number().allow(null),
+        approverFullname: Joi.string().allow(null)
     };
 
 employee.relateWithMany(skill, "KNOWS", "knowledges", true, knowledgeSchema);

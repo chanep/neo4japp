@@ -26,16 +26,15 @@ class BaseDa {
 		return P.resolve(result.value);
     }
     _validate(data, onlyDataKeys){
-        try{
-            let schema = this.model.schema;
-            let schemaName = this.model.name;
-            if(onlyDataKeys){
-                schema = _.pick(schema, _.keys(data));
-            }
-            return this._validateSchema(data, schema, schemaName);
-        } catch(err){
-            return P.reject(new errors.GenericError("Error validating model data: " + data, err));
+        let schema = this.model.schema;
+        let schemaName = this.model.name;
+        if(onlyDataKeys){
+            schema = _.pick(schema, _.keys(data));
         }
+        return this._validateSchema(data, schema, schemaName)
+            .catch(err => {
+                throw new errors.GenericError("Error validating model data: " + JSON.stringify(data), err);
+            });
     }
     _validateRelationship(relData, relKey, onlyDataKeys){
         try{

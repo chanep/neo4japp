@@ -12,7 +12,7 @@ class EmployeeDa extends BaseDa{
     setDepartment(id, departmentId){
         return this.relate(id, departmentId, 'department', null, true);
     }
-    setPostion(id, positionId){
+    setPosition(id, positionId){
         return this.relate(id, positionId, 'position', null, true);
     }
     setKnowledge(id, skillId, knowledgeData){

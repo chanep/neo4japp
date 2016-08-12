@@ -27,7 +27,8 @@ class PositionsImportTask extends CwBaseTask{
         async.eachSeries = P.promisify(async.eachSeries);
         return async.eachSeries(positions, function (d, callback) {
             let position = _this._transformPosition(d);
-            positionDa.upsert(position, ["sourceId"])
+            const mergeKeys = true;
+            positionDa.upsert(position, ["sourceId"], mergeKeys)
                 .then(r => {
                     if (r.created) {
                         info.created++;
