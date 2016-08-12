@@ -1,6 +1,6 @@
 'use strict'
 const BaseDa = require('./base-da');
-const model = require('./models').employee;
+const model = require('../models/models').employee;
 
 class EmployeeDa extends BaseDa{
     constructor(tx){

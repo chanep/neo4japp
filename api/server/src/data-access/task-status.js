@@ -1,7 +1,7 @@
 'use strict'
 const _ = require('lodash');
 const BaseDa = require('./base-da');
-const model = require('./models').taskStatus;
+const model = require('../models/models').taskStatus;
 const errors = require('../shared/errors');
 
 class TaskStatusDa extends BaseDa{

@@ -1,6 +1,6 @@
 'use strict'
 const BaseDa = require('./base-da');
-const model = require('./models').skillGroup;
+const model = require('../models/models').skillGroup;
 const neo4j = require('neo4j-driver').v1;
 
 class SkillGroupDa extends BaseDa{

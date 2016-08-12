@@ -1,6 +1,6 @@
 'use strict'
 const BaseDa = require('./base-da');
-const model = require('./models').office;
+const model = require('../models/models').office;
 
 class OfficeDa extends BaseDa{
     constructor(tx){

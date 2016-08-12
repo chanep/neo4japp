@@ -121,6 +121,7 @@ class BaseDa {
             id: 4,
             username: 'estebanc',
             email: {$like: '%.com'},
+            $or: [{fullname: 'juan'}, {fulname: 'pepe'}],
             office: {$relExists: false}, //return employess with no office
             birth: new Date(),
             includes: [
