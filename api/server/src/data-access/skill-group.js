@@ -70,7 +70,6 @@ class SkillGroupDa extends BaseDa{
 	        		'type': levelsData.type
 	        	};
 
-				console.log('Creating level2: ', levelsData.level1Id, levelsData.name);
 				return newLevel2.createAndRelate(obj, levelsData.level1Id, "skillparent", null).then(result => {
 					resultReturn.id = result.id;
 					resultReturn.action = 'inserted';
