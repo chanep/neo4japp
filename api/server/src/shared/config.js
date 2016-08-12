@@ -13,9 +13,7 @@ let config = {
         pass: process.env.CW_PASS
     },
     googlespreadsheet: {
-        skills_spreadsheet_key: process.env.SKILLS_SPREADSHEET_KEY,
-        skills_client_email: process.env.SKILLS_CLIENT_EMAIL,
-        skills_private_key: process.env.SKILLS_PRIVATE_KEY
+        skills_spreadsheet_key: process.env.GOOGLE_SPREADSHEET_KEY
     }
 };
 

@@ -2,6 +2,7 @@
 const _ = require('lodash');
 const async = require('async');
 const errors = require('../shared/errors');
+const config = require('../shared/config').googlespreadsheet;
 const P = require('bluebird');
 const BaseTask = require('./base-task');
 const SkillGroupDa = require('../data-access/skill-group');
@@ -22,7 +23,7 @@ class SkillImportTask extends BaseTask{
         };
 
 		var GoogleSpreadsheet = require('google-spreadsheet');
-		var doc = new GoogleSpreadsheet('1ExPMQwoHZEvXrcxEwxROfWZH1AmPWySqY4_tD58aZ04');
+		var doc = new GoogleSpreadsheet(config.skills_spreadsheet_key);
 		var sheet;
 
 		return async.series([
@@ -83,6 +84,8 @@ class SkillImportTask extends BaseTask{
 
     									callback();
 				        			});
+				        		}).catch(err => {
+				        			inforeturn.errors++;
 				        		});
 							}
 				        }).then(() => {
