@@ -95,6 +95,9 @@ class BaseDa {
         });
     }
     findById(id, includes){
+        if(!id){
+            return P.reject(new errors.GenericError("Must specify id in findById"));
+        }
         let cypher = this._cypher.findByIdCmd(id, includes);
         let cmd = cypher[0];
         let params = cypher[1];
@@ -112,6 +115,20 @@ class BaseDa {
                 }
             })
     }
+    /*
+        Query example:
+        {
+            id: 4,
+            username: 'estebanc',
+            email: {$like: '%.com'},
+            office: {$relExists: false}, //return employess with no office
+            birth: new Date(),
+            includes: [
+                {key: "knowledges", relQuery: {level: {$lt: 3}}, query: {name: "PHP"}, includes: ["group"]},
+                {key: "department", query: {name: {$ilike: '%NOLOGY%'}}}
+            ]
+        };
+    */
     find(query){
         query = query || {};
         let includes = query.includes || [];

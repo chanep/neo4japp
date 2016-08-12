@@ -23,12 +23,17 @@ class CypherHelper {
     }
     findCmd(query){
         let includes = [];
-        if(query)
+        if(query){
             includes = this.parseIncludes(query.includes, this.model, 'n');
-        let where = this.getWhere(query);
+            query.includes = includes;
+        }
+            
+        let where = queryHelper.getWhere(this.model, query);
         let match = this.getMatch(includes);
+        let with_ = this.getWith(includes);
         let ret = this.getReturn(includes);
         let cmd = `${match}
+                    ${with_}
                     ${where}
                     ${ret}`;
         return [cmd, {}];
@@ -45,7 +50,7 @@ class CypherHelper {
                       SET n ${operator} {data}
                         RETURN n`;
         let dataAux = _.omit(data, ["id"]);
-        let params = {id: data.id, data: this.convertToNative(dataAux, this.model.schema)};
+        let params = {id: neo4j.int(data.id), data: this.convertToNative(dataAux, this.model.schema)};
         return [cmd, params];
     }
     deleteCmd(id, force){
@@ -286,30 +291,28 @@ class CypherHelper {
         });
         return match;
     }
-    getWhere(query){ 
-        if(!query)
-            return "";
-        let cypher = "";
-
-        query = _.omit(query, ["include"])   
-        let includes = query.includes || [];
+    getWith(includes){
         let alias = 'n';
-
-        let parts = [];
-        parts.push(queryHelper.getWherePart(query, alias));
-
-        includes.forEach(i => {
-            let part = queryHelper.getWherePart(i.query, i.dataAlias);
-            parts.push(part);
+        let cypher = `WITH ${alias}`;
+        includes.forEach(include => {
+            cypher += this.includeToWith(include);
         });
-
-        _.remove(parts, p => (p == ''));
-
-        if(parts.length > 0)
-            cypher = " WHERE " + parts.join(' AND\n');
         return cypher;
     }
+    includeToWith(include){
+        let i = include;
 
+        let cypher = "";
+        if(i.relQuery && !_.isEmpty(i.relQuery))
+            cypher += ', ' + i.relAlias;
+
+        cypher += ', ' + i.destAlias;
+
+        i.includes.forEach(include => {
+            cypher += this.includeToWith(include);
+        });
+        return cypher;
+    }
     getReturn(includes){
         let ret = `RETURN `;
         ret += this.modelToMapStr(this.model, includes, 'n');
@@ -382,6 +385,10 @@ class CypherHelper {
     parseInclude(include, model, sourceAlias, index){
         if(include && (typeof include === 'string'))
             include = {key: include, includes: []};
+
+        if(!include.includes)
+            include.includes = [];
+            
         include.sourceAlias = sourceAlias;
         include.destAlias = sourceAlias + index;
         include.relAlias = include.sourceAlias + include.destAlias;

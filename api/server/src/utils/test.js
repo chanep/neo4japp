@@ -9,17 +9,36 @@ require('dotenv').config({path: envFile});
 let db = require('../data-access/db');
 
 const queryHelper = require('../data-access/query-helper')
+const CypherHelper = require('../data-access/cypher-helper')
+
+
+
+// let query = {
+//     id: 4,
+//     a: 'hola',
+//     b: {$in:[5,6]},
+//     c: new Date(),
+//     includes: [{key: "knowledges", relQuery: {level: 5}, includes: ["group"]}]
+// };
+
 
 let query = {
     id: 4,
-    a: 'hola',
-    b: {$in:[5,6]},
-    c: new Date()
+    username: 'estebanc',
+    emaqil: {$like: '%.com'},
+    knowledges: {$relExists: false},
+    c: new Date(),
+    includes: [{key: "office", query: {acronym: "BA"}}]
 };
 
-let cypherStr = queryHelper.queryMapToCypher(query, 'n');
 
-console.log(cypherStr)
+let model = require("../data-access/models").employee;
+
+const cypherHelper = new CypherHelper(model);
+
+let cmd = cypherHelper.findCmd(query)[0];
+
+console.log(cmd)
 
 // let [a, b] = ["hola, chau"];
 // console.log("a", a)
