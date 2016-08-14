@@ -13,10 +13,9 @@ class CypherHelper {
     }
     findByIdCmd(id, includes){
         includes = this.parseIncludes(includes, this.model, 'n');
-        let match = this.getMatch(includes);
+        let match = this.getMatch(includes, {id: id});
         let ret = this.getReturn(includes);
         let cmd = `${match}
-                    WHERE ID(n) = {id}
                     ${ret}`;
         let params = {id: id};
         return [cmd, params];
@@ -29,12 +28,11 @@ class CypherHelper {
         }
             
         let where = queryHelper.getWhere(this.model, query);
-        let match = this.getMatch(includes);
+        let match = this.getMatch(includes, query);
         let with_ = this.getWith(includes);
         let ret = this.getReturn(includes);
         let cmd = `${match}
                     ${with_}
-                    ${where}
                     ${ret}`;
         return [cmd, {}];
     }
@@ -267,9 +265,18 @@ class CypherHelper {
     getInt(identity){
         return identity.low;
     }
-    getMatch(includes){
+    getMatch(includes, query){
         let alias = 'n';
         let match = `MATCH (${alias}${this.labels(this.model)})`;
+        
+        let rootQuery = _.omit(query, ["includes"]);
+        if(rootQuery.id){
+            match += ` WHERE ID(${alias}) = {id}`;
+        } else{
+            match += ' WHERE ' + queryHelper.queryMapToCypher(this.model, rootQuery, alias);
+        }
+        
+        
         includes.forEach(include => {
             match += '\n' + this.includeToMatch(include);
         });
@@ -277,14 +284,19 @@ class CypherHelper {
     }
     includeToMatch(include){
         let i = include;
-        let match = `OPTIONAL MATCH (${i.sourceAlias})`;
+        let optional = '';
+        if(!i.hasQuery)
+            optional = 'OPTIONAL ';
+        let match = `${optional}MATCH (${i.sourceAlias})`;
         let rel;
         if(i.r.outgoing){
             rel = `-[${i.relAlias}:${i.r.label}]->`;
         }else {
             rel = `<-[${i.relAlias}:${i.r.label}]-`;
         }
-        match += rel + `(${i.destAlias})`
+        match += rel + `(${i.destAlias}) `;
+
+        match += queryHelper.queryIncludeToCypher(include);
 
         i.includes.forEach(include => {
             match += '\n' + this.includeToMatch(include);
@@ -303,7 +315,7 @@ class CypherHelper {
         let i = include;
 
         let cypher = "";
-        if(i.relQuery && !_.isEmpty(i.relQuery))
+        if(i.r.schema)
             cypher += ', ' + i.relAlias;
 
         cypher += ', ' + i.destAlias;
@@ -380,7 +392,12 @@ class CypherHelper {
             let parsed = this.parseInclude(include, model, sourceAlias, i);
             parsedIncludes.push(parsed);
         })
-        return parsedIncludes;
+        let sorted = _.sortBy(parsedIncludes, inc => {
+            if(inc.hasQuery)
+                return 0;
+            return 1;
+        });
+        return sorted;
     }
     parseInclude(include, model, sourceAlias, index){
         if(include && (typeof include === 'string'))
@@ -400,8 +417,21 @@ class CypherHelper {
             include.dataAlias = include.destAlias;
         }
         include.includes = this.parseIncludes(include.includes, r.model, include.destAlias);
+        include.hasQuery = this.includeHasQuery(include);
         return include;
     }
+    includeHasQuery(include){
+        let i = include;
+        let has = false;
+        if(i.query || i.relQuery)
+            return true;
+        for(let si of i.includes){
+            if(this.includeHasQuery(si))
+                return true;
+        }
+        return false;
+    }
+
     convertToNative(data, schema){
         if(!schema)
             return data;

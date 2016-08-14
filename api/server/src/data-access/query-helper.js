@@ -3,7 +3,9 @@ const _ = require('lodash');
 const errors = require('../shared/errors');
 
 module.exports = {
-    getWhere: getWhere
+    getWhere: getWhere,
+    queryIncludeToCypher: queryIncludeToCypher,
+    queryMapToCypher: queryMapToCypher
 };
 
 function getWhere(model, query){
@@ -19,7 +21,7 @@ function getWhere(model, query){
     let includes = query.includes || [];
 
     includes.forEach(i => {
-        queryIncludeToCypher(parts, i);
+        queryIncludeToCypher2(parts, i);
     });
 
     _.remove(parts, p => (p == ''));
@@ -29,7 +31,17 @@ function getWhere(model, query){
     return cypher;
 }
 
-function queryIncludeToCypher(parts, include){
+function queryIncludeToCypher(include){
+    if(include.query && !_.isEmpty(include.query)){
+        return 'WHERE ' + queryMapToCypher(include.r.model, include.query, include.destAlias);
+    }
+    if(include.relQuery && !_.isEmpty(include.relQuery)){
+        return 'WHERE ' + queryMapToCypher(include.r.model, include.relQuery, include.relAlias);
+    }
+    return '';
+}
+
+function queryIncludeToCypher2(parts, include){
     if(include.query && !_.isEmpty(include.query)){
         let part = queryMapToCypher(include.r.model, include.query, include.destAlias);
         parts.push(part);
@@ -39,7 +51,7 @@ function queryIncludeToCypher(parts, include){
         parts.push(part);
     }
     include.includes.forEach(i => {
-        queryIncludeToCypher(parts, i);
+        queryIncludeToCypher2(parts, i);
     });   
 }
 
