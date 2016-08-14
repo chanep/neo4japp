@@ -13,6 +13,7 @@ const Cypher = require('./cypher-helper');
 class BaseDa {
     constructor(model, tx){
         this.model = model;
+        this.labelsStr = model.labelsStr;
         this._cypher = new Cypher(model);
         this._tx = tx;
         

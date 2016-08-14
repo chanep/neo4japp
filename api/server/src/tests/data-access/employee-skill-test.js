@@ -20,6 +20,7 @@ let employee = {
     username: 'estebant',
     email: 'esteban.test@rga.com',
     fullname: 'Esteban Test',
+    type: 'EmployeeUser'
 };
 
 let knowledge = {

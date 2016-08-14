@@ -14,6 +14,7 @@ let employee = {
     username: 'estebant',
     email: 'esteban.test@rga.com',
     fullname: 'Esteban Test',
+    type: 'EmployeeUser'
 };
 
 
@@ -50,7 +51,6 @@ vows.describe('Employee data access test')
                 console.log("error", err)
                 throw err;
             }
-            console.log("department result", result)
             department.id = result.id;
         }
     }

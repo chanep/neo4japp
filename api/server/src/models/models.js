@@ -1,5 +1,4 @@
 const e = require('./employee');
-const taskStatus = require('./task-status');
 const s = require('./skill');
 
 module.exports = {
@@ -9,5 +8,6 @@ module.exports = {
     department: e.department,
     skill: s.skill,
     skillGroup: s.skillGroup,
-    taskStatus: taskStatus
+    taskStatus: require('./task-status'),
+    appSetting: require('./app-setting')
 };

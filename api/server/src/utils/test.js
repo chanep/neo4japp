@@ -12,7 +12,6 @@ const queryHelper = require('../data-access/query-helper')
 const CypherHelper = require('../data-access/cypher-helper')
 
 
-
 // let query = {
 //     id: 4,
 //     a: 'hola',
@@ -70,21 +69,21 @@ const CypherHelper = require('../data-access/cypher-helper')
 // let parsed = cypher.parseIncludes([include], employeeModel, 'n');
 // console.log("parsed", JSON.stringify(parsed))
 
-const EmployeeDa = require('../data-access/employee');
-let employeeDa = new EmployeeDa();
-let employee = {
-    username: 'estebant',
-    email: 'esteban.test@rga.com',
-    fullname: 'Esteban Test',
-    type: "EmployeeUser",
-    phone: null
-};
+// const EmployeeDa = require('../data-access/employee');
+// let employeeDa = new EmployeeDa();
+// let employee = {
+//     username: 'estebant',
+//     email: 'esteban.test@rga.com',
+//     fullname: 'Esteban Test',
+//     type: "EmployeeUser",
+//     phone: null
+// };
 
-employeeDa._validate(employee)
-.then(r =>{
-        console.log("result", JSON.stringify(r));
-    })
-    .catch(console.error);
+// employeeDa._validate(employee)
+// .then(r =>{
+//         console.log("result", JSON.stringify(r));
+//     })
+//     .catch(console.error);
 
 
 // employeeDa.query(`match (n:Employee:Test) optional match (n)-[r:KNOWS]->(m) return {id: id(n), name: n.name, knowledges: collect({id: ID(r), level: r.level, skill: m})}`)

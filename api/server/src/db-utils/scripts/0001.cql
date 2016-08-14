@@ -1,0 +1,1 @@
+create (n:AppSetting${p} {name: 'db_version', value: 1});

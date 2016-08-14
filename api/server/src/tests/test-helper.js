@@ -3,16 +3,16 @@ var envFile = path.resolve(__dirname, "../.test-env");
 require('dotenv').config({path: envFile});
 
 const config = require('../shared/config');
-const partition = config.db.partition;
-const dbHelper = require('./db-helper');
+const partitionSuffix = config.db.partitionSuffix;
+const testDbHelper = require('./test-db-helper');
 
 module.exports = {
-    resetTestDbBatch: function(dbName){
+    resetTestDbBatch: function(){
         return {
             'reset db' : {
                 topic: function(){
                     var _this = this;
-                    dbHelper.resetDb(partition)
+                    testDbHelper.resetDb(partitionSuffix)
                         .then(function(){
                             _this.callback(null)
                         })

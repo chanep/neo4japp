@@ -3,7 +3,7 @@ const Joi = require('joi');
 const _ = require('lodash');
 const errors = require('../shared/errors');
 const config = require('../shared/config');
-const partition = config.db.partition;
+const partitionSuffix = config.db.partitionSuffix;
 
 class Relationship {
     constructor(model, label, key, type, outgoing, schema){
@@ -22,9 +22,12 @@ class Model {
         this.labels = labels;
         this.schema = schema;
         this.relationships = [];
-        if(partition){
-            this.labels.push(partition);
+        if(partitionSuffix){
+            for(let i in this.labels){
+                this.labels[i] += partitionSuffix;
+            }
         }
+        this.labelsStr = this.labels.join(':');
     }
     relateWithOne(model, label, key, outgoing, schema){
         let r = new Relationship(model, label, key, "one", outgoing, schema)

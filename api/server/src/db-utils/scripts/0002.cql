@@ -1,0 +1,9 @@
+create constraint on (n:AppSetting${p}) Assert n.name is UNIQUE;
+create constraint on (n:Employee${p}) Assert n.username is UNIQUE;
+create constraint on (n:Employee${p}) Assert n.sourceId is UNIQUE;
+create constraint on (n:Office${p}) Assert n.name is UNIQUE;
+create constraint on (n:Office${p}) Assert n.sourceId is UNIQUE;
+create constraint on (n:Department${p}) Assert n.name is UNIQUE;
+create constraint on (n:Department${p}) Assert n.sourceId is UNIQUE;
+create constraint on (n:Position${p}) Assert n.name is UNIQUE;
+create constraint on (n:Position${p}) Assert n.sourceId is UNIQUE;
