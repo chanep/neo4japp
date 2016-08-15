@@ -7,9 +7,21 @@ let errors = require('../shared/errors');
 require('dotenv').config({path: envFile});
 
 let db = require('../data-access/db');
+const neo4j = require('neo4j-driver').v1;
 
-const queryHelper = require('../data-access/query-helper')
-const CypherHelper = require('../data-access/cypher-helper')
+// const queryHelper = require('../data-access/query-helper')
+// const CypherHelper = require('../data-access/cypher-helper')
+
+
+let session = db.session();
+
+let cmd = `match (n:Employee_T) where ID(n) IN {ids} return n.username`;
+let params = {ids: [neo4j.int(230)]};
+session.run(cmd, params)
+    .then(r => {
+        console.log(JSON.stringify(r))
+    })
+    .catch(console.error);
 
 
 // let query = {

@@ -1,143 +1,109 @@
 'use strict'
 const _ = require('lodash');
 const errors = require('../shared/errors');
+const neo4j = require('neo4j-driver').v1;
 
 module.exports = {
-    getWhere: getWhere,
     queryIncludeToCypher: queryIncludeToCypher,
     queryMapToCypher: queryMapToCypher
 };
 
-function getWhere(model, query){
-    if(!query)
-            return "";
-    let alias = 'n';
-
-    let parts = [];
-
-    let rootQuery = _.omit(query, ["includes"]);
-    parts.push(queryMapToCypher(model, rootQuery, alias));
-
-    let includes = query.includes || [];
-
-    includes.forEach(i => {
-        queryIncludeToCypher2(parts, i);
-    });
-
-    _.remove(parts, p => (p == ''));
-    let cypher = "";
-    if(parts.length > 0)
-        cypher = " WHERE " + parts.join(' AND\n');
-    return cypher;
-}
-
-function queryIncludeToCypher(include){
+function queryIncludeToCypher(include, params){
     if(include.query && !_.isEmpty(include.query)){
-        return 'WHERE ' + queryMapToCypher(include.r.model, include.query, include.destAlias);
+        return 'WHERE ' + queryMapToCypher(include.r.model, include.query, include.destAlias, params);
     }
     if(include.relQuery && !_.isEmpty(include.relQuery)){
-        return 'WHERE ' + queryMapToCypher(include.r.model, include.relQuery, include.relAlias);
+        return 'WHERE ' + queryMapToCypher(include.r.model, include.relQuery, include.relAlias, params);
     }
     return '';
 }
 
-function queryIncludeToCypher2(parts, include){
-    if(include.query && !_.isEmpty(include.query)){
-        let part = queryMapToCypher(include.r.model, include.query, include.destAlias);
-        parts.push(part);
-    }
-    if(include.relQuery && !_.isEmpty(include.relQuery)){
-        let part = queryMapToCypher(include.r.model, include.relQuery, include.relAlias);
-        parts.push(part);
-    }
-    include.includes.forEach(i => {
-        queryIncludeToCypher2(parts, i);
-    });   
-}
-
-function queryMapToCypher(model, map, alias){
+function queryMapToCypher(model, map, alias, params){
     let terms = [];
     for(let k in map){
-        let term = queryKeyValueToCypher(model, k, map[k], alias);
+        let term = queryKeyValueToCypher(model, k, map[k], alias, params);
         terms.push(term);
     }
     return terms.join(' AND ');
 }
 
-function queryKeyValueToCypher(model, key, value, alias){
+function queryKeyValueToCypher(model, key, value, alias, params){
     let operator = getOperator(key, value);
     if(!operator){
-        return simpleConditionToCypher(key, value, alias);
+        return simpleConditionToCypher(key, value, alias, params);
     } else if(operator == '$or'){
-        return orOperatorToCypher(key, value, alias);
+        return orOperatorToCypher(key, value, alias, params);
     } else if(operator == '$and'){
-        return andOperatorToCypher(key, value, alias);
+        return andOperatorToCypher(key, value, alias, params);
     } else if(operator == '$not'){
-        return notOperatorToCypher(key, value, alias);
+        return notOperatorToCypher(key, value, alias, params);
     } else if(operator == '$in'){
-        return inOperatorToCypher(key, value, alias);
+        return inOperatorToCypher(key, value, alias, params);
     } else if(operator == '$ne'){
-        return neOperatorToCypher(key, value, alias);
+        return neOperatorToCypher(key, value, alias, params);
     } else if(operator == '$like'){
-        return likeOperatorToCypher(key, value, alias);
+        return likeOperatorToCypher(key, value, alias, params);
     } else if(operator == '$ilike'){
-        return ilikeOperatorToCypher(key, value, alias);
+        return ilikeOperatorToCypher(key, value, alias, params);
     } else if(operator == '$lt' || operator == '$lte' || operator == '$gt' || operator == '$gte'){
-        return comparisonOperatorToCypher(operator, key, value, alias);
+        return comparisonOperatorToCypher(operator, key, value, alias, params);
     } else if(operator == '$relExists'){
-        return relExistsOperatorToCypher(model, key, value, alias);
+        return relExistsOperatorToCypher(model, key, value, alias, params);
     }
 }
-
-function neOperatorToCypher(key, value, alias){
+function neOperatorToCypher(key, value, alias, params){
     value = value.$ne;
     if(value == null)
         return keyToCypher(key, alias) + ' IS NOT NULL';
-    value = valueToCypher(value);
-    return keyToCypher(key, alias) + ` <> ${value}`;
+    value = valueToCypher(value, key);
+    let paramName = keyToParamName(key, alias);
+    params[paramName] = value;
+    return keyToCypher(key, alias) + ` <> {${paramName}}`;
 }
 
-function orOperatorToCypher(key, value, alias){
+function orOperatorToCypher(key, value, alias, params){
     if(!Array.isArray(value))
         throw new errors.GenericError("$or operator expects an array");
     let terms = [];
     value.forEach(map => {
-        let term = queryMapToCypher(map, alias);
+        let term = queryMapToCypher(map, alias, params);
         terms.push(term);
     })
     return '(' + terms.join(' OR ') + ') ';
 }
 
-function andOperatorToCypher(key, value, alias){
+function andOperatorToCypher(key, value, alias, params){
     if(!Array.isArray(value))
         throw new errors.GenericError("$and operator expects an array");
     let terms = [];
     value.forEach(map => {
-        let term = queryMapToCypher(map, alias);
+        let term = queryMapToCypher(map, alias, params);
         terms.push(term);
     })
     return '(' + terms.join(' AND ') + ') ';
 }
 
-function inOperatorToCypher(key, value, alias){
+function inOperatorToCypher(key, value, alias, params){
     value = value.$in;
     if(!Array.isArray(value))
         throw new errors.GenericError("$in operator expects an array");
-    let terms = [];
+
+    let paramName = keyToParamName(key, alias);
+    params[paramName] = [];
     value.forEach(i => {
-        let term = valueToCypher(i);
-        terms.push(term);
+        let parsed = valueToCypher(i, key);
+        params[paramName].push(parsed);
     })
-    return keyToCypher(key, alias) + ` IN [${terms.join(', ')}]`;
+    return keyToCypher(key, alias) + ` IN {${paramName}}`;
 }
 
-function notOperatorToCypher(key, value, alias){
+function notOperatorToCypher(key, value, alias, params){
     if(!_.isObject(value))
         throw new errors.GenericError("$not operator expects a object");
-    return 'NOT(' + queryMapToCypher(map, alias) + ')';
+    return 'NOT(' + queryMapToCypher(map, alias, params) + ')';
 }
 
-function comparisonOperatorToCypher(operator, key, value, alias){
+function comparisonOperatorToCypher(operator, key, value, alias, params){
     let op;
     switch(operator){
         case '$lt':
@@ -154,9 +120,10 @@ function comparisonOperatorToCypher(operator, key, value, alias){
             break;
     }
     value = value[operator];
-
-    value = valueToCypher(value);
-    return keyToCypher(key, alias) + ` ${op} ${value}`;
+    value = valueToCypher(value, key);
+    let paramName = keyToParamName(key, alias);
+    params[paramName] = value;
+    return keyToCypher(key, alias) + ` ${op} {${paramName}}`;
 }
 
 function relExistsOperatorToCypher(model, key, value, alias){
@@ -190,8 +157,9 @@ function likeOperatorToCypher(key, value, alias) {
     }
 
     value = value.replace(any, '');
-    value = valueToCypher(value);
-    return keyToCypher(key, alias) + ` ${op} ${value}`;
+    let paramName = keyToParamName(key, alias);
+    params[paramName] = value;
+    return keyToCypher(key, alias) + ` ${op} {${paramName}}`;
 }
 
 function ilikeOperatorToCypher(key, value, alias) {
@@ -201,9 +169,10 @@ function ilikeOperatorToCypher(key, value, alias) {
     if(value.length == 0)
         return "";
 
-    value = value.replace(/%/g, '.*');
-    
-    return keyToCypher(key, alias) + ` =~ '(?i)${value}'`;
+    value = '(?i)' + value.replace(/%/g, '.*');
+    let paramName = keyToParamName(key, alias);
+    params[paramName] = value;
+    return keyToCypher(key, alias) + ` =~ {${paramName}}`;
 }
 
 function getOperator(key, value){
@@ -218,23 +187,26 @@ function getOperator(key, value){
 
 
 
-function simpleConditionToCypher(key, value, alias) {
+function simpleConditionToCypher(key, value, alias, params) {
     if(value == null)
         return keyToCypher(key, alias) + ' IS NULL';
     let equal = '='
     if (valueIsRegEx(value))
         equal = '=~';
-    value = valueToCypher(value);
-    return keyToCypher(key, alias) + ` ${equal} ${value}`;
+    value = valueToCypher(value, key);
+    let paramName = keyToParamName(key, alias);
+    params[paramName] = value;
+
+    return keyToCypher(key, alias) + ` ${equal} {${paramName}}`;
 }
 
-function valueToCypher(value){
-    if (typeof value === 'string') {
-        return `'${value}'`;
+function valueToCypher(value, key){
+    if(key == 'id' && _.isInteger(value)){
+        return neo4j.int(value);
     } else if (_.isDate(value)){
-        return `${value.getTime()}`;
+        return value.getTime();
     } else if (_.isObject(value)){
-        return `'${JSON.stringify(value)}'`;
+        return JSON.stringify(value);
     } else{
         return value;
     }
@@ -242,8 +214,11 @@ function valueToCypher(value){
 
 function keyToCypher(key, alias){
     if(key == 'id')
-        return `ID(${alias}.id)`;
+        return `ID(${alias})`;
     return `${alias}.${key}`;
+}
+function keyToParamName(key, alias){
+    return `${alias}_${key}`;
 }
 
 function valueIsRegEx(){

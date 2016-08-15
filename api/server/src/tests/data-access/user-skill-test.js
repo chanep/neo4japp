@@ -147,9 +147,9 @@ vows.describe('User/Skill data access test')
                 throw err;
             }
             assert.equal(result.length, 1)
-            let e = result[0];
-            assert.equal(e.knowledges.length, 1)
-            e.knowledges.forEach(k => {
+            let u = result[0];
+            assert.equal(u.knowledges.length, 1)
+            u.knowledges.forEach(k => {
                 assert.isTrue(k.level > 3);
             })
         }
@@ -177,9 +177,9 @@ vows.describe('User/Skill data access test')
                 throw err;
             }
             assert.equal(result.length, 1)
-            let e = result[0];
-            assert.equal(e.knowledges.length, 1)
-            e.knowledges.forEach(k => {
+            let u = result[0];
+            assert.equal(u.knowledges.length, 1)
+            u.knowledges.forEach(k => {
                 assert.isTrue(k.level < 3);
             })
         }
@@ -208,12 +208,42 @@ vows.describe('User/Skill data access test')
                 throw err;
             }
             assert.equal(result.length, 1)
-            let e = result[0];
+            let u = result[0];
 
-            assert.equal(e.knowledges.length, 1)
-            e.knowledges.forEach(k => {
+            assert.equal(u.knowledges.length, 1)
+            u.knowledges.forEach(k => {
                 assert.equal(k.skill.group.type, skillGroups[1].type);
             })
+        }
+    }
+})
+
+.addBatch({
+    '4d. find users with suqueries with notInclude': {
+        topic: function () {
+            let query = {
+                username: user.username,
+                includes: [{
+                    key: "knowledges",
+                    notInclude: true,
+                    relQuery: {level: {$lt: 3}},
+                    includes: ["group"]
+                }]
+            };
+            userDa.find(query)
+                .then(r => this.callback(null, r))
+                .catch(err => this.callback(err))
+        },
+        'should crete knowledge': function (err, result) {
+            if(err){
+                console.log("error", err)
+                throw err;
+            }
+            assert.equal(result.length, 1)
+            let u = result[0];
+
+            assert.isUndefined(u.knowledges);
+
         }
     }
 })

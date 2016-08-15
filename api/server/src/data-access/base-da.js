@@ -99,9 +99,7 @@ class BaseDa {
             return P.reject(new errors.GenericError("Must specify id in findById"));
         }
         let cypher = this._cypher.findByIdCmd(id, includes);
-        let cmd = cypher[0];
-        let params = cypher[1];
-        return this._run(cmd, params)
+        return this._run(cypher.cmd, cypher.params)
                 .then(r => this._cypher.parseResult(r, includes))
                 .catch(err => {throw new errors.GenericError("Error finding by id " + this.model.name, err)});
     }
@@ -116,17 +114,83 @@ class BaseDa {
             })
     }
     /*
+        Simple Query Structure
+        ----------------------
+            query = {
+                key1: value1,
+                key2: value2,
+            }
+            Will match nodes with (key1 = value1 AND key2 = value2)
+        
+        Operators
+        ---------
+        $or:[{key1: value1}, {key2: value2}]    -> (key1=value1 OR key2=value2)   
+        $not:{key1: vaalue1, key2: value2}      -> NOT(key1=value1 AND key2=value2)     
+        key1:{$in:[3,4,5]}                      -> (key1 IN [3,4,5])
+        key1:{$ne: value1}                      -> (key1 <> value1)
+        key1:{$like: '%abc%'}                   -> (key1 CONTAINS 'abc')
+        key1:{$ilike: '%abc%'}                  -> case insensitive version of $like 
+        key1:{$lt: 10}                          -> (key1 < 10)
+        key1:{$lte: 10}                         -> (key1 <= 10)
+        key1:{$gt: 10}                          -> (key1 > 10)
+        key1:{$gte: 10}                         -> (key1 >= 10)
+        children: {$relExists : true}           -> match objects that have at least 1 child. "children" is the relationship key defined in object Model
+        children: {$relExists : false}          -> match objects that are not related with any child. "children" is the relationship key defined in object Model
+
+        Includes
+        --------------
+        Includes related objects in the query result
+
+            Simple form
+            -----------
+            query = {
+                includes: ["child1", "child2"]
+            }
+            Will include the model related objects defined in relationships "child1" and "child2"
+
+            Complete form
+            -------------
+            query = {
+                includes:[
+                    {key: "knowledges", relQuery: {level: {$lt: 3}}, notInclude: true, query: {name: 'php'}, includes: ["group"]}
+                ]
+            }
+            key: the key (name) of the relationship
+            relQuery: the query criteria for the actual relationship data (only for relationships that have data)
+            query: the query criteria for the related object
+            includes: includes can have subincludes
+            notInclude: Applies include query criterias but doesn't include the related object in the result
+        
+        Pagination
+        ----------
+        query = {
+            key1: value1
+            paged: {skip: 100, limit: 10}
+        }
+        result = {
+            data : [....]
+            paged: {skip:100, limit:10, totalCount: 2000}
+        }
+
+        Ordering
+        --------
+        query = {
+            key1: value1
+            orderBy: "key1 ASC, child.key2 DESC"
+        }
+        order first by key asc and then by key2 of child DESC
+
         Query example:
         {
             id: 4,
             username: 'estebanc',
             email: {$like: '%.com'},
-            $or: [{fullname: 'juan'}, {fulname: 'pepe'}],
+            $or: [{fullname: 'juan'}, {fullname: 'pepe'}],
             office: {$relExists: false}, //return employess with no office
             birth: new Date(),
             includes: [
                 {key: "knowledges", relQuery: {level: {$lt: 3}}, query: {name: "PHP"}, includes: ["group"]},
-                {key: "department", query: {name: {$ilike: '%NOLOGY%'}}}
+                {key: "department", notInclude: true, query: {name: {$ilike: '%NOLOGY%'}}}
             ]
         };
     */
@@ -134,9 +198,7 @@ class BaseDa {
         query = query || {};
         let includes = query.includes || [];
         let cypher = this._cypher.findCmd(query);
-        let cmd = cypher[0];
-        let params = cypher[1];
-        return this._run(cmd, params)
+        return this._run(cypher.cmd, cypher.params)
                 .then(r => this._cypher.parseResultArray(r, includes))
                 .catch(err => {throw new errors.GenericError("Error finding " + this.model.name, err)});
     }
@@ -149,9 +211,7 @@ class BaseDa {
         return this._validate(data)
             .then(d => {
                 let cypher = this._cypher.createCmd(d);
-                let cmd = cypher[0];
-                let params = cypher[1];
-                return this._run(cmd, params);
+                return this._run(cypher.cmd, cypher.params);
             })
             .then(r => this._cypher.parseResult(r))
             .catch(err => {throw new errors.GenericError("Error creating " + this.model.name, err)});
@@ -160,9 +220,7 @@ class BaseDa {
         return this._validate(data, true)
             .then(d => {
                 let cypher = this._cypher.updateCmd(d, mergeKeys);
-                let cmd = cypher[0];
-                let params = cypher[1];
-                return this._run(cmd, params);
+                return this._run(cypher.cmd, cypher.params);
             })
             .then(r => this._cypher.parseResult(r))
             .catch(err => {throw new errors.GenericError("Error updating " + this.model.name, err)});
@@ -187,17 +245,13 @@ class BaseDa {
     //force: if true delete relations before
     delete(id, force){
         let cypher = this._cypher.deleteCmd(id, force);
-        let cmd = cypher[0];
-        let params = cypher[1];  
-        return this._run(cmd, params)
+        return this._run(cypher.cmd, cypher.params)
             .then(r => this._cypher.parseResultAffected(r))
             .catch(err => {throw new errors.GenericError("Error deleting " + this.model.name, err)});
     }
     deleteAll(){
-        let cypher = this._cypher.deleteAllCmd();
-        let cmd = cypher[0];
-        let params = cypher[1];  
-        return this._run(cmd, params)
+        let cypher = this._cypher.deleteAllCmd(); 
+        return this._run(cypher.cmd, cypher.params)
             .then(r => this._cypher.parseResultAffected(r))
             .catch(err => {throw new errors.GenericError("Error deleting all " + this.model.name, err)});
     }
@@ -205,19 +259,14 @@ class BaseDa {
         return this._validateRelationship(relData, relKey)
             .then(d => {
                 let cypher = this._cypher.relateCmd(id, otherId, relKey, d, replace);
-                let cmd = cypher[0];
-                let params = cypher[1];
-                return this._run(cmd, params);
+                return this._run(cypher.cmd, cypher.params);
             })
             .then(r => this._cypher.parseResultRaw(r, null))
             .catch(err => {throw new errors.GenericError("Error relating " + this.model.name, err)});
     }
     createAndRelate(data, otherId, relKey, relData){
         let cypher = this._cypher.createAndRelateCmd(data, otherId, relKey, relData);
-        let cmd = cypher[0];
-        let params = cypher[1];
-
-        return this._run(cmd, params)
+        return this._run(cypher.cmd, cypher.params)
             .then(r => this._cypher.parseResult(r))
             .catch(err => {throw new errors.GenericError("Error creating and relating " + this.model.name, err)});
     }

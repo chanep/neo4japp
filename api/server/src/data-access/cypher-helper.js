@@ -8,72 +8,66 @@ const queryHelper = require('./query-helper');
 class CypherHelper {
     constructor(model){
         this.model = model;
-        let aux = [""].concat(this.model.labels);
-        this._labelsCypher = aux.join(':');
     }
     findByIdCmd(id, includes){
         includes = this.parseIncludes(includes, this.model, 'n');
-        let match = this.getMatch(includes, {id: id});
+        let query = {id: id, includes: includes};
+        let params = {};
+        let match = this.getMatch(query, params);
         let ret = this.getReturn(includes);
         let cmd = `${match}
                     ${ret}`;
-        let params = {id: id};
-        return [cmd, params];
+        return  {cmd:cmd, params:params};
     }
     findCmd(query){
-        let includes = [];
-        if(query){
-            includes = this.parseIncludes(query.includes, this.model, 'n');
-            query.includes = includes;
-        }
-            
-        let where = queryHelper.getWhere(this.model, query);
-        let match = this.getMatch(includes, query);
-        let with_ = this.getWith(includes);
-        let ret = this.getReturn(includes);
+        query = this.parseQuery(query);
+        let params = {};
+        let match = this.getMatch(query, params);
+        let with_ = this.getWith(query.includes);
+        let ret = this.getReturn(query.includes);
         let cmd = `${match}
                     ${with_}
                     ${ret}`;
-        return [cmd, {}];
+        return {cmd:cmd, params:params};
     }
     createCmd(data){
-        let cmd = `CREATE (n${this._labelsCypher} {data}) 
+        let cmd = `CREATE (n:${this.model.labelsStr} {data}) 
                    RETURN n`
         let params = {data: this.convertToNative(data, this.model.schema)};
-        return [cmd, params];
+        return  {cmd:cmd, params:params};
     }
     updateCmd(data, mergeKeys){
         let operator = mergeKeys? '+=' : '=';
-        let cmd = `MATCH (n${this._labelsCypher}) WHERE ID(n) = {id} 
+        let cmd = `MATCH (n:${this.model.labelsStr}) WHERE ID(n) = {id} 
                       SET n ${operator} {data}
                         RETURN n`;
         let dataAux = _.omit(data, ["id"]);
         let params = {id: neo4j.int(data.id), data: this.convertToNative(dataAux, this.model.schema)};
-        return [cmd, params];
+        return  {cmd:cmd, params:params};
     }
     deleteCmd(id, force){
         let cmd = `
-            MATCH (n${this._labelsCypher}) WHERE ID(n) = {id} 
+            MATCH (n:${this.model.labelsStr}) WHERE ID(n) = {id} 
             DELETE n
             RETURN count(n) as affected`;
         if(force){
             cmd = `
-                MATCH (n${this._labelsCypher}) WHERE ID(n) = {id} 
-                OPTIONAL MATCH (n${this._labelsCypher})-[r]-() WHERE ID(n) = {id} 
+                MATCH (n:${this.model.labelsStr}) WHERE ID(n) = {id} 
+                OPTIONAL MATCH (n:${this.model.labelsStr})-[r]-() WHERE ID(n) = {id} 
                 DELETE n,r
                 RETURN count(n) as affected`;
         }
         let params = {id: id};
-        return [cmd, params];
+        return  {cmd:cmd, params:params};;
     }
     deleteAllCmd(){
         let cmd = `
-                MATCH (n${this._labelsCypher}) 
-                OPTIONAL MATCH (n${this._labelsCypher})-[r]-() 
+                MATCH (n:${this.model.labelsStr}) 
+                OPTIONAL MATCH (n:${this.model.labelsStr})-[r]-() 
                 DELETE n,r
                 RETURN count(n) as affected`;
         let params = {};
-        return [cmd, params];
+        return  {cmd:cmd, params:params};;
     }
     relateCmd(id, otherId, relKey, relData, replace){
         let r = this.model.getRelationByKey(relKey);
@@ -88,7 +82,7 @@ class CypherHelper {
         relData = relData || {};
         // let relDataStr = this.mapToStr(relData, "relData");
         // let cmd = `
-        //     MATCH (n${this._labelsCypher}),(m)
+        //     MATCH (n:${this.model.labelsStr}),(m)
         //     WHERE ID(n) = {id} AND ID(m) = {otherId}
         //     MERGE (n)${dir1}-[r:${r.label} ${relDataStr}]-${dir2}(m)
         //     RETURN r`;
@@ -97,7 +91,7 @@ class CypherHelper {
             unique = 'UNIQUE ';
         
         let cmd = `
-            MATCH (n${this._labelsCypher}),(m)
+            MATCH (n:${this.model.labelsStr}),(m:${r.model.labelsStr})
             WHERE ID(n) = {id} AND ID(m) = {otherId}
             CREATE ${unique}(n)${dir1}-[r:${r.label}]-${dir2}(m)
             SET r = {relData}
@@ -105,7 +99,7 @@ class CypherHelper {
         
         let params = {id: neo4j.int(id), otherId: neo4j.int(otherId), relData: relData};
 
-        return [cmd, params];
+        return  {cmd:cmd, params:params};;
     }
     createAndRelateCmd(data, otherId, relKey, relData){
         let r = this.model.getRelationByKey(relKey);
@@ -118,11 +112,11 @@ class CypherHelper {
 
         relData = relData || {};
         let cmd = `
-            MATCH (m) WHERE ID(m) = {otherId}
-            CREATE (n${this._labelsCypher} {data})${dir1}-[r:${r.label} {relData}]-${dir2}(m)
+            MATCH (m:${r.model.labelsStr}) WHERE ID(m) = {otherId}
+            CREATE (n:${this.model.labelsStr} {data})${dir1}-[r:${r.label} {relData}]-${dir2}(m)
             RETURN n`
         let params = {otherId: neo4j.int(otherId), data: this.convertToNative(data, this.model.schema), relData: this.convertToNative(relData, r.schema)};
-        return [cmd, params];
+        return  {cmd:cmd, params:params};;
     }
     parseResult(result){
         var nodes = this.parseResultArray(result);
@@ -265,24 +259,19 @@ class CypherHelper {
     getInt(identity){
         return identity.low;
     }
-    getMatch(includes, query){
+    getMatch(query, params){
         let alias = 'n';
         let match = `MATCH (${alias}${this.labels(this.model)})`;
         
-        let rootQuery = _.omit(query, ["includes"]);
-        if(rootQuery.id){
-            match += ` WHERE ID(${alias}) = {id}`;
-        } else{
-            match += ' WHERE ' + queryHelper.queryMapToCypher(this.model, rootQuery, alias);
-        }
+        let rootQuery = this.getRootQuery(query);
+        match += ' WHERE ' + queryHelper.queryMapToCypher(this.model, rootQuery, alias, params);
         
-        
-        includes.forEach(include => {
-            match += '\n' + this.includeToMatch(include);
+        query.includes.forEach(include => {
+            match += '\n' + this.includeToMatch(include, params);
         });
         return match;
     }
-    includeToMatch(include){
+    includeToMatch(include, params){
         let i = include;
         let optional = '';
         if(!i.hasQuery)
@@ -296,10 +285,10 @@ class CypherHelper {
         }
         match += rel + `(${i.destAlias}) `;
 
-        match += queryHelper.queryIncludeToCypher(include);
+        match += queryHelper.queryIncludeToCypher(include, params);
 
         i.includes.forEach(include => {
-            match += '\n' + this.includeToMatch(include);
+            match += '\n' + this.includeToMatch(include, params);
         });
         return match;
     }
@@ -335,7 +324,8 @@ class CypherHelper {
         map += this.mapToStr(model.schema, alias);
 
         includes.forEach(include => {
-            map += ', ' + this.includeToMapStr(include);
+            if(!include.notInclude)
+                map += ', ' + this.includeToMapStr(include);
         })
 
         map += `}`;
@@ -381,6 +371,16 @@ class CypherHelper {
     labels(model){
         let aux = [""].concat(model.labels);
         return aux.join(':');
+    }
+    parseQuery(query){
+        if(!query)
+            return query;
+        let parsed = _.clone(query);
+        parsed.includes = this.parseIncludes(query.includes, this.model, 'n');
+        return parsed;
+    }
+    getRootQuery(query){
+        return _.omit(query, ["includes", "paged", "orderBy"]);
     }
     parseIncludes(includes, model, sourceAlias){
         if(!includes)
