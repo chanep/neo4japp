@@ -25,9 +25,23 @@ class CypherHelper {
         let match = this.getMatch(query, params);
         let with_ = this.getWith(query.includes);
         let ret = this.getReturn(query.includes);
+        let orderBy = this.getOrderBy(query);
         let cmd = `${match}
                     ${with_}
-                    ${ret}`;
+                    ${orderBy}
+                    ${ret}
+                    `;
+        return {cmd:cmd, params:params};
+    }
+    countCmd(query){
+        query = this.parseQuery(query);
+        let params = {};
+        let match = this.getMatch(query, params);
+        let with_ = this.getWith(query.includes);
+        let cmd = `${match}
+                    ${with_}
+                    RETURN count(n) as count
+                    `;
         return {cmd:cmd, params:params};
     }
     createCmd(data){
@@ -117,6 +131,9 @@ class CypherHelper {
             RETURN n`
         let params = {otherId: neo4j.int(otherId), data: this.convertToNative(data, this.model.schema), relData: this.convertToNative(relData, r.schema)};
         return  {cmd:cmd, params:params};;
+    }
+    parseIntResult(result){
+        return result.records[0]._fields[0].low;
     }
     parseResult(result){
         var nodes = this.parseResultArray(result);
@@ -228,7 +245,7 @@ class CypherHelper {
             for(let k in f){
                 if(k == 'id')
                     parsed.id = this.getInt(f[k]);
-                let value = f[k];
+                let v = f[k];
                 if(_.isArray(v)){
                     parsed[k] = v.map(i => this.parseFieldRaw(v));
                 } else if(_.isObject(v)){
@@ -261,10 +278,11 @@ class CypherHelper {
     }
     getMatch(query, params){
         let alias = 'n';
-        let match = `MATCH (${alias}${this.labels(this.model)})`;
+        let match = `MATCH (${alias}:${this.model.labelsStr})`;
         
         let rootQuery = this.getRootQuery(query);
-        match += ' WHERE ' + queryHelper.queryMapToCypher(this.model, rootQuery, alias, params);
+        if(Object.keys(rootQuery).length > 0)
+            match += ' WHERE ' + queryHelper.queryMapToCypher(this.model, rootQuery, alias, params);
         
         query.includes.forEach(include => {
             match += '\n' + this.includeToMatch(include, params);
@@ -356,7 +374,6 @@ class CypherHelper {
         return map;
 
     }
-
     mapToStr(map, alias){
         let terms = [];
         for(let k in map){
@@ -368,9 +385,28 @@ class CypherHelper {
         }
         return terms.join(', ');
     }
-    labels(model){
-        let aux = [""].concat(model.labels);
-        return aux.join(':');
+    getOrderBy(query){
+        if(!query || !query.orderBy)
+            return '';
+        let terms = query.orderBy.split(',');
+        let orders = [];
+        for(let i in terms){
+            let term = terms[i];
+            let subTerms = term.trim().split(/\s+/);
+            if(subTerms.length != 2 || (subTerms[1].toLowerCase() != 'asc' && subTerms[1].toLowerCase() != 'desc'))
+                throw new errors.GenericError("Query order by term format error: " + term);
+            let keyPath = subTerms[0];
+            let direction = subTerms[1];
+            let pathParts = keyPath.split('.');
+            let key = pathParts[pathParts.length - 1];
+            if(pathParts.length == 1){
+                orders.push(`n.${key} ${direction}`);
+            } else{
+                let i = this.getIncludeByKeyPath(keyPath, query);
+                orders.push(`${i.dataAlias}.${key} ${direction}`);
+            }
+        }
+        return 'ORDER BY ' + orders.join(', ');
     }
     parseQuery(query){
         if(!query)
@@ -430,6 +466,21 @@ class CypherHelper {
                 return true;
         }
         return false;
+    }
+    getIncludeByKeyPath(path, query){
+        let pathArray = path.split('.');
+        if(pathArray.length == 1)
+            return null;
+        let includes = query.includes;
+        let i;
+        for(let p = 0; p < pathArray.length - 1; p++){
+            let key = pathArray[p];
+            i = _.find(includes, {key: key});
+            if(!i)
+                throw new errors.GenericError(`Error in query. Key path ${path} does not exist`);
+            includes = i.includes;
+        }
+        return i;
     }
 
     convertToNative(data, schema){

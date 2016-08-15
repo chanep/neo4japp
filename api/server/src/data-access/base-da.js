@@ -202,6 +202,14 @@ class BaseDa {
                 .then(r => this._cypher.parseResultArray(r, includes))
                 .catch(err => {throw new errors.GenericError("Error finding " + this.model.name, err)});
     }
+    count(query){
+        query = query || {};
+        let includes = query.includes || [];
+        let cypher = this._cypher.countCmd(query);
+        return this._run(cypher.cmd, cypher.params)
+                .then(r => this._cypher.parseIntResult(r, null))
+                .catch(err => {throw new errors.GenericError("Error counting " + this.model.name, err)});
+    }
     query(cmd, params){
         return this._run(cmd, params)
                 .then(r => this._cypher.parseResultArrayRaw(r));

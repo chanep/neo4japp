@@ -24,7 +24,14 @@ let user = {
     username: 'estebant',
     email: 'esteban.test@rga.com',
     fullname: 'Esteban Test',
-    type: 'UserUser'
+    type: 'UserEmployee'
+};
+
+let user2 = {
+    username: 'estebant2',
+    email: 'esteban.test2@rga.com',
+    fullname: 'Esteban Test2',
+    type: 'UserEmployee'
 };
 
 let knowledges = [
@@ -35,6 +42,10 @@ let knowledges = [
     {
         level: 2,
         want: true
+    },
+    {
+        level: 5,
+        want: false
     }
 ];
 
@@ -72,6 +83,10 @@ vows.describe('User/Skill data access test')
                 })
                 .then(u => {
                     user.id = u.id;
+                    return userDa.create(user2)
+                })
+                .then(u => {
+                    user2.id = u.id;
                 })
                 .then(r => this.callback(null, r))
                 .catch(err => this.callback(err))
@@ -91,6 +106,9 @@ vows.describe('User/Skill data access test')
             userDa.setKnowledge(user.id, skills[0].id, knowledges[0])
                 .then(k => {
                     return userDa.setKnowledge(user.id, skills[2].id, knowledges[1])
+                })
+                .then(k => {
+                    return userDa.setKnowledge(user2.id, skills[3].id, knowledges[2])
                 })
                 .then(r => this.callback(null, r))
                 .catch(err => this.callback(err))
@@ -121,7 +139,12 @@ vows.describe('User/Skill data access test')
                 console.log("error", err)
                 throw err;
             }
-            console.log("user", JSON.stringify(result))
+            let u = result;
+            assert.isArray(u.knowledges)
+            u.knowledges.forEach(k => {
+                assert.isTrue(!!k.skill)
+                assert.isTrue(!!k.skill.group)
+            })
         }
     }
 })
@@ -147,10 +170,11 @@ vows.describe('User/Skill data access test')
                 throw err;
             }
             assert.equal(result.length, 1)
-            let u = result[0];
-            assert.equal(u.knowledges.length, 1)
-            u.knowledges.forEach(k => {
-                assert.isTrue(k.level > 3);
+            result.forEach(u =>{
+                assert.isArray(u.knowledges)
+                u.knowledges.forEach(k => {
+                    assert.isTrue(k.level > 3);
+                })
             })
         }
     }
@@ -177,10 +201,11 @@ vows.describe('User/Skill data access test')
                 throw err;
             }
             assert.equal(result.length, 1)
-            let u = result[0];
-            assert.equal(u.knowledges.length, 1)
-            u.knowledges.forEach(k => {
-                assert.isTrue(k.level < 3);
+            result.forEach(u =>{
+                assert.isArray(u.knowledges)
+                u.knowledges.forEach(k => {
+                    assert.isTrue(k.level < 3);
+                })
             })
         }
     }
@@ -244,6 +269,97 @@ vows.describe('User/Skill data access test')
 
             assert.isUndefined(u.knowledges);
 
+        }
+    }
+})
+
+.addBatch({
+    '5. find users order by': {
+        topic: function () {
+            let query = {
+                includes: [{
+                    key: "knowledges",
+                    includes: ["group"]
+                }],
+                orderBy: "username ASC"
+            };
+            userDa.find(query)
+                .then(r => this.callback(null, r))
+                .catch(err => this.callback(err))
+        },
+        'should crete knowledge': function (err, result) {
+            if(err){
+                console.log("error", err)
+                throw err;
+            }
+            assert.equal(result.length, 2)
+            let u = result[0];
+            console.log("result", JSON.stringify(result))
+        }
+    }
+})
+
+.addBatch({
+    '5b. find users order by': {
+        topic: function () {
+            let query = {
+                includes: ["group"],
+                orderBy: "group.name DESC"
+            };
+            skillDa.find(query)
+                .then(r => this.callback(null, r))
+                .catch(err => this.callback(err))
+        },
+        'should crete knowledge': function (err, result) {
+            if(err){
+                console.log("error", err)
+                throw err;
+            }
+
+            console.log("result", JSON.stringify(result))
+        }
+    }
+})
+
+.addBatch({
+    '6. count users': {
+        topic: function () {
+            let query = {
+                username: user.username
+            };
+            userDa.count(query)
+                .then(r => this.callback(null, r))
+                .catch(err => this.callback(err))
+        },
+        'should crete knowledge': function (err, result) {
+            if(err){
+                console.log("error", err)
+                throw err;
+            }
+
+            assert.equal(result, 1)
+        }
+    }
+})
+
+
+.addBatch({
+    '6b. count users': {
+        topic: function () {
+            let query = {
+                username: user.username + 'x'
+            };
+            userDa.count(query)
+                .then(r => this.callback(null, r))
+                .catch(err => this.callback(err))
+        },
+        'should crete knowledge': function (err, result) {
+            if(err){
+                console.log("error", err)
+                throw err;
+            }
+
+            assert.equal(result, 0)
         }
     }
 })
