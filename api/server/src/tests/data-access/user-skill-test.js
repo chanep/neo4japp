@@ -300,11 +300,12 @@ vows.describe('User/Skill data access test')
 })
 
 .addBatch({
-    '5b. find users order by': {
+    '5b. find skills order by paged': {
         topic: function () {
             let query = {
                 includes: ["group"],
-                orderBy: "group.name DESC"
+                orderBy: "group.name DESC",
+                paged: {skip:0, limit:2}
             };
             skillDa.find(query)
                 .then(r => this.callback(null, r))
@@ -316,18 +317,22 @@ vows.describe('User/Skill data access test')
                 throw err;
             }
 
-            console.log("result", JSON.stringify(result))
+            assert.equal(result.data.length, 2)
+            assert.equal(result.paged.totalCount, 4)
+            assert.equal(result.data[0].group.type, "tool")
         }
     }
 })
 
 .addBatch({
-    '6. count users': {
+    '5c. find skills order by paged': {
         topic: function () {
             let query = {
-                username: user.username
+                includes: ["group"],
+                orderBy: "group.name DESC",
+                paged: {skip:2, limit:2}
             };
-            userDa.count(query)
+            skillDa.find(query)
                 .then(r => this.callback(null, r))
                 .catch(err => this.callback(err))
         },
@@ -337,29 +342,9 @@ vows.describe('User/Skill data access test')
                 throw err;
             }
 
-            assert.equal(result, 1)
-        }
-    }
-})
-
-
-.addBatch({
-    '6b. count users': {
-        topic: function () {
-            let query = {
-                username: user.username + 'x'
-            };
-            userDa.count(query)
-                .then(r => this.callback(null, r))
-                .catch(err => this.callback(err))
-        },
-        'should crete knowledge': function (err, result) {
-            if(err){
-                console.log("error", err)
-                throw err;
-            }
-
-            assert.equal(result, 0)
+            assert.equal(result.data.length, 2)
+            assert.equal(result.paged.totalCount, 4)
+            assert.equal(result.data[0].group.type, "skill")
         }
     }
 })

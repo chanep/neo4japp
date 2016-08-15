@@ -26,11 +26,14 @@ class CypherHelper {
         let with_ = this.getWith(query.includes);
         let ret = this.getReturn(query.includes);
         let orderBy = this.getOrderBy(query);
+        let skipLimit = this.getSkipLimit(query);
         let cmd = `${match}
                     ${with_}
                     ${orderBy}
+                    ${skipLimit}
                     ${ret}
                     `;
+        cmd = cmd.replace(/\n+/, '\n');
         return {cmd:cmd, params:params};
     }
     countCmd(query){
@@ -407,6 +410,11 @@ class CypherHelper {
             }
         }
         return 'ORDER BY ' + orders.join(', ');
+    }
+    getSkipLimit(query){
+        if(!query || !query.paged)
+            return '';
+        return `SKIP ${query.paged.skip} LIMIT ${query.paged.limit}`;
     }
     parseQuery(query){
         if(!query)

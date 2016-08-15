@@ -197,10 +197,33 @@ class BaseDa {
     find(query){
         query = query || {};
         let includes = query.includes || [];
+        if(query.paged)
+            return this._findPaged(query);
         let cypher = this._cypher.findCmd(query);
         return this._run(cypher.cmd, cypher.params)
                 .then(r => this._cypher.parseResultArray(r, includes))
                 .catch(err => {throw new errors.GenericError("Error finding " + this.model.name, err)});
+    }
+    _findPaged(query){
+        query = query || {};
+        let includes = query.includes || [];
+        let cypher = this._cypher.findCmd(query);
+        let totalCount;
+        return this.count(query)
+                .then(c => {
+                    totalCount = c;
+                    return this._run(cypher.cmd, cypher.params)
+                })
+                .then(r => this._cypher.parseResultArray(r, includes))
+                .then(data => {
+                    let paged = _.clone(query.paged);
+                    paged.totalCount = totalCount;
+                    return {
+                        data: data,
+                        paged: paged
+                    };
+                })
+                .catch(err => {throw new errors.GenericError("Error finding paged" + this.model.name, err)});
     }
     count(query){
         query = query || {};
