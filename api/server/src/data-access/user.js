@@ -1,8 +1,8 @@
 'use strict'
 const BaseDa = require('./base-da');
-const model = require('../models/models').employee;
+const model = require('../models/models').user;
 
-class EmployeeDa extends BaseDa{
+class UserDa extends BaseDa{
     constructor(tx){
         super(model, tx);
     }
@@ -20,4 +20,4 @@ class EmployeeDa extends BaseDa{
     }
 }
 
-module.exports = EmployeeDa;
+module.exports = UserDa;

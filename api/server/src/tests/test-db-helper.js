@@ -18,7 +18,7 @@ function resetDb(partitionSuffix){
             'Office',
             'Department',
             'Position',
-            'Employee',
+            'User',
             'TaskStatus'
         ];
         for(let i in labels){

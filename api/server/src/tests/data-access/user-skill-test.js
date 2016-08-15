@@ -3,7 +3,7 @@ const _ = require('lodash');
 const vows = require('vows');
 const assert = require('assert'); 
 const testHelper = require('../test-helper'); 
-const employeeDa = new (require('../../data-access/employee'));
+const userDa = new (require('../../data-access/user'));
 const skillDa = new (require('../../data-access/skill'));
 const skillGroupDa = new (require('../../data-access/skill-group'));
 
@@ -20,11 +20,11 @@ let skillGroups = [
 
 let skills = [{name: 's1'}, {name: 's2'}, {name: 's3'}, {name: 's4'}];
 
-let employee = {
+let user = {
     username: 'estebant',
     email: 'esteban.test@rga.com',
     fullname: 'Esteban Test',
-    type: 'EmployeeUser'
+    type: 'UserUser'
 };
 
 let knowledges = [
@@ -38,12 +38,12 @@ let knowledges = [
     }
 ];
 
-vows.describe('Employee/Skill data access test')
+vows.describe('User/Skill data access test')
 
 .addBatch(testHelper.resetTestDbBatch())
 
 .addBatch({
-    '1. create skill group, skill and employee': {
+    '1. create skill group, skill and user': {
         topic: function () {
             skillGroupDa.create(skillGroups[0])
                 .then(sg => {
@@ -68,15 +68,15 @@ vows.describe('Employee/Skill data access test')
                 })
                 .then(s => {
                     skills[3].id = s.id;
-                    return employeeDa.create(employee)
+                    return userDa.create(user)
                 })
-                .then(e => {
-                    employee.id = e.id;
+                .then(u => {
+                    user.id = u.id;
                 })
                 .then(r => this.callback(null, r))
                 .catch(err => this.callback(err))
         },
-        'should create employee': function (err, result) {
+        'should create user': function (err, result) {
             if(err){
                 console.log("error", err)
                 throw err;
@@ -88,9 +88,9 @@ vows.describe('Employee/Skill data access test')
 .addBatch({
     '2. create knowledges': {
         topic: function () {
-            employeeDa.setKnowledge(employee.id, skills[0].id, knowledges[0])
+            userDa.setKnowledge(user.id, skills[0].id, knowledges[0])
                 .then(k => {
-                    return employeeDa.setKnowledge(employee.id, skills[2].id, knowledges[1])
+                    return userDa.setKnowledge(user.id, skills[2].id, knowledges[1])
                 })
                 .then(r => this.callback(null, r))
                 .catch(err => this.callback(err))
@@ -106,13 +106,13 @@ vows.describe('Employee/Skill data access test')
 })
 
 .addBatch({
-    '3. find employee and include knowledges and skill group': {
+    '3. find user and include knowledges and skill group': {
         topic: function () {
             let include = {
                 key : "knowledges",
                 includes : ["group"]
             }
-            employeeDa.findById(employee.id, [include])
+            userDa.findById(user.id, [include])
                 .then(r => this.callback(null, r))
                 .catch(err => this.callback(err))
         },
@@ -121,23 +121,23 @@ vows.describe('Employee/Skill data access test')
                 console.log("error", err)
                 throw err;
             }
-            console.log("employee", JSON.stringify(result))
+            console.log("user", JSON.stringify(result))
         }
     }
 })
 
 .addBatch({
-    '4. find employees with suqueries': {
+    '4. find users with suqueries': {
         topic: function () {
             let query = {
-                username: employee.username,
+                username: user.username,
                 includes: [{
                     key: "knowledges",
                     relQuery: {level: {$gt: 3}},
                     includes: ["group"]
                 }]
             };
-            employeeDa.find(query)
+            userDa.find(query)
                 .then(r => this.callback(null, r))
                 .catch(err => this.callback(err))
         },
@@ -157,17 +157,17 @@ vows.describe('Employee/Skill data access test')
 })
 
 .addBatch({
-    '4b. find employees with suqueries': {
+    '4b. find users with suqueries': {
         topic: function () {
             let query = {
-                username: employee.username,
+                username: user.username,
                 includes: [{
                     key: "knowledges",
                     relQuery: {level: {$lt: 3}},
                     includes: ["group"]
                 }]
             };
-            employeeDa.find(query)
+            userDa.find(query)
                 .then(r => this.callback(null, r))
                 .catch(err => this.callback(err))
         },
@@ -187,10 +187,10 @@ vows.describe('Employee/Skill data access test')
 })
 
 .addBatch({
-    '4c. find employees with suqueries': {
+    '4c. find users with suqueries': {
         topic: function () {
             let query = {
-                username: employee.username,
+                username: user.username,
                 includes: [{
                     key: "knowledges",
                     includes: [
@@ -198,7 +198,7 @@ vows.describe('Employee/Skill data access test')
                     ]
                 }]
             };
-            employeeDa.find(query)
+            userDa.find(query)
                 .then(r => this.callback(null, r))
                 .catch(err => this.callback(err))
         },

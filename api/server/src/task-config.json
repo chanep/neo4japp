@@ -28,8 +28,8 @@
 		}
 	},
 	{
-		"name" : "employees-import",
-		"path" : "./tasks/employees-import",
+		"name" : "users-import",
+		"path" : "./tasks/users-import",
 		"cronPattern" : null,
 		"args" : {
 		}

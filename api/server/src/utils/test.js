@@ -31,7 +31,7 @@ const CypherHelper = require('../data-access/cypher-helper')
 // };
 
 
-// let model = require("../data-access/models").employee;
+// let model = require("../data-access/models").user;
 
 // const cypherHelper = new CypherHelper(model);
 
@@ -62,39 +62,39 @@ const CypherHelper = require('../data-access/cypher-helper')
 //                 key : "knowledges",
 //                 includes : ["group"]
 //             }
-// const employeeModel = require('../data-access/models').employee;
+// const userModel = require('../data-access/models').user;
 // const CypherHelper = require('../data-access/cypher-helper');
-// let cypher = new CypherHelper(employeeModel);
+// let cypher = new CypherHelper(userModel);
 
-// let parsed = cypher.parseIncludes([include], employeeModel, 'n');
+// let parsed = cypher.parseIncludes([include], userModel, 'n');
 // console.log("parsed", JSON.stringify(parsed))
 
-// const EmployeeDa = require('../data-access/employee');
-// let employeeDa = new EmployeeDa();
-// let employee = {
+// const UserDa = require('../data-access/user');
+// let userDa = new UserDa();
+// let user = {
 //     username: 'estebant',
 //     email: 'esteban.test@rga.com',
 //     fullname: 'Esteban Test',
-//     type: "EmployeeUser",
+//     type: "UserUser",
 //     phone: null
 // };
 
-// employeeDa._validate(employee)
+// userDa._validate(user)
 // .then(r =>{
 //         console.log("result", JSON.stringify(r));
 //     })
 //     .catch(console.error);
 
 
-// employeeDa.query(`match (n:Employee:Test) optional match (n)-[r:KNOWS]->(m) return {id: id(n), name: n.name, knowledges: collect({id: ID(r), level: r.level, skill: m})}`)
+// userDa.query(`match (n:User:Test) optional match (n)-[r:KNOWS]->(m) return {id: id(n), name: n.name, knowledges: collect({id: ID(r), level: r.level, skill: m})}`)
 //     .then(r => {
 //         console.log("result", JSON.stringify(r));
 //     })
 
 
-// employeeDa.create(employeeData)
+// userDa.create(userData)
 //     .then(e => {
-//         return employeeDa.setOffice(e.id, 389);
+//         return userDa.setOffice(e.id, 389);
 //     })
 
 

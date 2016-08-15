@@ -3,38 +3,38 @@ const _ = require('lodash');
 const vows = require('vows');
 const assert = require('assert'); 
 const testHelper = require('../test-helper'); 
-const employeeDa = new (require('../../data-access/employee'));
+const userDa = new (require('../../data-access/user'));
 const departmentDa = new (require('../../data-access/department'));
 
 let department = {
     name: 'cucamona'
 }
 
-let employee = {
+let user = {
     username: 'estebant',
     email: 'esteban.test@rga.com',
     fullname: 'Esteban Test',
-    type: 'EmployeeUser'
+    type: 'UserUser'
 };
 
 
-vows.describe('Employee data access test')
+vows.describe('User data access test')
 
 .addBatch(testHelper.resetTestDbBatch())
 
 .addBatch({
-    '1. create employee': {
+    '1. create user': {
         topic: function () {
-            employeeDa.create(employee)
+            userDa.create(user)
                 .then(r => this.callback(null, r))
                 .catch(err => this.callback(err))
         },
-        'should create employee': function (err, result) {
+        'should create user': function (err, result) {
             if(err){
                 console.log("error", err)
                 throw err;
             }
-            employee.id = result.id;
+            user.id = result.id;
         }
     }
 })
@@ -57,9 +57,9 @@ vows.describe('Employee data access test')
 })
 
 .addBatch({
-    '3. relate employee with department': {
+    '3. relate user with department': {
         topic: function () {
-            employeeDa.setDepartment(employee.id, department.id)
+            userDa.setDepartment(user.id, department.id)
                 .then(r => this.callback(null, r))
                 .catch(err => this.callback(err))
         },

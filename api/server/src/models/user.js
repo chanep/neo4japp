@@ -44,9 +44,9 @@ let position = new Model(
     }
 );
 
-let employee = new Model(
-    'Employee',
-    ['Employee'],
+let user = new Model(
+    'User',
+    ['User'],
     {
         id: Joi.number(),
         sourceId: Joi.string(),
@@ -71,13 +71,13 @@ let knowledgeSchema = {
         approverFullname: Joi.string().allow(null)
     };
 
-employee.relateWithMany(skill, "KNOWS", "knowledges", true, knowledgeSchema);
-employee.relateWithOne(office, "OF_OFFICE", "office", true, null);
-employee.relateWithOne(department, "OF_DEPARTMENT", "department", true, null);
-employee.relateWithOne(position, "OF_POSITION", "position", true, null);
+user.relateWithMany(skill, "KNOWS", "knowledges", true, knowledgeSchema);
+user.relateWithOne(office, "OF_OFFICE", "office", true, null);
+user.relateWithOne(department, "OF_DEPARTMENT", "department", true, null);
+user.relateWithOne(position, "OF_POSITION", "position", true, null);
 
 module.exports = {
-    employee: employee,
+    user: user,
     office: office,
     department: department,
     position: position

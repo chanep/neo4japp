@@ -4,16 +4,16 @@ const async = require('async');
 const errors = require('../shared/errors');
 const P = require('bluebird');
 const CwBaseTask = require('./cw-base');
-const EmployeeDa = require('../data-access/employee');
+const UserDa = require('../data-access/user');
 const OfficeDa = require('../data-access/office');
 const DepartmentDa = require('../data-access/department');
 const PositionDa = require('../data-access/position');
 
 
 
-class EmployeesImportTask extends CwBaseTask{
+class UsersImportTask extends CwBaseTask{
     constructor(){
-        super('employees-import');
+        super('users-import');
     }
     _createOfficesMap(){      
         let officeDa = new OfficeDa();
@@ -51,11 +51,11 @@ class EmployeesImportTask extends CwBaseTask{
                 return map;
             });
     }
-    _getEmployees(page, ipp){
+    _getUsers(page, ipp){
         return this._req.get(`user?filters[]=type=UserEmployee&p=${page}&ipp=${ipp}`)
             .then(r => r.body.data);
     }
-    _importEmployees(employees) {
+    _importUsers(users) {
         let _this = this;
         let info = {
             updated: 0,
@@ -64,8 +64,8 @@ class EmployeesImportTask extends CwBaseTask{
             total: function(){ return this.updated + this.created + this.errors; }
         };
         async.eachSeries = P.promisify(async.eachSeries);
-        return async.eachSeries(employees, function (e, callback) {
-            _this._importEmployee(e)
+        return async.eachSeries(users, function (e, callback) {
+            _this._importUser(e)
                 .then(partialInfo => {
                     info.created += partialInfo.created;
                     info.updated += partialInfo.updated;
@@ -77,45 +77,45 @@ class EmployeesImportTask extends CwBaseTask{
             return info;
         });
     }
-    _importEmployee(sourceEmployee){
-        let employee = this._transformEmployee(sourceEmployee);
-        let departmentId = employee.departmentId;
-        let positionId = employee.positionId;
-        let officeId = employee.officeId;
-        _.remove(employee, ["departmentId", "positionId", "officeId"]);
+    _importUser(sourceUser){
+        let user = this._transformUser(sourceUser);
+        let departmentId = user.departmentId;
+        let positionId = user.positionId;
+        let officeId = user.officeId;
+        _.remove(user, ["departmentId", "positionId", "officeId"]);
         let info = {
             updated: 0,
             created: 0,
             errors: 0
         };
         const mergeKeys = true;
-        let eId;
+        let uId;
 
-        let employeeDa = new EmployeeDa();
-        return employeeDa.upsert(employee, ["sourceId"], mergeKeys)
-            .then(e => {
-                eId = e.data.id;
-                if (e.created) {
+        let userDa = new UserDa();
+        return userDa.upsert(user, ["sourceId"], mergeKeys)
+            .then(u => {
+                uId = u.data.id;
+                if (u.created) {
                         info.created++;
                     } else {
                         info.updated++;
                     }
                 if(!positionId)
                     return;
-                return employeeDa.setPosition(eId, positionId);
+                return userDa.setPosition(uId, positionId);
             })
             .then(() => {
                 if(!departmentId)
                     return;
-                return employeeDa.setDepartment(eId, departmentId);
+                return userDa.setDepartment(uId, departmentId);
             })
             .then(() => {
                 if(!officeId)
                     return;
-                return employeeDa.setOffice(eId, officeId);
+                return userDa.setOffice(uId, officeId);
             })
             .catch((err) => {
-                let e = new errors.GenericError("Error importing employee:" + employee, err);
+                let e = new errors.GenericError("Error importing user:" + user, err);
                 console.log(e);
                 info.errors++;
             })
@@ -123,9 +123,9 @@ class EmployeesImportTask extends CwBaseTask{
                 return info;
             })
     }
-    _transformEmployee(source){
+    _transformUser(source){
         let s = source;
-        let employee = {
+        let user = {
             sourceId: s._id,
             username: s.username,
             type: s.type,
@@ -136,26 +136,26 @@ class EmployeesImportTask extends CwBaseTask{
             phone: s.phone
         }
         if(s.main_image && s.main_image.sizes && s.main_image.sizes.one_one && s.main_image.sizes.one_one.s320x320)
-            employee.image = s.main_image.sizes.one_one.s320x320;
+            user.image = s.main_image.sizes.one_one.s320x320;
         if(s.data && s.data.department){
             let sourceId = s.data.department._id;
             if(this.departmentsMap[sourceId])
-                employee.departmentId = this.departmentsMap[sourceId];
+                user.departmentId = this.departmentsMap[sourceId];
         }
         if(s.data && s.data.position){
             let sourceId = s.data.position._id;
             if(this.positionsMap[sourceId])
-                employee.positionId = this.positionsMap[sourceId];
+                user.positionId = this.positionsMap[sourceId];
         }
         if(s.data && s.data.office){
             let sourceId = s.data.office._id;
             if(this.officesMap[sourceId])
-                employee.officeId = this.officesMap[sourceId];
+                user.officeId = this.officesMap[sourceId];
         }
 
-        return employee;
+        return user;
     }
-    _getAndImportEmployees() {
+    _getAndImportUsers() {
         let ipp = 50;
         let info = {
             updated: 0,
@@ -166,8 +166,8 @@ class EmployeesImportTask extends CwBaseTask{
 
         async.doUntil = P.promisify(async.doUntil);
         return async.doUntil(callback => {
-            this._getEmployees(page, ipp)
-                .then(es => this._importEmployees(es))
+            this._getUsers(page, ipp)
+                .then(us => this._importUsers(us))
                 .then(partialInfo => callback(null, partialInfo))
                 .catch(err => callback(err));
         }, partialInfo => {
@@ -199,9 +199,9 @@ class EmployeesImportTask extends CwBaseTask{
             })
             .then(om => {
                 this.officesMap = om;
-                return this._getAndImportEmployees();
+                return this._getAndImportUsers();
             });
     }
 }
 
-module.exports = EmployeesImportTask;
+module.exports = UsersImportTask;
