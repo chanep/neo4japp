@@ -67,8 +67,8 @@ class BaseDa {
     _logCmd(cmd, params){
         if(config.logCommands){
             console.log("----------------------");
-            console.log("Command: ", cmd);
-            console.log("params: ", params);
+            console.log("Command:\n" + cmd);
+            console.log("\nParams:", params);
             console.log("----------------------");
         }
     }

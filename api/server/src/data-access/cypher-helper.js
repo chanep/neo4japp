@@ -27,13 +27,8 @@ class CypherHelper {
         let ret = this.getReturn(query.includes);
         let orderBy = this.getOrderBy(query);
         let skipLimit = this.getSkipLimit(query);
-        let cmd = `${match}
-                    ${with_}
-                    ${orderBy}
-                    ${skipLimit}
-                    ${ret}
-                    `;
-        cmd = cmd.replace(/\n+/, '\n');
+        let cmd = `${match}\n${with_}\n${orderBy}\n${skipLimit}\n${ret}`;
+        cmd = cmd.replace(/\n+/g, '\n');
         return {cmd:cmd, params:params};
     }
     countCmd(query){
@@ -41,10 +36,7 @@ class CypherHelper {
         let params = {};
         let match = this.getMatch(query, params);
         let with_ = this.getWith(query.includes);
-        let cmd = `${match}
-                    ${with_}
-                    RETURN count(n) as count
-                    `;
+        let cmd = `${match}\n${with_}\nRETURN count(n) as count`;
         return {cmd:cmd, params:params};
     }
     createCmd(data){
@@ -304,7 +296,7 @@ class CypherHelper {
         }else {
             rel = `<-[${i.relAlias}:${i.r.label}]-`;
         }
-        match += rel + `(${i.destAlias}) `;
+        match += rel + `(${i.destAlias}:${i.r.model.labelsStr}) `;
 
         match += queryHelper.queryIncludeToCypher(include, params);
 
