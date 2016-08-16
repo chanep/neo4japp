@@ -50,12 +50,15 @@ let user = new Model(
     {
         id: Joi.number(),
         sourceId: Joi.string(),
+        phonelistId: Joi.number(),
         username: Joi.string().required(),
         type: Joi.string().required(),
         email: Joi.string().required(),
         fullname: Joi.string().required(),
         first: Joi.string().allow(null),
         last: Joi.string().allow(null),
+        isApprover: Joi.boolean().default(false),
+        isResourceManager: Joi.boolean().default(false),
         phone: Joi.string().allow(null),
         roles: Joi.string().allow(null),
         image: Joi.string().allow(null)
@@ -71,10 +74,16 @@ let knowledgeSchema = {
         approverFullname: Joi.string().allow(null)
     };
 
-user.relateWithMany(skill, "KNOWS", "knowledges", true, knowledgeSchema);
-user.relateWithOne(office, "OF_OFFICE", "office", true, null);
-user.relateWithOne(department, "OF_DEPARTMENT", "department", true, null);
-user.relateWithOne(position, "OF_POSITION", "position", true, null);
+let outgoing = true;
+let incoming = false;
+
+user.relateWithMany(skill, "KNOWS", "knowledges", outgoing, knowledgeSchema);
+user.relateWithOne(office, "OF_OFFICE", "office", outgoing, null);
+user.relateWithOne(department, "OF_DEPARTMENT", "department", outgoing, null);
+user.relateWithOne(position, "OF_POSITION", "position", outgoing, null);
+
+user.relateWithOne(user, "MY_APPROVER", "approver", outgoing, null);
+user.relateWithOne(user, "MY_R_MANAGER", "resourceManager", outgoing, null);
 
 module.exports = {
     user: user,
