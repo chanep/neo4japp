@@ -94,14 +94,18 @@ class BaseDa {
             });
         });
     }
-    findById(id, includes){
-        if(!id){
-            return P.reject(new errors.GenericError("Must specify id in findById"));
-        }
-        let cypher = this._cypher.findByIdCmd(id, includes);
-        return this._run(cypher.cmd, cypher.params)
+    findById(id, includes) {
+        try {
+            if (!id) {
+                return P.reject(new errors.GenericError("Must specify id in findById"));
+            }
+            let cypher = this._cypher.findByIdCmd(id, includes);
+            return this._run(cypher.cmd, cypher.params)
                 .then(r => this._cypher.parseResult(r, includes))
-                .catch(err => {throw new errors.GenericError("Error finding by id " + this.model.name, err)});
+                .catch(err => { throw new errors.GenericError("Error finding by id " + this.model.name, err) });
+        } catch (err) {
+            return P.reject(new errors.GenericError("Error finding by id " + this.model.name, err));
+        }
     }
     findOne(query){
         return this.find(query)
@@ -111,7 +115,7 @@ class BaseDa {
                 } else {
                     return list[0];
                 }
-            })
+        });
     }
     /*
         Simple Query Structure
@@ -195,21 +199,26 @@ class BaseDa {
         };
     */
     find(query){
-        query = query || {};
-        let includes = query.includes || [];
-        if(query.paged)
-            return this._findPaged(query);
-        let cypher = this._cypher.findCmd(query);
-        return this._run(cypher.cmd, cypher.params)
+        try {
+            query = query || {};
+            let includes = query.includes || [];
+            if (query.paged)
+                return this._findPaged(query);
+            let cypher = this._cypher.findCmd(query);
+            return this._run(cypher.cmd, cypher.params)
                 .then(r => this._cypher.parseResultArray(r, includes))
-                .catch(err => {throw new errors.GenericError("Error finding " + this.model.name, err)});
+                .catch(err => { throw new errors.GenericError("Error finding " + this.model.name, err) });
+        } catch (err) {
+            return P.reject(new errors.GenericError("Error finding " + this.model.name, err));
+        }
     }
     _findPaged(query){
-        query = query || {};
-        let includes = query.includes || [];
-        let cypher = this._cypher.findCmd(query);
-        let totalCount;
-        return this.count(query)
+        try{
+            query = query || {};
+            let includes = query.includes || [];
+            let cypher = this._cypher.findCmd(query);
+            let totalCount;
+            return this.count(query)
                 .then(c => {
                     totalCount = c;
                     return this._run(cypher.cmd, cypher.params)
@@ -224,14 +233,21 @@ class BaseDa {
                     };
                 })
                 .catch(err => {throw new errors.GenericError("Error finding paged" + this.model.name, err)});
+        } catch(err){
+            return P.reject(new errors.GenericError("Error finding paged " + this.model.name, err))
+        }
     }
     count(query){
-        query = query || {};
-        let includes = query.includes || [];
-        let cypher = this._cypher.countCmd(query);
-        return this._run(cypher.cmd, cypher.params)
+        try{
+            query = query || {};
+            let includes = query.includes || [];
+            let cypher = this._cypher.countCmd(query);
+            return this._run(cypher.cmd, cypher.params)
                 .then(r => this._cypher.parseIntResult(r, null))
                 .catch(err => {throw new errors.GenericError("Error counting " + this.model.name, err)});
+        } catch(err){
+            return P.reject(new errors.GenericError("Error counting " + this.model.name, err))
+        }
     }
     query(cmd, params){
         return this._run(cmd, params)
@@ -247,8 +263,15 @@ class BaseDa {
             .then(r => this._cypher.parseResult(r))
             .catch(err => {throw new errors.GenericError("Error creating " + this.model.name, err)});
     }
+    
+    /**
+     * Updates node
+     * @param {Object} data
+     * @param {boolean} mergeKeys - if true, updates set only data keys, if false, updates overwrites the whole node with passed data
+     * @returns updated node
+     */
     update(data, mergeKeys){
-        return this._validate(data, true)
+        return this._validate(data, mergeKeys)
             .then(d => {
                 let cypher = this._cypher.updateCmd(d, mergeKeys);
                 return this._run(cypher.cmd, cypher.params);

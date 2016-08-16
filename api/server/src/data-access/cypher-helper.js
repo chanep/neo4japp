@@ -151,15 +151,28 @@ class CypherHelper {
         }
     }
     parseResultArrayRaw(result, schema){
-        var nodes = [];
+        var records = [];
         if(_.isUndefined(schema))
-            schema = this.model.schema
-        result.records.forEach(r => {
-            let f = r._fields[0];
-            let n = this.parseFieldRaw(f, schema);
-            nodes.push(n);
-        })
-        return nodes;
+            schema = this.model.schema;
+        for(let r of result.records){
+            var fields = [];
+            for(let f of r._fields){
+                let n = this.parseFieldRaw(f, schema);
+                fields.push(n);
+            }
+            if(fields.length == 1){
+                records.push(fields[0]);
+            }else {
+                records.push(fields);
+            }
+        }
+        // result.records.forEach(r => {
+        //     r._fields
+        //     let f = r._fields[0];
+        //     let n = this.parseFieldRaw(f, schema);
+        //     nodes.push(n);
+        // })
+        return records;
     }
     parseResultArray(result){
         var nodes = [];
@@ -363,7 +376,7 @@ class CypherHelper {
         if(i.r.type == 'many'){
             map += `COLLECT(${innerMap})`;
         } else{
-            map += `${innerMap}`
+            map += `CASE WHEN ${i.destAlias} IS NOT NULL THEN ${innerMap} ELSE NULL END`
         }
 
         return map;

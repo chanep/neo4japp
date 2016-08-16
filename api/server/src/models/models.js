@@ -7,6 +7,7 @@ module.exports = {
     position: u.position,
     department: u.department,
     skill: s.skill,
+    allocation: u.allocation,
     skillGroup: s.skillGroup,
     taskStatus: require('./task-status'),
     appSetting: require('./app-setting')

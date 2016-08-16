@@ -74,6 +74,17 @@ let knowledgeSchema = {
         approverFullname: Joi.string().allow(null)
     };
 
+let allocation = new Model(
+    'Allocation',
+    ['Allocation'],
+    {
+        id: Joi.number(),
+        startDate: Joi.date().required(),
+        weekHours: Joi.array().items(Joi.number()).required(),
+        totalHours: Joi.number().required(),
+    }
+);
+
 let outgoing = true;
 let incoming = false;
 
@@ -85,9 +96,13 @@ user.relateWithOne(position, "OF_POSITION", "position", outgoing, null);
 user.relateWithOne(user, "MY_APPROVER", "approver", outgoing, null);
 user.relateWithOne(user, "MY_R_MANAGER", "resourceManager", outgoing, null);
 
+user.relateWithOne(allocation, "ALLOCATION", "allocation", outgoing, null);
+allocation.relateWithOne(user, "ALLOCATION", "user", incoming, null);
+
 module.exports = {
     user: user,
     office: office,
     department: department,
-    position: position
+    position: position,
+    allocation: allocation
 }

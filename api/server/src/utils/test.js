@@ -1,6 +1,7 @@
 'use strict'
 const _ = require('lodash');
 let path = require('path');
+//let envFile = path.resolve(__dirname, "../.env");
 let envFile = path.resolve(__dirname, "../.env");
 let errors = require('../shared/errors');
 
@@ -10,16 +11,18 @@ let db = require('../data-access/db');
 const neo4j = require('neo4j-driver').v1;
 
 // const queryHelper = require('../data-access/query-helper')
-// const CypherHelper = require('../data-access/cypher-helper')
+const CypherHelper = require('../data-access/cypher-helper')
+let ch = new CypherHelper(null);
 
 
 let session = db.session();
 
-let cmd = `match (n:Employee_T) where ID(n) IN {ids} return n.username`;
+let cmd = `match (n:SkillGroup_T)<-[:BELONGS_TO]-(m:Skill_T)<--(o:User_T) return n, m, o`;
 let params = {ids: [neo4j.int(230)]};
 session.run(cmd, params)
     .then(r => {
         console.log(JSON.stringify(r))
+        console.log(JSON.stringify(ch.parseResultArrayRaw(r, null)))
     })
     .catch(console.error);
 
@@ -81,16 +84,35 @@ session.run(cmd, params)
 // let parsed = cypher.parseIncludes([include], userModel, 'n');
 // console.log("parsed", JSON.stringify(parsed))
 
+
 // const UserDa = require('../data-access/user');
 // let userDa = new UserDa();
-// let user = {
-//     username: 'estebant',
-//     email: 'esteban.test@rga.com',
-//     fullname: 'Esteban Test',
-//     type: "UserUser",
-//     phone: null
+// let u = {
+//     username: 'estebanc',
+//     fullname: 'Esteban Canepa',
+//     email: 'esteban.canepa@rga.com',
+//     type: 'UserEmployee'
 // };
 
+// userDa.create(u)
+// .then(r =>{
+//         console.log("result", JSON.stringify(r));
+//     })
+//     .catch(console.error);
+
+
+
+// let allocationData = {
+//     startDate : new Date(),
+//     weekHours: [10, 20, 30, 40],
+//     totalHours: 50
+// };
+
+// userDa.setAllocation(119, allocationData)
+// .then(r =>{
+//         console.log("result", JSON.stringify(r));
+//     })
+//     .catch(console.error);
 // userDa._validate(user)
 // .then(r =>{
 //         console.log("result", JSON.stringify(r));
