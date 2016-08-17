@@ -9,10 +9,9 @@ const SkillGroupDa = require('../data-access/skill-group');
 const SkillDa = require('../data-access/skill');
 
 class SkillImportTask extends BaseTask{
-    constructor(){
-        super('tasks-import');
+	constructor(){
+        super('skill-import');
     }
-
     _doRun(){
     	let _this = this;
 

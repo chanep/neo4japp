@@ -1,19 +1,18 @@
 'use strict'
 const _ = require('lodash');
 const async = require('async');
+const fs = require('fs');
 const errors = require('../shared/errors');
 const P = require('bluebird');
 const UserDa = require('../data-access/user');
 const BaseTask = require('./base-task');
+const path = require('path');
+const tmpPhonelistFile = path.resolve(__dirname, "../tmp/employees.json");
 
 const request = require('request');
-request.get = P.promisify(request.get);
-request.post = P.promisify(request.post);
-request.put = P.promisify(request.put);
-request.del = P.promisify(request.del);
 
-async.doUntil = P.promisify(async.doUntil);
-async.map = P.promisify(async.map);
+let asyncDoUntil = P.promisify(async.doUntil);
+let asyncMap = P.promisify(async.map);
 
 const taskname ='phonelist-id-import';
 const phonelistUrl = 'http://phonelist/gateway/json/employees.aspx'
@@ -33,10 +32,17 @@ class PhonelistIdImportTask extends BaseTask{
     //         })
     // }
     _getPhonelistEmployees(){
-        return request.get(phonelistUrl)
-            .then(text => {
-                return JSON.parse(text).employees;
+        return new P((resolve, reject) => {
+            let stream = request.get(phonelistUrl)
+                .pipe(fs.createWriteStream(tmpPhonelistFile));
+            stream.on('finish', () => {
+                let json = require(tmpPhonelistFile);
+                resolve(json.employees);
             });
+            stream.on('error', (err) => {
+                reject(err);
+            });
+        });
     }
     _getUsernameIdMap(plEmployees){
         let usernameIdmap = {};
@@ -52,18 +58,24 @@ class PhonelistIdImportTask extends BaseTask{
         let skip = 0;
         let info = {
             updated: 0,
+            skipped: 0,
             errors: 0
         };
-        return async.doUntil(callback => {
+        let totalUsers = 0;
+        return asyncDoUntil(callback => {
             this._getUsers(skip, limit)
-                .then(data => this._updateUsers(data.data))
+                .then(data => {
+                    totalUsers = data.paged.totalCount;
+                    return this._updateUsers(data.data);
+                })
                 .then(partialInfo => callback(null, partialInfo))
                 .catch(err => callback(err));
         }, partialInfo => {
             skip += limit;
             info.updated += partialInfo.updated;
+            info.skipped += partialInfo.skipped;
             info.errors += partialInfo.errors;
-            return (partialInfo.total() == 0);
+            return (skip >= totalUsers);
         })
         .then(() => {
             return info;
@@ -79,10 +91,11 @@ class PhonelistIdImportTask extends BaseTask{
         let _this = this;
         let info = {
             updated: 0,
+            skipped: 0,
             errors: 0,
             total: function(){ return this.updated + this.errors; }
         };
-        return async.map(users, function (u, callback) {
+        return asyncMap(users, function (u, callback) {
             try{
                 _this._updateUser(u)
                     .then(partialInfo => {
@@ -95,6 +108,7 @@ class PhonelistIdImportTask extends BaseTask{
         .then(infoArray => {
             for(let i of infoArray){
                 info.updated += i.updated;
+                info.skipped += i.skipped;
                 info.errors += i.errors;
             }
             return info;
@@ -106,15 +120,15 @@ class PhonelistIdImportTask extends BaseTask{
             let userDa = new UserDa();
             return userDa.update({id: user.id, phonelistId: phonelistId}, true)
                 .then(() => {
-                    return {updated: 1, errors: 0};
+                    return {updated: 1, skipped: 0, errors: 0};
                 })
                 .catch(err => {
                     console.log(taskname + " - error setting phonelistId for user " + user.username);
-                    return {updated: 0, errors: 1};
+                    return {updated: 0, skipped: 0, errors: 1};
                 })
         } else{
             //TODO update user as ex user??
-            return P.resolve({updated: 0, errors: 0});
+            return P.resolve({updated: 0, skipped: 0, errors: 0});
         }
     }
     _doRun(){
@@ -124,7 +138,6 @@ class PhonelistIdImportTask extends BaseTask{
             })
             .then(map => {
                 this.usernameIdmap = map;
-                console.log("map", map)
                 return this._findAndUpdateUsers();
             });
     }

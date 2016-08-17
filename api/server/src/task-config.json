@@ -1,35 +1,35 @@
 [
 	{
-		"name" : "cw-import",
-		"path" : "./tasks/cw-import",
+		"name" : "cw-import-all",
+		"path" : "./tasks/cw-import/cw-import-all",
 		"cronPattern" : "0 1 * * 0",
 		"args" : {
 		}
 	},
 	{
 		"name" : "offices-import",
-		"path" : "./tasks/offices-import",
+		"path" : "./tasks/cw-import/offices-import",
 		"cronPattern" : null,
 		"args" : {
 		}
 	},
 	{
 		"name" : "departments-import",
-		"path" : "./tasks/departments-import",
+		"path" : "./tasks/cw-import/departments-import",
 		"cronPattern" : null,
 		"args" : {
 		}
 	},
 	{
 		"name" : "positions-import",
-		"path" : "./tasks/positions-import",
+		"path" : "./tasks/cw-import/positions-import",
 		"cronPattern" : null,
 		"args" : {
 		}
 	},
 	{
 		"name" : "users-import",
-		"path" : "./tasks/users-import",
+		"path" : "./tasks/cw-import/users-import",
 		"cronPattern" : null,
 		"args" : {
 		}

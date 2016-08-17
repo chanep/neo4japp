@@ -1,0 +1,1 @@
+drop constraint on (n:Position${p}) Assert n.name is UNIQUE;

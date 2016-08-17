@@ -7,7 +7,7 @@ const config = require('../shared/config');
 const dbHelper = require('./db-helper');
 
 
-let p = getPartition();
+let p = getPartitionSuffix();
 dbHelper.applyScripts(p)
     .finally(() => {
         dbHelper.closeDb();

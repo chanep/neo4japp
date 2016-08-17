@@ -23,8 +23,8 @@ class DepartmentsImportTask extends CwBaseTask{
         };
         let departmentDa = new DepartmentDa();
 
-        async.eachSeries = P.promisify(async.eachSeries);
-        return async.eachSeries(departments, function (d, callback) {
+        let eachSeries = P.promisify(async.eachSeries);
+        return eachSeries(departments, function (d, callback) {
             let department = _this._transformDepartment(d);
             const mergeKeys = true;
             departmentDa.upsert(department, ["sourceId"], mergeKeys)
