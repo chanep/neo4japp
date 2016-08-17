@@ -6,7 +6,7 @@ const config = require('../shared/config').db;
 const Joi = require('joi');
 const errors = require('../shared/errors');
 const P = require('bluebird');
-const Cypher = require('./cypher-helper');
+const Cypher = require('./cypher/cypher-helper');
 
 
 
@@ -232,7 +232,7 @@ class BaseDa {
                         paged: paged
                     };
                 })
-                .catch(err => {throw new errors.GenericError("Error finding paged" + this.model.name, err)});
+                .catch(err => {throw new errors.GenericError("Error finding paged " + this.model.name, err)});
         } catch(err){
             return P.reject(new errors.GenericError("Error finding paged " + this.model.name, err))
         }
@@ -297,17 +297,25 @@ class BaseDa {
             });
     }
     //force: if true delete relations before
-    delete(id, force){
-        let cypher = this._cypher.deleteCmd(id, force);
-        return this._run(cypher.cmd, cypher.params)
-            .then(r => this._cypher.parseResultAffected(r))
-            .catch(err => {throw new errors.GenericError("Error deleting " + this.model.name, err)});
+    delete(id, force) {
+        try {
+            let cypher = this._cypher.deleteCmd(id, force);
+            return this._run(cypher.cmd, cypher.params)
+                .then(r => this._cypher.parseResultAffected(r))
+                .catch(err => { throw new errors.GenericError("Error deleting " + this.model.name, err) });
+        } catch (err) {
+            return P.reject(new errors.GenericError("Error deleting " + this.model.name, err))
+        }
     }
-    deleteAll(){
-        let cypher = this._cypher.deleteAllCmd(); 
-        return this._run(cypher.cmd, cypher.params)
-            .then(r => this._cypher.parseResultAffected(r))
-            .catch(err => {throw new errors.GenericError("Error deleting all " + this.model.name, err)});
+    deleteAll() {
+        try {
+            let cypher = this._cypher.deleteAllCmd();
+            return this._run(cypher.cmd, cypher.params)
+                .then(r => this._cypher.parseResultAffected(r))
+                .catch(err => { throw new errors.GenericError("Error deleting all " + this.model.name, err) });
+        } catch (err) {
+            return P.reject(new errors.GenericError("Error deleting all " + this.model.name, err))
+        }
     }
     relate(id, otherId, relKey, relData, replace){
         return this._validateRelationship(relData, relKey)
@@ -318,11 +326,15 @@ class BaseDa {
             .then(r => this._cypher.parseResultRaw(r, null))
             .catch(err => {throw new errors.GenericError("Error relating " + this.model.name, err)});
     }
-    createAndRelate(data, otherId, relKey, relData){
-        let cypher = this._cypher.createAndRelateCmd(data, otherId, relKey, relData);
-        return this._run(cypher.cmd, cypher.params)
-            .then(r => this._cypher.parseResult(r))
-            .catch(err => {throw new errors.GenericError("Error creating and relating " + this.model.name, err)});
+    createAndRelate(data, otherId, relKey, relData) {
+        try {
+            let cypher = this._cypher.createAndRelateCmd(data, otherId, relKey, relData);
+            return this._run(cypher.cmd, cypher.params)
+                .then(r => this._cypher.parseResult(r))
+                .catch(err => { throw new errors.GenericError("Error creating and relating " + this.model.name, err) });
+        } catch (err) {
+            return P.reject(new errors.GenericError("Error creating and relating " + this.model.name, err))
+        }
     }
     enlistTx(tx){
         this._tx = tx;

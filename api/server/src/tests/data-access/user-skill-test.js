@@ -7,6 +7,7 @@ const userDa = new (require('../../data-access/user'));
 const skillDa = new (require('../../data-access/skill'));
 const skillGroupDa = new (require('../../data-access/skill-group'));
 
+
 let skillGroups = [
     {
         name: 'languages',
@@ -89,9 +90,10 @@ vows.describe('User/Skill data access test')
                     user2.id = u.id;
                 })
                 .then(r => this.callback(null, r))
-                .catch(err => this.callback(err))
+                .catch(err => {console.log('hola1'); this.callback(err);})
         },
         'should create user': function (err, result) {
+            console.log('hola');
             if(err){
                 console.log("error", err)
                 throw err;

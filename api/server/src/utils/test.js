@@ -11,20 +11,22 @@ let db = require('../data-access/db');
 const neo4j = require('neo4j-driver').v1;
 
 // const queryHelper = require('../data-access/query-helper')
-const CypherHelper = require('../data-access/cypher-helper')
-let ch = new CypherHelper(null);
+// const CypherHelper = require('../data-access/cypher-helper')
+// let ch = new CypherHelper(null);
 
 
-let session = db.session();
+// RAW Cypher Command
+//----------------------------------------------------
+// let session = db.session();
 
-let cmd = `match (n:SkillGroup_T)<-[:BELONGS_TO]-(m:Skill_T)<--(o:User_T) return n, m, o`;
-let params = {ids: [neo4j.int(230)]};
-session.run(cmd, params)
-    .then(r => {
-        console.log(JSON.stringify(r))
-        console.log(JSON.stringify(ch.parseResultArrayRaw(r, null)))
-    })
-    .catch(console.error);
+// let cmd = `match (n:SkillGroup_T)<-[:BELONGS_TO]-(m:Skill_T)<--(o:User_T) return n, m, o`;
+// let params = {ids: [neo4j.int(230)]};
+// session.run(cmd, params)
+//     .then(r => {
+//         console.log(JSON.stringify(r))
+//         console.log(JSON.stringify(ch.parseResultArrayRaw(r, null)))
+//     })
+//     .catch(console.error);
 
 
 // let query = {

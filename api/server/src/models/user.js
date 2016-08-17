@@ -57,10 +57,8 @@ let user = new Model(
         fullname: Joi.string().required(),
         first: Joi.string().allow(null),
         last: Joi.string().allow(null),
-        isApprover: Joi.boolean().default(false),
-        isResourceManager: Joi.boolean().default(false),
+        roles: Joi.array().items(Joi.string()),
         phone: Joi.string().allow(null),
-        roles: Joi.string().allow(null),
         image: Joi.string().allow(null)
     }
 );
@@ -93,8 +91,8 @@ user.relateWithOne(office, "OF_OFFICE", "office", outgoing, null);
 user.relateWithOne(department, "OF_DEPARTMENT", "department", outgoing, null);
 user.relateWithOne(position, "OF_POSITION", "position", outgoing, null);
 
-user.relateWithOne(user, "MY_APPROVER", "approver", outgoing, null);
-user.relateWithOne(user, "MY_R_MANAGER", "resourceManager", outgoing, null);
+user.relateWithOne(user, "APPROVED_BY", "approver", outgoing, null);
+user.relateWithOne(user, "R_MANAGED_BY", "resourceManager", outgoing, null);
 
 user.relateWithOne(allocation, "ALLOCATION", "allocation", outgoing, null);
 allocation.relateWithOne(user, "ALLOCATION", "user", incoming, null);

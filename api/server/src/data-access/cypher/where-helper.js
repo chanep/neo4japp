@@ -1,24 +1,24 @@
 'use strict'
 const _ = require('lodash');
-const errors = require('../shared/errors');
+const errors = require('../../shared/errors');
 const neo4j = require('neo4j-driver').v1;
 
 module.exports = {
-    queryIncludeToCypher: queryIncludeToCypher,
-    queryMapToCypher: queryMapToCypher
+    queryIncludeToWhere: queryIncludeToWhere,
+    queryMapToWhere: queryMapToWhere
 };
 
-function queryIncludeToCypher(include, params){
+function queryIncludeToWhere(include, params){
     if(include.query && !_.isEmpty(include.query)){
-        return 'WHERE ' + queryMapToCypher(include.r.model, include.query, include.destAlias, params);
+        return 'WHERE ' + queryMapToWhere(include.r.model, include.query, include.destAlias, params);
     }
     if(include.relQuery && !_.isEmpty(include.relQuery)){
-        return 'WHERE ' + queryMapToCypher(include.r.model, include.relQuery, include.relAlias, params);
+        return 'WHERE ' + queryMapToWhere(include.r.model, include.relQuery, include.relAlias, params);
     }
     return '';
 }
 
-function queryMapToCypher(model, map, alias, params){
+function queryMapToWhere(model, map, alias, params){
     let terms = [];
     for(let k in map){
         let term = queryKeyValueToCypher(model, k, map[k], alias, params);
@@ -66,7 +66,7 @@ function orOperatorToCypher(key, value, alias, params){
         throw new errors.GenericError("$or operator expects an array");
     let terms = [];
     value.forEach(map => {
-        let term = queryMapToCypher(map, alias, params);
+        let term = queryMapToWhere(map, alias, params);
         terms.push(term);
     })
     return '(' + terms.join(' OR ') + ') ';
@@ -77,7 +77,7 @@ function andOperatorToCypher(key, value, alias, params){
         throw new errors.GenericError("$and operator expects an array");
     let terms = [];
     value.forEach(map => {
-        let term = queryMapToCypher(map, alias, params);
+        let term = queryMapToWhere(map, alias, params);
         terms.push(term);
     })
     return '(' + terms.join(' AND ') + ') ';
@@ -100,7 +100,7 @@ function inOperatorToCypher(key, value, alias, params){
 function notOperatorToCypher(key, value, alias, params){
     if(!_.isObject(value))
         throw new errors.GenericError("$not operator expects a object");
-    return 'NOT(' + queryMapToCypher(map, alias, params) + ')';
+    return 'NOT(' + queryMapToWhere(map, alias, params) + ')';
 }
 
 function comparisonOperatorToCypher(operator, key, value, alias, params){
