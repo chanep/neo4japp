@@ -13,7 +13,10 @@ class SkillDa extends BaseDa{
     }
 
     checkOrCreateSkill(skill) {
-        var queryStmt = "MATCH (skill:Skill)-[BELONGS_TO]->(group:SkillGroup) WHERE ID(group) = {groupID} AND skill.name = {skillName} RETURN skill";
+        let modelName = this.model.labelsStr;
+        let relationName = this.model.getRelationByKey("group").label;
+        let relatedModelName = this.model.getRelationByKey("group").model.labelsStr;
+        var queryStmt = `MATCH (skill:${modelName})-[:${relationName}]->(group:${relatedModelName}) WHERE ID(group) = {groupID} AND skill.name = {skillName} RETURN skill`;
         var params = {
             'groupID': neo4j.int(skill.groupId),
             'skillName': skill.name

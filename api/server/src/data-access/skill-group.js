@@ -9,7 +9,9 @@ class SkillGroupDa extends BaseDa{
     }
 
     checkLevel1(level1) {
-    	var queryStmt = "MATCH (level1:SkillGroup) WHERE NOT ((level1)-[:BELONGS_TO]->()) AND level1.name = {level1name} AND level1.type = {level1type} RETURN level1";
+        let modelName = this.model.labelsStr;
+        let relationName = this.model.getRelationByKey("skillparent").label;
+    	var queryStmt = `MATCH (level1:${modelName}) WHERE NOT ((level1)-[:${relationName}]->()) AND level1.name = {level1name} AND level1.type = {level1type} RETURN level1`;
     	var params = {
     		'level1name': level1.name,
     		'level1type': level1.type
@@ -50,7 +52,9 @@ class SkillGroupDa extends BaseDa{
     }
 
     checkLevel2(levelsData) {
-    	var queryStmt = "MATCH (child:SkillGroup)-[BELONGS_TO]->(parent:SkillGroup) WHERE ID(parent) = {parentID} AND child.name = {childName} AND child.type = {childType} RETURN child";
+    	let modelName = this.model.labelsStr;
+        let relationName = this.model.getRelationByKey("skillparent").label;
+        var queryStmt = `MATCH (child:${modelName})-[${relationName}]->(parent:${modelName}) WHERE ID(parent) = {parentID} AND child.name = {childName} AND child.type = {childType} RETURN child`;
     	var params = {
     		'parentID': neo4j.int(levelsData.level1Id),
     		'childName': levelsData.name,
