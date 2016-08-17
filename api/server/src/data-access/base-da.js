@@ -336,6 +336,16 @@ class BaseDa {
             return P.reject(new errors.GenericError("Error creating and relating " + this.model.name, err))
         }
     }
+    deleteAllRelationships(id, relKey) {
+        try {
+            let cypher = this._cypher.deleteAllRelationshipsCmd(id, relKey);
+            return this._run(cypher.cmd, cypher.params)
+                .then(r => this._cypher.parseResultAffected(r))
+                .catch(err => { throw new errors.GenericError("Error deleting all relationships " + this.model.name, err) });
+        } catch (err) {
+            return P.reject(new errors.GenericError("Error deleting all relationships " + this.model.name, err))
+        }
+    }
     enlistTx(tx){
         this._tx = tx;
     }

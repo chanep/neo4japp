@@ -45,9 +45,11 @@ class PhonelistIdImportTask extends BaseTask{
         });
     }
     _getUsernameIdMap(plEmployees){
+        console.log("employees count", plEmployees.length)
         let usernameIdmap = {};
+        let usernameIdmapLower = {};
         plEmployees.forEach(e => {
-            let username = e.ADkey;
+            let username = e.ADkey.toLowerCase();
             if(!usernameIdmap[username])
                 usernameIdmap[username] = e.ID;
         });
@@ -59,7 +61,8 @@ class PhonelistIdImportTask extends BaseTask{
         let info = {
             updated: 0,
             skipped: 0,
-            errors: 0
+            errors: 0,
+            notFound: 0
         };
         let totalUsers = 0;
         return asyncDoUntil(callback => {
@@ -75,6 +78,7 @@ class PhonelistIdImportTask extends BaseTask{
             info.updated += partialInfo.updated;
             info.skipped += partialInfo.skipped;
             info.errors += partialInfo.errors;
+            info.notFound += partialInfo.notFound;
             return (skip >= totalUsers);
         })
         .then(() => {
@@ -93,6 +97,7 @@ class PhonelistIdImportTask extends BaseTask{
             updated: 0,
             skipped: 0,
             errors: 0,
+            notFound: 0,
             total: function(){ return this.updated + this.errors; }
         };
         return asyncMap(users, function (u, callback) {
@@ -110,25 +115,37 @@ class PhonelistIdImportTask extends BaseTask{
                 info.updated += i.updated;
                 info.skipped += i.skipped;
                 info.errors += i.errors;
+                info.notFound += i.notFound;
             }
             return info;
         });
     }
     _updateUser(user){
+        let info = {updated: 0, skipped: 0, notFound: 0, errors: 0};
         let phonelistId = this.usernameIdmap[user.username];
+
         if(phonelistId && !user.phonelistId){
             let userDa = new UserDa();
             return userDa.update({id: user.id, phonelistId: phonelistId}, true)
                 .then(() => {
-                    return {updated: 1, skipped: 0, errors: 0};
+                    console.log("updated user " + user.username)
+                    info.updated++;
+                    return info;
                 })
                 .catch(err => {
                     console.log(taskname + " - error setting phonelistId for user " + user.username);
-                    return {updated: 0, skipped: 0, errors: 1};
+                    info.errors++;
+                    return info;
                 })
         } else{
             //TODO update user as ex user??
-            return P.resolve({updated: 0, skipped: 0, errors: 0});
+            if(!phonelistId){
+                info.notFound++;
+                console.log("username not found " + user.username)
+            } else{
+                info.skipped++;
+            }
+            return P.resolve(info);
         }
     }
     _doRun(){
