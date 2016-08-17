@@ -6,29 +6,38 @@ const P = require('bluebird');
 const UserDa = require('../data-access/user');
 const BaseTask = require('./base-task');
 
+const request = require('request');
+request.get = P.promisify(request.get);
+request.post = P.promisify(request.post);
+request.put = P.promisify(request.put);
+request.del = P.promisify(request.del);
+
 async.doUntil = P.promisify(async.doUntil);
 async.map = P.promisify(async.map);
 
 const taskname ='phonelist-id-import';
-
+const phonelistUrl = 'http://phonelist/gateway/json/employees.aspx'
 
 class PhonelistIdImportTask extends BaseTask{
     constructor(){
         super(taskname);
     }
-    _getPhonelistEmployees(){
-        const fs = require("fs");
-        let path = require('path');
-        let file = path.resolve(__dirname, "./e.json");
-        fs.readFile = P.promisify(fs.readFile);
-        return fs.readFile(file, 'utf8')
-            .then(test => {
-                return JSON.parse(test).employees;
-            })
-    }
     // _getPhonelistEmployees(){
-        
+    //     const fs = require("fs");
+    //     let path = require('path');
+    //     let file = path.resolve(__dirname, "./e.json");
+    //     fs.readFile = P.promisify(fs.readFile);
+    //     return fs.readFile(file, 'utf8')
+    //         .then(test => {
+    //             return JSON.parse(test).employees;
+    //         })
     // }
+    _getPhonelistEmployees(){
+        return request.get(phonelistUrl)
+            .then(text => {
+                return JSON.parse(text).employees;
+            });
+    }
     _getUsernameIdMap(plEmployees){
         let usernameIdmap = {};
         plEmployees.forEach(e => {

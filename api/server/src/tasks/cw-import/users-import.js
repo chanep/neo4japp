@@ -1,13 +1,13 @@
 'use strict'
 const _ = require('lodash');
 const async = require('async');
-const errors = require('../shared/errors');
+const errors = require('../../shared/errors');
 const P = require('bluebird');
 const CwBaseTask = require('./cw-base');
-const UserDa = require('../data-access/user');
-const OfficeDa = require('../data-access/office');
-const DepartmentDa = require('../data-access/department');
-const PositionDa = require('../data-access/position');
+const UserDa = require('../../data-access/user');
+const OfficeDa = require('../../data-access/office');
+const DepartmentDa = require('../../data-access/department');
+const PositionDa = require('../../data-access/position');
 
 
 

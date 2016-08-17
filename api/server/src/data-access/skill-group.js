@@ -10,7 +10,7 @@ class SkillGroupDa extends BaseDa{
 
     checkLevel1(level1) {
         let modelName = this.model.labelsStr;
-        let relationName = this.model.getRelationByKey("skillparent").label;
+        let relationName = this.model.getRelationByKey("parent").label;
     	var queryStmt = `MATCH (level1:${modelName}) WHERE NOT ((level1)-[:${relationName}]->()) AND level1.name = {level1name} AND level1.type = {level1type} RETURN level1`;
     	var params = {
     		'level1name': level1.name,
@@ -53,7 +53,7 @@ class SkillGroupDa extends BaseDa{
 
     checkLevel2(levelsData) {
     	let modelName = this.model.labelsStr;
-        let relationName = this.model.getRelationByKey("skillparent").label;
+        let relationName = this.model.getRelationByKey("parent").label;
         var queryStmt = `MATCH (child:${modelName})-[${relationName}]->(parent:${modelName}) WHERE ID(parent) = {parentID} AND child.name = {childName} AND child.type = {childType} RETURN child`;
     	var params = {
     		'parentID': neo4j.int(levelsData.level1Id),
@@ -74,7 +74,7 @@ class SkillGroupDa extends BaseDa{
 	        		'type': levelsData.type
 	        	};
 
-				return newLevel2.createAndRelate(obj, levelsData.level1Id, "skillparent", null).then(result => {
+				return newLevel2.createAndRelate(obj, levelsData.level1Id, "parent", null).then(result => {
 					resultReturn.id = result.id;
 					resultReturn.action = 'inserted';
 

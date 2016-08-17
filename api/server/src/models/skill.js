@@ -25,7 +25,7 @@ let skill = new Model(
 
 skill.relateWithOne(skillGroup, "BELONGS_TO", "group", true, null)
 skillGroup.relateWithMany(skill, "BELONGS_TO", "skills", false, null)
-skillGroup.relateWithOne(skillGroup, "BELONGS_TO", "skillparent", true, null)
+skillGroup.relateWithOne(skillGroup, "BELONGS_TO", "parent", true, null)
 
 
 module.exports = {

@@ -1,10 +1,10 @@
 'use strict'
 const _ = require('lodash');
 const async = require('async');
-const errors = require('../shared/errors');
+const errors = require('../../shared/errors');
 const P = require('bluebird');
 const CwBaseTask = require('./cw-base');
-const DepartmentDa = require('../data-access/department');
+const DepartmentDa = require('../../data-access/department');
 
 class DepartmentsImportTask extends CwBaseTask{
     constructor(){

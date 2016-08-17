@@ -1,9 +1,9 @@
 'use strict'
-const errors = require('../shared/errors');
+const errors = require('../../shared/errors');
 const P = require('bluebird');
-const BaseTask = require('./base-task');
+const BaseTask = require('../base-task');
 const request = require('request');
-const config = require('../shared/config').cw;
+const config = require('../../shared/config').cw;
 
 
 request.get = P.promisify(request.get);
