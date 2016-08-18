@@ -123,6 +123,8 @@ class PhonelistIdImportTask extends BaseTask{
     _updateUser(user){
         let info = {updated: 0, skipped: 0, notFound: 0, errors: 0};
         let phonelistId = this.usernameIdmap[user.username];
+        if(phonelistId)
+            delete this.usernameIdmap[user.username];
 
         if(phonelistId && !user.phonelistId){
             let userDa = new UserDa();
@@ -156,6 +158,12 @@ class PhonelistIdImportTask extends BaseTask{
             .then(map => {
                 this.usernameIdmap = map;
                 return this._findAndUpdateUsers();
+            })
+            .then(info => {
+                let orphan = Object.keys(this.usernameIdmap);
+                console.log("orphan phonelist users", orphan)
+                console.log("orphan phonelist user count", orphan.length)
+                return info;
             });
     }
 }

@@ -100,6 +100,7 @@ function inOperatorToCypher(key, value, alias, params){
 function notOperatorToCypher(key, value, alias, params){
     if(!_.isObject(value))
         throw new errors.GenericError("$not operator expects a object");
+    let map = value.$not;
     return 'NOT(' + queryMapToWhere(map, alias, params) + ')';
 }
 
