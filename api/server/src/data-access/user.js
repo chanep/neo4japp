@@ -20,17 +20,7 @@ class UserDa extends BaseDa{
         return this.relate(id, skillId, 'knowledges', knowledgeData, true);
     }
     setAllocation(id, allocationData){
-        let allocationDa = new AllocationDa();
-        let query = {id: id, includes:["allocation"]};
-        return this.findOne(query)
-            .then(u => {
-                if(u.allocation && u.allocation.id){
-                    allocationData.id = u.allocation.id;
-                    return allocationDa.update(allocationData);
-                } else{
-                    return allocationDa.createAndRelate(allocationData, id, "user");
-                }
-            })
+        return this.setChild(id, "allocation", allocationData);
     }
 }
 

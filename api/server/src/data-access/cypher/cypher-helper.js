@@ -125,6 +125,41 @@ class CypherHelper {
         let params = {};
         return  {cmd:cmd, params:params};;
     }
+    setChildCmd(selfId, relKey, childData){
+        let r = this.model.getRelationByKey(relKey);
+        let relCypher = this._getRelationshipCypher(relKey, 'r', null);
+
+        let cmd = `
+            MATCH (n:${this.model.labelsStr}) WHERE ID(n) = {selfId}
+            MERGE (n)${relCypher}(m:${r.model.labelsStr})
+            SET m = {childData} 
+            RETURN m`
+        let params = {selfId: neo4j.int(selfId), childData: this.convertToNative(childData, r.model.schema)};
+        return  {cmd:cmd, params:params};;
+    }
+    addChildCmd(selfId, relKey, childData){
+        let r = this.model.getRelationByKey(relKey);
+        let relCypher = this._getRelationshipCypher(relKey, 'r', null);
+
+        let cmd = `
+            MATCH (n:${this.model.labelsStr}) WHERE ID(n) = {selfId}
+            CREATE (n)${relCypher}(m:${r.model.labelsStr} {childData})
+            RETURN m`
+        let params = {selfId: neo4j.int(selfId), childData: this.convertToNative(childData, r.model.schema)};
+        return  {cmd:cmd, params:params};;
+    }
+    updateChild(slefId, relKey, childData){
+        let r = this.model.getRelationByKey(relKey);
+        let relCypher = this._getRelationshipCypher(relKey, 'r', null);
+        let childId = childData.id;
+        let childDataAux = _.omit(data, ["id"]);
+        let cmd = `
+            MATCH (n:${this.model.labelsStr})${relCypher}(m:${r.model.labelsStr}) WHERE ID(n) = {selfId} AND ID(m) = {childId}
+            SET m = {childDataAux} 
+            RETURN m`
+        let params = {selfId: neo4j.int(selfId), childId: neo4j.int(childId), childDataAux: this.convertToNative(childDataAux, r.model.schema)};
+        return  {cmd:cmd, params:params};;
+    }
     _getRelationshipCypher(relKey, relAlias, relData){
         let r = this.model.getRelationByKey(relKey);
         let dir1 = '';
@@ -138,11 +173,13 @@ class CypherHelper {
             data = ' {relData}';
         return `${dir1}-[${relAlias}:${r.label}${data}]-${dir2}`;
     }
-    parseResult(result){
-        return resultParser.parseResult(result, this.model);
+    parseResult(result, model){
+        model = model || this.model;
+        return resultParser.parseResult(result, model);
     }
-    parseResultArray(result){
-        return resultParser.parseResultArray(result, this.model);
+    parseResultArray(result, model){
+        model = model || this.model;
+        return resultParser.parseResultArray(result, model);
     }
     parseResultRaw(result, schema){
         if(_.isUndefined(schema))
