@@ -87,8 +87,8 @@ const neo4j = require('neo4j-driver').v1;
 // console.log("parsed", JSON.stringify(parsed))
 
 
-// const UserDa = require('../data-access/user');
-// let userDa = new UserDa();
+const UserDa = require('../data-access/user');
+let userDa = new UserDa();
 // let u = {
 //     username: 'estebanc',
 //     fullname: 'Esteban Canepa',
@@ -96,6 +96,21 @@ const neo4j = require('neo4j-driver').v1;
 //     type: 'UserEmployee'
 // };
 
+let allocation = {
+        startDate: new Date(),
+        weekHours: [10, 20, 30, 40],
+        totalHours: 100,
+    }
+
+userDa.findOne({username: 'estebanc'})
+    .then(u =>{
+        console.log("u",u)
+       return userDa.setAllocation(u.id, allocation);
+    })
+    .then(r =>{
+        console.log("result", JSON.stringify(r));
+    })
+    .catch(console.error);
 // userDa.create(u)
 // .then(r =>{
 //         console.log("result", JSON.stringify(r));

@@ -81,13 +81,7 @@ class CypherHelper {
     }
     relateCmd(id, otherId, relKey, relData, replace){
         let r = this.model.getRelationByKey(relKey);
-
-        let dir1 = '';
-        let dir2 = '>';
-        if(!r.outgoing){
-            dir1 = '<';
-            dir2 = '';
-        }
+        let relCypher = this._getRelationshipCypher(relKey, 'r', relData);
 
         relData = relData || {};
         // let relDataStr = this.mapToStr(relData, "relData");
@@ -103,7 +97,7 @@ class CypherHelper {
         let cmd = `
             MATCH (n:${this.model.labelsStr}),(m:${r.model.labelsStr})
             WHERE ID(n) = {id} AND ID(m) = {otherId}
-            CREATE ${unique}(n)${dir1}-[r:${r.label}]-${dir2}(m)
+            CREATE ${unique}(n)${relCypher}(m)
             SET r = {relData}
             RETURN r`;
         
@@ -113,26 +107,79 @@ class CypherHelper {
     }
     createAndRelateCmd(data, otherId, relKey, relData){
         let r = this.model.getRelationByKey(relKey);
+        let relCypher = this._getRelationshipCypher(relKey, 'r', relData);
+        relData = relData || {};
+        let cmd = `
+            MATCH (m:${r.model.labelsStr}) WHERE ID(m) = {otherId}
+            CREATE (n:${this.model.labelsStr} {data})${relCypher}(m)
+            RETURN n`
+        let params = {otherId: neo4j.int(otherId), data: this.convertToNative(data, this.model.schema), relData: this.convertToNative(relData, r.schema)};
+        return  {cmd:cmd, params:params};;
+    }
+    deleteAllRelationshipsCmd(){
+        let relCypher = this._getRelationshipCypher(relKey, 'r');
+        let cmd = `
+                MATCH (n:${this.model.labelsStr})${relCypher}()
+                DELETE r
+                RETURN count(n) as affected`;
+        let params = {};
+        return  {cmd:cmd, params:params};;
+    }
+    setChildCmd(selfId, relKey, childData){
+        let r = this.model.getRelationByKey(relKey);
+        let relCypher = this._getRelationshipCypher(relKey, 'r', null);
+
+        let cmd = `
+            MATCH (n:${this.model.labelsStr}) WHERE ID(n) = {selfId}
+            MERGE (n)${relCypher}(m:${r.model.labelsStr})
+            SET m = {childData} 
+            RETURN m`
+        let params = {selfId: neo4j.int(selfId), childData: this.convertToNative(childData, r.model.schema)};
+        return  {cmd:cmd, params:params};;
+    }
+    addChildCmd(selfId, relKey, childData){
+        let r = this.model.getRelationByKey(relKey);
+        let relCypher = this._getRelationshipCypher(relKey, 'r', null);
+
+        let cmd = `
+            MATCH (n:${this.model.labelsStr}) WHERE ID(n) = {selfId}
+            CREATE (n)${relCypher}(m:${r.model.labelsStr} {childData})
+            RETURN m`
+        let params = {selfId: neo4j.int(selfId), childData: this.convertToNative(childData, r.model.schema)};
+        return  {cmd:cmd, params:params};;
+    }
+    updateChild(slefId, relKey, childData){
+        let r = this.model.getRelationByKey(relKey);
+        let relCypher = this._getRelationshipCypher(relKey, 'r', null);
+        let childId = childData.id;
+        let childDataAux = _.omit(data, ["id"]);
+        let cmd = `
+            MATCH (n:${this.model.labelsStr})${relCypher}(m:${r.model.labelsStr}) WHERE ID(n) = {selfId} AND ID(m) = {childId}
+            SET m = {childDataAux} 
+            RETURN m`
+        let params = {selfId: neo4j.int(selfId), childId: neo4j.int(childId), childDataAux: this.convertToNative(childDataAux, r.model.schema)};
+        return  {cmd:cmd, params:params};;
+    }
+    _getRelationshipCypher(relKey, relAlias, relData){
+        let r = this.model.getRelationByKey(relKey);
         let dir1 = '';
         let dir2 = '>';
         if(!r.outgoing){
             dir1 = '<';
             dir2 = '';
         }
-
-        relData = relData || {};
-        let cmd = `
-            MATCH (m:${r.model.labelsStr}) WHERE ID(m) = {otherId}
-            CREATE (n:${this.model.labelsStr} {data})${dir1}-[r:${r.label} {relData}]-${dir2}(m)
-            RETURN n`
-        let params = {otherId: neo4j.int(otherId), data: this.convertToNative(data, this.model.schema), relData: this.convertToNative(relData, r.schema)};
-        return  {cmd:cmd, params:params};;
+        let data = '';
+        if(relData)
+            data = ' {relData}';
+        return `${dir1}-[${relAlias}:${r.label}${data}]-${dir2}`;
     }
-    parseResult(result){
-        return resultParser.parseResult(result, this.model);
+    parseResult(result, model){
+        model = model || this.model;
+        return resultParser.parseResult(result, model);
     }
-    parseResultArray(result){
-        return resultParser.parseResultArray(result, this.model);
+    parseResultArray(result, model){
+        model = model || this.model;
+        return resultParser.parseResultArray(result, model);
     }
     parseResultRaw(result, schema){
         if(_.isUndefined(schema))

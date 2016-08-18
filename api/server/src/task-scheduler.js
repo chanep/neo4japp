@@ -17,7 +17,7 @@ function setupSchedule() {
 		if(taskConf.cronPattern){
 			let task = new (require(taskConf.path));
 			let j = schedule.scheduleJob(taskConf.cronPattern, function() {
-				task.run(taskConf.args);
+				run(task, taskConf.args);
 			});
 		}
 	})
@@ -30,8 +30,15 @@ function runTask(taskName){
 
 	if(taskConf){
 		var task = new (require(taskConf.path));
-		task.run(taskConf.args);
+		run(task, taskConf.args);
 	} else {
 		console.log("Task " + taskName + " does not exist");
 	}
+}
+
+function run(task, args){
+	console.log(`Task ${task.name} started...`);
+	task.run(args)
+		.then(info => console.log(`Task ${task.name} finished ok. Info: ${JSON.stringify(info)}`))
+		.catch(err => console.log(`Task ${task.name} finished with error`, err));
 }

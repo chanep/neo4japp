@@ -24,8 +24,8 @@ class PositionsImportTask extends CwBaseTask{
         };
         let positionDa = new PositionDa();
 
-        async.eachSeries = P.promisify(async.eachSeries);
-        return async.eachSeries(positions, function (d, callback) {
+        let eachSeries = P.promisify(async.eachSeries);
+        return eachSeries(positions, function (d, callback) {
             let position = _this._transformPosition(d);
             const mergeKeys = true;
             positionDa.upsert(position, ["sourceId"], mergeKeys)
@@ -68,8 +68,8 @@ class PositionsImportTask extends CwBaseTask{
                 this._req = req;
                 let page = 1;
 
-                async.doUntil = P.promisify(async.doUntil);
-                return async.doUntil(callback => {
+                let doUntil = P.promisify(async.doUntil);
+                return doUntil(callback => {
                     this._getPositions(page, ipp)
                         .then(ps => this._importPositions(ps))
                         .then(partialInfo => callback(null, partialInfo))

@@ -14,6 +14,12 @@ class Relationship {
         this.outgoing = outgoing;
         this.schema = schema;
     }
+    isToOne(){
+        return (this.type == "one");
+    }
+    isToMany(){
+        return (this.type == "many");
+    }
 }
 
 class Model {

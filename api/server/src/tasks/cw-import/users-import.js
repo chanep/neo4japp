@@ -63,8 +63,8 @@ class UsersImportTask extends CwBaseTask{
             errors: 0,
             total: function(){ return this.updated + this.created + this.errors; }
         };
-        async.eachSeries = P.promisify(async.eachSeries);
-        return async.eachSeries(users, function (e, callback) {
+        let eachSeries = P.promisify(async.eachSeries);
+        return eachSeries(users, function (e, callback) {
             _this._importUser(e)
                 .then(partialInfo => {
                     info.created += partialInfo.created;
@@ -164,8 +164,8 @@ class UsersImportTask extends CwBaseTask{
         };
         let page = 1;
 
-        async.doUntil = P.promisify(async.doUntil);
-        return async.doUntil(callback => {
+        let doUntil = P.promisify(async.doUntil);
+        return doUntil(callback => {
             this._getUsers(page, ipp)
                 .then(us => this._importUsers(us))
                 .then(partialInfo => callback(null, partialInfo))
@@ -177,6 +177,8 @@ class UsersImportTask extends CwBaseTask{
             info.errors += partialInfo.errors;
             // if(page == 4)
             //     return true;
+            if(((page - 1) % 4) == 0)
+                console.log("... " + JSON.stringify(info));
             return (partialInfo.total() == 0);
         })
         .then(() => {
