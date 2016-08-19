@@ -1,4 +1,11 @@
 'use strict'
+const config = require('../shared/config');
+const errors = require('../shared/errors');
+
+function isProduction(){
+    process.env.NODE_ENV == 'prod'
+}
+
 class BaseController {
     constructor(){
         //make 'this' be the actual 'this' when instance functions are used as callbacks
@@ -29,10 +36,10 @@ class BaseController {
 
 
     _createDataResponse(data, createDto){
-        var _this = this;
-        var response = {status: 'success', data: data};
-        if(data && data.pager && data.data){
-            response.pager = data.pager;
+        let _this = this;
+        let response = {status: 'success', data: data};
+        if(data && data.paged && data.data){
+            response.paged = data.paged;
             data = data.data;   
         }
         if(data){
@@ -81,13 +88,57 @@ class BaseController {
         })
     }
 
-    _handleError(res, err){
-        var errResp = {
-            status: "error",
-            error: err.toString()
+    _handleError(res, err) {
+        let code;
+        
+        if (err instanceof errors.AuthorizationError) {
+            code = 401;
+        } else if (err instanceof errors.ForbiddenError) {
+            code = 403;
+        } else if (err instanceof errors.NotFoundError) {
+            code = 404;
+        } else if (err instanceof errors.BasGatewayError) {
+            code = 502;
         }
-        res.status(500).send(errResp);
+
+        if (err instanceof errors.ValidationError) {
+            console.log(err);
+            let error = { code: err.code, message: err.message };
+            if (err.data) {
+                error.data = err.data;
+            }
+            res.status(422).send({
+                status: "error",
+                error: error
+            });
+        } else if (code) {
+            console.log(err);
+            res.status(code).send({
+                status: "error",
+                error: err.message
+            });
+        } else {
+            let trackId = Math.floor((Math.random() * 100000000));
+            let errorFull = errors.toString(err);
+            console.log("trackId: " + trackId + " - ", err);
+
+            var errResp = {
+                status: "error",
+                error: {
+                    trackId: trackId,
+                    message: "server error"
+                }
+            }
+
+            if (!isProduction()) {
+                errResp.error.devInfo = errorFull;
+            }
+
+            res.status(500).send(errResp);
+
+        }
     }
+
 }
 
 module.exports = BaseController;

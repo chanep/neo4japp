@@ -19,7 +19,6 @@ function queryIncludeToWhere(include, params){
 }
 
 function queryMapToWhere(model, map, alias, params){
-    console.log("map", map)
     let terms = [];
     for(let k in map){
         let term = queryKeyValueToCypher(model, k, map[k], alias, params);

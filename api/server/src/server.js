@@ -4,11 +4,15 @@ const cors = require('cors');
 const routes = require('./routes');
 require('dotenv').load();
 
+const config = require('../shared/config');
+
 const app = express();
 
 // parse body params and attache them to req.body
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.cookieParser('secret-intl-skills-cloud'));
+app.use(express.session({secret: config.session.secret}));
 
 // enable CORS - Cross Origin Resource Sharing
 app.use(cors());

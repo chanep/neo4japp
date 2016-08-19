@@ -10,6 +10,12 @@ require('dotenv').config({path: envFile});
 let db = require('../data-access/db');
 const neo4j = require('neo4j-driver').v1;
 
+
+///Login Service
+let LoginService = require('../services/login');
+let login = new LoginService();
+
+
 // const queryHelper = require('../data-access/query-helper')
 // const CypherHelper = require('../data-access/cypher-helper')
 // let ch = new CypherHelper(null);
@@ -87,31 +93,31 @@ const neo4j = require('neo4j-driver').v1;
 // console.log("parsed", JSON.stringify(parsed))
 
 
-const UserDa = require('../data-access/user');
-let userDa = new UserDa();
-// let u = {
-//     username: 'estebanc',
-//     fullname: 'Esteban Canepa',
-//     email: 'esteban.canepa@rga.com',
-//     type: 'UserEmployee'
-// };
+// const UserDa = require('../data-access/user');
+// let userDa = new UserDa();
+// // let u = {
+// //     username: 'estebanc',
+// //     fullname: 'Esteban Canepa',
+// //     email: 'esteban.canepa@rga.com',
+// //     type: 'UserEmployee'
+// // };
 
-let allocation = {
-        startDate: new Date(),
-        weekHours: [10, 20, 30, 40],
-        totalHours: 100,
-    }
+// let allocation = {
+//         startDate: new Date(),
+//         weekHours: [10, 20, 30, 40],
+//         totalHours: 100,
+//     }
 
-userDa.findOne({$not: {username: 'estebanc'}})
-    .then(u =>{
-        console.log("u",u)
-        return u;
-       return userDa.setAllocation(u.id, allocation);
-    })
-    .then(r =>{
-        console.log("result", JSON.stringify(r));
-    })
-    .catch(console.error);
+// userDa.findOne({$not: {username: 'estebanc'}})
+//     .then(u =>{
+//         console.log("u",u)
+//         return u;
+//        return userDa.setAllocation(u.id, allocation);
+//     })
+//     .then(r =>{
+//         console.log("result", JSON.stringify(r));
+//     })
+//     .catch(console.error);
 // userDa.create(u)
 // .then(r =>{
 //         console.log("result", JSON.stringify(r));
