@@ -132,10 +132,12 @@ header {
         span {
           color: #000;
           &.icon-search {
+            cursor: pointer;
             float: right;
           }
 
           &.icon-close {
+            cursor: pointer;
             margin-right: 28px;
           }
         }
