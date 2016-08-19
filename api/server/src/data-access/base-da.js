@@ -6,7 +6,7 @@ const config = require('../shared/config').db;
 const Joi = require('joi');
 const errors = require('../shared/errors');
 const P = require('bluebird');
-const Cypher = require('./cypher-helper');
+const Cypher = require('./cypher/cypher-helper');
 
 
 
@@ -101,7 +101,7 @@ class BaseDa {
             }
             let cypher = this._cypher.findByIdCmd(id, includes);
             return this._run(cypher.cmd, cypher.params)
-                .then(r => this._cypher.parseResult(r, includes))
+                .then(r => this._cypher.parseResult(r))
                 .catch(err => { throw new errors.GenericError("Error finding by id " + this.model.name, err) });
         } catch (err) {
             return P.reject(new errors.GenericError("Error finding by id " + this.model.name, err));
@@ -206,7 +206,7 @@ class BaseDa {
                 return this._findPaged(query);
             let cypher = this._cypher.findCmd(query);
             return this._run(cypher.cmd, cypher.params)
-                .then(r => this._cypher.parseResultArray(r, includes))
+                .then(r => this._cypher.parseResultArray(r))
                 .catch(err => { throw new errors.GenericError("Error finding " + this.model.name, err) });
         } catch (err) {
             return P.reject(new errors.GenericError("Error finding " + this.model.name, err));
@@ -223,7 +223,7 @@ class BaseDa {
                     totalCount = c;
                     return this._run(cypher.cmd, cypher.params)
                 })
-                .then(r => this._cypher.parseResultArray(r, includes))
+                .then(r => this._cypher.parseResultArray(r))
                 .then(data => {
                     let paged = _.clone(query.paged);
                     paged.totalCount = totalCount;
@@ -232,7 +232,7 @@ class BaseDa {
                         paged: paged
                     };
                 })
-                .catch(err => {throw new errors.GenericError("Error finding paged" + this.model.name, err)});
+                .catch(err => {throw new errors.GenericError("Error finding paged " + this.model.name, err)});
         } catch(err){
             return P.reject(new errors.GenericError("Error finding paged " + this.model.name, err))
         }
@@ -297,32 +297,117 @@ class BaseDa {
             });
     }
     //force: if true delete relations before
-    delete(id, force){
-        let cypher = this._cypher.deleteCmd(id, force);
-        return this._run(cypher.cmd, cypher.params)
-            .then(r => this._cypher.parseResultAffected(r))
-            .catch(err => {throw new errors.GenericError("Error deleting " + this.model.name, err)});
+    delete(id, force) {
+        try {
+            let cypher = this._cypher.deleteCmd(id, force);
+            return this._run(cypher.cmd, cypher.params)
+                .then(r => this._cypher.parseResultAffected(r))
+                .catch(err => { throw new errors.GenericError("Error deleting " + this.model.name, err) });
+        } catch (err) {
+            return P.reject(new errors.GenericError("Error deleting " + this.model.name, err))
+        }
     }
-    deleteAll(){
-        let cypher = this._cypher.deleteAllCmd(); 
-        return this._run(cypher.cmd, cypher.params)
-            .then(r => this._cypher.parseResultAffected(r))
-            .catch(err => {throw new errors.GenericError("Error deleting all " + this.model.name, err)});
+    deleteAll() {
+        try {
+            let cypher = this._cypher.deleteAllCmd();
+            return this._run(cypher.cmd, cypher.params)
+                .then(r => this._cypher.parseResultAffected(r))
+                .catch(err => { throw new errors.GenericError("Error deleting all " + this.model.name, err) });
+        } catch (err) {
+            return P.reject(new errors.GenericError("Error deleting all " + this.model.name, err))
+        }
     }
-    relate(id, otherId, relKey, relData, replace){
+    relate(selfId, otherId, relKey, relData, replace){
         return this._validateRelationship(relData, relKey)
             .then(d => {
-                let cypher = this._cypher.relateCmd(id, otherId, relKey, d, replace);
+                let cypher = this._cypher.relateCmd(selfId, otherId, relKey, d, replace);
                 return this._run(cypher.cmd, cypher.params);
             })
             .then(r => this._cypher.parseResultRaw(r, null))
             .catch(err => {throw new errors.GenericError("Error relating " + this.model.name, err)});
     }
-    createAndRelate(data, otherId, relKey, relData){
-        let cypher = this._cypher.createAndRelateCmd(data, otherId, relKey, relData);
-        return this._run(cypher.cmd, cypher.params)
-            .then(r => this._cypher.parseResult(r))
-            .catch(err => {throw new errors.GenericError("Error creating and relating " + this.model.name, err)});
+    createAndRelate(data, otherId, relKey, relData) {
+        try {
+            let cypher = this._cypher.createAndRelateCmd(data, otherId, relKey, relData);
+            return this._run(cypher.cmd, cypher.params)
+                .then(r => this._cypher.parseResult(r))
+                .catch(err => { throw new errors.GenericError("Error creating and relating " + this.model.name, err) });
+        } catch (err) {
+            return P.reject(new errors.GenericError("Error creating and relating " + this.model.name, err))
+        }
+    }
+    deleteAllRelationships(id, relKey) {
+        try {
+            let cypher = this._cypher.deleteAllRelationshipsCmd(id, relKey);
+            return this._run(cypher.cmd, cypher.params)
+                .then(r => this._cypher.parseResultAffected(r))
+                .catch(err => { throw new errors.GenericError("Error deleting all relationships " + this.model.name, err) });
+        } catch (err) {
+            return P.reject(new errors.GenericError("Error deleting all relationships " + this.model.name, err))
+        }
+    }
+
+    /**
+     * Creates or replace a child node. This model must be the owner of the child
+     * which means the child can't exists without the owner
+     * @param {number} selfId - This model id
+     * @param {string} relKey - Relationship key. Must be a one to one relationship
+     * @param {object} childData
+     * @returns {object} child node
+     */
+    setChild(selfId, relKey, childData){
+        try {
+            let r = this.model.getRelationByKey(relKey);
+            if(!r.isToOne())
+                throw new errors.GenericError("Relation is not One to One");
+            let cypher = this._cypher.setChildCmd(selfId, relKey, childData);
+            return this._run(cypher.cmd, cypher.params)
+                .then(r => this._cypher.parseResult(r, r.model))
+                .catch(err => { throw new errors.GenericError("Error setting child node of " + this.model.name, err) });
+        } catch (err) {
+            return P.reject(new errors.GenericError("Error setting child node of " + this.model.name, err))
+        }
+    }
+     /**
+     * Adds a new child node of a one to many relationship. This model must be the owner of the child
+     * which means the child can't exists without the owner
+     * @param {number} selfId - This model id
+     * @param {string} relKey - Relationship key. Must be a one to many relationship
+     * @param {object} childData
+     * @returns {object} child node
+     */
+    addChild(selfId, relKey, childData){
+        try {
+            let r = this.model.getRelationByKey(relKey);
+            if(!r.isToMany())
+                throw new errors.GenericError("Relation is not x to Many");
+            let cypher = this._cypher.addChildCmd(selfId, relKey, childData);
+            return this._run(cypher.cmd, cypher.params)
+                .then(r => this._cypher.parseResult(r, r.model))
+                .catch(err => { throw new errors.GenericError("Error adding child node of " + this.model.name, err) });
+        } catch (err) {
+            return P.reject(new errors.GenericError("Error adding child node of " + this.model.name, err))
+        }
+    }
+     /**
+     * Updates a child node of relationship. This model must be the owner of the child
+     * which means the child can't exists without the owner. 
+     * @param {number} selfId - This model id
+     * @param {string} relKey - Relationship key
+     * @param {object} childData - id must be defined
+     * @returns {object} child node
+     */
+    updateChild(slefId, relKey, childData){
+        try {
+            if(!childData.id)
+                throw new errors.GenericError("Child id must be defined");
+            let cypher = this._cypher.updateChild(selfId, relKey, childData);
+            return this._run(cypher.cmd, cypher.params)
+                .then(r => this._cypher.parseResult(r, r.model))
+                .catch(err => { throw new errors.GenericError("Error update child node of " + this.model.name, err) });
+        } catch (err) {
+            return P.reject(new errors.GenericError("Error update child node of " + this.model.name, err))
+        }
     }
     enlistTx(tx){
         this._tx = tx;

@@ -1,10 +1,10 @@
 'use strict'
 const _ = require('lodash');
 const async = require('async');
-const errors = require('../shared/errors');
+const errors = require('../../shared/errors');
 const P = require('bluebird');
 const CwBaseTask = require('./cw-base');
-const OfficeDa = require('../data-access/office');
+const OfficeDa = require('../../data-access/office');
 
 class OfficesImportTask extends CwBaseTask{
     constructor(){
@@ -23,8 +23,8 @@ class OfficesImportTask extends CwBaseTask{
         };
         let officeDa = new OfficeDa();
 
-        async.eachSeries = P.promisify(async.eachSeries);
-        return async.eachSeries(offices, function (o, callback) {
+        let eachSeries = P.promisify(async.eachSeries);
+        return eachSeries(offices, function (o, callback) {
             let office = _this._transformOffice(o);
             const mergeKeys = true;
             officeDa.upsert(office, ["sourceId"], mergeKeys)
@@ -45,7 +45,6 @@ class OfficesImportTask extends CwBaseTask{
                 })
         })
         .then(() => {
-            console.log("info", info)
             return info;
         })
         .catch(err => {

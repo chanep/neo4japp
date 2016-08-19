@@ -5,6 +5,8 @@ const TaskStatusDa = require('../data-access/task-status');
 
 class BaseTask {
     constructor(name){
+        if(!name)
+            throw new errors.GenericError("Must call BaseTasl constructor with task name argument");
         this.name = name;
     }
     _doRun(args){
@@ -13,7 +15,7 @@ class BaseTask {
     run(args){
         let running = false;
         let taskStatusDa = new TaskStatusDa();
-        taskStatusDa.findByName(this.name)
+        return taskStatusDa.findByName(this.name)
             .then(taskStatus => {
                 if(taskStatus && taskStatus.status == 'running'){
                     running = true;
@@ -26,19 +28,23 @@ class BaseTask {
                 return this._doRun(args);
             })
             .then(info => {
-                console.log(`Task ${this.name} finished ok. Info: ${JSON.stringify(info)}`);
-			    return taskStatusDa.setFinishOk(this.name, info);
+			    return taskStatusDa.setFinishOk(this.name, info)
+                    .then(() => {
+                        return info;
+                    });
             })
             .catch(error => {
-                let info = error;
-                if(typeof error == 'Error'){
-                    info = {error: error.message};
-                }
                 if(!running){
-                    console.log(`Task ${this.name} finished with error`, error);
-                    return taskStatusDa.setFinishError(this.name, info);
-                } else{
-                    console.log(`Task ${this.name} is already running...`);
+                    let info = error;
+                    if(typeof error == 'Error'){
+                        info = {error: error.message};
+                    }
+                    return taskStatusDa.setFinishError(this.name, info)
+                        .then(() => {
+                            throw error;
+                        });
+                } else {
+                    return P.reject(new errors.GenericError(`Task ${this.name} is already running...`))
                 }
             })
     }

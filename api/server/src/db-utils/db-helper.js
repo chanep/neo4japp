@@ -10,9 +10,12 @@ const dbVersionSettingName = 'db_version';
 
 const scriptsDir = path.resolve(__dirname, "./scripts");
 
-fs.readdir = P.promisify(fs.readdir);
-fs.readFile = P.promisify(fs.readFile);
-async.eachSeries = P.promisify(async.eachSeries);
+
+let pfs = {
+    readdir: P.promisify(fs.readdir),
+    readFile: P.promisify(fs.readFile)
+};
+let asyncEachSeries = P.promisify(async.eachSeries);
 
 module.exports = {
     applyScripts: applyScripts,
@@ -28,7 +31,7 @@ function closeDb(){
 function deleteLabels(labels){
     if(!Array.isArray(labels))
         labels = [labels];
-    return async.eachSeries(labels, function (label, callback) {           
+    return asyncEachSeries(labels, function (label, callback) {           
         deleteLabel(label)
             .then(() => {
                 callback();
@@ -65,7 +68,7 @@ function applyScripts(partitionSuffix){
     })
     .then(scripts => {
         console.log(scripts.length + ' scripts to apply...');
-        return async.eachSeries(scripts, function (s, callback) {           
+        return asyncEachSeries(scripts, function (s, callback) {           
             runScript(s, dbVersion + 1, partitionSuffix)
                 .then(() => {
                     scriptsApplied++;
@@ -126,7 +129,7 @@ function runCypherArrayTx(cypherArray, dbVersion){
 }
 
 function runCypherArray(cypherArray, tx) {
-    return async.eachSeries(cypherArray, function (c, callback) {
+    return asyncEachSeries(cypherArray, function (c, callback) {
         tx.run(c)
             .then(() => {
                 callback();
@@ -143,7 +146,7 @@ function scriptNumber(filename){
 
 function readScript(filename){
     let scriptPath = path.resolve(scriptsDir, "./" + filename);
-    return fs.readFile(scriptPath, 'utf8');
+    return pfs.readFile(scriptPath, 'utf8');
 }
 
 function setPartition(cypher, partitionSuffix){
@@ -152,7 +155,7 @@ function setPartition(cypher, partitionSuffix){
 
 function getUnappliedScripts(dbVersion){
     dbVersion = dbVersion || 0;
-    return fs.readdir(scriptsDir)
+    return pfs.readdir(scriptsDir)
         .then(scripts => {
             scripts = scripts.filter(s => {
                 return s.endsWith('.cql');

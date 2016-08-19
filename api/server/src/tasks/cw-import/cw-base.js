@@ -1,22 +1,15 @@
 'use strict'
-const errors = require('../shared/errors');
+const errors = require('../../shared/errors');
 const P = require('bluebird');
-const BaseTask = require('./base-task');
+const BaseTask = require('../base-task');
 const request = require('request');
-const config = require('../shared/config').cw;
-
-
-request.get = P.promisify(request.get);
-request.post = P.promisify(request.post);
-request.put = P.promisify(request.put);
-request.del = P.promisify(request.del);
+const config = require('../../shared/config').cw;
 
 class CwBaseTask extends BaseTask{
     constructor(name){
         super(name);
     }
     _login(){
-        console.log("login")
         let reqDefaults = {
             baseUrl: config.apiBase,
             json: true,
@@ -26,7 +19,9 @@ class CwBaseTask extends BaseTask{
         };
 
         let req = request.defaults(reqDefaults);
-        return req.post('session', {body: { 
+        let reqPost = P.promisify(req.post);
+
+        return reqPost('session', {body: { 
                         "username": config.user, 
                         "password": config.pass
             }})
@@ -34,11 +29,13 @@ class CwBaseTask extends BaseTask{
                 let cookie = result.headers['set-cookie'].pop().replace(/.*(id\.api\.cw\.rga\.com=[^;]*).*/, '$1');
                 //console.log("cookie", cookie);  
                 reqDefaults.headers.Cookie = [cookie];           
-                console.log("Logged In CW");
-                return request.defaults(reqDefaults);
+                let reqAux = request.defaults(reqDefaults);
+                return {
+                    get: P.promisify(reqAux.get),
+                    post: P.promisify(reqAux.post)
+                };
             })
             .catch(err =>{
-                console.log("login error", err)
                 throw new errors.GenericError("Error login in CW", err);
             })
     }
