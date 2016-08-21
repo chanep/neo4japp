@@ -1,7 +1,7 @@
 'use strict'
 let config = {
     session_secret: process.env.SESSION_SECRET,
-    apiBaseUrl: 'http://localhost:5002',
+    apiBaseUrl: 'http://localhost:5005/api/',
     ldap: {
         url: "ldap://aang.ny.rga.com",
         bindDn: "CN=LDAP SkillsCloud,OU=Utility Accounts,DC=ny,DC=rga,DC=com",

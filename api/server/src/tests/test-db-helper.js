@@ -3,10 +3,10 @@ const _ = require('lodash');
 const dbHelper = require('../db-utils/db-helper');
 const config = require('../shared/config');
 const roles = require('../models/roles');
-const userDa = new (require('../../data-access/user'));
-const officeDa = new (require('../../data-access/department'));
-const departmentDa = new (require('../../data-access/department'));
-const positionDa = new (require('../../data-access/department'));
+const userDa = new (require('../data-access/user'));
+const officeDa = new (require('../data-access/department'));
+const departmentDa = new (require('../data-access/department'));
+const positionDa = new (require('../data-access/department'));
 
 module.exports = {
     resetDb: resetDb,
@@ -52,15 +52,15 @@ function createUser(values, index){
     let office, department, position, user;
     return upsertOffice()
         .then(o => {
-            office = o;
+            office = o.data;
             return upsertDepartment();
         })
         .then(d => {
-            department = d;
+            department = d.data;
             return upsertPosition();
         })
         .then(p => {
-            position = d;
+            position = p.data;
             return userDa.create(userData);
         })
         .then(u => {
@@ -74,13 +74,12 @@ function createUser(values, index){
             return userDa.setPosition(user.id, position.id)
         })
         .then(() => {
-            return userDa.findOne({id: user.id, includes:["office", "department", "office"]})
+            return userDa.findOne({id: user.id, includes:["office", "department", "position"]})
         });
 }
 
 function upsertOffice(values){
     let officeDefaults = {
-        sourceId:	'5679ad1fd7c7c2aaf75ab508',
         zip:	'C1414DAP',
         country:	'Argentina',
         address:	'Uriarte 1572',
@@ -103,6 +102,6 @@ function upsertDepartment(name = 'Technology'){
 }
 
 function upsertPosition(name = 'Developer'){
-    return positionDa.upsert({name: name});
+    return positionDa.upsert({name: name}, ["name"]);
 }
 

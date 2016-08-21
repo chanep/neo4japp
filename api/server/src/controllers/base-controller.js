@@ -2,17 +2,16 @@
 const config = require('../shared/config');
 const errors = require('../shared/errors');
 
-function isProduction(){
-    process.env.NODE_ENV == 'prod'
-}
+
 
 class BaseController {
     constructor(){
-        //make 'this' be the actual 'this' when instance functions are used as callbacks
-        for(f in this){
-            if(typeof this[f] === 'function')
-                this[f] = this[f].bind(this);
-        }
+    //    for (let name of getAllPropertyNames(this, 1)) {
+    //         let method = this[name];
+    //         // Supposedly you'd like to skip constructor
+    //         if (!(method instanceof Function) || name === 'constructor') continue;
+    //         this[name] = method.bind(this);
+    //     }
     }
 
     _buildSearch(req){
@@ -89,56 +88,75 @@ class BaseController {
     }
 
     _handleError(res, err) {
-        let code;
-        
-        if (err instanceof errors.AuthorizationError) {
-            code = 401;
-        } else if (err instanceof errors.ForbiddenError) {
-            code = 403;
-        } else if (err instanceof errors.NotFoundError) {
-            code = 404;
-        } else if (err instanceof errors.BasGatewayError) {
-            code = 502;
-        }
+        try {
+            let code;
 
-        if (err instanceof errors.ValidationError) {
-            console.log(err);
-            let error = { code: err.code, message: err.message };
-            if (err.data) {
-                error.data = err.data;
+            if (err instanceof errors.AuthorizationError) {
+                code = 401;
+            } else if (err instanceof errors.ForbiddenError) {
+                code = 403;
+            } else if (err instanceof errors.NotFoundError) {
+                code = 404;
+            } else if (err instanceof errors.BasGatewayError) {
+                code = 502;
             }
-            res.status(422).send({
-                status: "error",
-                error: error
-            });
-        } else if (code) {
-            console.log(err);
-            res.status(code).send({
-                status: "error",
-                error: err.message
-            });
-        } else {
-            let trackId = Math.floor((Math.random() * 100000000));
-            let errorFull = errors.toString(err);
-            console.log("trackId: " + trackId + " - ", err);
 
-            var errResp = {
-                status: "error",
-                error: {
-                    trackId: trackId,
-                    message: "server error"
+            if (err instanceof errors.ValidationError) {
+                console.log(err);
+                let error = { code: err.code, message: err.message };
+                if (err.data) {
+                    error.data = err.data;
                 }
+                res.status(422).send({
+                    status: "error",
+                    error: error
+                });
+            } else if (code) {
+                console.log(err);
+                res.status(code).send({
+                    status: "error",
+                    error: err.message
+                });
+            } else {
+                let trackId = Math.floor((Math.random() * 100000000));
+                let errorFull = errors.toString(err);
+                console.log("trackId: " + trackId + " - ", err);
+
+                var errResp = {
+                    status: "error",
+                    error: {
+                        trackId: trackId,
+                        message: "server error"
+                    }
+                }
+
+                if (!config.isProduction) {
+                    errResp.error.devInfo = errorFull;
+                }
+                res.status(500).send(errResp);
+
             }
-
-            if (!isProduction()) {
-                errResp.error.devInfo = errorFull;
-            }
-
-            res.status(500).send(errResp);
-
+        } catch (err) {
+            console.log(err);
+            res.status(500).send({ status: 'error', error: 'server error' });
         }
+
     }
 
 }
 
 module.exports = BaseController;
+
+// function getAllPropertyNames( obj) {
+//     let i = 0;
+//     var props = [];
+//     do {
+//         i++;
+//         Object.getOwnPropertyNames( obj ).forEach(function ( prop ) {
+//             if ( props.indexOf( prop ) === -1 ) {
+//                 props.push( prop );
+//             }
+//         });
+//     } while ( obj = Object.getPrototypeOf( obj ) );
+//     return props;
+// }

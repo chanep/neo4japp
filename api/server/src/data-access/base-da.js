@@ -280,6 +280,10 @@ class BaseDa {
             .catch(err => {throw new errors.GenericError("Error updating " + this.model.name, err)});
     }
     upsert(data, uniqueKeys, mergeKeys){
+        if(!uniqueKeys)
+            return P.reject(new errors.GenericError(`uniqueKeys undefined in upsert`));
+        if(typeof uniqueKeys == 'string')
+            uniqueKeys = [uniqueKeys];
         let query = _.pick(data, uniqueKeys);
         return this.find(query)
             .then(entities => {
@@ -318,6 +322,10 @@ class BaseDa {
         }
     }
     relate(selfId, otherId, relKey, relData, replace){
+        if(!selfId)
+            return P.reject(new errors.GenericError(`BaseDa.relate selfId undefined`));
+        if(!otherId)
+            return P.reject(new errors.GenericError(`BaseDa.relate otherId undefined`));
         return this._validateRelationship(relData, relKey)
             .then(d => {
                 let cypher = this._cypher.relateCmd(selfId, otherId, relKey, d, replace);

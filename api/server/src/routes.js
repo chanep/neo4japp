@@ -1,11 +1,19 @@
+'use strict'
 const express = require('express');
+const router = express.Router();
+const sessionController = new (require('./controllers/session'));
+const security = new (require('./controllers/security'));
 
-const router = express.Router();	// eslint-disable-line new-cap
+router.post('/session/', sessionController.login.bind(sessionController));
+router.delete('/session/', sessionController.logout.bind(sessionController));
 
-/** GET /health-check - Check service health */
-router.post('/session/', (req, res) =>
-  res.send('OK')
-);
+router.use(security.checkLoggedIn.bind(security));
+
+router.get('/test/', security.checkRole('mongorole').bind(security) , (req, res) =>{
+  console.log("headers", req.headers);
+  console.log('req.session.user', req.session.user)
+  res.send('OK');
+});
 
 // mount user routes at /users
 //router.use('/users', userRoutes);

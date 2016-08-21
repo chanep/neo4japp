@@ -32,37 +32,42 @@ module.exports = {
             }
         }
     },
-    loginBatch: function(reqCallback, username, password = 'skill123'){
+    loginBatch: function (reqCallback, username = 'pepetest', password = 'skill123') {
         return {
-            'login' : {
-                topic: function(){
+            'login': {
+                topic: function () {
                     var _this = this;
                     var reqDefaults = {
-                      baseUrl: config.apiBaseUrl, 
-                      json: true,
-                      headers: {
-                        'Content-Type': 'application/json'
-                      }
+                        baseUrl: config.apiBaseUrl,
+                        json: true,
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
                     };
 
                     req = request.defaults(reqDefaults);
 
-                    req.post('/api/session', {body: { 
-                        "username": username, 
-                        "password": password
-                        }}, function(err, res, body){
-                                if(!err){
-                                    _this.callback(null, req)
-                                } else{
-                                    _this.callback(err, null)
-                                }
-                            });
+                    req.post('session', {
+                        body: {
+                            "username": username,
+                            "password": password
+                        }
+                    }, function (err, res, body) {
+                        let cookie = res.headers['set-cookie'].pop().match(/(connect\.sid=.+?);/)[1];
+                        reqDefaults.headers.Cookie = cookie;
+                        req = request.defaults(reqDefaults);
+                        if (!err) {
+                            _this.callback(null, req)
+                        } else {
+                            _this.callback(err, null)
+                        }
+                    });
                 },
-                'login result' : function(err, request){
-                    if(err){
+                'login result': function (err, request) {
+                    if (err) {
                         console.log("error logging in ", err)
                         throw err;
-                    }else{
+                    } else {
                         reqCallback(request);
                     }
                 }
@@ -82,12 +87,12 @@ module.exports = {
                             _this.callback(err, null)
                         });
                 },
-                'create user result' : function(err){
+                'create user result' : function(err, result){
                     if(err){
                         console.log("error creating user ", err)
                         throw err;
                     }else{
-                        callback(request);
+                        callback(result);
                     }
                 }
             }
