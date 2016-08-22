@@ -1,3 +1,4 @@
+'use strict'
 let test = (process.argv[2] == 'test');
 if (test) {
     let path = require('path');
@@ -26,7 +27,7 @@ app.use(session({ secret: config.session_secret, resave: true, saveUninitialized
 // enable CORS - Cross Origin Resource Sharing
 app.use(cors());
 
-app.use('/apidoc', express.static('apidoc'));
+app.use('/apidoc', express.static('../apidoc'));
 
 // mount all routes on /api path
 app.use('/api', routes);
