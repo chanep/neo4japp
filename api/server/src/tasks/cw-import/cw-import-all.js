@@ -8,6 +8,7 @@ const officesImportTask = new (require('./offices-import'));
 const departmentsImportTask = new (require('./departments-import'));
 const positionsImportTask = new (require('./positions-import'));
 const usersImportTask = new (require('./users-import'));
+const allocationsImportTask = new (require('./allocations-import'));
 
 class CwImportAllTask extends CwBaseTask{
     constructor(){
@@ -33,7 +34,11 @@ class CwImportAllTask extends CwBaseTask{
             })
             .then(info => {
                 console.log(`Task ${usersImportTask.name} finished ok. Info: ${JSON.stringify(info)}`);
-                return {message: 'Offices, Departments, Positions and User were imported from CW'};
+                console.log(`Task ${allocationsImportTask.name} started...`);
+                return allocationsImportTask.run();
+            }).then(info => {
+                console.log(`Task ${allocationsImportTask.name} finished ok. Info: ${JSON.stringify(info)}`);
+                return {message: 'Offices, Departments, Positions, User, Allocations were imported from CW'};
             });
     }
 }

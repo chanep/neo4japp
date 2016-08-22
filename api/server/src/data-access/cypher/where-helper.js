@@ -66,7 +66,7 @@ function orOperatorToCypher(key, value, alias, params){
         throw new errors.GenericError("$or operator expects an array");
     let terms = [];
     value.forEach(map => {
-        let term = queryMapToWhere(map, alias, params);
+        let term = queryMapToWhere(null, map, alias, params);
         terms.push(term);
     })
     return '(' + terms.join(' OR ') + ') ';
@@ -77,7 +77,7 @@ function andOperatorToCypher(key, value, alias, params){
         throw new errors.GenericError("$and operator expects an array");
     let terms = [];
     value.forEach(map => {
-        let term = queryMapToWhere(map, alias, params);
+        let term = queryMapToWhere(null, map, alias, params);
         terms.push(term);
     })
     return '(' + terms.join(' AND ') + ') ';
@@ -100,8 +100,7 @@ function inOperatorToCypher(key, value, alias, params){
 function notOperatorToCypher(key, value, alias, params){
     if(!_.isObject(value))
         throw new errors.GenericError("$not operator expects a object");
-    let map = value.$not;
-    return 'NOT(' + queryMapToWhere(map, alias, params) + ')';
+    return 'NOT(' + queryMapToWhere(null, value, alias, params) + ')';
 }
 
 function comparisonOperatorToCypher(operator, key, value, alias, params){
@@ -177,7 +176,7 @@ function ilikeOperatorToCypher(key, value, alias) {
 }
 
 function getOperator(key, value){
-    if(typeof k === 'string' && k[0] == '$')
+    if(typeof key === 'string' && key[0] == '$')
         return key;
     
     if(_.isObject(value) && Object.keys(value).length == 1 && Object.keys(value)[0][0] == '$' )

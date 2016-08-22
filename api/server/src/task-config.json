@@ -50,7 +50,7 @@
 	},
 	{
 		"name" : "allocations-import",
-		"path" : "./tasks/allocations-import",
+		"path" : "./tasks/pl-import/allocations-import",
 		"cronPattern" : null,
 		"args" : {
 		}

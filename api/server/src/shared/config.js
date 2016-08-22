@@ -14,6 +14,9 @@ let config = {
     },
     googlespreadsheet: {
         skills_spreadsheet_key: process.env.GOOGLE_SPREADSHEET_KEY
+    },
+    pl: {
+        apiBase: process.env.PL_API_BASE
     }
 };
 

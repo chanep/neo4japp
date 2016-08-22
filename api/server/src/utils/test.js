@@ -102,9 +102,10 @@ let allocation = {
         totalHours: 100,
     }
 
-userDa.findOne({username: 'estebanc'})
+userDa.findOne({$not: {username: 'estebanc'}})
     .then(u =>{
         console.log("u",u)
+        return u;
        return userDa.setAllocation(u.id, allocation);
     })
     .then(r =>{
