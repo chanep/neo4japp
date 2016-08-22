@@ -99,12 +99,16 @@ header {
     }
   }
 
-  .search-wrapper {
-    background-color: #e7e7e8;
-    height: 50px;
+  .search {
+    background-color: #fff;
     width: 100%;
 
-    &__container {
+    .search__input__wrapper {
+      background-color: #e7e7e8;
+      height: 50px;
+    }
+
+    .search__input {
       max-width: 962px;
       margin: 0 auto;
       height: 100%;
@@ -128,10 +132,12 @@ header {
         span {
           color: #000;
           &.icon-search {
+            cursor: pointer;
             float: right;
           }
 
           &.icon-close {
+            cursor: pointer;
             margin-right: 28px;
           }
         }
