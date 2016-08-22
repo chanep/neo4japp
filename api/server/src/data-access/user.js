@@ -19,6 +19,9 @@ class UserDa extends BaseDa{
     setPosition(id, positionId){
         return this.relate(id, positionId, 'position', null, true);
     }
+    setApprover(id, approverId){
+        return this.relate(id, approverId, 'approver', null, true);
+    }
     setKnowledge(id, skillId, knowledgeData){
         return this.relate(id, skillId, 'knowledges', knowledgeData, true);
     }

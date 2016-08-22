@@ -10,10 +10,21 @@ require('dotenv').config({path: envFile});
 let db = require('../data-access/db');
 const neo4j = require('neo4j-driver').v1;
 
+let m = new Map();
+m.set("key1", "value1")
+m.set("key1", "value2")
+console.log('key1', m.get("key1"));
+// let managersTask = new (require('../tasks/pl-import/managers-import'));
+// managersTask._getUserManagersEmail(45553)
+//     .then(r => {
+//         console.log(JSON.stringify(r))
+//     })
+//     .catch(console.error);
+
 
 ///Login Service
-let LoginService = require('../services/login');
-let login = new LoginService();
+// let LoginService = require('../services/login');
+// let login = new LoginService();
 
 
 // const queryHelper = require('../data-access/query-helper')
