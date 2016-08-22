@@ -62,8 +62,7 @@ class PhonelistIdImportTask extends BaseTask{
         let info = {
             updated: 0,
             skipped: 0,
-            errors: 0,
-            notFound: 0
+            errors: 0
         };
         let totalUsers = 0;
         return asyncDoUntil(callback => {
@@ -79,7 +78,6 @@ class PhonelistIdImportTask extends BaseTask{
             info.updated += partialInfo.updated;
             info.skipped += partialInfo.skipped;
             info.errors += partialInfo.errors;
-            info.notFound += partialInfo.notFound;
             return (skip >= totalUsers);
         })
         .then(() => {
@@ -99,8 +97,7 @@ class PhonelistIdImportTask extends BaseTask{
             updated: 0,
             skipped: 0,
             errors: 0,
-            notFound: 0,
-            total: function(){ return this.updated + this.errors; }
+            total: function(){ return this.updated + this.errors + this.skipped; }
         };
         return asyncMap(users, function (u, callback) {
             try{
@@ -117,22 +114,34 @@ class PhonelistIdImportTask extends BaseTask{
                 info.updated += i.updated;
                 info.skipped += i.skipped;
                 info.errors += i.errors;
-                info.notFound += i.notFound;
             }
             return info;
         });
     }
     _updateUser(user){
-        let info = {updated: 0, skipped: 0, notFound: 0, errors: 0};
+        let info = {updated: 0, skipped: 0, errors: 0};
         let phonelistId = this.usernameIdmap[user.username];
+        let existsInPhonelist = !!phonelistId;
         
         if(phonelistId){
             delete this.usernameIdmap[user.username];
         }
+
+        let mustUpdate = false;
+        let updateData = {id: user.id};
+        if(!existsInPhonelist && !user.disabled){
+            mustUpdate = true;
+            updateData.disabled = true;
+        }
+        if(existsInPhonelist && (phonelistId != user.phonelistId || user.disabled)){
+            mustUpdate = true;
+            updateData.phonelistId = phonelistId;
+            updateData.disabled = false;
+        }
             
-        if(phonelistId && !user.phonelistId){
+        if(mustUpdate){
             let userDa = new UserDa();
-            return userDa.update({id: user.id, phonelistId: phonelistId}, true)
+            return userDa.update(updateData, true)
                 .then(() => {
                     //console.log("updated user " + user.username)
                     info.updated++;
@@ -144,13 +153,7 @@ class PhonelistIdImportTask extends BaseTask{
                     return info;
                 })
         } else{
-            //TODO update user as ex user??
-            if(!phonelistId){
-                info.notFound++;
-                //console.log("username not found " + user.username)
-            } else{
-                info.skipped++;
-            }
+            info.skipped++;
             return P.resolve(info);
         }
     }
@@ -164,7 +167,7 @@ class PhonelistIdImportTask extends BaseTask{
                 return this._findAndUpdateUsers();
             })
             .then(info => {
-                console.log("orphan phonelist users", _.keys(this.usernameIdmap))
+                console.log("orphan phonelist users", JSON.stringify(_.keys(this.usernameIdmap)))
                 console.log("orphan phonelist user count", _.keys(this.usernameIdmap).length)
                 return info;
             });

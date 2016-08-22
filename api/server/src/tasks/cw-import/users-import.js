@@ -57,15 +57,16 @@ class UsersImportTask extends CwBaseTask{
     }
     _importUsers(users) {
         let _this = this;
+        const limit = 10;
         let info = {
             updated: 0,
             created: 0,
             errors: 0,
             total: function(){ return this.updated + this.created + this.errors; }
         };
-        let eachSeries = P.promisify(async.eachSeries);
-        return eachSeries(users, function (e, callback) {
-            _this._importUser(e)
+        let asyncEachLimit = P.promisify(async.eachLimit);
+        return asyncEachLimit(users, limit, function (u, callback) {
+            _this._importUser(u)
                 .then(partialInfo => {
                     info.created += partialInfo.created;
                     info.updated += partialInfo.updated;

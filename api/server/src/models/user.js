@@ -13,10 +13,10 @@ let office = new Model(
         sourceId: Joi.string().required(),
         name: Joi.string().required(),
         description: Joi.string().allow(null),
-        acronym: Joi.string().required(),
-        country: Joi.string().required(),
-        latitude: Joi.number().required(),
-        longitude: Joi.number().required(),
+        acronym: Joi.string().allow(null),
+        country: Joi.string().allow(null),
+        latitude: Joi.number().allow(null),
+        longitude: Joi.number().allow(null),
         address: Joi.string().allow(null),
         phone: Joi.string().allow(null),
         zip: Joi.string().allow(null),
@@ -59,7 +59,8 @@ let user = new Model(
         last: Joi.string().allow(null),
         roles: Joi.array().items(Joi.string()),
         phone: Joi.string().allow(null),
-        image: Joi.string().allow(null)
+        image: Joi.string().allow(null),
+        disabled: Joi.boolean().default(false)
     }
 );
 
