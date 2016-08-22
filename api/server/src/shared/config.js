@@ -1,5 +1,14 @@
 'use strict'
 let config = {
+    session_secret: process.env.SESSION_SECRET,
+    apiBaseUrl: 'http://localhost:5005/api/',
+    ldap: {
+        url: "ldap://aang.ny.rga.com",
+        bindDn: "CN=LDAP SkillsCloud,OU=Utility Accounts,DC=ny,DC=rga,DC=com",
+        bindPassword: "v2egArkU",
+        searchBase: "DC=ny,DC=rga,DC=com",
+        searchFilter: "sAMAccountName={{username}}"
+    },
     db: {
         server: process.env.DB_SERVER,
         user: process.env.DB_USER,
@@ -17,7 +26,8 @@ let config = {
     },
     pl: {
         apiBase: process.env.PL_API_BASE
-    }
+    },
+    isProduction : (process.env.NODE_ENV == 'prod')
 };
 
 module.exports = config;

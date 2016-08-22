@@ -27,15 +27,23 @@ class ValidationError extends GenericError{
     }
 }
 
+class AuthorizationError extends GenericError{
+}
+
 class ForbiddenError extends GenericError{
 }
 
 class NotFoundError extends GenericError{
 }
 
+class BasGatewayError extends GenericError{
+}
+
 module.exports = {
     GenericError: GenericError,
     ValidationError: ValidationError,
     ForbiddenError: ForbiddenError,
-    NotFoundError: NotFoundError
+    NotFoundError: NotFoundError,
+    AuthorizationError: AuthorizationError,
+    BasGatewayError: BasGatewayError
 }

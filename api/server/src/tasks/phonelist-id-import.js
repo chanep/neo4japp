@@ -37,6 +37,7 @@ class PhonelistIdImportTask extends BaseTask{
                 .pipe(fs.createWriteStream(tmpPhonelistFile));
             stream.on('finish', () => {
                 let json = require(tmpPhonelistFile);
+                //resolve(json.employees.slice(0,100));
                 resolve(json.employees);
             });
             stream.on('error', (err) => {
@@ -87,7 +88,8 @@ class PhonelistIdImportTask extends BaseTask{
     }
     _getUsers(skip, limit){
         //TODO to mark ex employees qe should iterate all users, not just users without phonelistId
-        let query = {phonelistId: null, paged: {skip: skip, limit: limit}}; 
+        //let query = {phonelistId: null, paged: {skip: skip, limit: limit}}; 
+        let query = {paged: {skip: skip, limit: limit}};
         let userDa = new UserDa();
         return userDa.find(query);
     }
@@ -123,14 +125,16 @@ class PhonelistIdImportTask extends BaseTask{
     _updateUser(user){
         let info = {updated: 0, skipped: 0, notFound: 0, errors: 0};
         let phonelistId = this.usernameIdmap[user.username];
-        if(phonelistId)
+        
+        if(phonelistId){
             delete this.usernameIdmap[user.username];
-
+        }
+            
         if(phonelistId && !user.phonelistId){
             let userDa = new UserDa();
             return userDa.update({id: user.id, phonelistId: phonelistId}, true)
                 .then(() => {
-                    console.log("updated user " + user.username)
+                    //console.log("updated user " + user.username)
                     info.updated++;
                     return info;
                 })
@@ -143,7 +147,7 @@ class PhonelistIdImportTask extends BaseTask{
             //TODO update user as ex user??
             if(!phonelistId){
                 info.notFound++;
-                console.log("username not found " + user.username)
+                //console.log("username not found " + user.username)
             } else{
                 info.skipped++;
             }
@@ -160,9 +164,8 @@ class PhonelistIdImportTask extends BaseTask{
                 return this._findAndUpdateUsers();
             })
             .then(info => {
-                let orphan = Object.keys(this.usernameIdmap);
-                console.log("orphan phonelist users", orphan)
-                console.log("orphan phonelist user count", orphan.length)
+                console.log("orphan phonelist users", _.keys(this.usernameIdmap))
+                console.log("orphan phonelist user count", _.keys(this.usernameIdmap).length)
                 return info;
             });
     }

@@ -7,6 +7,9 @@ class UserDa extends BaseDa{
     constructor(tx){
         super(model, tx);
     }
+    getByUsername(username){
+        return this.findOne({username: username});
+    }
     setOffice(id, officeId){
         return this.relate(id, officeId, 'office', null, true);
     }
