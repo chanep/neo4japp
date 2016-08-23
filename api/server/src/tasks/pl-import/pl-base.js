@@ -26,10 +26,12 @@ class PlBaseTask extends BaseTask{
 
     	return rp(options).then(data => {
     		var parser = new xml2js.Parser();
-			return parser.parseString(data, function (err, result) {
-				let jsonData = JSON.parse(result['string']._);
-				return jsonData;
+            var resultObj;
+			parser.parseString(data, function (err, result) {
+				resultObj = result['string']._;
 			});
+
+            return JSON.parse(resultObj);
     	});
 		
     }

@@ -60,6 +60,7 @@ class AllocationsImportTask extends PlBaseTask{
             return (skip >= totalUsers);
         })
         .then(() => {
+            console.log("info", info);
             return info;
         });
     }
@@ -81,23 +82,55 @@ class AllocationsImportTask extends PlBaseTask{
 			usersIDs.push(newID);
 		});
 
-        var startWeek = new moment(this._getLastSunday(0));
-        var endWeek = new moment(this._getLastSunday(6));
-        var stDate = startWeek.format("MM-DD-YYYY");
-		var enDate = endWeek.format("MM-DD-YYYY");
-		var postData = querystring.stringify({
-		  employeeId: JSON.stringify(usersIDs),
-		  startDate: stDate,
-		  endDate: enDate
-		});
+        var weeks = [0, 1, 2, 3];
 
-        return _this.callPostWebServices('gateway/json/empAllocations.asmx/getEmployeeAllocations', postData).then(result => {
-            return asyncMap(users, function (u, callback) {
+        var dataAlloc = [];
+
+        async.eachSeries = P.promisify(async.eachSeries);
+        return async.eachSeries(weeks, function iteratee(weekNumber, nextWeek) {
+            var startWeek = new moment(_this._getLastSunday(0 + (7 * weekNumber)));
+            var endWeek = new moment(_this._getLastSunday(6 + (7 * weekNumber)));
+            var stDate = startWeek.format("MM-DD-YYYY");
+            var enDate = endWeek.format("MM-DD-YYYY");
+
+            var postData = querystring.stringify({
+              employeeId: JSON.stringify(usersIDs),
+              startDate: stDate,
+              endDate: enDate
+            });
+
+            return _this.callPostWebServices('gateway/json/empAllocations.asmx/getEmployeeAllocations', postData).then(allocationData => {
+                allocationData.forEach(function(item) {
+                    var userData = dataAlloc.filter(function(findItem) {
+                        return findItem.id == item['UserID'];
+                    });
+
+                    if (userData.length == 0){
+                        var newUser = {
+                            'id': item['UserID'],
+                            'startDate': [stDate],
+                            'weekHours': [item['AllocatedHrs']],
+                            'totalHours': item['AllocatedHrs']
+                        };
+
+                        dataAlloc.push(newUser);
+                    } else {
+                        var currentUser = userData[0];
+                        
+                        currentUser.startDate.push(stDate);
+                        currentUser.weekHours.push(item['AllocatedHrs']);
+                        currentUser.totalHours += item['AllocatedHrs'];
+                    }
+                });
+
+                nextWeek();
+            });
+        }).then(() => {
+            return asyncMap(dataAlloc, function (userData, callback) {
                 try{
-                    _this._updateUser(u)
-                        .then(partialInfo => {
-                            callback(null, partialInfo);
-                        })
+                    _this._updateUser(userData).then(partialInfo => {
+                        callback(null, partialInfo);
+                    });
                 }catch(err){
                     callback(err);
                 }
@@ -109,15 +142,19 @@ class AllocationsImportTask extends PlBaseTask{
                     info.errors += i.errors;
                     info.notFound += i.notFound;
                 }
+
                 return info;
             });
         });
     }
 
-    _updateUser(user){
-        let info = {updated: 0, skipped: 0, notFound: 0, errors: 0};
+    _updateUser(userData){
+        let info = {updated: 1, skipped: 0, notFound: 0, errors: 0};
 
-        return P.resolve(info);
+        var userDa = new UserDa();
+        console.log(userData);
+        return userDa.setAllocation(userData.ID, userData)
+            .then(() => info);
     }
 
     _doRun(){
