@@ -153,8 +153,14 @@ class AllocationsImportTask extends PlBaseTask{
 
         var userDa = new UserDa();
         console.log(userData);
-        return userDa.setAllocation(userData.ID, userData)
+        try{
+            return userDa.setAllocation(userData.ID, userData)
             .then(() => info);
+        } catch(err){
+            console.log("err", err)
+            return P.reject(err);
+        }
+        
     }
 
     _doRun(){
