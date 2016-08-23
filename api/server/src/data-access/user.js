@@ -11,16 +11,19 @@ class UserDa extends BaseDa{
         return this.findOne({username: username});
     }
     setOffice(id, officeId){
-        return this.relate(id, officeId, 'office', null, true);
+        return this.relate(id, officeId, 'office');
     }
     setDepartment(id, departmentId){
-        return this.relate(id, departmentId, 'department', null, true);
+        return this.relate(id, departmentId, 'department');
     }
     setPosition(id, positionId){
-        return this.relate(id, positionId, 'position', null, true);
+        return this.relate(id, positionId, 'position');
     }
-    setApprover(id, approverId){
-        return this.relate(id, approverId, 'approver', null, true);
+    addApprover(id, approverId){
+        return this.relate(id, approverId, 'approvers');
+    }
+    clearApprovers(id){
+        return this.deleteAllRelationships(id, 'approvers');
     }
     setKnowledge(id, skillId, knowledgeData){
         return this.relate(id, skillId, 'knowledges', knowledgeData, true);

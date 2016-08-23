@@ -86,14 +86,17 @@ class ApproversImportTask extends BaseTask{
     }
     _getAndUpdateUserApprovers(user){
         let updated = false;
-        return this._getUserApproversId(user.phonelistId)
+        return userDa.clearApprovers(user.id)
+            .then(() => {
+                return this._getUserApproversId(user.phonelistId);
+            })
             .then(aproversId => {
                 return asyncEach(aproversId, (approverId, callback) => {
                     if(!approverId){
                         this.info.errors++;
                         callback();
                     } else{
-                        userDa.setApprover(user.id, approverId)
+                        userDa.addApprover(user.id, approverId)
                             .then(() => {
                                 updated = true;
                                 callback();

@@ -79,27 +79,29 @@ class CypherHelper {
         let params = {};
         return  {cmd:cmd, params:params};;
     }
-    relateCmd(id, otherId, relKey, relData, replace){
+    relateCmd(id, otherId, relKey, relData, mergeKeys){
         let r = this.model.getRelationByKey(relKey);
-        let relCypher = this._getRelationshipCypher(relKey, 'r', relData);
+        let relCypher = this._getRelationshipCypher(relKey, 'r');
+        let oldRelCypher = this._getRelationshipCypher(relKey, 'oldr');
 
         relData = relData || {};
-        // let relDataStr = this.mapToStr(relData, "relData");
-        // let cmd = `
-        //     MATCH (n:${this.model.labelsStr}),(m)
-        //     WHERE ID(n) = {id} AND ID(m) = {otherId}
-        //     MERGE (n)${dir1}-[r:${r.label} ${relDataStr}]-${dir2}(m)
-        //     RETURN r`;
-        let unique = ''
-        if(replace)
-            unique = 'UNIQUE ';
-        
-        let cmd = `
-            MATCH (n:${this.model.labelsStr}),(m:${r.model.labelsStr})
-            WHERE ID(n) = {id} AND ID(m) = {otherId}
-            CREATE ${unique}(n)${relCypher}(m)
-            SET r = {relData}
-            RETURN r`;
+        let cmd;
+        let operator = mergeKeys? '+=' : '=';
+        if(r.isToOne()){
+            cmd = `MATCH (n:${this.model.labelsStr}) where ID(n) = {id}
+             MATCH (m:${r.model.labelsStr}) where ID(m) = {otherId}
+             OPTIONAL MATCH (n)${oldRelCypher}(o:${r.model.labelsStr}) WHERE ID(m) <> ID(o)
+             MERGE (n)${relCypher}(m)
+             SET r ${operator} {relData}
+             DELETE oldr
+             RETURN r`;
+        } else{
+            cmd = `MATCH (n:${this.model.labelsStr}) where ID(n) = {id}
+             MATCH (m:${r.model.labelsStr}) where ID(m) = {otherId}
+             MERGE (n)${relCypher}(m)
+             SET r ${operator} {relData}
+             RETURN r`;
+        }
         
         let params = {id: neo4j.int(id), otherId: neo4j.int(otherId), relData: relData};
 

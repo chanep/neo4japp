@@ -92,8 +92,8 @@ user.relateWithOne(office, "OF_OFFICE", "office", outgoing, null);
 user.relateWithOne(department, "OF_DEPARTMENT", "department", outgoing, null);
 user.relateWithOne(position, "OF_POSITION", "position", outgoing, null);
 
-user.relateWithOne(user, "APPROVED_BY", "approver", outgoing, null);
-user.relateWithOne(user, "R_MANAGED_BY", "resourceManager", outgoing, null);
+user.relateWithMany(user, "APPROVED_BY", "approvers", outgoing, null);
+user.relateWithMany(user, "R_MANAGED_BY", "resourceManagers", outgoing, null);
 
 user.relateWithOne(allocation, "ALLOCATION", "allocation", outgoing, null);
 allocation.relateWithOne(user, "ALLOCATION", "user", incoming, null);

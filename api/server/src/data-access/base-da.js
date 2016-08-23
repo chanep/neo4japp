@@ -321,14 +321,14 @@ class BaseDa {
             return P.reject(new errors.GenericError("Error deleting all " + this.model.name, err))
         }
     }
-    relate(selfId, otherId, relKey, relData, replace){
+    relate(selfId, otherId, relKey, relData, mergeKeys){
         if(!selfId)
             return P.reject(new errors.GenericError(`BaseDa.relate selfId undefined`));
         if(!otherId)
             return P.reject(new errors.GenericError(`BaseDa.relate otherId undefined`));
         return this._validateRelationship(relData, relKey)
             .then(d => {
-                let cypher = this._cypher.relateCmd(selfId, otherId, relKey, d, replace);
+                let cypher = this._cypher.relateCmd(selfId, otherId, relKey, d, mergeKeys);
                 return this._run(cypher.cmd, cypher.params);
             })
             .then(r => this._cypher.parseResultRaw(r, null))
