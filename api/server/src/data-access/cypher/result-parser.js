@@ -138,15 +138,17 @@ function parseFieldRaw(f, schema){
         return parseNodeField(f, schema);
     } else{
         for(let k in f){
-            if(k == 'id')
+            if(k == 'id'){
                 parsed.id = getInt(f[k]);
-            let v = f[k];
-            if(_.isArray(v)){
-                parsed[k] = v.map(i => parseFieldRaw(v));
-            } else if(_.isObject(v)){
-                parsed[k] = parseFieldRaw(v);
             } else{
-                parsed[k] = v;
+                let v = f[k];
+                if(_.isArray(v)){
+                    parsed[k] = v.map(i => parseFieldRaw(i));
+                } else if(_.isObject(v)){
+                    parsed[k] = parseFieldRaw(v);
+                } else{
+                    parsed[k] = v;
+                }
             }
         }
     }

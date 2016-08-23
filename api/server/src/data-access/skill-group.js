@@ -1,6 +1,7 @@
 'use strict'
 const BaseDa = require('./base-da');
 const model = require('../models/models').skillGroup;
+const skillModel = require('../models/models').skill;
 const neo4j = require('neo4j-driver').v1;
 
 class SkillGroupDa extends BaseDa{
@@ -94,6 +95,17 @@ class SkillGroupDa extends BaseDa{
 			return resultReturn;
     	});
     }
+	
+	/**
+	 * Finds all groups with their children groups and skills
+	 */
+	findAll(){
+		console.log("findall")
+		let cmd = `MATCH (g:${this.labelsStr})<-[:BELONGS_TO]-(cg:${this.labelsStr})<-[:BELONGS_TO]-(s:${skillModel.labelsStr}) ` +
+			`WITH g, {id: ID(cg), name: cg.name, type: cg.type, skills: COLLECT({id: ID(s), name: s.name})} as child ` + 
+			`RETURN {id: ID(g), name: g.name, type: g.type, children: COLLECT(child) }` 
+		return this.query(cmd, {}, null);
+	}
 }
 
 module.exports = SkillGroupDa;

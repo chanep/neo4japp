@@ -1,3 +1,4 @@
+'use strict'
 var path = require('path');
 var envFile = path.resolve(__dirname, "../.test-env");
 require('dotenv').config({path: envFile});
@@ -6,6 +7,7 @@ const config = require('../shared/config');
 const partitionSuffix = config.db.partitionSuffix;
 const testDbHelper = require('./test-db-helper');
 const request = require('request');
+const assert = require('assert'); 
 
 module.exports = {
     resetTestDbBatch: function(){
@@ -32,7 +34,20 @@ module.exports = {
             }
         }
     },
-    loginBatch: function (reqCallback, username = 'pepetest', password = 'skill123') {
+    assertSuccess : function(){
+        return function(err, res, body){
+            assert.equal(res.statusCode, '200')
+            assert.equal(body.status, 'success');
+        }
+    }, 
+    assertHTTPCode: function(code){
+        return function(err, res, body){
+            assert.equal(res.statusCode, code)
+        }
+    },
+    loginBatch: function (reqCallback, username, password) {
+        username = username || 'pepetest';
+        password = password || 'skill123';
         return {
             'login': {
                 topic: function () {
@@ -45,7 +60,7 @@ module.exports = {
                         }
                     };
 
-                    req = request.defaults(reqDefaults);
+                    let req = request.defaults(reqDefaults);
 
                     req.post('session', {
                         body: {
@@ -90,6 +105,30 @@ module.exports = {
                 'create user result' : function(err, result){
                     if(err){
                         console.log("error creating user ", err)
+                        throw err;
+                    }else{
+                        callback(result);
+                    }
+                }
+            }
+        }
+    },
+    createSkillGroupsBatch: function(callback){
+        return {
+            'create skill groups' : {
+                topic: function(){
+                    var _this = this;
+                    testDbHelper.createSkillGroups()
+                        .then(function(groups){
+                            _this.callback(null, groups)
+                        })
+                        .catch(function(err){
+                            _this.callback(err, null)
+                        });
+                },
+                'result' : function(err, result){
+                    if(err){
+                        console.log("error creating skill groups ", err)
                         throw err;
                     }else{
                         callback(result);
