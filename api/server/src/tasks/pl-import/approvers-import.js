@@ -147,6 +147,10 @@ class ApproversImportTask extends BaseTask{
 
         return this._findAndUpdateAllUsers()
             .then(() => {
+                return userDa.updateApproverRole();;
+            })
+            .then(count => {
+                console.log(count + ' have modified their approver role');
                 console.log('Not found approvers', this.notFoundApprovers);
                 return this.info;
             });

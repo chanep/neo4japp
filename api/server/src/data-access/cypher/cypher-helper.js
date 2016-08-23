@@ -118,13 +118,13 @@ class CypherHelper {
         let params = {otherId: neo4j.int(otherId), data: this.convertToNative(data, this.model.schema), relData: this.convertToNative(relData, r.schema)};
         return  {cmd:cmd, params:params};;
     }
-    deleteAllRelationshipsCmd(){
+    deleteAllRelationshipsCmd(id, relKey){
         let relCypher = this._getRelationshipCypher(relKey, 'r');
         let cmd = `
-                MATCH (n:${this.model.labelsStr})${relCypher}()
+                MATCH (n:${this.model.labelsStr})${relCypher}() WHERE ID(n) = {id}
                 DELETE r
                 RETURN count(n) as affected`;
-        let params = {};
+        let params = {id: neo4j.int(id)};
         return  {cmd:cmd, params:params};;
     }
     setChildCmd(selfId, relKey, childData){
