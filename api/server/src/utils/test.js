@@ -10,10 +10,7 @@ require('dotenv').config({path: envFile});
 let db = require('../data-access/db');
 const neo4j = require('neo4j-driver').v1;
 
-let m = new Map();
-m.set("key1", "value1")
-m.set("key1", "value2")
-console.log('key1', m.get("key1"));
+
 // let managersTask = new (require('../tasks/pl-import/managers-import'));
 // managersTask._getUserManagersEmail(45553)
 //     .then(r => {
@@ -46,89 +43,26 @@ console.log('key1', m.get("key1"));
 //     .catch(console.error);
 
 
-// let query = {
-//     id: 4,
-//     a: 'hola',
-//     b: {$in:[5,6]},
-//     c: new Date(),
-//     includes: [{key: "knowledges", relQuery: {level: 5}, includes: ["group"]}]
-// };
 
 
-// let query = {
-//     id: 4,
-//     username: 'estebanc',
-//     emaqil: {$like: '%.com'},
-//     knowledges: {$relExists: false},
-//     c: new Date(),
-//     includes: [{key: "office", query: {acronym: "BA"}}]
-// };
+const UserDa = require('../data-access/user');
+let userDa = new UserDa();
 
+let allocation = {
+        startDate: ['week1', 'week2', 'week3', 'week4'],
+        weekHours: [10, 20, 30, 40],
+        totalHours: 100,
+    }
 
-// let model = require("../data-access/models").user;
-
-// const cypherHelper = new CypherHelper(model);
-
-// let cmd = cypherHelper.findCmd(query)[0];
-
-// console.log(cmd)
-
-// let [a, b] = ["hola, chau"];
-// console.log("a", a)
-// console.log("b", b)
-
-//let cmd = `match (n:Skill) optional match (n)-[r:BELONGS_TO]->(m) return {identity: id(n), name: n.name, group: m}`;
-// let cmd = `match (n:SkillGroup)
-//             optional match (n)<-[r:BELONGS_TO]-(m)
-//             return {identity: id(n), name: n.name, skills: collect(m)}`;
-// let session = db.session();
-
-// session.run(cmd)
-//     .then(r =>{
-//         console.log("result", JSON.stringify(r));
-//         session.close();
-//         db.close();
-//     })
-//     .catch(console.error);
-
-
-// let include = {
-//                 key : "knowledges",
-//                 includes : ["group"]
-//             }
-// const userModel = require('../data-access/models').user;
-// const CypherHelper = require('../data-access/cypher-helper');
-// let cypher = new CypherHelper(userModel);
-
-// let parsed = cypher.parseIncludes([include], userModel, 'n');
-// console.log("parsed", JSON.stringify(parsed))
-
-
-// const UserDa = require('../data-access/user');
-// let userDa = new UserDa();
-// // let u = {
-// //     username: 'estebanc',
-// //     fullname: 'Esteban Canepa',
-// //     email: 'esteban.canepa@rga.com',
-// //     type: 'UserEmployee'
-// // };
-
-// let allocation = {
-//         startDate: new Date(),
-//         weekHours: [10, 20, 30, 40],
-//         totalHours: 100,
-//     }
-
-// userDa.findOne({$not: {username: 'estebanc'}})
-//     .then(u =>{
-//         console.log("u",u)
-//         return u;
-//        return userDa.setAllocation(u.id, allocation);
-//     })
-//     .then(r =>{
-//         console.log("result", JSON.stringify(r));
-//     })
-//     .catch(console.error);
+userDa.findOne({username: 'estebanc'})
+    .then(u =>{
+        console.log("u",u)
+       return userDa.setAllocation(323983457, allocation);
+    })
+    .then(r =>{
+        console.log("result", JSON.stringify(r));
+    })
+    .catch(console.error);
 // userDa.create(u)
 // .then(r =>{
 //         console.log("result", JSON.stringify(r));
