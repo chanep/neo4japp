@@ -57,7 +57,7 @@ let user = new Model(
         fullname: Joi.string().required(),
         first: Joi.string().allow(null),
         last: Joi.string().allow(null),
-        roles: Joi.array().items(Joi.string()).default([]),
+        roles: Joi.array().default([]).items(Joi.string()),
         phone: Joi.string().allow(null),
         image: Joi.string().allow(null),
         disabled: Joi.boolean().default(false)
@@ -68,7 +68,7 @@ let knowledgeSchema = {
         id: Joi.number(),
         level: Joi.number().allow(null),
         want: Joi.boolean().default(false),
-        approved: Joi.boolean().default(false),
+        approved: Joi.boolean().default(false).allow(null),
         approverId: Joi.number().allow(null),
         approverFullname: Joi.string().allow(null)
     };

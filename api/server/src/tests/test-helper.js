@@ -45,9 +45,9 @@ module.exports = {
             assert.equal(res.statusCode, code)
         }
     },
-    loginBatch: function (reqCallback, username, password) {
-        username = username || 'pepetest';
-        password = password || 'skill123';
+    loginBatch: function (reqCallback, usernameFunction, passwordFunction) {
+        usernameFunction = usernameFunction || (() => 'pepetest');
+        passwordFunction = passwordFunction || (() => 'skill123');
         return {
             'login': {
                 topic: function () {
@@ -62,6 +62,8 @@ module.exports = {
 
                     let req = request.defaults(reqDefaults);
 
+                    let username = usernameFunction();
+                    let password = passwordFunction();
                     req.post('session', {
                         body: {
                             "username": username,
@@ -136,5 +138,29 @@ module.exports = {
                 }
             }
         }
-    }
+    },    
+    createBasicDataBatch: function(callback){
+        return {
+            'create basic data' : {
+                topic: function(){
+                    var _this = this;
+                    testDbHelper.createBasicData()
+                        .then(function(data){
+                            _this.callback(null, data)
+                        })
+                        .catch(function(err){
+                            _this.callback(err, null)
+                        });
+                },
+                'create basic data result' : function(err, result){
+                    if(err){
+                        console.log("error creating basic data ", err)
+                        throw err;
+                    }else{
+                        callback(result);
+                    }
+                }
+            }
+        }
+    },
 };

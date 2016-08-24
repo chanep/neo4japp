@@ -10,6 +10,11 @@ require('dotenv').config({path: envFile});
 let db = require('../data-access/db');
 const neo4j = require('neo4j-driver').v1;
 
+// const Joi = require('joi');
+// let schema = {key: Joi.array().items(Joi.string()).default([])};
+// let data = {key: [null]};
+// var result = Joi.validate(data, schema);
+// console.log(result)
 
 // let managersTask = new (require('../tasks/pl-import/managers-import'));
 // managersTask._getUserManagersEmail(45553)

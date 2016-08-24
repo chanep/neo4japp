@@ -7,7 +7,6 @@ const testHelper = require('../test-helper');
 let req = null;
 let user = null;
 let sgs = null;
-let skills = 
 
 
 vows.describe('Skill api test')

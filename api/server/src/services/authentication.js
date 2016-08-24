@@ -39,7 +39,7 @@ class LoginService {
         return p
             .then(result => {
                 let userDa = new UserDa();
-                return userDa.getByUsername(username);
+                return userDa.findByUsername(username);
             })
             .catch(err => {
                 if (err.name && err.name == 'InvalidCredentialsError')

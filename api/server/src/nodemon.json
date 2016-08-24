@@ -1,0 +1,4 @@
+{
+  "verbose": true,
+  "ignore": ["tests/*", "utils/*", "db-utils/*"]
+}
