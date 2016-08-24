@@ -206,7 +206,7 @@ function createSkillGroups(){
  *  approver: {}, //user aprrover
  *  resourceManager: {}, //user resource Manager
  *  employee: {}, // user employee
- *  users: []
+ *  employees: [] // all user employee
  *  office: {},
  *  offices: [],
  *  skillGroups: [] //contain children groups and children groups contain skills
@@ -228,26 +228,33 @@ function createBasicData(){
         })
         .then(u => {
             data.admin = u;
-            data.users = [u];
             return createUser({roles: [roles.approver]}, 2);
         })
         .then(u => {
             data.approver = u;
-            data.users.push(u);
             return createUser({roles: [roles.resourceManager]}, 3);
         })
         .then(u => {
             data.resourceManager = u;
-            data.users.push(u);
             return createUser({roles: []}, 4);
         })
         .then(u => {
             data.employee = u;
-            data.users.push(u);
+            data.employees = [u];          
             return userDa.addApprover(data.employee.id, data.approver.id);
         })
         .then(() => {
             return userDa.addResourceManager(data.employee.id, data.resourceManager.id);
+        })
+        .then(() => {
+            return createUser({roles: []}, 5);
+        })
+        .then(u => {
+            data.employees.push(u);
+            return userDa.addApprover(data.employees[1].id, data.approver.id);
+        })
+        .then(() => {
+            return userDa.addResourceManager(data.employees[1].id, data.resourceManager.id);
         })
         .then(() => {
             return createSkillGroups();

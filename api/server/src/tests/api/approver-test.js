@@ -3,46 +3,66 @@ const _ = require('lodash');
 const vows = require('vows');
 const assert = require('assert'); 
 const testHelper = require('../test-helper'); 
+const approverDa = new (require('../../data-access/approver'));
 
 let req = null;
 let data = null;
 
-let skills = [];
 let ks = [
     {level: 3, want: false},
-    {level: null, want: true}
+    {level: null, want: true},
+    {level: null, want: true},
+
+    {level: 3, want: false},
+    {level: 4, want: false}
 ];
 
+let e;
 
-vows.describe('User api test')
+
+vows.describe('Approver api test')
 
 .addBatch(testHelper.resetTestDbBatch())
 .addBatch(testHelper.createBasicDataBatch(d => data = d))
 
-.addBatch(testHelper.loginBatch(r => req = r, () => data.employee.username))
 .addBatch({
-    '1. Set a knowledge': {
+    '1. Set some employees knowledges': {
         topic: function () {
-            let skill0 = data.skills[0];
-            ks[0].skill = skill0;
-            skills.push(skill0);
-            req.put('user/knowledge', 
-                {body: {skillId: skill0.id, level: ks[0].level, want: ks[0].want}},
-                this.callback);
+            let s = data.skills;
+            e = data.employees;
+            approverDa.setKnowledge(e[0].id, s[0], ks[0].level, ks[0].want)
+                .then(k => {
+                    ks[0].id = k.id;
+                    return approverDa.setKnowledge(e[0].id, s[1], ks[1].level, ks[1].want)
+                })
+                .then(k => {
+                    ks[1].id = k.id;
+                    return approverDa.setKnowledge(e[0].id, s[2], ks[2].level, ks[2].want)
+                })
+                .then(k => {
+                    ks[2].id = k.id;
+                    return approverDa.setKnowledge(e[1].id, s[3], ks[3].level, ks[3].want)
+                })
+                .then(k => {
+                    ks[3].id = k.id;
+                    return approverDa.setKnowledge(e[1].id, s[4], ks[4].level, ks[4].want)
+                })
+                .then(k => {
+                    ks[4].id = k.id;
+                    this.callback();
+                })
+                .catch(err => this.callback(err))
         },
-        'response is 200': testHelper.assertSuccess(),
-        'should return knowledge ': function (err, result, body) {
+        'should create knowledge ': function (err, result, body) {
             if (err) {
                 console.log("error", err);
                 throw err;
             }
-            let k = body.data;
-            assert.isNumber(k.id);
-            assert.equal(k.level, ks[0].level)
-            assert.equal(k.want, ks[0].want)
         }
     }
 })
+
+.addBatch(testHelper.loginBatch(r => req = r, () => data.approver.username))
 
 .addBatch({
     '2. Set an other knowledge': {

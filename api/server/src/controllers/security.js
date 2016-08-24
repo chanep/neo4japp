@@ -1,4 +1,5 @@
 'use strict'
+const _ = require('lodash');
 const P = require('bluebird');
 const config = require('../shared/config');
 const errors = require('../shared/errors');
@@ -14,10 +15,14 @@ class SecurityController extends BaseController{
             next()
         }
     }
-    checkRole(role){
+    checkRole(roles){
         return (req, res, next) => {
-            if(req.session.user.roles.indexOf(role) < 0){
-                let err = new errors.ForbiddenError('User must be member of ' + role);
+            if(typeof roles === 'string'){
+                roles = [roles];
+            }
+            let matches = _.intersection(req.session.user.roles, roles);
+            if(matches.length == 0){
+                let err = new errors.ForbiddenError('User must be member of ' + roles.join(' or '));
                 this._handleError(res, err);
             } else{
                 next()

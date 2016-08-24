@@ -1,10 +1,12 @@
 'use strict'
 const express = require('express');
 const router = express.Router();
+const roles = new (require('../models/roles'));
 const sessionController = new (require('./controllers/session'));
 const security = new (require('./controllers/security'));
 const skillController = new (require('./controllers/skill'));
 const userController = new (require('./controllers/user'));
+const approverController = new (require('./controllers/approver'));
 
 router.post('/session/', sessionController.login.bind(sessionController));
 router.delete('/session/', sessionController.logout.bind(sessionController));
@@ -16,6 +18,9 @@ router.get('/skill/all-groups', skillController.findAllGroups.bind(skillControll
 
 router.get('/user/details', userController.details.bind(userController));
 router.put('/user/knowledge', userController.setKnowledge.bind(userController));
+
+
+router.use('/approver', security.checkRole(roles.approver).bind(security));
 
 
 module.exports = router;
