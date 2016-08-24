@@ -90,10 +90,10 @@ class ApproversImportTask extends BaseTask{
             .then(() => {
                 return this._getUserApproversId(user.phonelistId);
             })
-            .then(aproversId => {
-                return asyncEach(aproversId, (approverId, callback) => {
+            .then(approversId => {
+                return asyncEach(approversId, (approverId, callback) => {
                     if(!approverId){
-                        this.info.errors++;
+                        //this.info.errors++;
                         callback();
                     } else{
                         userDa.addApprover(user.id, approverId)
@@ -118,7 +118,7 @@ class ApproversImportTask extends BaseTask{
             })
     }
     _findAndUpdateAllUsers() {
-        const limit = 10;
+        const limit = 20;
         let skip = 0;
         let totalUsers = 0;
 
@@ -140,7 +140,7 @@ class ApproversImportTask extends BaseTask{
         });
     }
     _doRun(){
-        this.info = {updated: 0, errors: 0};
+        this.info = {updated: 0, errors: 0, approversNotFound: 0};
         this.phonelistIdToEmail = new Map();
         this.emailToUserId = new Map();
         this.notFoundApprovers = new Set();
@@ -152,6 +152,7 @@ class ApproversImportTask extends BaseTask{
             .then(count => {
                 console.log(count + ' have modified their approver role');
                 console.log('Not found approvers', this.notFoundApprovers);
+                this.info.approversNotFound = this.notFoundApprovers.size;
                 return this.info;
             });
     }

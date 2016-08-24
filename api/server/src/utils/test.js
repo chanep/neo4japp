@@ -48,22 +48,28 @@ const neo4j = require('neo4j-driver').v1;
 const UserDa = require('../data-access/user');
 let userDa = new UserDa();
 
-let allocation = {
-        startDate: ['week1', 'week2', 'week3', 'week4'],
-        weekHours: [10, 20, 30, 40],
-        totalHours: 100,
-    }
-
-userDa.findOne({username: 'estebanc'})
-    .then(u =>{
-        console.log("u",u)
-       return userDa.setAllocation(323983457, allocation);
-    })
-    .then(r =>{
+userDa.updateApproverRole()
+.then(r =>{
         console.log("result", JSON.stringify(r));
     })
     .catch(console.error);
-// userDa.create(u)
+
+// let allocation = {
+//         startDate: ['week1', 'week2', 'week3', 'week4'],
+//         weekHours: [10, 20, 30, 40],
+//         totalHours: 100,
+//     }
+
+// userDa.findOne({username: 'estebanc'})
+//     .then(u =>{
+//         console.log("u",u)
+//        return userDa.setAllocation(323983457, allocation);
+//     })
+//     .then(r =>{
+//         console.log("result", JSON.stringify(r));
+//     })
+//     .catch(console.error);
+// // userDa.create(u)
 // .then(r =>{
 //         console.log("result", JSON.stringify(r));
 //     })

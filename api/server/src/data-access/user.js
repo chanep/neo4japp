@@ -36,7 +36,7 @@ class UserDa extends BaseDa{
         let role = roles.approver;
         let cmd1 = `MATCH (a:${label})<-[:${rel}]-(:${label}) WHERE (a.roles IS NULL) OR NONE(role IN a.roles WHERE role = {role})
                 WITH DISTINCT a
-                SET a.roles = a.roles + {role}
+                SET a.roles = CASE WHEN (a.roles IS NULL) then [{role}] ELSE a.roles + {role} END
                 return count(a)`;
         let cmd2 = `MATCH (a:${label}) WHERE NOT( (a)<-[:${rel}]-(:${label}) ) AND ANY(role IN a.roles WHERE role = {role})
                 WITH DISTINCT a
