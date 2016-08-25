@@ -107,6 +107,38 @@ class CypherHelper {
 
         return  {cmd:cmd, params:params};;
     }
+    updateRelationshipCmd(relId, relKey, relData, mergeKeys){
+        let r = this.model.getRelationByKey(relKey);
+        let relCypher = this._getRelationshipCypher(relKey, 'r');
+
+        relData = relData || {};
+        let operator = mergeKeys? '+=' : '=';
+        let cmd = `MATCH ()${relCypher}() where ID(r) = {relId}
+             SET r ${operator} {relData}
+             RETURN r`;
+
+        let params = {relId: neo4j.int(relId), relData: relData};
+
+        return  {cmd:cmd, params:params};;
+    }
+    relationshipExistsCmd(selfId, relKey, otherId){
+        let r = this.model.getRelationByKey(relKey);
+        let label = this.model.labelsStr;
+        let relCypher = this._getRelationshipCypher(relKey, 'r');
+
+        let params = {id: neo4j.int(selfId)};
+        let condition = ''
+        if(otherId){
+            params.otherId = neo4j.int(otherId)
+            condition = 'and id(m) = {otherId}'
+        }
+
+        let cmd = `match (n:${label})${relCypher}(m) 
+            where id(n) = {id} ${condition}
+            return (count(n) <> 0)`;
+
+        return  {cmd:cmd, params:params};;
+    }
     createAndRelateCmd(data, otherId, relKey, relData){
         let r = this.model.getRelationByKey(relKey);
         let relCypher = this._getRelationshipCypher(relKey, 'r', relData);

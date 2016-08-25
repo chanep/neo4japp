@@ -1,13 +1,15 @@
 'use strict'
+const P = require('bluebird');
 const neo4j = require('neo4j-driver').v1;
 const roles = require('../models/roles');
 const UserDa = require('./user');
+const errors = require('../shared/errors');
 const skillModel = require('../models/models').skill;
 const skillGroupModel = require('../models/models').skillGroup;
 
 class ApproverDa extends UserDa{
 
-    findMyTeamUsers(id, onlyPendingApproval, includeWantSkills){
+    findMyTeamUsers(approverId, onlyPendingApproval, includeWantSkills){
         let label = this.labelsStr;
         let officeRelL = this.model.getRelationByKey("office").label;
         let departmentRelL = this.model.getRelationByKey("department").label;
@@ -50,13 +52,58 @@ class ApproverDa extends UserDa{
                         skillGroups: skillGroups,
                         totalPendingApproval: totalPendingApproval
             } order by totalPendingApproval DESC`
-        let params = {id: neo4j.int(id)};
-        return this._run(cmd, params)
-            .then(r => this._cypher.parseResultArrayRaw(r))
+        let params = {id: neo4j.int(approverId)};
+        return this.query(cmd, params);
 
     }
-    approveKnowledge(id, knowledgeId){
 
+    /**
+     * Returns true if the user is the approver of the employee
+     * @param {number} userId
+     * @param {number} employeeId
+     */
+    isApproverOf(userId, employeeId){
+        return this.relationshipExists(employeeId, "approvers", userId);
+    }
+     /**
+     * Returns true if the user is one of possible the approvers of a knowledge 
+     * @param {number} userId
+     * @param {number} knowledgeId
+     */
+    isApproverOfKnowledge(userId, knowledgeId){
+        if(!userId)
+            return P.reject(new errors.GenericError(`ApproverDa.isApproverOfKnowledge userId undefined`));
+        if(!knowledgeId)
+            return P.reject(new errors.GenericError(`ApproverDa.isApproverOfKnowledge knowledgeId undefined`));
+        let label = this.labelsStr;
+        let knowledgeRelL = this.model.getRelationByKey("knowledges").label;
+        let approverRelL = this.model.getRelationByKey("approvers").label;
+
+        let cmd = `match (n:${label})<-[:${approverRelL}]-(:${label})-[k:${knowledgeRelL}]->()
+            where id(n) = {userId} and id(k) = {knowledgeId}
+            return (count(n) <> 0)`;
+        let params = {userId: neo4j.int(userId), knowledgeId: neo4j.int(knowledgeId)};
+        return this.query(cmd, params);
+    }
+    /**
+     * An Approver (manager) approves (verify) a employee's skill knowledge 
+     * @param {number} approverId
+     * @param {number} knowledgeId
+     * @param {boolean} disapproved - True for delete approval
+     * @returns knowledge data
+     */
+    approveKnowledge(approverId, knowledgeId, disapprove){
+        return this.findById(approverId)
+            .then(approver => {
+                if(!approver)
+                    throw new errors.GenericError("Error approving knowledge. User not found, id: " + approverId);
+                let kData = {
+                    approverId: approverId,
+                    approverFullname: approver.fullname,
+                    approved: !disapprove
+                }
+                return this.updateRelationship(knowledgeId, "knowledges", kData, true);
+            })
     }
 }
 

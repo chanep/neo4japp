@@ -23,6 +23,7 @@ router.put('/user/knowledge', userController.setKnowledge.bind(userController));
 router.use('/approver', security.checkRole(roles.approver).bind(security));
 
 router.get('/approver/my-team', approverController.findMyTeamUsers.bind(approverController));
+router.put('/approver/approve', approverController.approveKnowledge.bind(approverController));
 
 
 module.exports = router;

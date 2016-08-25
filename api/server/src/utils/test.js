@@ -2,7 +2,7 @@
 const _ = require('lodash');
 let path = require('path');
 //let envFile = path.resolve(__dirname, "../.env");
-let envFile = path.resolve(__dirname, "../.env");
+let envFile = path.resolve(__dirname, "../.test-env");
 let errors = require('../shared/errors');
 
 require('dotenv').config({path: envFile});
@@ -50,10 +50,11 @@ const neo4j = require('neo4j-driver').v1;
 
 
 
-const UserDa = require('../data-access/user');
-let userDa = new UserDa();
+const Da = require('../data-access/approver');
+let da = new Da();
 
-userDa.updateApproverRole()
+//da.isApproverOf(4840, 4837)
+da.isApproverOf(4837, 4840)
 .then(r =>{
         console.log("result", JSON.stringify(r));
     })
