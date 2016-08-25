@@ -1,7 +1,7 @@
 'use strict'
 const express = require('express');
 const router = express.Router();
-const roles = new (require('../models/roles'));
+const roles = require('./models/roles');
 const sessionController = new (require('./controllers/session'));
 const security = new (require('./controllers/security'));
 const skillController = new (require('./controllers/skill'));
@@ -21,6 +21,8 @@ router.put('/user/knowledge', userController.setKnowledge.bind(userController));
 
 
 router.use('/approver', security.checkRole(roles.approver).bind(security));
+
+router.get('/approver/my-team', approverController.findMyTeamUsers.bind(approverController));
 
 
 module.exports = router;

@@ -26,29 +26,21 @@ vows.describe('Approver api test')
 .addBatch(testHelper.createBasicDataBatch(d => data = d))
 
 .addBatch({
-    '1. Set some employees knowledges': {
+    '1. Set one employee knowledges': {
         topic: function () {
             let s = data.skills;
             e = data.employees;
-            approverDa.setKnowledge(e[0].id, s[0], ks[0].level, ks[0].want)
+            approverDa.setKnowledge(e[0].id, s[0].id, ks[0].level, ks[0].want)
                 .then(k => {
                     ks[0].id = k.id;
-                    return approverDa.setKnowledge(e[0].id, s[1], ks[1].level, ks[1].want)
+                    return approverDa.setKnowledge(e[0].id, s[1].id, ks[1].level, ks[1].want)
                 })
                 .then(k => {
                     ks[1].id = k.id;
-                    return approverDa.setKnowledge(e[0].id, s[2], ks[2].level, ks[2].want)
+                    return approverDa.setKnowledge(e[0].id, s[2].id, ks[2].level, ks[2].want)
                 })
                 .then(k => {
                     ks[2].id = k.id;
-                    return approverDa.setKnowledge(e[1].id, s[3], ks[3].level, ks[3].want)
-                })
-                .then(k => {
-                    ks[3].id = k.id;
-                    return approverDa.setKnowledge(e[1].id, s[4], ks[4].level, ks[4].want)
-                })
-                .then(k => {
-                    ks[4].id = k.id;
                     this.callback();
                 })
                 .catch(err => this.callback(err))
@@ -65,33 +57,9 @@ vows.describe('Approver api test')
 .addBatch(testHelper.loginBatch(r => req = r, () => data.approver.username))
 
 .addBatch({
-    '2. Set an other knowledge': {
+    '2. Get approver team': {
         topic: function () {
-            let skill1 = data.skills[data.skills.length - 1];
-            ks[1].skill = skill1;
-            skills.push(skill1);
-            req.put('user/knowledge', 
-                {body: {skillId: skill1.id, level: ks[1].level, want: ks[1].want}},
-                this.callback);
-        },
-        'response is 200': testHelper.assertSuccess(),
-        'should return knowledge ': function (err, result, body) {
-            if (err) {
-                console.log("error", err);
-                throw err;
-            }
-            let k = body.data;
-            assert.isNumber(k.id);
-            assert.equal(k.level, ks[1].level)
-            assert.equal(k.want, ks[1].want)
-        }
-    }
-})
-
-.addBatch({
-    '3. Get user details': {
-        topic: function () {
-            req.get('user/details', 
+            req.get('approver/my-team?onlyPendingApproval=true', 
                 this.callback);
         },
         'response is 200': testHelper.assertSuccess(),
@@ -100,46 +68,95 @@ vows.describe('Approver api test')
                 console.log("error", err);
                 throw err;
             }
-            let u = body.data;
-            let e = data.employee;
-
-            assert.isObject(u);
-            assert.equal(u.id, e.id);
-            assert.equal(u.username, e.username);
-            assert.equal(u.type, e.type);
-            assert.equal(u.email, e.email);
-            assert.equal(u.fullname, e.fullname);
-            assert.equal(u.phone, e.phone);
-
-            assert.isObject(u.office);
-            assert.equal(u.office.name, e.office.name);
-            assert.isObject(u.department);
-            assert.equal(u.department.name, e.department.name);
-            assert.isObject(u.position);
-            assert.equal(u.position.name, e.position.name);
-
-            assert.isArray(u.skillGroups);
-            assert.equal(u.skillGroups.length, 2);
-
-            let sk0 = findSkill(skills[0].id, u.skillGroups);
-
-            assert.isObject(sk0);
-            assert.equal(sk0.name, skills[0].name);
-            assert.isObject(sk0.knowledge);
-            assert.equal(sk0.knowledge.level, ks[0].level);
-            assert.equal(sk0.knowledge.want, ks[0].want);
-
-            let sk1 = findSkill(skills[1].id, u.skillGroups);
-            assert.isObject(sk1);
-            assert.equal(sk1.name, skills[1].name);
-            assert.isObject(sk1.knowledge);
-            assert.equal(sk1.knowledge.level, ks[1].level);
-            assert.equal(sk1.knowledge.want, ks[1].want);
-
+            let employees = body.data;
+            assert.equal(employees.length, 1)
+            assertTeamMembers(employees, true, false);
         }
     }
 })
 
+.addBatch({
+    '3. Get approver team': {
+        topic: function () {
+            req.get('approver/my-team?onlyPendingApproval=false&mongo=3', 
+                this.callback);
+        },
+        'response is 200': testHelper.assertSuccess(),
+        'should return user details including knowledges ': function (err, result, body) {
+            if (err) {
+                console.log("error", err);
+                throw err;
+            }
+            let employees = body.data;
+            assert.equal(employees.length, 2)
+            assertTeamMembers(employees, false, false);
+        }
+    }
+})
+
+// .addBatch({
+//     '4. Set other employee knowledges': {
+//         topic: function () {
+//             let s = data.skills;
+//             approverDa.setKnowledge(e[1].id, s[3].id, ks[3].level, ks[3].want)
+//                 .then(k => {
+//                     ks[3].id = k.id;
+//                     return approverDa.setKnowledge(e[1].id, s[4].id, ks[4].level, ks[4].want)
+//                 })
+//                 .then(k => {
+//                     ks[4].id = k.id;
+//                     this.callback();
+//                 })
+//                 .catch(err => this.callback(err))
+//         },
+//         'should create knowledge ': function (err, result, body) {
+//             if (err) {
+//                 console.log("error", err);
+//                 throw err;
+//             }
+//         }
+//     }
+// })
+
+// .addBatch({
+//     '5. Get approver team': {
+//         topic: function () {
+//             req.get('approver/my-team?onlyPendingApproval=true', 
+//                 this.callback);
+//         },
+//         'response is 200': testHelper.assertSuccess(),
+//         'should return user details including knowledges ': function (err, result, body) {
+//             if (err) {
+//                 console.log("error", err);
+//                 throw err;
+//             }
+//             let employees = body.data;
+//             assert.equal(employees.length, 2)
+//             assertTeamMembers(employees, true, false);
+//             assert.isTrue(employees[0].totalPendingApproval >= employees[1].totalPendingApproval);
+
+//         }
+//     }
+// })
+
+// .addBatch({
+//     '6. Get approver team': {
+//         topic: function () {
+//             req.get('approver/my-team?onlyPendingApproval=false&includeWantSkills=true', 
+//                 this.callback);
+//         },
+//         'response is 200': testHelper.assertSuccess(),
+//         'should return user details including knowledges ': function (err, result, body) {
+//             if (err) {
+//                 console.log("error", err);
+//                 throw err;
+//             }
+//             let employees = body.data;
+//             assert.equal(employees.length, 2)
+//             assertTeamMembers(employees, false, true);
+//         }
+//     }
+// })
 
 .export(module);
 
@@ -157,3 +174,30 @@ function findSkill(id, groups){
     return null;
 }
 
+function assertTeamMembers(members, onlyPendingApproval, includeWantSkills){
+    if(!Array.isArray(members))
+        members = [members];
+    for(let m of members){
+        assert.isTrue(!!m.username);
+        assert.isObject(m.office);
+        assert.isObject(m.department);
+        assert.isObject(m.position);
+        assert.isNumber(m.totalPendingApproval);
+        assert.isArray(m.skillGroups);
+        for(let sg of m.skillGroups){
+            assert.isNumber(sg.pendingApprovalCount);
+            assert.isObject(sg.parent);
+            assert.isArray(sg.skills);
+            for(let s of sg.skills){
+                if(onlyPendingApproval)
+                    assert.isTrue(!s.knowledge.approved)
+                if(!includeWantSkills)
+                    assert.isTrue(!s.knowledge.want)
+                assert.isString(s.name);
+                assert.isObject(s.knowledge);
+                
+            }
+        }
+    }
+    
+}

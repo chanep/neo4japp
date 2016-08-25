@@ -28,32 +28,20 @@ class ApproverController extends BaseController{
     */
     findMyTeamUsers(req, res, next){
         let userId = req.session.user.id;
-        let onlyPendingApprove = req.body.onlyPendingApprove;
-        let includeWantSkills = req.body.includeWantSkills;
+        
+        let search = this._buildSearch(req);
+        let onlyPendingApproval = search.onlyPendingApproval;
+        let includeWantSkills = search.includeWantSkills;
 
-        let promise = userDa.setKnowledge(userId, skillId, level, want);
-
-        this._respondPromise(req, res, promise);
-    }
-
-    /**
-    @api {get} /api/user/details Details
-    @apiDescription Return logged user full data (include knowledges)
-    @apiGroup Users
-    
-    @apiUse userDetailsResponse
-    */
-    details(req, res, next){
-        let userId = req.session.user.id;
-
-        let promise = userDa.findByIdFull(userId);
+        let promise = approverDa.findMyTeamUsers(userId, onlyPendingApproval, includeWantSkills);
 
         this._respondPromise(req, res, promise);
     }
+
 
 } 
 
-module.exports = UserController;
+module.exports = ApproverController;
 
 /*
 @apiUse teamResponse

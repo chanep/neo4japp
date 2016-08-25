@@ -15,15 +15,16 @@ class BaseController {
     }
 
     _buildSearch(req){
-        var url_parts = url.parse(req.url, true);
-        var queryString = url_parts.query;
-        var search = qs.parse(queryString);
-        // if(search.limit){
-        //     search.limit = Number(search.limit);
-        // }
-        // if(search.offset){
-        //     search.offset = Number(search.offset);
-        // }
+        let search =  req.parsedQuery;
+        for(let k in search){
+            if(!isNaN(Number(search[k]))){
+                search[k] = Number(search[k])
+            } else if (search[k] == 'true'){
+                search[k] = true;
+            } else if (search[k] == 'false'){
+                search[k] = false;
+            }
+        }
         return search;
     }
 
