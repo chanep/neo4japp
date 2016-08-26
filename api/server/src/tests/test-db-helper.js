@@ -5,6 +5,7 @@ const config = require('../shared/config');
 const roles = require('../models/roles');
 const userDa = new (require('../data-access/user'));
 const officeDa = new (require('../data-access/office'));
+const clientDa = new (require('../data-access/client'));
 const departmentDa = new (require('../data-access/department'));
 const positionDa = new (require('../data-access/position'));
 const skillDa = new (require('../data-access/skill'));
@@ -30,7 +31,8 @@ function resetDb(partitionSuffix){
             'Department',
             'Position',
             'User',
-            'TaskStatus'
+            'Client',
+            'TaskStatus',
         ];
         for(let i in labels){
             labels[i] += partitionSuffix;
@@ -78,8 +80,37 @@ function createUser(values, index){
             return userDa.setPosition(user.id, position.id)
         })
         .then(() => {
+            return upsertClient()
+                .then(cl => {
+                    return userDa.addClient(user.id, cl.id);
+                })
+                .then(() => {
+                    return upsertClient({}, 2);
+                })
+                .then(cl => {
+                    return userDa.addClient(user.id, cl.id);
+                })
+        })
+        .then(() => {
             return userDa.findOne({id: user.id, includes:["office", "department", "position"]})
         });
+}
+
+function upsertClient(values, index){
+    let iStr = index || '';
+    let i = index || 0;
+    let clientDefaults = {
+        phonelistId: 1234567 + i,
+        name:	'Nike' + iStr,
+        short:	'NIKE' + iStr,
+        office: 'Buenos Aires',
+        familyID: '13',
+        family: 'NikeFamily'
+    };
+
+    let clientData = _.extend({}, clientDefaults, values);
+
+    return clientDa.upsert(clientData).then(data => data.data);
 }
 
 function upsertOffice(values, index){

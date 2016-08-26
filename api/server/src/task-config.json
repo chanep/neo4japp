@@ -49,6 +49,13 @@
 		}
 	},
 	{
+		"name" : "user-clients-import",
+		"path" : "./tasks/pl-import/user-clients-import",
+		"cronPattern" : null,
+		"args" : {
+		}
+	},
+	{
 		"name" : "approvers-import",
 		"path" : "./tasks/pl-import/approvers-import",
 		"cronPattern" : null,

@@ -20,6 +20,7 @@ class UserDa extends BaseDa{
         let officeRelL = this.model.getRelationByKey("office").label;
         let departmentRelL = this.model.getRelationByKey("department").label;
         let positionRelL = this.model.getRelationByKey("position").label;
+        let clientRelL = this.model.getRelationByKey("clients").label;
         let sgL = skillGroupModel.labelsStr;
         let skillL = skillModel.labelsStr;
         let sgRelL = skillModel.getRelationByKey("group").label;
@@ -31,7 +32,8 @@ class UserDa extends BaseDa{
                     (n)-[:${positionRelL}]->(p),
                     (sg:${sgL})<-[:${sgRelL}]-(s:${skillL})<-[k:${kRelL}]-(n),
                     (sg)-[:${sgRelL}]->(sgp:${sgL})
-                    with n, o, d, p, sg, sgp, 
+                    optional match (n)-[:${clientRelL}]->(c)
+                    with n, o, d, p, collect(c) as clients, sg, sgp, 
                         collect({id: id(s), name: s.name, knowledge: {id: id(k), level: k.level, want: k.want, approved: k.approved, approver: k.approverFullname}}) as skills
                     return {    
                                 id: id(n), username: n.username, type: n.type, email: n.email, 
@@ -39,6 +41,7 @@ class UserDa extends BaseDa{
                                 office: {id: id(o), name: o.name, country: o.country, acronym: o.acronym},
                                 department: {id: id(d), name: d.name},
                                 position: {id: id(p), name: p.name},
+                                clients: clients,
                                 skillGroups: collect({
                                     id: id(sg), name: sg.name,
                                     parent: {id: id(sgp), name: sgp.name},
@@ -65,11 +68,17 @@ class UserDa extends BaseDa{
     addApprover(id, approverId){
         return this.relate(id, approverId, 'approvers');
     }
+    clearApprovers(id){
+        return this.deleteAllRelationships(id, 'approvers');
+    }
     addResourceManager(id, managerId){
         return this.relate(id, managerId, 'resourceManagers');
     }
-    clearApprovers(id){
-        return this.deleteAllRelationships(id, 'approvers');
+    addClient(id, clientId){
+        return this.relate(id, clientId, 'clients');
+    }
+    clearClients(id){
+        return this.deleteAllRelationships(id, 'clients');
     }
     /**
      * Update all users role 'approver' based on relationships 'APPROVED_BY'

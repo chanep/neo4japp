@@ -69,7 +69,7 @@ vows.describe('User api test')
 })
 
 .addBatch({
-    '3. Get user details': {
+    '4. Get user details': {
         topic: function () {
             req.get('user/details', 
                 this.callback);
@@ -82,6 +82,8 @@ vows.describe('User api test')
             }
             let u = body.data;
             let e = data.employee;
+
+            //console.log("user", JSON.stringify(u));
 
             assert.isObject(u);
             assert.equal(u.id, e.id);
@@ -97,6 +99,9 @@ vows.describe('User api test')
             assert.equal(u.department.name, e.department.name);
             assert.isObject(u.position);
             assert.equal(u.position.name, e.position.name);
+
+            assert.isArray(u.clients);
+            assert.isTrue(!!u.clients[0].short);
 
             assert.isArray(u.skillGroups);
             assert.equal(u.skillGroups.length, 2);

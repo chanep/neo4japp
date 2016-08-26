@@ -373,6 +373,8 @@ class BaseDa {
     }
     deleteAllRelationships(id, relKey) {
         try {
+            if(!id)
+                throw new errors.GenericError(`BaseDa.deleteAllRelationships id undefined`);
             let cypher = this._cypher.deleteAllRelationshipsCmd(id, relKey);
             return this._run(cypher.cmd, cypher.params)
                 .then(r => this._cypher.parseResultAffected(r))
