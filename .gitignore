@@ -9,3 +9,5 @@ css/styles.css.map
 .vscode
 api/server/src/tmp
 api/server/apidoc
+.vagrant
+vagrant-machine/.vagrant
