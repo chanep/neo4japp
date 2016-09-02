@@ -4,9 +4,10 @@ const dbHelper = require('../db-utils/db-helper');
 const config = require('../shared/config');
 const roles = require('../models/roles');
 const userDa = new (require('../data-access/user'));
-const officeDa = new (require('../data-access/department'));
+const officeDa = new (require('../data-access/office'));
+const clientDa = new (require('../data-access/client'));
 const departmentDa = new (require('../data-access/department'));
-const positionDa = new (require('../data-access/department'));
+const positionDa = new (require('../data-access/position'));
 const skillDa = new (require('../data-access/skill'));
 const skillGroupDa = new (require('../data-access/skill-group'));
 
@@ -16,7 +17,8 @@ module.exports = {
     upsertOffice: upsertOffice,
     upsertDepartment: upsertDepartment,
     upsertPosition: upsertPosition,
-    createSkillGroups: createSkillGroups
+    createSkillGroups: createSkillGroups,
+    createBasicData: createBasicData
 }
 
 
@@ -29,7 +31,8 @@ function resetDb(partitionSuffix){
             'Department',
             'Position',
             'User',
-            'TaskStatus'
+            'Client',
+            'TaskStatus',
         ];
         for(let i in labels){
             labels[i] += partitionSuffix;
@@ -77,8 +80,37 @@ function createUser(values, index){
             return userDa.setPosition(user.id, position.id)
         })
         .then(() => {
+            return upsertClient()
+                .then(cl => {
+                    return userDa.addClient(user.id, cl.id);
+                })
+                .then(() => {
+                    return upsertClient({}, 2);
+                })
+                .then(cl => {
+                    return userDa.addClient(user.id, cl.id);
+                })
+        })
+        .then(() => {
             return userDa.findOne({id: user.id, includes:["office", "department", "position"]})
         });
+}
+
+function upsertClient(values, index){
+    let iStr = index || '';
+    let i = index || 0;
+    let clientDefaults = {
+        phonelistId: 1234567 + i,
+        name:	'Nike' + iStr,
+        short:	'NIKE' + iStr,
+        office: 'Buenos Aires',
+        familyID: '13',
+        family: 'NikeFamily'
+    };
+
+    let clientData = _.extend({}, clientDefaults, values);
+
+    return clientDa.upsert(clientData).then(data => data.data);
 }
 
 function upsertOffice(values, index){
@@ -93,7 +125,8 @@ function upsertOffice(values, index){
         name:	'Buenos Aires' + i,
         description:	'Buenos Aires' + i,
         uri:	'buenos-aires',
-        longitude:	-58.43251
+        longitude:	-58.43251,
+        sourceId: "cwid" + i
     };
 
     let officeData = _.extend({}, officeDefaults, values);
@@ -185,8 +218,12 @@ function createSkillGroups(){
             data.skillGroups = g;
             data.skills = []
             for(let g1 of g){
+                g1.parent = g;
                 for(let g2 of g1.children){
                     data.skills = data.skills.concat(g2.skills);
+                    for(let s of g2.skills){
+                        s.group = g2;
+                    }
                 }
             } 
             return data;
@@ -200,10 +237,11 @@ function createSkillGroups(){
  *  approver: {}, //user aprrover
  *  resourceManager: {}, //user resource Manager
  *  employee: {}, // user employee
- *  users: []
+ *  employees: [] // all user employee
  *  office: {},
  *  offices: [],
  *  skillGroups: [] //contain children groups and children groups contain skills
+ *  skills: [] //contain all skills
  * }
  */
 function createBasicData(){
@@ -221,28 +259,41 @@ function createBasicData(){
         })
         .then(u => {
             data.admin = u;
-            data.users = [u]
-            return createUser({roles: [roles.aprrover]}, 2);
+            return createUser({roles: [roles.approver]}, 2);
         })
         .then(u => {
             data.approver = u;
-            data.users.push(u);
-            return createUser({roles: [roles.resourceManager]}, 3);
-        })
-        .then(u => {
-            data.approver = u;
-            data.users.push(u);
             return createUser({roles: [roles.resourceManager]}, 3);
         })
         .then(u => {
             data.resourceManager = u;
-            data.users.push(u);
             return createUser({roles: []}, 4);
         })
         .then(u => {
             data.employee = u;
-            data.users.push(u);
-            return createUser({roles: []}, 4);
+            data.employees = [u];          
+            return userDa.addApprover(data.employee.id, data.approver.id);
         })
+        .then(() => {
+            return userDa.addResourceManager(data.employee.id, data.resourceManager.id);
+        })
+        .then(() => {
+            return createUser({roles: []}, 5);
+        })
+        .then(u => {
+            data.employees.push(u);
+            return userDa.addApprover(data.employees[1].id, data.approver.id);
+        })
+        .then(() => {
+            return userDa.addResourceManager(data.employees[1].id, data.resourceManager.id);
+        })
+        .then(() => {
+            return createSkillGroups();
+        })
+        .then(sgData => {
+            data.skillGroups = sgData.skillGroups;
+            data.skills = sgData.skills;
+            return data;
+        });
 }
 

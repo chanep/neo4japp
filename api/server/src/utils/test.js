@@ -2,7 +2,7 @@
 const _ = require('lodash');
 let path = require('path');
 //let envFile = path.resolve(__dirname, "../.env");
-let envFile = path.resolve(__dirname, "../.env");
+let envFile = path.resolve(__dirname, "../.test-env");
 let errors = require('../shared/errors');
 
 require('dotenv').config({path: envFile});
@@ -10,10 +10,12 @@ require('dotenv').config({path: envFile});
 let db = require('../data-access/db');
 const neo4j = require('neo4j-driver').v1;
 
-let m = new Map();
-m.set("key1", "value1")
-m.set("key1", "value2")
-console.log('key1', m.get("key1"));
+// const Joi = require('joi');
+// let schema = {key: Joi.array().items(Joi.string()).default([])};
+// let data = {key: [null]};
+// var result = Joi.validate(data, schema);
+// console.log(result)
+
 // let managersTask = new (require('../tasks/pl-import/managers-import'));
 // managersTask._getUserManagersEmail(45553)
 //     .then(r => {
@@ -46,90 +48,34 @@ console.log('key1', m.get("key1"));
 //     .catch(console.error);
 
 
-// let query = {
-//     id: 4,
-//     a: 'hola',
-//     b: {$in:[5,6]},
-//     c: new Date(),
-//     includes: [{key: "knowledges", relQuery: {level: 5}, includes: ["group"]}]
-// };
 
 
-// let query = {
-//     id: 4,
-//     username: 'estebanc',
-//     emaqil: {$like: '%.com'},
-//     knowledges: {$relExists: false},
-//     c: new Date(),
-//     includes: [{key: "office", query: {acronym: "BA"}}]
-// };
+const Da = require('../data-access/approver');
+let da = new Da();
 
-
-// let model = require("../data-access/models").user;
-
-// const cypherHelper = new CypherHelper(model);
-
-// let cmd = cypherHelper.findCmd(query)[0];
-
-// console.log(cmd)
-
-// let [a, b] = ["hola, chau"];
-// console.log("a", a)
-// console.log("b", b)
-
-//let cmd = `match (n:Skill) optional match (n)-[r:BELONGS_TO]->(m) return {identity: id(n), name: n.name, group: m}`;
-// let cmd = `match (n:SkillGroup)
-//             optional match (n)<-[r:BELONGS_TO]-(m)
-//             return {identity: id(n), name: n.name, skills: collect(m)}`;
-// let session = db.session();
-
-// session.run(cmd)
-//     .then(r =>{
-//         console.log("result", JSON.stringify(r));
-//         session.close();
-//         db.close();
-//     })
-//     .catch(console.error);
-
-
-// let include = {
-//                 key : "knowledges",
-//                 includes : ["group"]
-//             }
-// const userModel = require('../data-access/models').user;
-// const CypherHelper = require('../data-access/cypher-helper');
-// let cypher = new CypherHelper(userModel);
-
-// let parsed = cypher.parseIncludes([include], userModel, 'n');
-// console.log("parsed", JSON.stringify(parsed))
-
-
-// const UserDa = require('../data-access/user');
-// let userDa = new UserDa();
-// // let u = {
-// //     username: 'estebanc',
-// //     fullname: 'Esteban Canepa',
-// //     email: 'esteban.canepa@rga.com',
-// //     type: 'UserEmployee'
-// // };
+//da.isApproverOf(4840, 4837)
+da.isApproverOf(4837, 4840)
+.then(r =>{
+        console.log("result", JSON.stringify(r));
+    })
+    .catch(console.error);
 
 // let allocation = {
-//         startDate: new Date(),
+//         startDate: ['week1', 'week2', 'week3', 'week4'],
 //         weekHours: [10, 20, 30, 40],
 //         totalHours: 100,
 //     }
 
-// userDa.findOne({$not: {username: 'estebanc'}})
+// userDa.findOne({username: 'estebanc'})
 //     .then(u =>{
 //         console.log("u",u)
-//         return u;
-//        return userDa.setAllocation(u.id, allocation);
+//        return userDa.setAllocation(323983457, allocation);
 //     })
 //     .then(r =>{
 //         console.log("result", JSON.stringify(r));
 //     })
 //     .catch(console.error);
-// userDa.create(u)
+// // userDa.create(u)
 // .then(r =>{
 //         console.log("result", JSON.stringify(r));
 //     })

@@ -44,6 +44,20 @@ let position = new Model(
     }
 );
 
+let client = new Model(
+    'Client',
+    ['Client'],
+    {
+        id: Joi.number(),
+        phonelistId: Joi.number().required(),
+        name: Joi.string().required(),
+        short: Joi.string().required(),
+        office: Joi.string(),
+        familyID: Joi.string(),
+        family: Joi.string()
+    }
+);
+
 let user = new Model(
     'User',
     ['User'],
@@ -57,7 +71,7 @@ let user = new Model(
         fullname: Joi.string().required(),
         first: Joi.string().allow(null),
         last: Joi.string().allow(null),
-        roles: Joi.array().items(Joi.string()),
+        roles: Joi.array().default([]).items(Joi.string()),
         phone: Joi.string().allow(null),
         image: Joi.string().allow(null),
         disabled: Joi.boolean().default(false)
@@ -68,7 +82,7 @@ let knowledgeSchema = {
         id: Joi.number(),
         level: Joi.number().allow(null),
         want: Joi.boolean().default(false),
-        approved: Joi.boolean().default(false),
+        approved: Joi.boolean().default(false).allow(null),
         approverId: Joi.number().allow(null),
         approverFullname: Joi.string().allow(null)
     };
@@ -95,6 +109,7 @@ user.relateWithOne(position, "OF_POSITION", "position", outgoing, null);
 user.relateWithMany(user, "APPROVED_BY", "approvers", outgoing, null);
 user.relateWithMany(user, "R_MANAGED_BY", "resourceManagers", outgoing, null);
 
+user.relateWithMany(client, "WORKED_FOR", "clients", outgoing, null);
 user.relateWithOne(allocation, "ALLOCATION", "allocation", outgoing, null);
 allocation.relateWithOne(user, "ALLOCATION", "user", incoming, null);
 
@@ -103,5 +118,6 @@ module.exports = {
     office: office,
     department: department,
     position: position,
-    allocation: allocation
+    allocation: allocation,
+    client: client
 }

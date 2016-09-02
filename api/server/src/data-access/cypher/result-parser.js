@@ -132,29 +132,28 @@ function parseNodeField(f, schema){
     return parsed;
 }
 
-function parseFieldRaw(f, schema){
-    let parsed = {};
-    if(isNodeField(f)){
+function parseFieldRaw(f, schema){ 
+    if(_.isArray(f)){
+        return f.map(i => parseFieldRaw(i));
+    } else if(!_.isObject(f)){
+        return f;
+    } else if(isNodeField(f)){
         return parseNodeField(f, schema);
+    } else if(neo4j.isInt(f)){
+        return getInt(f);
     } else{
+        let parsed = {};
         for(let k in f){
-            if(k == 'id'){
-                parsed.id = getInt(f[k]);
-            } else{
-                let v = f[k];
-                if(_.isArray(v)){
-                    parsed[k] = v.map(i => parseFieldRaw(i));
-                } else if(_.isObject(v)){
-                    parsed[k] = parseFieldRaw(v);
-                } else{
-                    parsed[k] = v;
-                }
+            if(k == '_'){
+                _.merge(parsed, parseFieldRaw(f[k]));
+            } else {
+                parsed[k] = parseFieldRaw(f[k]);
             }
         }
+        return parsed;
     }
-
-    return parsed;
 }
+
 function convertFromNativeValue(value, type){
     if(!value || !type)
         return value;
@@ -168,6 +167,8 @@ function convertFromNativeValue(value, type){
     } 
 }
 function isNodeField(f){
+    if(!f)
+        return f;
     return (f.identity && f.properties);
 }
 function getInt(identity){

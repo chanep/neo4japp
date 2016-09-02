@@ -11,6 +11,7 @@ if (test) {
 
 const express = require('express');
 const bodyParser = require('body-parser');
+const expressQSParser = require('express-qs-parser');
 const session = require('express-session');
 const cors = require('cors');
 const routes = require('./routes');
@@ -20,6 +21,7 @@ const config = require('./shared/config');
 const app = express();
 
 // parse body params and attache them to req.body
+app.use(expressQSParser({}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(session({ secret: config.session_secret, resave: true, saveUninitialized: false }));

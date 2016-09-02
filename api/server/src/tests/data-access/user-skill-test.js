@@ -90,10 +90,9 @@ vows.describe('User/Skill data access test')
                     user2.id = u.id;
                 })
                 .then(r => this.callback(null, r))
-                .catch(err => {console.log('hola1'); this.callback(err);})
+                .catch(err => this.callback(err))
         },
         'should create user': function (err, result) {
-            console.log('hola');
             if(err){
                 console.log("error", err)
                 throw err;

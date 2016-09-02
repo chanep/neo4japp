@@ -1,0 +1,1 @@
+create constraint on (n:Client${p}) Assert n.phonelistId is UNIQUE;

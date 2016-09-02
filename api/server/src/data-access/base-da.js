@@ -334,6 +334,33 @@ class BaseDa {
             .then(r => this._cypher.parseResultRaw(r, null))
             .catch(err => {throw new errors.GenericError("Error relating " + this.model.name, err)});
     }
+    updateRelationship(relId, relKey, relData, mergeKeys){
+        if(!relId)
+            return P.reject(new errors.GenericError(`BaseDa.updateRelationship relId undefined`));
+        return this._validateRelationship(relData, relKey)
+            .then(d => {
+                let cypher = this._cypher.updateRelationshipCmd(relId, relKey, relData, mergeKeys);
+                return this._run(cypher.cmd, cypher.params);
+            })
+            .then(r => this._cypher.parseResultRaw(r, null))
+            .catch(err => {throw new errors.GenericError("Error updating relationship " + this.model.name, err)});
+    }
+    /**
+     * Check the existence of a relationship
+     * @param {number} selfId
+     * @param {string} relKey
+     * @param {number} otherId - Related node id (if null: checks the existence of the relationship with any other node)
+     */
+    relationshipExists(selfId, relKey, otherId){
+        try {
+            let cypher = this._cypher.relationshipExistsCmd(selfId, relKey, otherId);
+            return this._run(cypher.cmd, cypher.params)
+                .then(r => this._cypher.parseResultRaw(r, null))
+                .catch(err => { throw new errors.GenericError("Error checking if relationship exists " + this.model.name, err) });
+        } catch (err) {
+            return P.reject(new errors.GenericError("Error checking if relationship exists " + this.model.name, err))
+        }
+    }
     createAndRelate(data, otherId, relKey, relData) {
         try {
             let cypher = this._cypher.createAndRelateCmd(data, otherId, relKey, relData);
@@ -346,6 +373,8 @@ class BaseDa {
     }
     deleteAllRelationships(id, relKey) {
         try {
+            if(!id)
+                throw new errors.GenericError(`BaseDa.deleteAllRelationships id undefined`);
             let cypher = this._cypher.deleteAllRelationshipsCmd(id, relKey);
             return this._run(cypher.cmd, cypher.params)
                 .then(r => this._cypher.parseResultAffected(r))
