@@ -17,6 +17,8 @@ sudo apt-get -y install neo4j
 sudo npm install webpack -g
 sudo npm install webpack-dev-server -g
 sudo npm install babel -g
+#Installing other NodeJs packages
 sudo npm install pm2 -g
+sudo npm install grunt -g
 #Checking status of Neo4j
 service neo4j status
