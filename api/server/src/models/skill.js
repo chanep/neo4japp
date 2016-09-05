@@ -10,7 +10,7 @@ let skillGroup = new Model(
     {
         id: Joi.number(),
         name: Joi.string().required(),
-        type: Joi.string().required()
+        type: Joi.string().required().allow(['tool', 'skill', 'project', 'industry'])
     }
 );
 

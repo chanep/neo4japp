@@ -32,4 +32,4 @@ Configurations needs to use Vagrant Environment:
 
 5. In the host machine, from some browser, enter to http://localhost:17474
 
-6. Config the new password for the database as 'root' (without quotes of course)
+6. Login with default password 'neo4j' and setup the new password for the database as 'root' (without quotes of course)
