@@ -56,3 +56,41 @@ class UserController extends BaseController{
 } 
 
 module.exports = UserController;
+
+/**
+@apiDefine userDetailsResponse
+
+@apiSuccessExample {json} Success-Response:
+HTTP/1.1 200 OK
+{
+    status: "success",
+    data: [{ 
+        id: 4839, 
+        fullname: "Pepe Test4", 
+        roles: [],
+        email: "pepe.test4@rga.com", 
+        username: "pepetest4", 
+        image: "http://x.com/pic.jpg",
+        phone: null,
+        disabled: false, 
+        type: "UserEmployee",  
+        position: { id: 4835, name: "Developer" }, 
+        office: { id: 4832, name: "Buenos Aires", country: "Argentina", acronym: "BA" }, 
+        department: { id: 4834, name: "Technology" }, 
+        clients: [{ id: 134, name: "Nike", short: "NIKE" }], 
+        skillGroups: [{ 
+            id: 4844, 
+            name: "languages", 
+            type: "tool", 
+            parent: { id: 4841, name: "Technology", type: "tool" }, 
+            skills: [{ 
+                id: 4850, 
+                name: "Php", 
+                knowledge: { id: 18753, level: 3, want: false } 
+            }]
+        }]
+    }, {
+       ... 
+    }]
+}
+*/
