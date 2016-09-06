@@ -8,13 +8,8 @@ Vagrant.configure("2") do |config|
 	config.vm.network "forwarded_port", guest: 5005, host: 15005, auto_correct: true
 	config.vm.synced_folder "../api", "/srv/api/"
 	config.vm.synced_folder "../front-end", "/srv/front-end/"
-<<<<<<< HEAD
-	config.vm.network "forwarded_port", guest: 8080, host: 18080, auto_correct: true
 	config.vm.network "forwarded_port", guest: 8282, host: 18282, auto_correct: true
-=======
-
 	config.vm.provider "virtualbox" do |v|
 		v.memory = 2048
 	end
->>>>>>> 1f2b94849bea97f804f5b14e4f89cacd0574ed96
 end
