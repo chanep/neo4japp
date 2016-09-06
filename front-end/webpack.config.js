@@ -19,7 +19,8 @@ module.exports = {
   },
   output: {
     path: __dirname + "/src/js/",
-    filename: "client.min.js"
+    filename: "client.min.js",
+    publicPath: "http://0.0.0.0:8080/"
   },
   plugins: debug ? [] : [
     new webpack.optimize.DedupePlugin(),
