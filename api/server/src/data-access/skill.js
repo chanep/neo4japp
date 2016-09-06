@@ -8,6 +8,12 @@ class SkillDa extends BaseDa{
         super(model, tx);
     }
 
+    findByTerm(term, type, limit){
+        let query = {name: {$ilike: term}};
+
+        
+    }
+
     createAndRelate(data, groupId){
         return super.createAndRelate(data, groupId, "group");
     }
