@@ -28,9 +28,7 @@ class AllocationsImportTask extends PlBaseTask{
     _getUsers(skip, limit){
         let query = {$not: {phonelistId: null}, paged: {skip: skip, limit: limit}}; 
         let userDa = new UserDa();
-        let data = userDa.find(query);
-        console.log(data);
-        return data;
+        return userDa.find(query);
     }
 
 	_findAndUpdateUsers() {
