@@ -16,7 +16,6 @@ export default class Results extends React.Component {
       console.log(event);
       this.props.addSkill(skill);
     }
-
     render () {
       let self = this;
         return (
