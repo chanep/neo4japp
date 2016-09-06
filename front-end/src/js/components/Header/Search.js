@@ -11,8 +11,11 @@ export default class Search extends React.Component {
       this.state = {
         hasResults: false,
         //source: 'http://www.mocky.io/v2/57b754560f000037100b7d36',
-        query: ''
+        query: '',
+        skillArr: []
       };
+
+      this.addSkill = this.addSkill.bind(this)
     }
 
     updateQuery(e) {
@@ -24,6 +27,18 @@ export default class Search extends React.Component {
       }
     }
 
+    addSkill(skill) {
+      console.log(this.state);
+
+      var currentArr = this.state.skillArr;
+      currentArr.push(skill);
+      console.log(skill);
+      
+      this.setState({skillArr: currentArr});
+
+      console.log(this.state.skillArr);
+    }
+
     query() {
       /*var request = new XMLHttpRequest();
       request.open("POST", this.state.source, true);
@@ -33,12 +48,11 @@ export default class Search extends React.Component {
         if (request.readyState != 4 || request.status != 200) {
           return;
         }
-
         var data = request.responseText;*/
         var data = '{"skills": ["Angular", "Animations", "Google Analytics"], "tools": ["Animator"], "people": ["Andrés Juárez"]}';
 
         var parsedData = JSON.parse(data);
-        console.log(parsedData);
+        console.log("parsedData",parsedData);
 
         this.setState({ results: parsedData });
 
@@ -62,14 +76,16 @@ export default class Search extends React.Component {
             <div className="search">
               <div className="search__input__wrapper">
                 <div className="search__input">
-                  <input type="text" name="query" onChange={this.updateQuery.bind(this)} />
+                  <div className="search-field-wrapper">
+                    <input type="text" name="query" onChange={this.updateQuery.bind(this)} />
+                  </div> 
                   <span className="search-button-wrapper">
                     <span className="icon-close"><span className="path1"></span><span className="path2" onClick={this.hideResults.bind(this)}></span></span>
                     <span className="icon-search" onClick={this.showResults.bind(this)}></span>
                   </span>
                 </div>
               </div>
-              { <Results hasResults={this.state.hasResults} results={this.state.results} /> }
+              { <Results hasResults={this.state.hasResults} results={this.state.results} addSkill={this.addSkill} /> }
             </div>
         );
     }

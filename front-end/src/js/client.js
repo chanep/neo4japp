@@ -9,6 +9,7 @@ import Login from "./pages/Login";
 
 const app = document.getElementById('app');
 
+
 ReactDOM.render(
 	<Router history={hashHistory}>
 		<Route path="/" component={Layout}>
@@ -16,7 +17,8 @@ ReactDOM.render(
 			<Route path="allocations" component={Allocations}></Route>
 		</Route>
 		<Route path="/login" component={Layout}>
-			<IndexRoute component={Login}></IndexRoute>
+					<IndexRoute component={Login}></IndexRoute>
 		</Route>
 	</Router>,
 app);
+
