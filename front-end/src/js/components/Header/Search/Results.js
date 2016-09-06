@@ -1,4 +1,5 @@
 import React from "react";
+import ReactDom from "react-dom";
 
 import { Link } from "react-router";
 
@@ -13,9 +14,12 @@ export default class Results extends React.Component {
     }
 
     clickingState (event, props, skill) {
-      console.log(event);
-      this.props.addSkill(skill);
+      console.log("SKillEVENT" ,event);
+      console.log("SKILLPROPS" ,props);
+      console.log("SKILSKILL" ,skill);
+      this.props.addSkill(props);
     }
+
     render () {
       let self = this;
         return (

@@ -1,6 +1,7 @@
 import React from "react";
 
 import Results from "./Search/Results";
+import Pill from './Search/Pill';
 
 import { Link } from "react-router";
 
@@ -11,9 +12,10 @@ export default class Search extends React.Component {
       this.state = {
         hasResults: false,
         //source: 'http://www.mocky.io/v2/57b754560f000037100b7d36',
-        query: ''
+        query: '',
+        skillArr: []
       };
-      this.skillsArr = [];
+
       this.addSkill = this.addSkill.bind(this)
     }
 
@@ -27,10 +29,19 @@ export default class Search extends React.Component {
     }
 
     addSkill(skill) {
+      let currentArr = this.state.skillArr;
+      currentArr.push(skill);
+      this.setState({skillArr:currentArr});
+      console.log("THIS>STATE>SKILLARR",this.state.skillArr);
       // console.log(this.state);
-      this.skillsArr.push(skill);
-      console.log("SkillArr",this.skillsArr);
+
+      // var currentArr = this.state.skillArr;
+      // currentArr.push(skill);
+      // console.log(skill);
       
+      // this.setState({skillArr: currentArr});
+
+      // console.log(this.state.skillArr);
     }
 
     query() {
@@ -46,11 +57,11 @@ export default class Search extends React.Component {
         var data = '{"skills": ["Angular", "Animations", "Google Analytics"], "tools": ["Animator"], "people": ["Andrés Juárez"]}';
 
         var parsedData = JSON.parse(data);
-        console.log("parsedData",parsedData);
+        // console.log("parsedData",parsedData);
 
         this.setState({ results: parsedData });
 
-        console.log(parsedData);
+        // console.log(parsedData);
 
       /*};
 
@@ -66,11 +77,16 @@ export default class Search extends React.Component {
     }
 
     render () {
+      var pills = this.state.skillArr;
         return (
             <div className="search">
               <div className="search__input__wrapper">
                 <div className="search__input">
                   <div className="search-field-wrapper">
+                    {pills.map(pillName=>{
+                       return (<Pill title={pillName}/>)
+                    })}
+                   
                     <input type="text" name="query" onChange={this.updateQuery.bind(this)} />
                   </div> 
                   <span className="search-button-wrapper">
