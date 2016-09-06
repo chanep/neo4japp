@@ -12,9 +12,8 @@ export default class Results extends React.Component {
       };
     }
 
-    clickingState (event, props, skill) {
-      console.log(event);
-      this.props.addSkill(skill);
+    clickingState(event, props, skill) {
+      this.props.addSkill(props);
     }
 
     render () {
@@ -37,8 +36,8 @@ export default class Results extends React.Component {
                 <li className="category-list">Tools</li>
                 <li className="subcategory-list">
                   <ul>
-                    {this.props.results.tools.map(function (tool){
-                      return <li data-skill={tool} onClick={self.clickingState.bind(self)}>{tool}</li>;
+                    {this.props.results.tools.map(function (tool, props){
+                      return <li data-skill={tool} onClick={self.clickingState.bind(self, props, tool)}>{tool}</li>;
                     })}
                   </ul>
                 </li>

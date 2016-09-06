@@ -28,15 +28,11 @@ export default class Search extends React.Component {
     }
 
     addSkill(skill) {
-      console.log(this.state);
-
       var currentArr = this.state.skillArr;
       currentArr.push(skill);
-      console.log(skill);
       
       this.setState({skillArr: currentArr});
-
-      console.log(this.state.skillArr);
+      console.log(currentArr);
     }
 
     query() {
