@@ -15,7 +15,6 @@ export default class Results extends React.Component {
     clickingState(event, props, skill) {
       this.props.addSkill(props);
     }
-
     render () {
       let self = this;
         return (

@@ -11,3 +11,4 @@ api/server/src/tmp
 api/server/apidoc
 .vagrant
 vagrant-machine/.vagrant
+front-end/dist

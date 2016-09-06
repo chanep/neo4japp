@@ -11,10 +11,9 @@ export default class Search extends React.Component {
       this.state = {
         hasResults: false,
         //source: 'http://www.mocky.io/v2/57b754560f000037100b7d36',
-        query: '',
-        skillArr: []
+        query: ''
       };
-
+      this.skillsArr = [];
       this.addSkill = this.addSkill.bind(this)
     }
 
