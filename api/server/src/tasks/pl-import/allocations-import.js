@@ -136,8 +136,14 @@ class AllocationsImportTask extends PlBaseTask{
                     var userLocalID = usersID_Phonelist.filter(function(findItem) {
                         return findItem.phonelistId == userData.id;
                     });
-                    userData.id = userLocalID[0]['localId'];
-                    _this._updateUser(userData).then(partialInfo => {
+
+                    var newAllocs = {
+                        'startDate': userData.startDate,
+                        'weekHours': userData.weekHours,
+                        'totalHours': userData.totalHours
+                    };
+
+                    _this._updateUser(userLocalID[0]['localId'], newAllocs).then(partialInfo => {
                         callback(null, partialInfo);
                     });
                 }catch(err){
@@ -157,12 +163,12 @@ class AllocationsImportTask extends PlBaseTask{
         });
     }
 
-    _updateUser(userData){
+    _updateUser(userId, userData){
         let info = {updated: 1, skipped: 0, notFound: 0, errors: 0};
 
         var userDa = new UserDa();
         try{
-            return userDa.setAllocation(userData.id, userData)
+            return userDa.setAllocation(userId, userData)
             .then(() => info);
         } catch(err){
             console.log("err", err)
