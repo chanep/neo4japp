@@ -75,11 +75,16 @@ class AllocationsImportTask extends PlBaseTask{
             total: function(){ return this.updated + this.errors; }
         };
 
+        var usersID_Phonelist = [];
         var usersIDs = [];
 		users.forEach(function(item) {
             var newID = [];
             newID.push(item.phonelistId); //this is a fix just because the services need the ID into an array.
 			usersIDs.push(newID);
+            usersID_Phonelist.push({
+                localId: item.id,
+                phonelistId: item.phonelistId
+            });
 		});
 
         var weeks = [0, 1, 2, 3];
@@ -128,6 +133,10 @@ class AllocationsImportTask extends PlBaseTask{
         }).then(() => {
             return asyncMap(dataAlloc, function (userData, callback) {
                 try{
+                    var userLocalID = usersID_Phonelist.filter(function(findItem) {
+                        return findItem.phonelistId == userData.id;
+                    });
+                    userData.id = userLocalID[0]['localId'];
                     _this._updateUser(userData).then(partialInfo => {
                         callback(null, partialInfo);
                     });
