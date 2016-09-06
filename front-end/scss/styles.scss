@@ -142,6 +142,40 @@ header {
           }
         }
       }
+
+      .search-field-wrapper {
+        display: inline-block;
+        height: 43px;
+      }
+
+      .search-field-pill {
+        display: inline-block;
+        background-color: white;
+        border-radius: 30px;
+        padding: 4px 12px;
+        margin-right: 15px;
+      }
+
+      .search-field-pill__close {
+        display: inline-block;
+        cursor: pointer;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background-color: #666767;
+        color: white;
+        font-size: 10px;
+        margin-left: 3px;
+        text-align: center; 
+        font-family: 'icomoon' !important;
+
+        &::before {
+          content: "\e903";
+          line-height: 15px;
+          color: white;
+          font-size: 12px;
+        }
+      }
     }
 
     &__results {
@@ -174,7 +208,12 @@ header {
               li {
                 font-size: 16px;
                 color: #000;
+                cursor: pointer;
                 margin-bottom: 6px;
+                transition: color .2s ease-in;
+
+                &:hover { color: #e71d39; }
+
                 &.selected {
                   color: #e71d39;
                 }

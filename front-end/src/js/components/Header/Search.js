@@ -11,8 +11,11 @@ export default class Search extends React.Component {
       this.state = {
         hasResults: false,
         //source: 'http://www.mocky.io/v2/57b754560f000037100b7d36',
-        query: ''
+        query: '',
+        skillArr: []
       };
+
+      this.addSkill = this.addSkill.bind(this)
     }
 
     updateQuery(e) {
@@ -22,6 +25,18 @@ export default class Search extends React.Component {
       if (!this.state.hasResults) {
         this.showResults();
       }
+    }
+
+    addSkill(skill) {
+      console.log(this.state);
+
+      var currentArr = this.state.skillArr;
+      currentArr.push(skill);
+      console.log(skill);
+      
+      this.setState({skillArr: currentArr});
+
+      console.log(this.state.skillArr);
     }
 
     query() {
@@ -62,14 +77,16 @@ export default class Search extends React.Component {
             <div className="search">
               <div className="search__input__wrapper">
                 <div className="search__input">
-                  <input type="text" name="query" onChange={this.updateQuery.bind(this)} />
+                  <div className="search-field-wrapper">
+                    <input type="text" name="query" onChange={this.updateQuery.bind(this)} />
+                  </div> 
                   <span className="search-button-wrapper">
                     <span className="icon-close"><span className="path1"></span><span className="path2" onClick={this.hideResults.bind(this)}></span></span>
                     <span className="icon-search" onClick={this.showResults.bind(this)}></span>
                   </span>
                 </div>
               </div>
-              { <Results hasResults={this.state.hasResults} results={this.state.results} /> }
+              { <Results hasResults={this.state.hasResults} results={this.state.results} addSkill={this.addSkill} /> }
             </div>
         );
     }

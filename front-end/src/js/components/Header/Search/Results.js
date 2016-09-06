@@ -3,7 +3,22 @@ import React from "react";
 import { Link } from "react-router";
 
 export default class Results extends React.Component {
+
+    constructor () {
+      super();
+
+      this.state = {
+        isClicked: false
+      };
+    }
+
+    clickingState (event, props, skill) {
+      console.log(event);
+      this.props.addSkill(skill);
+    }
+
     render () {
+      let self = this;
         return (
           <div className="search__results__wrapper">
           {this.props.hasResults ?
@@ -12,8 +27,8 @@ export default class Results extends React.Component {
                 <li className="category-list">Skills</li>
                 <li className="subcategory-list">
                   <ul>
-                    {this.props.results.skills.map(function (skill){
-                      return <li>{skill}</li>;
+                    {this.props.results.skills.map(function (skill, props){
+                      return <li data-skill={skill} onClick={self.clickingState.bind(self, props, skill)}>{skill}</li>;
                     })}
                   </ul>
                 </li>
@@ -23,7 +38,7 @@ export default class Results extends React.Component {
                 <li className="subcategory-list">
                   <ul>
                     {this.props.results.tools.map(function (tool){
-                      return <li>{tool}</li>;
+                      return <li data-skill={tool} onClick={self.clickingState.bind(self)}>{tool}</li>;
                     })}
                   </ul>
                 </li>
