@@ -9,9 +9,15 @@ class SkillDa extends BaseDa{
     }
 
     findByTerm(term, type, limit){
-        let query = {name: {$ilike: term}};
-
+        let query = {name: {$ilike: `%${term}%`}};
+        if(type)
+            query.includes = [{key: "group", query: {type: type}, notInclude: true}];
+        if(limit)
+            query.paged = {skip: 0, limit: limit};
         
+        query.orderBy = "name ASC";
+
+        return this.find(query);
     }
 
     createAndRelate(data, groupId){

@@ -100,6 +100,9 @@ vows.describe('User api test')
             assert.isObject(u.position);
             assert.equal(u.position.name, e.position.name);
 
+            assert.isArray(u.approvers);
+            assert.isTrue(!!u.approvers[0].fullname);
+
             assert.isArray(u.clients);
             assert.isTrue(!!u.clients[0].short);
 

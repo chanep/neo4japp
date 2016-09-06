@@ -21,6 +21,7 @@ class UserDa extends BaseDa{
         let departmentRelL = this.model.getRelationByKey("department").label;
         let positionRelL = this.model.getRelationByKey("position").label;
         let clientRelL = this.model.getRelationByKey("clients").label;
+        let approverRelL = this.model.getRelationByKey("approvers").label;
         let sgL = skillGroupModel.labelsStr;
         let skillL = skillModel.labelsStr;
         let sgRelL = skillModel.getRelationByKey("group").label;
@@ -32,8 +33,9 @@ class UserDa extends BaseDa{
                     (n)-[:${positionRelL}]->(p),
                     (sg:${sgL})<-[:${sgRelL}]-(s:${skillL})<-[k:${kRelL}]-(n),
                     (sg)-[:${sgRelL}]->(sgp:${sgL})
+                    optional match (n)-[:${approverRelL}]->(a)
                     optional match (n)-[:${clientRelL}]->(c)
-                    with n, o, d, p, collect(c) as clients, sg, sgp, 
+                    with n, o, d, p, collect(a) as approvers, collect(c) as clients, sg, sgp, 
                         collect({id: id(s), name: s.name, knowledge: {id: id(k), level: k.level, want: k.want, approved: k.approved, approver: k.approverFullname}}) as skills
                     return {    
                                 id: id(n), username: n.username, type: n.type, email: n.email, 
@@ -41,6 +43,7 @@ class UserDa extends BaseDa{
                                 office: {id: id(o), name: o.name, country: o.country, acronym: o.acronym},
                                 department: {id: id(d), name: d.name},
                                 position: {id: id(p), name: p.name},
+                                approvers: approvers,
                                 clients: clients,
                                 skillGroups: collect({
                                     id: id(sg), name: sg.name,
