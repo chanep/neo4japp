@@ -1,7 +1,7 @@
-cd /srv/api/server/src/db-utils
-node db-apply-scripts
 cd /srv/api/server
 npm install
+cd /srv/api/server/src/db-utils
+node db-apply-scripts
 grunt apidoc
-cd src
+cd /srv/api/server/src
 pm2 start server.js
