@@ -77,6 +77,7 @@ HTTP/1.1 200 OK
         position: { id: 4835, name: "Developer" }, 
         office: { id: 4832, name: "Buenos Aires", country: "Argentina", acronym: "BA" }, 
         department: { id: 4834, name: "Technology" }, 
+        approvers: [{id: 4345, fullname: "Juan Manager"}],
         clients: [{ id: 134, name: "Nike", short: "NIKE" }], 
         skillGroups: [{ 
             id: 4844, 

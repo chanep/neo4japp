@@ -88,7 +88,7 @@ vows.describe('Approver api test')
                 throw err;
             }
             let employees = body.data;
-            console.log('team', JSON.stringify(employees));
+
             assert.equal(employees.length, 2)
             assertTeamMembers(employees, false, false);
         }

@@ -7,7 +7,12 @@ const security = new (require('./controllers/security'));
 const skillController = new (require('./controllers/skill'));
 const userController = new (require('./controllers/user'));
 const approverController = new (require('./controllers/approver'));
+const searchAllController = new (require('./controllers/search-all'));
 
+
+// ---------
+// All Users
+// ---------
 router.post('/session/', sessionController.login.bind(sessionController));
 router.delete('/session/', sessionController.logout.bind(sessionController));
 
@@ -19,11 +24,20 @@ router.get('/skill/all-groups', skillController.findAllGroups.bind(skillControll
 router.get('/user/details', userController.details.bind(userController));
 router.put('/user/knowledge', userController.setKnowledge.bind(userController));
 
-
+// ---------
+// Approvers
+// ---------
 router.use('/approver', security.checkRole(roles.approver).bind(security));
 
 router.get('/approver/my-team', approverController.findMyTeamUsers.bind(approverController));
 router.put('/approver/approve', approverController.approveKnowledge.bind(approverController));
+router.get('/approver/search-all', searchAllController.searchAll.bind(searchAllController));
+
+// -----------------
+// Resource Managers
+// -----------------
+router.use('/resource-manager', security.checkRole(roles.resourceManager).bind(security));
+router.get('/resource-manager/search-all', searchAllController.searchAll.bind(searchAllController));
 
 
 module.exports = router;

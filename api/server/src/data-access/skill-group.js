@@ -100,7 +100,6 @@ class SkillGroupDa extends BaseDa{
 	 * Finds all groups with their children groups and skills
 	 */
 	findAll(){
-		console.log("findall")
 		let cmd = `MATCH (g:${this.labelsStr})<-[:BELONGS_TO]-(cg:${this.labelsStr})<-[:BELONGS_TO]-(s:${skillModel.labelsStr}) ` +
 			`WITH g, {id: ID(cg), name: cg.name, type: cg.type, skills: COLLECT({id: ID(s), name: s.name})} as child ` + 
 			`RETURN {id: ID(g), name: g.name, type: g.type, children: COLLECT(child) }` 

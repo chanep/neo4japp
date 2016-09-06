@@ -142,7 +142,7 @@ function relExistsOperatorToCypher(model, key, value, alias){
     return cypher;
 }
 
-function likeOperatorToCypher(key, value, alias) {
+function likeOperatorToCypher(key, value, alias, params) {
     value = value.$like;
     if(!_.isString(value))
         throw new errors.GenericError("$like operator expects a string");
@@ -162,7 +162,7 @@ function likeOperatorToCypher(key, value, alias) {
     return keyToCypher(key, alias) + ` ${op} {${paramName}}`;
 }
 
-function ilikeOperatorToCypher(key, value, alias) {
+function ilikeOperatorToCypher(key, value, alias, params) {
     value = value.$ilike;
     if(!_.isString(value))
         throw new errors.GenericError("$ilike operator expects a string");
