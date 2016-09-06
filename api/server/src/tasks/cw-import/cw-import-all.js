@@ -14,25 +14,17 @@ class CwImportAllTask extends CwBaseTask{
         super('cw-import-all');
     }
     _doRun(){
-        console.log(`Task ${officesImportTask.name} started...`);
         return officesImportTask.run()
             .then(info => {
-                console.log(`Task ${officesImportTask.name} finished ok. Info: ${JSON.stringify(info)}`);
-                console.log(`Task ${departmentsImportTask.name} started...`);
                 return departmentsImportTask.run();
             })
             .then(info => {
-                console.log(`Task ${departmentsImportTask.name} finished ok. Info: ${JSON.stringify(info)}`);
-                console.log(`Task ${positionsImportTask.name} started...`);
                 return positionsImportTask.run();
             })
             .then(info => {
-                console.log(`Task ${positionsImportTask.name} finished ok. Info: ${JSON.stringify(info)}`);
-                console.log(`Task ${usersImportTask.name} started...`);
                 return usersImportTask.run()
             })
             .then(info => {
-                console.log(`Task ${usersImportTask.name} finished ok. Info: ${JSON.stringify(info)}`);
                 return {message: 'Offices, Departments, Positions, User, Allocations were imported from CW'};
             });
     }

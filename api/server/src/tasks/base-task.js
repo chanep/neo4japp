@@ -25,9 +25,11 @@ class BaseTask {
                 }
             })
             .then(() => {
+                console.log(`Task ${this.name} started...`);
                 return this._doRun(args);
             })
             .then(info => {
+                console.log(`Task ${this.name} finished ok. Info: ${JSON.stringify(info)}`)
 			    return taskStatusDa.setFinishOk(this.name, info)
                     .then(() => {
                         return info;
@@ -35,6 +37,7 @@ class BaseTask {
             })
             .catch(error => {
                 if(!running){
+                    console.log(`Task ${this.name} finished with error`, error)
                     let info = error;
                     if(typeof error == 'Error'){
                         info = {error: error.message};
@@ -44,6 +47,7 @@ class BaseTask {
                             throw error;
                         });
                 } else {
+                    console.log(`Task ${this.name} is already running...`);
                     return P.reject(new errors.GenericError(`Task ${this.name} is already running...`))
                 }
             })
