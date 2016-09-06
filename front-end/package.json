@@ -10,7 +10,6 @@
     "babel-preset-react": "^6.11.0",
     "grunt": "^1.0.1",
     "grunt-cli": "^1.2.0",
-    "grunt-contrib-sass": "^1.0.0",
     "grunt-contrib-watch": "^1.0.0",
     "history": "^1.17.0",
     "react": "^15.1.0",
@@ -18,11 +17,13 @@
     "react-router": "^2.5.1",
     "webpack": "^1.13.1"
   },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "prestart": "webpack",
-    "start": "webpack-dev-server --content-base src --inline --hot"
-  },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-http-server": "^2.0.0",
+    "grunt-sass": "^1.2.1",
+    "grunt-webpack": "^1.0.14",
+    "webpack-dev-server": "^1.15.1"
+  }
 }

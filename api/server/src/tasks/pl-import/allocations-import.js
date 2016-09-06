@@ -28,9 +28,7 @@ class AllocationsImportTask extends PlBaseTask{
     _getUsers(skip, limit){
         let query = {$not: {phonelistId: null}, paged: {skip: skip, limit: limit}}; 
         let userDa = new UserDa();
-        let data = userDa.find(query);
-        console.log(data);
-        return data;
+        return userDa.find(query);
     }
 
 	_findAndUpdateUsers() {
@@ -75,11 +73,16 @@ class AllocationsImportTask extends PlBaseTask{
             total: function(){ return this.updated + this.errors; }
         };
 
+        var usersID_Phonelist = [];
         var usersIDs = [];
 		users.forEach(function(item) {
             var newID = [];
             newID.push(item.phonelistId); //this is a fix just because the services need the ID into an array.
 			usersIDs.push(newID);
+            usersID_Phonelist.push({
+                localId: item.id,
+                phonelistId: item.phonelistId
+            });
 		});
 
         var weeks = [0, 1, 2, 3];
@@ -128,7 +131,17 @@ class AllocationsImportTask extends PlBaseTask{
         }).then(() => {
             return asyncMap(dataAlloc, function (userData, callback) {
                 try{
-                    _this._updateUser(userData).then(partialInfo => {
+                    var userLocalID = usersID_Phonelist.filter(function(findItem) {
+                        return findItem.phonelistId == userData.id;
+                    });
+
+                    var newAllocs = {
+                        'startDate': userData.startDate,
+                        'weekHours': userData.weekHours,
+                        'totalHours': userData.totalHours
+                    };
+
+                    _this._updateUser(userLocalID[0]['localId'], newAllocs).then(partialInfo => {
                         callback(null, partialInfo);
                     });
                 }catch(err){
@@ -148,12 +161,12 @@ class AllocationsImportTask extends PlBaseTask{
         });
     }
 
-    _updateUser(userData){
+    _updateUser(userId, userData){
         let info = {updated: 1, skipped: 0, notFound: 0, errors: 0};
 
         var userDa = new UserDa();
         try{
-            return userDa.setAllocation(userData.id, userData)
+            return userDa.setAllocation(userId, userData)
             .then(() => info);
         } catch(err){
             console.log("err", err)

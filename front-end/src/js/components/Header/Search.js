@@ -48,12 +48,11 @@ export default class Search extends React.Component {
         if (request.readyState != 4 || request.status != 200) {
           return;
         }
-
         var data = request.responseText;*/
         var data = '{"skills": ["Angular", "Animations", "Google Analytics"], "tools": ["Animator"], "people": ["Andrés Juárez"]}';
 
         var parsedData = JSON.parse(data);
-        console.log(parsedData);
+        console.log("parsedData",parsedData);
 
         this.setState({ results: parsedData });
 

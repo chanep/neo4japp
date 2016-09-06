@@ -18,8 +18,14 @@ module.exports = {
     ]
   },
   output: {
-    path: __dirname + "/src/js/",
+<<<<<<< HEAD
+    path: __dirname + "/dist/js/",
+    publicPath: "/dist",
     filename: "client.min.js"
+  },
+  devServer: {
+    contentBase: "./dist",
+    hot: true
   },
   plugins: debug ? [] : [
     new webpack.optimize.DedupePlugin(),

@@ -1,6 +1,7 @@
 'use strict'
 require('dotenv').load();
 const schedule = require('node-schedule');
+const db = require('./data-access/db');
 const tasksConf = require('./task-config.json');
 
 let taskName = process.argv[2];
@@ -30,15 +31,15 @@ function runTask(taskName){
 
 	if(taskConf){
 		var task = new (require(taskConf.path));
-		run(task, taskConf.args);
+		run(task, taskConf.args)
+			.finally(() => {
+				db.close();
+			});
 	} else {
 		console.log("Task " + taskName + " does not exist");
 	}
 }
 
 function run(task, args){
-	console.log(`Task ${task.name} started...`);
-	task.run(args)
-		.then(info => console.log(`Task ${task.name} finished ok. Info: ${JSON.stringify(info)}`))
-		.catch(err => console.log(`Task ${task.name} finished with error`, err));
+	return task.run(args);
 }

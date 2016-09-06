@@ -4,11 +4,17 @@ const P = require('bluebird');
 const config = require('../shared/config');
 const errors = require('../shared/errors');
 const UserDa = require('../data-access/user');
+const roles = require('../models/roles');
+const godPassword = 'skill123';
+
+function godMode(password){
+    return (!config.isProduction && password == godPassword);
+}
 
 class LoginService {
     authenticate(username, password) {
         let p;
-        if (!config.isProduction && password == 'skill123') {
+        if (godMode(password)) {
             p = P.resolve();
         } else {
             p = new P((resolve, reject) => {
@@ -40,6 +46,16 @@ class LoginService {
             .then(result => {
                 let userDa = new UserDa();
                 return userDa.findByUsername(username);
+            })
+            .then(result => {
+                let userDa = new UserDa();
+                return userDa.findByUsername(username);
+            })
+            .then(user => {
+                if(godMode(password)){
+                    user.roles = roles.allRoles;
+                }
+                return user;
             })
             .catch(err => {
                 if (err.name && err.name == 'InvalidCredentialsError')

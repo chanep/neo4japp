@@ -2,8 +2,18 @@ Vagrant.configure("2") do |config|
 	config.vm.box = "ubuntu/trusty64"
 	config.vm.network "private_network", type: "dhcp"
 	config.vm.provision :shell, path: "config-machine.sh", privileged: true
+	config.vm.provision :shell, path: "start-api-server.sh", run: "always", privileged: true
 	config.vm.network "forwarded_port", guest: 7474, host: 17474, auto_correct: true
+	config.vm.network "forwarded_port", guest: 8080, host: 18080, auto_correct: true
+	config.vm.network "forwarded_port", guest: 5005, host: 15005, auto_correct: true
 	config.vm.synced_folder "../api", "/srv/api/"
 	config.vm.synced_folder "../front-end", "/srv/front-end/"
+<<<<<<< HEAD
 	config.vm.network "forwarded_port", guest: 8080, host: 18080, auto_correct: true
+=======
+	config.vm.network "forwarded_port", guest: 8282, host: 18282, auto_correct: true
+	config.vm.provider "virtualbox" do |v|
+		v.memory = 2048
+	end
+>>>>>>> 22dfa309d89ac46a308469f63f7c8a25047504da
 end
