@@ -28,9 +28,9 @@ class ImportAllTask extends BaseTask{
             .then(info => {
                 return approversImportTask.run();
             })
-            // .then(info => {
-            //     return allocationsImportTask.run();
-            // })
+            .then(info => {
+                return allocationsImportTask.run();
+            })
             .then(info => {
                 return {message: 'Import all task finished ok'};
             });

@@ -162,7 +162,7 @@ class CypherHelper {
     setChildCmd(selfId, relKey, childData){
         let r = this.model.getRelationByKey(relKey);
         let relCypher = this._getRelationshipCypher(relKey, 'r', null);
-
+        childData = _.omit(childData, ["id"]);
         let cmd = `
             MATCH (n:${this.model.labelsStr}) WHERE ID(n) = {selfId}
             MERGE (n)${relCypher}(m:${r.model.labelsStr})
