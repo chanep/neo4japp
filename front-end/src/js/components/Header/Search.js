@@ -33,15 +33,6 @@ export default class Search extends React.Component {
       currentArr.push(skill);
       this.setState({skillArr:currentArr});
       console.log("THIS>STATE>SKILLARR",this.state.skillArr);
-      // console.log(this.state);
-
-      // var currentArr = this.state.skillArr;
-      // currentArr.push(skill);
-      // console.log(skill);
-      
-      // this.setState({skillArr: currentArr});
-
-      // console.log(this.state.skillArr);
     }
 
     query() {
