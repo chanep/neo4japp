@@ -2,6 +2,11 @@
 const config = require('../shared/config').db;
 const P = require('bluebird');
 
+if(!config || !config.server || !config.user || !config.pass){
+    console.log('db config', config);
+    throw new Error("invalid db config");
+}
+
 const neo4j = require('neo4j-driver').v1;
 const driver = neo4j.driver(config.server, neo4j.auth.basic(config.user, config.pass));
 
