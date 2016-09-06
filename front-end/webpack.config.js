@@ -18,6 +18,7 @@ module.exports = {
     ]
   },
   output: {
+<<<<<<< HEAD
     path: __dirname + "/dist/js/",
     publicPath: "/dist",
     filename: "client.min.js"

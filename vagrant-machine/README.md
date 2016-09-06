@@ -23,7 +23,7 @@ Configurations needs to use Vagrant Environment:
 	cd /etc/neo4j/
 	sudo vim neo4j.conf
 		a. Uncomment line 50
-		b. In line 57 replace 127.0.0.0 by 0.0.0.0
+		b. In line 57 replace 127.0.0.0:7473 by 0.0.0.0:7473
 		c. Save and exit --> :wq
 	exit
 		// we are now in the host machine terminal
@@ -32,4 +32,4 @@ Configurations needs to use Vagrant Environment:
 
 5. In the host machine, from some browser, enter to http://localhost:17474
 
-6. Config the new password for the database as 'root' (without quotes of course)
+6. Login with default password 'neo4j' and setup the new password for the database as 'root' (without quotes of course)

@@ -1,5 +1,12 @@
 [
 	{
+		"name" : "import-all",
+		"path" : "./tasks/import-all",
+		"cronPattern" : null,
+		"args" : {
+		}
+	},
+	{
 		"name" : "cw-import-all",
 		"path" : "./tasks/cw-import/cw-import-all",
 		"cronPattern" : "0 1 * * 0",
