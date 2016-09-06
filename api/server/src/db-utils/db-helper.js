@@ -83,10 +83,13 @@ function applyScripts(partitionSuffix){
                 });
         })
     })
-    .finally(() => {
+    .then(() => {
         console.log(scriptsApplied + ' scripts applied.');
         console.log('Db Version is: ' + dbVersion);
         //db.close();
+    })
+    .catch(err => {
+        console.log('Error applying db scripts', err);
     });
 }
 
