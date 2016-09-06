@@ -33,12 +33,11 @@ export default class Search extends React.Component {
         if (request.readyState != 4 || request.status != 200) {
           return;
         }
-
         var data = request.responseText;*/
         var data = '{"skills": ["Angular", "Animations", "Google Analytics"], "tools": ["Animator"], "people": ["Andrés Juárez"]}';
 
         var parsedData = JSON.parse(data);
-        console.log(parsedData);
+        console.log("parsedData",parsedData);
 
         this.setState({ results: parsedData });
 
@@ -62,7 +61,11 @@ export default class Search extends React.Component {
             <div className="search">
               <div className="search__input__wrapper">
                 <div className="search__input">
-                  <input type="text" name="query" onChange={this.updateQuery.bind(this)} />
+                  <div className="search-field-wrapper">
+                    <span className="search-field-pill">sdafjhsadkfhjsdhjfkhjskafkjhfdsAngular</span>
+                    <span className="search-field-pill">Node</span>
+                    <input type="text" name="query" onChange={this.updateQuery.bind(this)} />
+                   </div>
                   <span className="search-button-wrapper">
                     <span className="icon-close"><span className="path1"></span><span className="path2" onClick={this.hideResults.bind(this)}></span></span>
                     <span className="icon-search" onClick={this.showResults.bind(this)}></span>
