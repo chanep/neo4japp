@@ -74,6 +74,7 @@ vows.describe('Resource Manager api test')
 .addBatch({
     '2. Find users by skills': {
         topic: function () {
+            let s = data.skills;
             var search = {
                 skills: [s[0].id, s[1].id]
             };

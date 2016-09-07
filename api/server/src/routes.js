@@ -39,7 +39,7 @@ router.get('/approver/search-all', searchAllController.searchAll.bind(searchAllC
 // -----------------
 router.use('/resource-manager', security.checkRole(roles.resourceManager).bind(security));
 router.get('/resource-manager/search-all', searchAllController.searchAll.bind(searchAllController));
-router.get('/resource-manager/user-by-skill', resourceManagerController.findUsersBySkill.bind(resourceManagerController));
+router.get('/resource-manager/users-by-skill', resourceManagerController.findUsersBySkill.bind(resourceManagerController));
 
 
 module.exports = router;
