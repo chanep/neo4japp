@@ -29,12 +29,14 @@ export default class Search extends React.Component {
       }
     }
 
-    addSkill(skill) {
+    addSkill(skill, key) {
       let currentArr = this.state.skillArr;
       currentArr.push(skill);
       this.setState({skillArr:currentArr});
 
       console.log("THIS>STATE>SKILLARR",this.state.skillArr); // THROWS THE UPDATED ARRAY 
+
+
     }
 
     removeSkill(skill, index) {
@@ -87,10 +89,6 @@ export default class Search extends React.Component {
               <div className="search__input__wrapper">
                 <div className="search__input">
                   <div className="search-field-wrapper">
-                    {pills.map((pillName, index)=>{
-                       return (<Pill title={pillName} removeSkill={this.removeSkill} index={index} />)
-                    })}
-                   
                     <input type="text" name="query" onChange={this.updateQuery.bind(this)} />
                   </div> 
                   <span className="search-button-wrapper">
@@ -99,6 +97,13 @@ export default class Search extends React.Component {
                   </span>
                 </div>
               </div>
+
+              <div className="search-pill-wrapper">
+                {pills.map((pillName, index)=>{
+                  return (<Pill title={pillName} removeSkill={this.removeSkill} index={index} />)
+                })}
+              </div>
+
               { <Results hasResults={this.state.hasResults} results={this.state.results} addSkill={this.addSkill} /> }
             </div>
         );

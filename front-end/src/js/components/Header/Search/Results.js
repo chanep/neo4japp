@@ -24,6 +24,7 @@ export default class Results extends React.Component {
       let self = this;
         return (
           <div className="search__results__wrapper">
+
           {this.props.hasResults ?
             (<div className="search__results">
               <ul>
