@@ -11,7 +11,7 @@ export default class Search extends React.Component {
 
       this.state = {
         hasResults: false,
-        //source: 'http://www.mocky.io/v2/57b754560f000037100b7d36',
+        source: '',
         query: '',
         skillArr: []
       };
@@ -32,31 +32,36 @@ export default class Search extends React.Component {
       let currentArr = this.state.skillArr;
       currentArr.push(skill);
       this.setState({skillArr:currentArr});
-      console.log("THIS>STATE>SKILLARR",this.state.skillArr);
     }
 
     query() {
-      /*var request = new XMLHttpRequest();
-      request.open("POST", this.state.source, true);
+      console.log("queryyy");
+      this.setState({ source:'http://localhost:15005/api/resource-manager/search-all?term=ph&limit=5'});
+      var request = new XMLHttpRequest();
+      request.open("GET", this.state.source, true);
+      request.setRequestHeader("Content-Type", "application/json;charset=UTF-8"); 
 
       request.onreadystatechange = function () {
         console.log(request.status);
         if (request.readyState != 4 || request.status != 200) {
+          console.log("ERROR");
           return;
         }
-        var data = request.responseText;*/
-        var data = '{"skills": ["Angular", "Animations", "Google Analytics"], "tools": ["Animator"], "people": ["Andrés Juárez"]}';
+        var data = request.responseText;
+        console.log(JSON.parse(data));
+         data = '{"skills": ["Angular", "Animations", "Google Analytics"], "tools": ["Animator"], "people": ["Andrés Juárez"]}';
 
         var parsedData = JSON.parse(data);
+        console.log(parsedData);
         // console.log("parsedData",parsedData);
 
         this.setState({ results: parsedData });
 
         // console.log(parsedData);
+      };
+    
 
-      /*};
-
-      request.send(this.state.query);*/
+      request.send(this.state.query);
     }
 
     hideResults() {
@@ -86,7 +91,7 @@ export default class Search extends React.Component {
                   </span>
                 </div>
               </div>
-              { <Results hasResults={this.state.hasResults} results={this.state.results} addSkill={this.addSkill} /> }
+     
             </div>
         );
     }
