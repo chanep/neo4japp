@@ -60,7 +60,7 @@ class LoginService {
             .catch(err => {
                 if (err.name && err.name == 'InvalidCredentialsError')
                     throw new errors.AuthorizationError("Invalid password");
-                throw new errors.GenericError(err);
+                throw new errors.GenericError("Error in user authentication", err);
             });
 
     }

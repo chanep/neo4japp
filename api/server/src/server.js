@@ -27,7 +27,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(session({ secret: config.session_secret, resave: true, saveUninitialized: false }));
 
 // enable CORS - Cross Origin Resource Sharing
-app.use(cors());
+var corsOptions = {
+  origin: true,
+  credentials: true,
+};
+app.use(cors(corsOptions));
 
 app.use('/apidoc', express.static('../apidoc'));
 

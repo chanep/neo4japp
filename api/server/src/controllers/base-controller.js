@@ -120,7 +120,6 @@ class BaseController {
                 });
             } else {
                 let trackId = Math.floor((Math.random() * 100000000));
-                let errorFull = errors.toString(err);
                 console.log("trackId: " + trackId + " - ", err);
 
                 var errResp = {
@@ -132,7 +131,7 @@ class BaseController {
                 }
 
                 if (!config.isProduction) {
-                    errResp.error.devInfo = errorFull;
+                    errResp.error.devInfo = err.toString();
                 }
                 res.status(500).send(errResp);
 
