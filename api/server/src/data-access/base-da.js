@@ -243,7 +243,7 @@ class BaseDa {
             let includes = query.includes || [];
             let cypher = this._cypher.countCmd(query);
             return this._run(cypher.cmd, cypher.params)
-                .then(r => this._cypher.parseIntResult(r, null))
+                .then(r => this._cypher.parseIntResult(r))
                 .catch(err => {throw new errors.GenericError("Error counting " + this.model.name, err)});
         } catch(err){
             return P.reject(new errors.GenericError("Error counting " + this.model.name, err))
@@ -253,6 +253,24 @@ class BaseDa {
         return this._run(cmd, params)
                 .then(r => this._cypher.parseResultArrayRaw(r, schema));
                 // .then(n => this._toEntityArray(n));
+    }
+    queryPaged(cmd, countCmd, params, schema){
+        let countParams = _.omit(params, ["skip", "limit"]);
+        let paged = {
+            skip: params.skip,
+            limit: params.limit
+        };
+        return this._run(countCmd, countParams)
+                .then(r => {
+                    paged.totalCount = this._cypher.parseIntResult(r);
+                    return this._run(cmd, params)
+                })
+                .then(r => {
+                    let result = {};
+                    result.data = this._cypher.parseResultArrayRaw(r, schema);
+                    result.paged = paged;
+                    return result;
+                });
     }
     create(data){
         return this._validate(data)
