@@ -97,18 +97,12 @@ export default class Search extends React.Component {
                   </span>
                 </div>
               </div>
-<<<<<<< HEAD
-     
-=======
-
               <div className="search-pill-wrapper">
                 {pills.map((pillName, index)=>{
                   return (<Pill title={pillName} removeSkill={this.removeSkill} index={index} />)
                 })}
               </div>
-
               { <Results hasResults={this.state.hasResults} results={this.state.results} addSkill={this.addSkill} /> }
->>>>>>> 8315a3e14756fa87906dc0462561221be3dd44f2
             </div>
         );
     }
