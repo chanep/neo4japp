@@ -14,9 +14,9 @@ export default class Results extends React.Component {
     }
 
     clickingState (event, props, skill) {
-      console.log("SKillEVENT" ,event);
-      console.log("SKILLPROPS" ,props);
-      console.log("SKILSKILL" ,skill);
+      //console.log("SKILLPROPS" ,props); // THIS ONE TELLS THE ELEMENT THAT HAS BEEN CLICKED
+
+      //TODO: check if ID is already in array
       this.props.addSkill(props);
     }
 
