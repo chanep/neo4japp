@@ -28,62 +28,110 @@ export default class SearchResultsTable extends React.Component {
                 <div className="results-section">
                     <ul className="result">
                         <li>
-                            <p>First Last</p>
-                            <p>Position</p>
+                            <div>
+                                <p><strong>First Last</strong></p>
+                                <p>Position</p>
+                            </div>
                         </li>
-                        <li>BA</li>
-                        <li>3/3</li>
                         <li>
-                            <i className="ss-icon-empty"></i>
-                            <i className="ss-icon-quarter"></i>
-                            <i className="ss-icon-half"></i>
-                            <i className="ss-icon-three-quarters"></i>
-                            <i className="ss-icon-full"></i>
+                            <div>
+                                BA
+                            </div>
                         </li>
-                    </ul>
-                    <ul className="result">
                         <li>
-                            <p>First Last</p>
-                            <p>Position</p>
+                            <div>
+                                3/3
+                            </div>
                         </li>
-                        <li>BA</li>
-                        <li>3/3</li>
                         <li>
-                            <i className="ss-icon-empty"></i>
-                            <i className="ss-icon-quarter"></i>
-                            <i className="ss-icon-half"></i>
-                            <i className="ss-icon-three-quarters"></i>
-                            <i className="ss-icon-full"></i>
+                            <div>
+                                <i className="ss-icon-empty"></i>
+                                <i className="ss-icon-quarter"></i>
+                                <i className="ss-icon-half"></i>
+                                <i className="ss-icon-three-quarters"></i>
+                                <i className="ss-icon-full"></i>
+                            </div>
                         </li>
                     </ul>
                     <ul className="result">
                         <li>
-                            <p>First Last</p>
-                            <p>Position</p>
+                            <div>
+                                <p><strong>First Last</strong></p>
+                                <p>Position</p>
+                            </div>
                         </li>
-                        <li>BA</li>
-                        <li>3/3</li>
                         <li>
-                            <i className="ss-icon-empty"></i>
-                            <i className="ss-icon-quarter"></i>
-                            <i className="ss-icon-half"></i>
-                            <i className="ss-icon-three-quarters"></i>
-                            <i className="ss-icon-full"></i>
+                            <div>
+                                BA
+                            </div>
+                        </li>
+                        <li>
+                            <div>
+                                3/3
+                            </div>
+                        </li>
+                        <li>
+                            <div>
+                                <i className="ss-icon-empty"></i>
+                                <i className="ss-icon-quarter"></i>
+                                <i className="ss-icon-half"></i>
+                                <i className="ss-icon-three-quarters"></i>
+                                <i className="ss-icon-full"></i>
+                            </div>
                         </li>
                     </ul>
                     <ul className="result">
                         <li>
-                            <p>First Last</p>
-                            <p>Position</p>
+                            <div>
+                                <p><strong>First Last</strong></p>
+                                <p>Position</p>
+                            </div>
                         </li>
-                        <li>BA</li>
-                        <li>3/3</li>
                         <li>
-                            <i className="ss-icon-empty"></i>
-                            <i className="ss-icon-quarter"></i>
-                            <i className="ss-icon-half"></i>
-                            <i className="ss-icon-three-quarters"></i>
-                            <i className="ss-icon-full"></i>
+                            <div>
+                                BA
+                            </div>
+                        </li>
+                        <li>
+                            <div>
+                                3/3
+                            </div>
+                        </li>
+                        <li>
+                            <div>
+                                <i className="ss-icon-empty"></i>
+                                <i className="ss-icon-quarter"></i>
+                                <i className="ss-icon-half"></i>
+                                <i className="ss-icon-three-quarters"></i>
+                                <i className="ss-icon-full"></i>
+                            </div>
+                        </li>
+                    </ul>
+                    <ul className="result">
+                        <li>
+                            <div>
+                                <p><strong>First Last</strong></p>
+                                <p>Position</p>
+                            </div>
+                        </li>
+                        <li>
+                            <div>
+                                BA
+                            </div>
+                        </li>
+                        <li>
+                            <div>
+                                3/3
+                            </div>
+                        </li>
+                        <li>
+                            <div>
+                                <i className="ss-icon-empty"></i>
+                                <i className="ss-icon-quarter"></i>
+                                <i className="ss-icon-half"></i>
+                                <i className="ss-icon-three-quarters"></i>
+                                <i className="ss-icon-full"></i>
+                            </div>
                         </li>
                     </ul>
                 </div>
