@@ -6,6 +6,7 @@ import Layout from "./components/Layout";
 import ResourceHotspot from "./pages/ResourceHotspot";
 import Allocations from "./pages/Allocations";
 import Login from "./pages/Login";
+import SearchResults from "./pages/SearchResults";
 
 const app = document.getElementById('app');
 
@@ -19,6 +20,9 @@ ReactDOM.render(
 		<Route path="/login" component={Layout}>
 					<IndexRoute component={Login}></IndexRoute>
 		</Route>
+        <Route path="/searchResults" component={Layout}>
+            <IndexRoute component={SearchResults}></IndexRoute>
+        </Route>
 	</Router>,
 app);
 
