@@ -14,9 +14,9 @@ export default class Results extends React.Component {
     }
 
     clickingState (event, props, skill) {
-      console.log("SKillEVENT" ,event);
-      console.log("SKILLPROPS" ,props);
-      console.log("SKILSKILL" ,skill);
+      //console.log("SKILLPROPS" ,props); // THIS ONE TELLS THE ELEMENT THAT HAS BEEN CLICKED
+
+      //TODO: check if ID is already in array
       this.props.addSkill(props);
     }
 
@@ -24,6 +24,7 @@ export default class Results extends React.Component {
       let self = this;
         return (
           <div className="search__results__wrapper">
+
           {this.props.hasResults ?
             (<div className="search__results">
               <ul>
