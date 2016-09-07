@@ -67,8 +67,6 @@ export default class Search extends React.Component {
 
         this.setState({ results: parsedData });
 
-        // console.log(parsedData);
-
       /*};
 
       request.send(this.state.query);*/
@@ -100,7 +98,7 @@ export default class Search extends React.Component {
 
               <div className="search-pill-wrapper">
                 {pills.map((pillName, index)=>{
-                  return (<Pill title={pillName} removeSkill={this.removeSkill} index={index} />)
+                  return (<Pill name={pillName} removeSkill={this.removeSkill} index={index} />)
                 })}
               </div>
 
