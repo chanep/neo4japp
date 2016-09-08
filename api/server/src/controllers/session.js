@@ -12,7 +12,7 @@ class SessionController extends BaseController{
     @apiGroup Session
 
     @apiParam {string} username
-    @apiParam {string} password Skillgroup type (find skills of certain group type) 
+    @apiParam {string} password 
 
     @apiSuccessExample {json} Success-Response:
     HTTP/1.1 200 OK
