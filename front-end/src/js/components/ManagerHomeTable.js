@@ -22,17 +22,17 @@ export default class ManagerHomeTable extends React.Component {
                 <div className="filters col -col-3">
                     //Left column goes here
                 </div>
-                <div className="header-bar col -col-9">
+                <div className="header-bar col -col-9 -col-no-gutter">
                     <div className="col -col-6">
                         <span className="table-header">Employee</span>
                     </div>
-                    <div className="col -col-1">
+                    <div className="col -col-2">
                         <span className="table-header">Location</span>
                     </div>
-                    <div className="col -col-1">
+                    <div className="col -col-2">
                         <span className="table-header">Review Skills</span>
                     </div>
-                    <div className="col -col-1">&nbsp;</div>
+                    <div className="col -col-0">&nbsp;</div>
                 </div>
                 <div className="results-section">
                     <div className="manager-home results results--right col -col-9 -col-no-gutter">

@@ -14,6 +14,10 @@
         .col {
             line-height: em(29);
 
+            &:nth-of-type(2) {
+                @include nestedColumn($width: 2, $context: 9);    
+            }
+            
             &:nth-of-type(5) {
                 text-align: center;
             }
