@@ -1,0 +1,37 @@
+.arrow-btn {
+    font-size: 12px;
+    font-weight: bold;
+    color: #000;
+    text-transform: uppercase;
+    span {
+        font-size: 10px;
+        font-weight: bold;
+        margin-left: 24px;
+    }
+}
+
+//Two Columns Module
+.two-col-wrapper {
+    clear: both;
+    overflow: hidden;
+    .left-col {
+        float: left;
+        width: 20%;
+    }
+
+    .right-col {
+        float: right;
+        width: 75%;
+    }
+}
+
+.main-content {
+    height: 500px;
+    padding: 40px 0;
+}
+
+section {
+    width: 100%;
+    max-width: 962px;
+    margin: 0 auto;
+}

@@ -1,0 +1,69 @@
+/**
+ * Base: Icons
+ */
+
+i {
+
+    /* use !important to prevent issues with browser extensions that change fonts */
+    display: inline-block;
+    font-family: 'Skill Search' !important;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: normal;
+    line-height: 1;
+    speak: none;
+    text-transform: none;
+
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.ss-icon-right-arrow:before {
+    content: "\e908";
+}
+.ss-icon-down-arrow:before {
+    content: "\e909";
+}
+.ss-icon-arrow-down:before {
+    content: "\e900";
+}
+.ss-icon-password:before {
+    content: "\e906";
+}
+.ss-icon-user:before {
+    content: "\e907";
+}
+.ss-icon-view:before {
+    content: "\e905";
+}
+.ss-icon-envelope:before {
+    content: "\e904";
+}
+.ss-icon-close .path1:before {
+    color: rgb(102, 103, 103);
+    content: "\e902";
+}
+.ss-icon-close .path2:before {
+    color: rgb(255, 255, 255);
+    content: "\e903";
+    margin-left: -0.9892578125em;
+}
+.ss-icon-search:before {
+    content: "\e901";
+}
+.ss-icon-empty:before {
+    content: "\e90a";
+}
+.ss-icon-quarter:before {
+    content: "\e90b";
+}
+.ss-icon-half:before {
+    content: "\e90c";
+}
+.ss-icon-three-quarters:before {
+    content: "\e90d";
+}
+.ss-icon-full:before {
+    content: "\e90e";
+}

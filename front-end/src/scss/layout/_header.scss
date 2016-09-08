@@ -1,0 +1,178 @@
+/**
+ * Layout: Header
+ */
+
+header {
+    display: block;
+    background: linear-gradient(to right, #ffffff 0%,#ffffff 50%,#e71d39 51%,#e71d39 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+
+
+    .header-wrapper {
+        background-color: #fff;
+        max-width: 962px;
+        margin: 0 auto;
+        clear: both;
+        overflow: hidden;
+        width: 100%;
+
+        h1 {
+            float: left;
+            margin: 11px 0;
+        }
+
+        .allocations-btn {
+            background: #e71d39;
+            color: #fff;
+            font-weight: bold;
+            float: right;
+            font-size: 14px;
+            padding: 10px 20px 10px 48px;
+
+            span, img {
+                display: inline-block;
+                vertical-align: middle;
+            }
+
+            span {
+                font-size: 10px;
+                margin-right: 7px;
+                padding-bottom: 2px;
+            }
+
+            img {
+                margin-left: 30px;
+            }
+        }
+    }
+
+    .search {
+        background-color: #fff;
+        width: 100%;
+
+        .search__input__wrapper {
+            background-color: #e7e7e8;
+            height: 50px;
+        }
+
+        .search__input {
+            max-width: 962px;
+            margin: 0 auto;
+            height: 100%;
+
+            input {
+                border: 0;
+                background: transparent;
+                font-size: 22px;
+                height: 100%;
+                width: 500px;
+            }
+
+            .search-button-wrapper {
+                background: #f3f3f4;
+                min-width: 90px;
+                float: right;
+                height: 50px;
+                padding: 16px 24px;
+
+                span {
+                    color: #000;
+                    &.icon-search {
+                        cursor: pointer;
+                        float: right;
+                    }
+
+                    &.icon-close {
+                        cursor: pointer;
+                        margin-right: 28px;
+                    }
+                }
+            }
+
+            .search-field-wrapper {
+                display: inline-block;
+                height: 43px;
+            }
+        }
+
+        &__results {
+            background: #f3f3f4;
+            padding: 30px 30px 46px;
+            max-width: 962px;
+            margin: 0 auto;
+
+            > ul {
+                margin: 0 0 28px;
+                &:last-child {
+                    margin: 0;
+                }
+                li {
+                    &.category-list {
+                        display: inline-block;
+                        font-size: 13px;
+                        color: #666767;
+                        padding-right: 30px;
+                        vertical-align: top;
+                        width: 145px;
+                    }
+
+                    &.subcategory-list {
+                        display: inline-block;
+                        vertical-align: top;
+                        ul {
+                            li {
+                                font-size: 16px;
+                                color: #000;
+                                cursor: pointer;
+                                margin-bottom: 6px;
+                                transition: color .2s ease-in;
+
+                                &:hover { color: #e71d39; }
+
+                                &.selected {
+                                    color: #e71d39;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .search-pill-wrapper {
+        width: 962px;
+        margin: 0 auto;
+        background-color: #f3f3f4;
+        border-bottom: 1px solid #e7e7e8;
+        margin-top: -1px
+    }
+
+    .search-field-pill {
+        display: inline-block;
+        background-color: white;
+        border-radius: 30px;
+        padding: 4px 12px;
+        margin: 12px 8px;
+    }
+
+    .search-field-pill__close {
+        display: inline-block;
+        cursor: pointer;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background-color: #666767;
+        color: white;
+        font-size: 10px;
+        margin-left: 3px;
+        text-align: center;
+        font-family: 'icomoon' !important;
+
+        &::before {
+            content: "\e903";
+            line-height: 15px;
+            color: white;
+            font-size: 12px;
+        }
+    }
+}
