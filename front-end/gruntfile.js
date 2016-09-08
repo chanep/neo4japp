@@ -16,6 +16,7 @@ module.exports = function (grunt) {
         'postcss': {
             'options': {
                 'processors': [
+                    require('precss')({ /* options */ }),
                     require('autoprefixer')({
                         'browsers': ['last 3 version']
                     })
@@ -134,5 +135,5 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-webpack');
     grunt.loadNpmTasks('grunt-http-server');
     grunt.loadNpmTasks('grunt-contrib-watch');
-    grunt.registerTask('default', ['http-server', 'sass', 'postcss', 'webpack', 'copy', 'watch']);
+    grunt.registerTask('default', ['http-server', 'sass','webpack', 'copy', 'watch']);
 };

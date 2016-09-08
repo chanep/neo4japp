@@ -17,11 +17,21 @@ export default class Results extends React.Component {
       //console.log("SKILLPROPS" ,props); // THIS ONE TELLS THE ELEMENT THAT HAS BEEN CLICKED
 
       //TODO: check if ID is already in array
+      console.log("CLICK-STATE E" , event);
+      console.log("CLICK-STATE P", props);
+      console.log("CLICK-STATE S", skill);
       this.props.addSkill(props);
     }
 
     render () {
       let self = this;
+      let skills = this.props.results.skills;
+      let tools = this.props.results.tools;
+      let users = this.props.results.users;
+      console.log("SKILLS", skills);
+      console.log("Tools", tools);
+      console.log("users", users);
+
         return (
           <div className="search__results__wrapper">
 
@@ -31,8 +41,8 @@ export default class Results extends React.Component {
                 <li className="category-list">Skills</li>
                 <li className="subcategory-list">
                   <ul>
-                    {this.props.results.skills.map(function (skill, props){
-                      return <li data-skill={skill} onClick={self.clickingState.bind(self, props, skill)}>{skill}</li>;
+                    {skills.map(function (skill, props){
+                      return <li data-skill={skill.name} key={skill.id} onClick={self.clickingState.bind(self, props, skill)}>{skill.name}</li>;
                     })}
                   </ul>
                 </li>
@@ -41,8 +51,8 @@ export default class Results extends React.Component {
                 <li className="category-list">Tools</li>
                 <li className="subcategory-list">
                   <ul>
-                    {this.props.results.tools.map(function (tool, props){
-                      return <li data-skill={tool} onClick={self.clickingState.bind(self, props, tool)}>{tool}</li>;
+                    {tools.map(function (tool, props){
+                      return <li data-skill={tool.name} key={tool.id} onClick={self.clickingState.bind(self, props, tool)}>{tool.name}</li>;
                     })}
                   </ul>
                 </li>
@@ -51,8 +61,8 @@ export default class Results extends React.Component {
                 <li className="category-list">People</li>
                 <li className="subcategory-list">
                   <ul>
-                    {this.props.results.people.map(function (person){
-                      return <li>{person}</li>;
+                    {users.map(function (person){
+                      return <li>{person.name}</li>;
                     })}
                   </ul>
                 </li>
