@@ -36,6 +36,13 @@
   },
   "apidoc": {
     "title": "Skillsearch Api Doc",
-    "url": ""
+    "url": "",
+    "order": [
+      "Session",
+      "Users",
+      "Approvers",
+      "Resource Managers",
+      "Skills"
+    ]
   }
 }
