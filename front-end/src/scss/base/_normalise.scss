@@ -47,3 +47,11 @@ html:-webkit-full-screen-ancestor {
 html:full-screen-ancestor {
     background-color: inherit;
 }
+
+li {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+}

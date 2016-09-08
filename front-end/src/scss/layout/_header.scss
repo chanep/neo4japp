@@ -17,7 +17,7 @@ header {
 
         h1 {
             float: left;
-            margin: 11px 0;
+            margin: 24px 0;
         }
 
         .allocations-btn {
@@ -76,12 +76,12 @@ header {
 
                 span {
                     color: #000;
-                    &.icon-search {
+                    &.ss-icon-search {
                         cursor: pointer;
                         float: right;
                     }
 
-                    &.icon-close {
+                    &.ss-icon-close {
                         cursor: pointer;
                         margin-right: 28px;
                     }
@@ -153,26 +153,14 @@ header {
         border-radius: 30px;
         padding: 4px 12px;
         margin: 12px 8px;
-    }
 
-    .search-field-pill__close {
-        display: inline-block;
-        cursor: pointer;
-        width: 14px;
-        height: 14px;
-        border-radius: 50%;
-        background-color: #666767;
-        color: white;
-        font-size: 10px;
-        margin-left: 3px;
-        text-align: center;
-        font-family: 'icomoon' !important;
-
-        &::before {
-            content: "\e903";
-            line-height: 15px;
-            color: white;
+        .ss-icon-close {
+            display: inline-block;
+            cursor: pointer;
+            width: 14px;
+            height: 14px;
             font-size: 12px;
+            margin-left: 3px;
         }
     }
 }

@@ -34,7 +34,7 @@ export default class Search extends React.Component {
       currentArr.push(skill);
       this.setState({skillArr:currentArr});
 
-      console.log("THIS>STATE>SKILLARR",this.state.skillArr); // THROWS THE UPDATED ARRAY 
+      console.log("THIS>STATE>SKILLARR",this.state.skillArr); // THROWS THE UPDATED ARRAY
 
 
     }
@@ -44,7 +44,7 @@ export default class Search extends React.Component {
       let currentArr = this.state.skillArr;
       currentArr.splice(index, 1);
       this.setState({skillArr:currentArr});
-      
+
       console.log(currentArr);
 
     }
@@ -59,7 +59,7 @@ export default class Search extends React.Component {
           return;
         }
         var data = request.responseText;*/
-        
+
         var data = '{"skills": ["Angular", "Animations", "Google Analytics"], "tools": ["Animator"], "people": ["Andrés Juárez"]}';
 
         var parsedData = JSON.parse(data);
@@ -88,10 +88,10 @@ export default class Search extends React.Component {
                 <div className="search__input">
                   <div className="search-field-wrapper">
                     <input type="text" name="query" onChange={this.updateQuery.bind(this)} />
-                  </div> 
+                  </div>
                   <span className="search-button-wrapper">
-                    <span className="icon-close"><span className="path1"></span><span className="path2" onClick={this.hideResults.bind(this)}></span></span>
-                    <span className="icon-search" onClick={this.showResults.bind(this)}></span>
+                    <span className="ss-icon-close"><span className="path1"></span><span className="path2" onClick={this.hideResults.bind(this)}></span></span>
+                    <span className="ss-icon-search" onClick={this.showResults.bind(this)}></span>
                   </span>
                 </div>
               </div>
