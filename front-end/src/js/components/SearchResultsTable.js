@@ -38,7 +38,89 @@ export default class SearchResultsTable extends React.Component {
                     <div className="col -col-1">&nbsp;</div>
                 </div>
                 <div className="results-section">
-                    <div className="filters col -col-3">Filters here</div>
+                    <div className="filters col -col-3">
+                        <div>
+                            <span className="filter-title">Locations</span> <span className="filter-title-group">(All)</span>
+                            <ul>
+                                <li className="filter-option">
+                                    <label>
+                                        <input type="checkbox" /> Austin
+                                    </label>
+                                </li>
+                                <li className="filter-option">
+                                    <label>
+                                        <input type="checkbox" /> Bucharest
+                                    </label>
+                                </li>
+                                <li className="filter-option">
+                                    <label>
+                                        <input type="checkbox" /> Buenos Aires
+                                    </label>
+                                </li>
+                                <li className="filter-option">
+                                    <label>
+                                        <input type="checkbox" /> Chicago
+                                    </label>
+                                </li>
+                                <li className="filter-option">
+                                    <label>
+                                        <input type="checkbox" /> Istanbul
+                                    </label>
+                                </li>
+                                <li className="filter-option">
+                                    <label>
+                                        <input type="checkbox" /> London
+                                    </label>
+                                </li>
+                                <li className="filter-option">
+                                    <label>
+                                        <input type="checkbox" /> Los Angeles
+                                    </label>
+                                </li>
+                                <li className="filter-option">
+                                    <label>
+                                        <input type="checkbox" /> New York
+                                    </label>
+                                </li>
+                                <li className="filter-option">
+                                    <label>
+                                        <input type="checkbox" /> Portland
+                                    </label>
+                                </li>
+                                <li className="filter-option">
+                                    <label>
+                                        <input type="checkbox" /> São Paulo
+                                    </label>
+                                </li>
+                                <li className="filter-option">
+                                    <label>
+                                        <input type="checkbox" /> San Francisco
+                                    </label>
+                                </li>
+                                <li className="filter-option">
+                                    <label>
+                                        <input type="checkbox" /> Shanghai
+                                    </label>
+                                </li>
+                                <li className="filter-option">
+                                    <label>
+                                        <input type="checkbox" /> Singapore
+                                    </label>
+                                </li>
+                                <li className="filter-option">
+                                    <label>
+                                        <input type="checkbox" /> Sydney
+                                    </label>
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <span className="filter-title">Departments</span> <span className="filter-title-group">(All)</span>
+                        </div>
+                        <div>
+                            <span className="filter-title">Position Levels</span> <span className="filter-title-group">(All)</span>
+                        </div>
+                    </div>
                     <div className="results col -col-9 -col-no-gutter">
                         <div className="grid">
                             <div className="col -col-4">

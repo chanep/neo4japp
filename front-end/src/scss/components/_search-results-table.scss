@@ -24,13 +24,50 @@
         @include grid($max-width: em(960));
 
         .filters {
-            background-color: $GREY;
+            background-color: $LIGHT-GREY;
+            padding: {
+                top: em(10);
+                bottom: 0;
+            }
+
+            & > div {
+                border-bottom: 1px solid $LIGHTEST-GREY;
+                padding-bottom: em(9);
+                padding-top: em(6);
+
+                &:last-of-type {
+                    border-bottom: none;
+                }
+            }
+
+            .filter-title-group {
+                color: $GREY;
+            }
+
+            .filter-option {
+                color: $GREY;
+
+                label {
+                    user-select: none;
+
+                    &:hover {
+                        cursor: pointer ;
+                    }
+                }
+
+                input {
+                    margin-right: 7px;
+                }
+            }
         }
 
         .results {
 
             & > * {
-                border-bottom: 1px solid $LIGHTEST-GREY;
+                border: {
+                    bottom: 1px solid $LIGHTEST-GREY;
+                    left: 1px solid $LIGHTEST-GREY;
+                }
                 height: em(75);
 
                 &:nth-of-type(even) {
