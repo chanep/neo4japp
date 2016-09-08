@@ -1,0 +1,9 @@
+/**
+ * Base: Typography
+ */
+
+// Skill Search
+@include generateFont('Skill Search', 'Skill Search');
+
+// Generate type-scale elements
+@include generateTypeScaleStyles();
