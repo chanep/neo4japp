@@ -17,8 +17,9 @@ export default class Login extends React.Component {
       const queryURL = 'http://localhost:15005/api/session/';
       var request = new XMLHttpRequest();
       request.open("POST", queryURL, true);
+      request.withCredentials = true;
       request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-      request.setRequestHeader("Access-Control-Allow-Origin", "http://localhost:15005");
+
 
       request.onreadystatechange = function () {
 

@@ -11,17 +11,19 @@ export default class Search extends React.Component {
 
       this.state = {
         hasResults: false,
-        source: '',
-        query: '',
-        skillArr: []
+        source:'',
+        query:'',
+        skillArr: [],
+        results:{}
       };
 
       this.addSkill = this.addSkill.bind(this);
-      this.removeSkill = this.removeSkill.bind(this)
+      this.removeSkill = this.removeSkill.bind(this);
+      this.updateQuery = this.updateQuery.bind(this);
     }
 
     updateQuery(e) {
-      this.setState({ query: e.target.value });
+      this.setState({query: e.target.value});
       this.query();
 
       if (!this.state.hasResults) {
@@ -29,9 +31,10 @@ export default class Search extends React.Component {
       }
     }
 
-    addSkill(skill, key) {
+    addSkill(skill) {
       let currentArr = this.state.skillArr;
-      currentArr.push(skill);
+      currentArr.push(skill.name);
+      console.log("ADD SKILL ------->", skill);
       this.setState({skillArr:currentArr});
     }
 
@@ -45,29 +48,33 @@ export default class Search extends React.Component {
     }
 
     query() {
-      console.log("queryyy");
-      this.setState({ source:'http://localhost:15005/api/resource-manager/search-all?term=ph&limit=5'});
+      let source = 'http://localhost:15005/api/resource-manager/search-all?term='+ this.state.query + '&limit=5'
       var request = new XMLHttpRequest();
-      request.open("GET", this.state.source, true);
-      request.setRequestHeader("Content-Type", "application/json;charset=UTF-8"); 
+      request.open("GET",source, true);
+      request.withCredentials = true;
 
-      request.onreadystatechange = function () {
+      request.onreadystatechange =  () => {
         console.log(request.status);
         if (request.readyState != 4 || request.status != 200) {
           console.log("ERROR");
           return;
         }
         var data = request.responseText;
-        console.log(JSON.parse(data));
-         data = '{"skills": ["Angular", "Animations", "Google Analytics"], "tools": ["Animator"], "people": ["Andrés Juárez"]}';
-
-        var parsedData = JSON.parse(data);
-        console.log(parsedData);
+         var parsedData = JSON.parse(data);
+        console.log("DATA", parsedData.data);
         // console.log("parsedData",parsedData);
 
-        this.setState({ results: parsedData });
-
-        // console.log(parsedData);
+        this.setState({ results: parsedData.data });
+        var l = 0;
+        l += this.state.results.skills.length;
+        l += this.state.results.tools.length;
+        l += this.state.results.users.length;
+        console.log("LENGTHHHHHH", l);
+        if(this.state.results.skills.length > 0){
+          this.showResults();
+        }else{
+          this.hideResults(0);
+        }
       };
     
 
@@ -84,12 +91,13 @@ export default class Search extends React.Component {
 
     render () {
       var pills = this.state.skillArr;
+      var self = this;
         return (
             <div className="search">
               <div className="search__input__wrapper">
                 <div className="search__input">
                   <div className="search-field-wrapper">
-                    <input type="text" name="query" onChange={this.updateQuery.bind(this)} />
+                    <input type="text" name="query" onChange={this.updateQuery} />
                   </div> 
                   <span className="search-button-wrapper">
                     <span className="icon-close"><span className="path1"></span><span className="path2" onClick={this.hideResults.bind(this)}></span></span>
@@ -102,7 +110,7 @@ export default class Search extends React.Component {
                   return (<Pill title={pillName} removeSkill={this.removeSkill} index={index} />)
                 })}
               </div>
-              { <Results hasResults={this.state.hasResults} results={this.state.results} addSkill={this.addSkill} /> }
+                 { <Results hasResults={this.state.hasResults} results={this.state.results} addSkill={this.addSkill} /> }
             </div>
         );
     }
