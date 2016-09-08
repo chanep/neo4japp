@@ -3,7 +3,6 @@ const config = require('../shared/config');
 const errors = require('../shared/errors');
 
 
-
 class BaseController {
     constructor(){
     //    for (let name of getAllPropertyNames(this, 1)) {
@@ -17,15 +16,20 @@ class BaseController {
     _buildSearch(req){
         let search =  req.parsedQuery;
         for(let k in search){
-            if(!isNaN(Number(search[k]))){
-                search[k] = Number(search[k])
-            } else if (search[k] == 'true'){
-                search[k] = true;
-            } else if (search[k] == 'false'){
-                search[k] = false;
-            }
+            search[k] = parseValue(search[k]);
         }
         return search;
+
+        function parseValue(value){
+            if(Array.isArray(value))
+                return value.map(v => parseValue(v));
+            if(!isNaN(Number(value)))
+                return Number(value)
+            if (value == 'true')
+                return true;
+            if (value == 'false')
+                return false;
+        }
     }
 
 
