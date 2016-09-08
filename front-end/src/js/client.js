@@ -7,6 +7,7 @@ import ResourceHotspot from "./pages/ResourceHotspot";
 import Allocations from "./pages/Allocations";
 import Login from "./pages/Login";
 import SearchResults from "./pages/SearchResults";
+import ManagerHome from "./pages/ManagerHome";
 
 const app = document.getElementById('app');
 
@@ -22,6 +23,9 @@ ReactDOM.render(
 		</Route>
         <Route path="/searchResults" component={Layout}>
             <IndexRoute component={SearchResults}></IndexRoute>
+        </Route>
+        <Route path="/ManagerHome" component={Layout}>
+            <IndexRoute component={ManagerHome}></IndexRoute>
         </Route>
 	</Router>,
 app);
