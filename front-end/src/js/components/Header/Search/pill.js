@@ -21,7 +21,7 @@ export default class Pill extends React.Component {
 
     render () {
         return (
-            <span className="search-field-pill">{this.props.name}<span className="ss-icon-close" onClick={this.removeItem.bind(this)}><span className="path1"></span><span className="path2"></span></span></span>
+             <span className="search-field-pill">{this.props.name}<span className="search-field-pill__close" onClick={this.removeItem.bind(this)}></span></span>
         );
     }
 }
