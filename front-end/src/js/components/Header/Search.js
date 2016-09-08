@@ -43,7 +43,7 @@ export default class Search extends React.Component {
       let currentArr = this.state.skillArr;
       currentArr.splice(index, 1);
       this.setState({skillArr:currentArr});
-      
+
       console.log(currentArr);
     }
 
@@ -76,7 +76,6 @@ export default class Search extends React.Component {
           this.hideResults(0);
         }
       };
-    
 
       request.send(this.state.query);
     }
@@ -100,14 +99,14 @@ export default class Search extends React.Component {
                     <input type="text" name="query" onChange={this.updateQuery} />
                   </div> 
                   <span className="search-button-wrapper">
-                    <span className="icon-close"><span className="path1"></span><span className="path2" onClick={this.hideResults.bind(this)}></span></span>
-                    <span className="icon-search" onClick={this.showResults.bind(this)}></span>
+                    <span className="ss-icon-close"><span className="path1"></span><span className="path2" onClick={this.hideResults.bind(this)}></span></span>
+                    <span className="ss-icon-search" onClick={this.showResults.bind(this)}></span>
                   </span>
                 </div>
               </div>
               <div className="search-pill-wrapper">
                 {pills.map((pillName, index)=>{
-                  return (<Pill title={pillName} removeSkill={this.removeSkill} index={index} />)
+                  return (<Pill name={pillName} removeSkill={this.removeSkill} index={index} />)
                 })}
               </div>
                  { <Results hasResults={this.state.hasResults} results={this.state.results} addSkill={this.addSkill} /> }

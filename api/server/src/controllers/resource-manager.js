@@ -3,7 +3,7 @@ const P = require('bluebird');
 const config = require('../shared/config');
 const errors = require('../shared/errors');
 const BaseController = require('./base-controller');
-const userDa = new (require('../data-access/user'));
+const resourceManagerDa = new (require('../data-access/resource-manager'));
 const skillDa = new (require('../data-access/skill'));
 
 class ResourceManagerController extends BaseController{
@@ -30,7 +30,7 @@ class ResourceManagerController extends BaseController{
         let skip = search.skip || 0;
         let limit = search.limit || 20;
 
-        let promise = approverDa.findUsersBySkill(skillIds, filters, skip, limit);
+        let promise = resourceManagerDa.findUsersBySkill(skillIds, filters, skip, limit);
 
         this._respondPromise(req, res, promise);
     }

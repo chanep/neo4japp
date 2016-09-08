@@ -28,25 +28,24 @@ class ResourceManagerDa extends UserDa{
             whereOffices = `where id(o) in {offices}`;
         }
 
-        let match = `match (n:${label})-[k:${kRelL}]->(s:${skillL}) where not(n.disabled) and id(s) in {skillIds} and not(k.want),
-                    (n)-[:${officeRelL}]->(o) ${whereOffices},
-                    (n)-[:${positionRelL}]->(p)`;
+        let match = `match (n:${label})-[k:${kRelL}]->(s:${skillL}) where not(n.disabled) and id(s) in {skillIds} and not(k.want)
+                     match (n)-[:${officeRelL}]->(o) ${whereOffices}
+                     match (n)-[:${positionRelL}]->(p)`;
 
-        let countCmd = `${match} return count(n) as count`;
+        let countCmd = `${match} return count(distinct n) as count`;
 
-        let cmd = `${match},
+        let cmd = `${match}
                     optional match (n)-[:${approverRelL}]->(a)
                     optional match (n)-[:${allocationRelL}]->(al)
-                    with n, o, p, collect(a) as approvers, collect({_:s, level: k.level, approved: k.approved}) as skills
-                    with n, o, p, approvers, skills, 
-                        (sum([s IN skills WHERE s.approved | s.level]) * 2 + sum([s IN skills | s.level])) as score
+                    with n, o, p, al, collect(a) as approvers, collect({_:s, level: k.level, approved: k.approved}) as skills
+                    with n, o, p, al, approvers, skills, 
+                    reduce(acc = 0, s IN filter(s IN skills WHERE s.approved) | acc + s.level) * 2 + reduce(acc = 0, s IN skills | acc + s.level) as score
                     order by score desc
                     skip {skip} limit {limit}
                     return {    
                                 id: id(n), username: n.username, type: n.type, email: n.email, 
                                 fullname: n.fullname, roles: n.roles, phone: n.phone, image: n.image, disabled: n.disabled,
                                 office: {id: id(o), name: o.name, country: o.country, acronym: o.acronym},
-                                department: {id: id(d), name: d.name},
                                 allocation: al,
                                 position: p,
                                 approvers: approvers,
