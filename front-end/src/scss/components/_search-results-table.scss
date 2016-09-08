@@ -135,4 +135,24 @@
             }
         }
     }
+
+    .manager-notifications {
+        padding-top: 1rem;
+    }
+
+    .manager-notifications__status {
+        color: #e71d39;
+        font-size: em(20);
+        margin-bottom: 3.75rem;
+    }
+
+    .manager-notifications__team {
+        border-bottom: 1px solid $LIGHTEST-GREY;
+        color: $GREY;
+        font-size: em(12);
+        padding-bottom: .6875rem;
+    }
 }
+
+
+

@@ -19,8 +19,9 @@ export default class ManagerHomeTable extends React.Component {
     render() {
         return (
             <div className="search-results-table">
-                <div className="filters col -col-3">
-                    //Left column goes here
+                <div className="manager-notifications filters col -col-3">
+                    <h1 className="manager-notifications__status">You have 10 Skills validation requests from 3 members of your team</h1>
+                    <p className="manager-notifications__team">My Team</p>
                 </div>
                 <div className="header-bar col -col-9 -col-no-gutter">
                     <div className="col -col-6">
