@@ -7,6 +7,7 @@ const security = new (require('./controllers/security'));
 const skillController = new (require('./controllers/skill'));
 const userController = new (require('./controllers/user'));
 const approverController = new (require('./controllers/approver'));
+const resourceManagerController = new (require('./controllers/resource-manager'));
 const searchAllController = new (require('./controllers/search-all'));
 
 
@@ -38,6 +39,7 @@ router.get('/approver/search-all', searchAllController.searchAll.bind(searchAllC
 // -----------------
 router.use('/resource-manager', security.checkRole(roles.resourceManager).bind(security));
 router.get('/resource-manager/search-all', searchAllController.searchAll.bind(searchAllController));
+router.get('/resource-manager/users-by-skill', resourceManagerController.findUsersBySkill.bind(resourceManagerController));
 
 
 module.exports = router;

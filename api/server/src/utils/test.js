@@ -1,5 +1,6 @@
 'use strict'
 const _ = require('lodash');
+const P = require('bluebird');
 let path = require('path');
 //let envFile = path.resolve(__dirname, "../.env");
 let envFile = path.resolve(__dirname, "../.test-env");
@@ -7,8 +8,26 @@ let errors = require('../shared/errors');
 
 require('dotenv').config({path: envFile});
 
-let db = require('../data-access/db');
-const neo4j = require('neo4j-driver').v1;
+// let db = require('../data-access/db');
+// const neo4j = require('neo4j-driver').v1;
+
+
+const async = require('async');
+const timeout = require('async-timeout')
+
+let x = [1,2,3];
+async.eachSeries(x,
+    timeout(function(z, callback){
+        console.log('z', z);
+        //callback();
+    }, 1000, "error de timeout") //"error de timeout" se pasa como result(o sea 2do parametro) del callback del async, no como error
+, function(err){
+    if(err){
+        console.log('error', err);
+    } else{
+        console.log('ok');
+    }
+});
 
 // const Joi = require('joi');
 // let schema = {key: Joi.array().items(Joi.string()).default([])};
@@ -50,15 +69,15 @@ const neo4j = require('neo4j-driver').v1;
 
 
 
-const Da = require('../data-access/approver');
-let da = new Da();
+// const Da = require('../data-access/approver');
+// let da = new Da();
 
-//da.isApproverOf(4840, 4837)
-da.isApproverOf(4837, 4840)
-.then(r =>{
-        console.log("result", JSON.stringify(r));
-    })
-    .catch(console.error);
+// //da.isApproverOf(4840, 4837)
+// da.isApproverOf(4837, 4840)
+// .then(r =>{
+//         console.log("result", JSON.stringify(r));
+//     })
+//     .catch(console.error);
 
 // let allocation = {
 //         startDate: ['week1', 'week2', 'week3', 'week4'],
