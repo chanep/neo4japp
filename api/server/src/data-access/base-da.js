@@ -249,11 +249,25 @@ class BaseDa {
             return P.reject(new errors.GenericError("Error counting " + this.model.name, err))
         }
     }
+
+    /**
+     * Executes a raw cypher query
+     * @param {String} cmd - Cypher command
+     * @param {String} params - Command parameters
+     * @param {Object} [schema] - Optional Joi schema of the result 
+     */
     query(cmd, params, schema){
         return this._run(cmd, params)
                 .then(r => this._cypher.parseResultArrayRaw(r, schema));
                 // .then(n => this._toEntityArray(n));
     }
+    /**
+     * Executes a raw cypher paged query
+     * @param {String} cmd - Cypher command
+     * @param {any} countCmd - Cypher command for counting the total number of records used for paging
+     * @param {String} params - Command parameters
+     * @param {Object} [schema] - Optional Joi schema of the result 
+     */
     queryPaged(cmd, countCmd, params, schema){
         let countParams = _.omit(params, ["skip", "limit"]);
         let paged = {
@@ -297,6 +311,13 @@ class BaseDa {
             .then(r => this._cypher.parseResult(r))
             .catch(err => {throw new errors.GenericError("Error updating " + this.model.name, err)});
     }
+    /**
+     * Updates if node exists (based on iniqueKeys) or creates if node doesn't exists
+     * @param {Object} data
+     * @param {Array} uniqueKeys - Keys of the object used to decide if the object exists and should be updated or it doesn't exists and should be created'
+     * @param {Boolean} mergeKeys - when updating, if true, merges data keys with db object keys. If false overwrites the entire db object with data
+     * @returns {Object} {data: {...}, created: true} or {data: {...}, updated: true}
+     */
     upsert(data, uniqueKeys, mergeKeys){
         if(!uniqueKeys)
             return P.reject(new errors.GenericError(`uniqueKeys undefined in upsert`));
@@ -318,7 +339,12 @@ class BaseDa {
                 }
             });
     }
-    //force: if true delete relations before
+    /**
+     * Deletes a node
+     * @param {Number} id
+     * @param {Boolean} force - if true, deletes also object relationships
+     * @returns Affected records count
+     */
     delete(id, force) {
         try {
             let cypher = this._cypher.deleteCmd(id, force);
@@ -329,6 +355,10 @@ class BaseDa {
             return P.reject(new errors.GenericError("Error deleting " + this.model.name, err))
         }
     }
+    /**
+     * Deletes all nodes of this type
+     * @returns Affected records count
+     */
     deleteAll() {
         try {
             let cypher = this._cypher.deleteAllCmd();
@@ -339,6 +369,15 @@ class BaseDa {
             return P.reject(new errors.GenericError("Error deleting all " + this.model.name, err))
         }
     }
+    /**
+     * Relate 2 existing nodes
+     * @param {Number} selfId
+     * @param {Number} otherId
+     * @param {String} relKey - name of the relationship
+     * @param {Object} [relData] - data of the actual relationships if applies
+     * @param {Boolean} mergeKeys - when updating, if true, merges data keys with db object keys. If false overwrites the entire db object with data
+     * @returns Relationship data
+     */
     relate(selfId, otherId, relKey, relData, mergeKeys){
         if(!selfId)
             return P.reject(new errors.GenericError(`BaseDa.relate selfId undefined`));
@@ -352,6 +391,14 @@ class BaseDa {
             .then(r => this._cypher.parseResultRaw(r, null))
             .catch(err => {throw new errors.GenericError("Error relating " + this.model.name, err)});
     }
+    /**
+     * Updates relationship data
+     * @param {Number} relId - Relationship id
+     * @param {any} relKey - Relationship name
+     * @param {any} relData - data of the actual relationships
+     * @param {Boolean} mergeKeys - when updating, if true, merges data keys with db object keys. If false overwrites the entire db object with data
+     * @returns Relationship data
+     */
     updateRelationship(relId, relKey, relData, mergeKeys){
         if(!relId)
             return P.reject(new errors.GenericError(`BaseDa.updateRelationship relId undefined`));
@@ -379,6 +426,14 @@ class BaseDa {
             return P.reject(new errors.GenericError("Error checking if relationship exists " + this.model.name, err))
         }
     }
+    /**
+     * Creates a node and relates to other node in the same command
+     * @param {Object} data - Node data
+     * @param {any} otherId - Id of the node to relate with
+     * @param {any} relKey - Relationship name
+     * @param {Object} [relData] - data of the actual relationships if applies
+     * @returns Relationship data
+     */
     createAndRelate(data, otherId, relKey, relData) {
         try {
             let cypher = this._cypher.createAndRelateCmd(data, otherId, relKey, relData);
@@ -389,6 +444,12 @@ class BaseDa {
             return P.reject(new errors.GenericError("Error creating and relating " + this.model.name, err))
         }
     }
+    /**
+     * Deletes all relationships of specified type
+     * @param {Number} id - node id
+     * @param {any} relKey - relationship name
+     * @returns
+     */
     deleteAllRelationships(id, relKey) {
         try {
             if(!id)
@@ -444,7 +505,7 @@ class BaseDa {
             return P.reject(new errors.GenericError("Error adding child node of " + this.model.name, err))
         }
     }
-     /**
+    /**
      * Updates a child node of relationship. This model must be the owner of the child
      * which means the child can't exists without the owner. 
      * @param {number} selfId - This model id
@@ -464,6 +525,10 @@ class BaseDa {
             return P.reject(new errors.GenericError("Error update child node of " + this.model.name, err))
         }
     }
+    /**
+     * Enlist this data acces object in an existing transaction. All commands will be part of the transaction
+     * @param {any} tx
+     */
     enlistTx(tx){
         this._tx = tx;
     }
