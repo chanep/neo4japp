@@ -25,11 +25,11 @@ $WHITE: #FFFFFF;
  * @value {int}    - Vertical grid height
  */
 $BREAKPOINTS: (
-    default: min 0 6 10 10 10 24,
-    phablet: min 480 6 10 10 10 24,
-    tablet: min 768 12 20 20 20 24,
-    laptop: min 1024 12 20 20 20 24,
-    desktop: min 1366 12 20 20 20 24
+    default: min 0 12 12 10 0 24,
+    phablet: min 480 12 12 10 0 24,
+    tablet: min 768 12 12 10 0 24,
+    laptop: min 1024 12 12 10 0 24,
+    desktop: min 1366 12 12 10 0 24
 );
 
 /**
@@ -74,6 +74,22 @@ $TYPE-SCALES: (
         p: (
             font-size: 16,
             line-height: 24
+        ),
+        '.table-header': (
+            font-weight: 700,
+            font-size: 12
+        ),
+        '.table-row': (
+            font-size: 18
+        ),
+        '.table-row-heading': (
+            font-size: 20,
+            font-weight: 700,
+            line-height: 16
+        ),
+        '.table-row-small': (
+            font-size: 12,
+            line-height: 16
         )
     )
 );

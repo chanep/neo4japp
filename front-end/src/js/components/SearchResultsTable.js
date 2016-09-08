@@ -19,121 +19,238 @@ export default class SearchResultsTable extends React.Component {
     render() {
         return (
             <div className="search-results-table">
-                <ul className="header-bar">
-                    <li>Employee</li>
-                    <li>Location</li>
-                    <li>Skill Match</li>
-                    <li>Allocation per week</li>
-                </ul>
+                <div className="header-bar">
+                    <div className="col -col-3">
+                        <span className="table-header">Filter your results</span>
+                    </div>
+                    <div className="col -col-4">
+                        <span className="table-header">Employee</span>
+                    </div>
+                    <div className="col -col-1">
+                        <span className="table-header">Location</span>
+                    </div>
+                    <div className="col -col-1">
+                        <span className="table-header">Skill</span>
+                    </div>
+                    <div className="col -col-2">
+                        <span className="table-header">Allocation per week</span>
+                    </div>
+                    <div className="col -col-1">&nbsp;</div>
+                </div>
                 <div className="results-section">
-                    <ul className="result">
-                        <li>
-                            <div>
-                                <p><strong>First Last</strong></p>
-                                <p>Position</p>
+                    <div className="filters col -col-3">Filters here</div>
+                    <div className="results col -col-9 -col-no-gutter">
+                        <div className="grid">
+                            <div className="col -col-4">
+                                <p className="table-row-heading">Manuel Bruno Lazzaro</p>
+                                <p className="table-row-small">Senior Open Standards Developer</p>
                             </div>
-                        </li>
-                        <li>
-                            <div>
-                                BA
+                            <div className="col -col-1">
+                                <span className="table-row">BA</span>
                             </div>
-                        </li>
-                        <li>
-                            <div>
-                                3/3
+                            <div className="col -col-1">
+                                <span className="table-row">3/3</span>
                             </div>
-                        </li>
-                        <li>
-                            <div>
+                            <div className="col -col-2">
                                 <i className="ss-icon-empty"></i>
+                                <i className="ss-icon-quarter"></i>
+                                <i className="ss-icon-half"></i>
+                                <i className="ss-icon-three-quarters"></i>
+                            </div>
+                            <div className="col -col-1">
+                                <i className="ss-icon-down-arrow"></i>
+                            </div>
+                        </div>
+                        <div className="grid">
+                            <div className="col -col-4">
+                                <p className="table-row-heading">First Last</p>
+                                <p className="table-row-small">Position</p>
+                            </div>
+                            <div className="col -col-1">
+                                <span className="table-row">NY(G3)</span>
+                            </div>
+                            <div className="col -col-1">
+                                <span className="table-row">3/3</span>
+                            </div>
+                            <div className="col -col-2">
                                 <i className="ss-icon-quarter"></i>
                                 <i className="ss-icon-half"></i>
                                 <i className="ss-icon-three-quarters"></i>
                                 <i className="ss-icon-full"></i>
                             </div>
-                        </li>
-                    </ul>
-                    <ul className="result">
-                        <li>
-                            <div>
-                                <p><strong>First Last</strong></p>
-                                <p>Position</p>
+                            <div className="col -col-1">
+                                <i className="ss-icon-down-arrow"></i>
                             </div>
-                        </li>
-                        <li>
-                            <div>
-                                BA
+                        </div>
+                        <div className="grid">
+                            <div className="col -col-4">
+                                <p className="table-row-heading">First Last</p>
+                                <p className="table-row-small">Position</p>
                             </div>
-                        </li>
-                        <li>
-                            <div>
-                                3/3
+                            <div className="col -col-1">
+                                <span className="table-row">BA</span>
                             </div>
-                        </li>
-                        <li>
-                            <div>
-                                <i className="ss-icon-empty"></i>
+                            <div className="col -col-1">
+                                <span className="table-row">3/3</span>
+                            </div>
+                            <div className="col -col-2">
                                 <i className="ss-icon-quarter"></i>
                                 <i className="ss-icon-half"></i>
                                 <i className="ss-icon-three-quarters"></i>
                                 <i className="ss-icon-full"></i>
                             </div>
-                        </li>
-                    </ul>
-                    <ul className="result">
-                        <li>
-                            <div>
-                                <p><strong>First Last</strong></p>
-                                <p>Position</p>
+                            <div className="col -col-1">
+                                <i className="ss-icon-down-arrow"></i>
                             </div>
-                        </li>
-                        <li>
-                            <div>
-                                BA
+                        </div>
+                        <div className="grid">
+                            <div className="col -col-4">
+                                <p className="table-row-heading">First Last</p>
+                                <p className="table-row-small">Position</p>
                             </div>
-                        </li>
-                        <li>
-                            <div>
-                                3/3
+                            <div className="col -col-1">
+                                <span className="table-row">BA</span>
                             </div>
-                        </li>
-                        <li>
-                            <div>
-                                <i className="ss-icon-empty"></i>
+                            <div className="col -col-1">
+                                <span className="table-row">3/3</span>
+                            </div>
+                            <div className="col -col-2">
                                 <i className="ss-icon-quarter"></i>
                                 <i className="ss-icon-half"></i>
                                 <i className="ss-icon-three-quarters"></i>
                                 <i className="ss-icon-full"></i>
                             </div>
-                        </li>
-                    </ul>
-                    <ul className="result">
-                        <li>
-                            <div>
-                                <p><strong>First Last</strong></p>
-                                <p>Position</p>
+                            <div className="col -col-1">
+                                <i className="ss-icon-down-arrow"></i>
                             </div>
-                        </li>
-                        <li>
-                            <div>
-                                BA
+                        </div>
+                        <div className="grid">
+                            <div className="col -col-4">
+                                <p className="table-row-heading">First Last</p>
+                                <p className="table-row-small">Position</p>
                             </div>
-                        </li>
-                        <li>
-                            <div>
-                                3/3
+                            <div className="col -col-1">
+                                <span className="table-row">BA</span>
                             </div>
-                        </li>
-                        <li>
-                            <div>
-                                <i className="ss-icon-empty"></i>
+                            <div className="col -col-1">
+                                <span className="table-row">3/3</span>
+                            </div>
+                            <div className="col -col-2">
                                 <i className="ss-icon-quarter"></i>
                                 <i className="ss-icon-half"></i>
                                 <i className="ss-icon-three-quarters"></i>
                                 <i className="ss-icon-full"></i>
                             </div>
-                        </li>
-                    </ul>
+                            <div className="col -col-1">
+                                <i className="ss-icon-down-arrow"></i>
+                            </div>
+                        </div>
+                        <div className="grid">
+                            <div className="col -col-4">
+                                <p className="table-row-heading">First Last</p>
+                                <p className="table-row-small">Position</p>
+                            </div>
+                            <div className="col -col-1">
+                                <span className="table-row">BA</span>
+                            </div>
+                            <div className="col -col-1">
+                                <span className="table-row">3/3</span>
+                            </div>
+                            <div className="col -col-2">
+                                <i className="ss-icon-quarter"></i>
+                                <i className="ss-icon-half"></i>
+                                <i className="ss-icon-three-quarters"></i>
+                                <i className="ss-icon-full"></i>
+                            </div>
+                            <div className="col -col-1">
+                                <i className="ss-icon-down-arrow"></i>
+                            </div>
+                        </div>
+                        <div className="grid">
+                            <div className="col -col-4">
+                                <p className="table-row-heading">First Last</p>
+                                <p className="table-row-small">Position</p>
+                            </div>
+                            <div className="col -col-1">
+                                <span className="table-row">BA</span>
+                            </div>
+                            <div className="col -col-1">
+                                <span className="table-row">3/3</span>
+                            </div>
+                            <div className="col -col-2">
+                                <i className="ss-icon-quarter"></i>
+                                <i className="ss-icon-half"></i>
+                                <i className="ss-icon-three-quarters"></i>
+                                <i className="ss-icon-full"></i>
+                            </div>
+                            <div className="col -col-1">
+                                <i className="ss-icon-down-arrow"></i>
+                            </div>
+                        </div>
+                        <div className="grid">
+                            <div className="col -col-4">
+                                <p className="table-row-heading">First Last</p>
+                                <p className="table-row-small">Position</p>
+                            </div>
+                            <div className="col -col-1">
+                                <span className="table-row">BA</span>
+                            </div>
+                            <div className="col -col-1">
+                                <span className="table-row">3/3</span>
+                            </div>
+                            <div className="col -col-2">
+                                <i className="ss-icon-quarter"></i>
+                                <i className="ss-icon-half"></i>
+                                <i className="ss-icon-three-quarters"></i>
+                                <i className="ss-icon-full"></i>
+                            </div>
+                            <div className="col -col-1">
+                                <i className="ss-icon-down-arrow"></i>
+                            </div>
+                        </div>
+                        <div className="grid">
+                            <div className="col -col-4">
+                                <p className="table-row-heading">First Last</p>
+                                <p className="table-row-small">Position</p>
+                            </div>
+                            <div className="col -col-1">
+                                <span className="table-row">BA</span>
+                            </div>
+                            <div className="col -col-1">
+                                <span className="table-row">3/3</span>
+                            </div>
+                            <div className="col -col-2">
+                                <i className="ss-icon-quarter"></i>
+                                <i className="ss-icon-half"></i>
+                                <i className="ss-icon-three-quarters"></i>
+                                <i className="ss-icon-full"></i>
+                            </div>
+                            <div className="col -col-1">
+                                <i className="ss-icon-down-arrow"></i>
+                            </div>
+                        </div>
+                        <div className="grid">
+                            <div className="col -col-4">
+                                <p className="table-row-heading">First Last</p>
+                                <p className="table-row-small">Position</p>
+                            </div>
+                            <div className="col -col-1">
+                                <span className="table-row">BA</span>
+                            </div>
+                            <div className="col -col-1">
+                                <span className="table-row">3/3</span>
+                            </div>
+                            <div className="col -col-2">
+                                <i className="ss-icon-quarter"></i>
+                                <i className="ss-icon-half"></i>
+                                <i className="ss-icon-three-quarters"></i>
+                                <i className="ss-icon-full"></i>
+                            </div>
+                            <div className="col -col-1">
+                                <i className="ss-icon-down-arrow"></i>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         );

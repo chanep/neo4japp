@@ -305,6 +305,11 @@
                 }
             }
         }
+
+        // Generate no gutter style
+        .col.-col-no-gutter {
+            padding: 0;
+        }
     }
 
     // $breakpoint-map is not a map, throw error
@@ -404,6 +409,14 @@
 
     float: left;
     width: percentage($width / $context);
+};
+
+// Nested column
+@mixin nestedColumn ($width: $TOTAL-COLUMNS, $horizontal-gutter: $HORIZONTAL-GUTTER, $vertical-gutter: $VERTICAL-GUTTER, $context: $TOTAL-COLUMNS) {
+    @include gutter($horizontal-gutter, $vertical-gutter);
+
+    float: left;
+    width: calc((100% / #{$context}) * #{$width});
 };
 
 // Vertical baseline background guide
