@@ -29,6 +29,7 @@ class BaseController {
                 return true;
             if (value == 'false')
                 return false;
+            return value;
         }
     }
 
