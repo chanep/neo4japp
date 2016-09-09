@@ -25,7 +25,7 @@ export default class ResultsProfileTable extends React.Component {
                     </div>
                 </div>
                 <div className="results-section">
-                    <div className="manager-home results results--right col -col-12 -col-no-gutter">
+                    <div className="results-profile results results--right col -col-12 -col-no-gutter">
                         <div className="grid">
                             <div className="col -col-10">
                                 <p className="table-row-heading">PHP</p>
@@ -42,7 +42,7 @@ export default class ResultsProfileTable extends React.Component {
                                 <p className="table-row-heading">Javascript</p>
                             </div>
                             <div className="col -col-1">
-                                <span className="table-row">5<i className="validate-pending"></i></span>
+                                <span className="table-row">5</span>
                             </div>
                             <div className="col -col-1">
                                 <i className="ss-icon-right-arrow right-small-arrow"></i>
@@ -53,7 +53,7 @@ export default class ResultsProfileTable extends React.Component {
                                 <p className="table-row-heading">NodeJS</p>
                             </div>
                             <div className="col -col-1">
-                                <span className="table-row">5<i className="validate-pending"></i></span>
+                                <span className="table-row">5</span>
                             </div>
                             <div className="col -col-1">
                                 <i className="ss-icon-right-arrow right-small-arrow"></i>
@@ -64,7 +64,7 @@ export default class ResultsProfileTable extends React.Component {
                                 <p className="table-row-heading">Databases</p>
                             </div>
                             <div className="col -col-1">
-                                <span className="table-row">5<i className="validate-pending"></i></span>
+                                <span className="table-row">5</span>
                             </div>
                             <div className="col -col-1">
                                 <i className="ss-icon-right-arrow right-small-arrow"></i>
@@ -75,7 +75,7 @@ export default class ResultsProfileTable extends React.Component {
                                 <p className="table-row-heading">HTML/CSS</p>
                             </div>
                             <div className="col -col-1">
-                                <span className="table-row">5<i className="validate-pending"></i></span>
+                                <span className="table-row">5</span>
                             </div>
                             <div className="col -col-1">
                                 <i className="ss-icon-right-arrow right-small-arrow"></i>
@@ -97,7 +97,7 @@ export default class ResultsProfileTable extends React.Component {
                                 <p className="table-row-heading">Integration Servers</p>
                             </div>
                             <div className="col -col-1">
-                                <span className="table-row">5<i className="validate-pending"></i></span>
+                                <span className="table-row">5</span>
                             </div>
                             <div className="col -col-1">
                                 <i className="ss-icon-right-arrow right-small-arrow"></i>
@@ -108,7 +108,7 @@ export default class ResultsProfileTable extends React.Component {
                                 <p className="table-row-heading">Other Languages</p>
                             </div>
                             <div className="col -col-1">
-                                <span className="table-row">5<i className="validate-pending"></i></span>
+                                <span className="table-row">5</span>
                             </div>
                             <div className="col -col-1">
                                 <i className="ss-icon-right-arrow right-small-arrow"></i>
@@ -119,7 +119,7 @@ export default class ResultsProfileTable extends React.Component {
                                 <p className="table-row-heading">APIs</p>
                             </div>
                             <div className="col -col-1">
-                                <span className="table-row">5<i className="validate-pending"></i></span>
+                                <span className="table-row">5</span>
                             </div>
                             <div className="col -col-1">
                                 <i className="ss-icon-right-arrow right-small-arrow"></i>
@@ -133,7 +133,7 @@ export default class ResultsProfileTable extends React.Component {
                     </div>
                 </div>
                 <div className="results-section">
-                    <div className="manager-home results results--right col -col-12 -col-no-gutter">
+                    <div className="results-profile results results--right col -col-12 -col-no-gutter">
                         <div className="grid">
                             <div className="col -col-10">
                                 <p className="table-row-heading">Photoshop</p>
@@ -150,7 +150,7 @@ export default class ResultsProfileTable extends React.Component {
                                 <p className="table-row-heading">Sketch</p>
                             </div>
                             <div className="col -col-1">
-                                <span className="table-row">5<i className="validate-pending"></i></span>
+                                <span className="table-row">5</span>
                             </div>
                             <div className="col -col-1">
                                 <i className="ss-icon-right-arrow right-small-arrow"></i>

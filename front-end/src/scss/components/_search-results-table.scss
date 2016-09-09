@@ -120,7 +120,8 @@
             }
         }
 
-        .manager-home {
+        .manager-home,
+        .results-profile {
             .grid {
                 display: flex;
                 justify-content: space-between;
@@ -130,6 +131,7 @@
             }
 
             .col {
+               &:nth-of-type(2),
                &:nth-of-type(3) { 
                     & > .table-row .validate-pending {
                         background-color: #e71d39;
@@ -141,6 +143,12 @@
                         width: 6px;
                     }
                } 
+            }
+        }
+
+        .results-profile {
+            &> * {
+                height: em(55);
             }
         }
     }
