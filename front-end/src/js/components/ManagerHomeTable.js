@@ -1,12 +1,12 @@
 /**
- * Components: SearchResultsTable
+ * Components: ManagerHomeTable
  */
 
 // Dependencies
 import React from 'react';
 import Search from './Header/Search';
 
-// Class: SearchResultsTable
+// Class: ManagerHomeTable
 export default class ManagerHomeTable extends React.Component {
     constructor(search, loggedIn) {
         super();
