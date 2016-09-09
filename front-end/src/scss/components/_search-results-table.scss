@@ -120,14 +120,18 @@
             }
         }
 
-        .manager-home {
+        .manager-home,
+        .results-profile {
             .grid {
+                display: flex;
+                justify-content: space-between;
                 transition: background-color .2s ease-in-out;
-                
+
                 &:hover { background-color: $LIGHTEST-GREY; }
             }
 
             .col {
+               &:nth-of-type(2),
                &:nth-of-type(3) { 
                     & > .table-row .validate-pending {
                         background-color: #e71d39;
@@ -139,6 +143,12 @@
                         width: 6px;
                     }
                } 
+            }
+        }
+
+        .results-profile {
+            &> * {
+                height: em(55);
             }
         }
     }
