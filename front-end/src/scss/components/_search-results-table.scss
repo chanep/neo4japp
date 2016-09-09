@@ -121,6 +121,12 @@
         }
 
         .manager-home {
+            .grid {
+                transition: background-color .2s ease-in-out;
+                
+                &:hover { background-color: $LIGHTEST-GREY; }
+            }
+
             .col {
                &:nth-of-type(3) { 
                     & > .table-row .validate-pending {
