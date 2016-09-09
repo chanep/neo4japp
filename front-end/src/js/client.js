@@ -7,7 +7,9 @@ import ResourceHotspot from "./pages/ResourceHotspot";
 import Allocations from "./pages/Allocations";
 import Login from "./pages/Login";
 import SearchResults from "./pages/SearchResults";
+import EmployeeProfile from "./pages/EmployeeProfile";
 import ManagerHome from "./pages/ManagerHome";
+import ResultsProfile from "./pages/ResultsProfile";
 
 const app = document.getElementById('app');
 
@@ -19,14 +21,19 @@ ReactDOM.render(
 			<Route path="allocations" component={Allocations}></Route>
 		</Route>
 		<Route path="/login" component={Layout}>
-					<IndexRoute component={Login}></IndexRoute>
+			<IndexRoute component={Login}></IndexRoute>
 		</Route>
         <Route path="/searchResults" component={Layout}>
             <IndexRoute component={SearchResults}></IndexRoute>
         </Route>
+        <Route path="/employeeProfile" component={Layout}>
+            <IndexRoute component={EmployeeProfile}></IndexRoute>
+        </Route>
         <Route path="/ManagerHome" component={Layout}>
             <IndexRoute component={ManagerHome}></IndexRoute>
         </Route>
+        <Route path="/ResultsProfile" component={Layout}>
+            <IndexRoute component={ResultsProfile}></IndexRoute>
+        </Route>
 	</Router>,
 app);
-

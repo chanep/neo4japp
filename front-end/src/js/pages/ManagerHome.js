@@ -1,5 +1,5 @@
 /**
- * Pages: SearchResults
+ * Pages: ManagerHome
  */
 
 // Dependencies
@@ -7,7 +7,7 @@ import React from 'react';
 import Header from '../components/Header';
 import ManagerHomeTable from '../components/ManagerHomeTable';
 
-// Class: SearchResults
+// Class: ManagerHome
 export default class ManagerHome extends React.Component {
     render() {
         return (

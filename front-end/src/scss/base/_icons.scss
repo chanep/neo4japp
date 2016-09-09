@@ -19,6 +19,9 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
+.ss-icon-employee:before {
+  content: "\e912";
+}
 .ss-icon-clients:before {
   content: "\e90f";
 }
