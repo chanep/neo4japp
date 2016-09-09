@@ -4,6 +4,7 @@
 
 .search-results-table {
     @include grid($max-width: em(960));
+    margin-top: 1.5rem;
 
     .header-bar {
         background-color: $DARK-GREY;
@@ -143,14 +144,44 @@
     .manager-notifications__status {
         color: #e71d39;
         font-size: em(20);
-        margin-bottom: 3.75rem;
+        margin-bottom: 3.5rem;
     }
 
-    .manager-notifications__team {
+    .manager-notifications__subtitle {
         border-bottom: 1px solid $LIGHTEST-GREY;
         color: $GREY;
         font-size: em(12);
         padding-bottom: .6875rem;
+    }
+
+    .manager-notifications__employee {
+        border-bottom: 1px solid $LIGHTEST-GREY;
+        display: flex;
+        justify-content: space-between;
+        margin-top: .6875rem;
+        padding-bottom: .6875rem;
+    }
+
+    .manager-notifications-icon {
+        background-color: $LIGHTEST-GREY;
+        height: 3.25rem;
+        text-align: center;
+        width: 3.25rem;
+
+        &> .ss-icon-employee {
+            font-size: em(24);
+            line-height: 2.25;
+        }
+    }
+
+    .manager-notifications-qty {
+        flex: 0 0 70%;
+
+        p {
+            color: $GREY;
+            font-size: .75em;
+            font-weight: bold;
+        }
     }
 }
 
