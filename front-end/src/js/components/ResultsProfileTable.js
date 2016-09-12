@@ -33,8 +33,8 @@ export default class ResultsProfileTable extends React.Component {
                             <div className="col -col-1">
                                 <span className="table-row">5<i className="validate-pending"></i></span>
                             </div>
-                            <div className="col -col-1">
-                                <i className="ss-icon-right-arrow right-small-arrow"></i>
+                            <div className="col -col-1 results-arrow-open-close">
+                                <i className="ss-icon-down-arrow"></i>
                             </div>
                         </div>
                         <div className="grid">
@@ -44,8 +44,8 @@ export default class ResultsProfileTable extends React.Component {
                             <div className="col -col-1">
                                 <span className="table-row">5</span>
                             </div>
-                            <div className="col -col-1">
-                                <i className="ss-icon-right-arrow right-small-arrow"></i>
+                            <div className="col -col-1 results-arrow-open-close">
+                                <i className="ss-icon-down-arrow"></i>
                             </div>
                         </div>
                         <div className="grid">
@@ -55,8 +55,8 @@ export default class ResultsProfileTable extends React.Component {
                             <div className="col -col-1">
                                 <span className="table-row">5</span>
                             </div>
-                            <div className="col -col-1">
-                                <i className="ss-icon-right-arrow right-small-arrow"></i>
+                            <div className="col -col-1 results-arrow-open-close">
+                                <i className="ss-icon-down-arrow"></i>
                             </div>
                         </div>
                         <div className="grid">
@@ -66,8 +66,8 @@ export default class ResultsProfileTable extends React.Component {
                             <div className="col -col-1">
                                 <span className="table-row">5</span>
                             </div>
-                            <div className="col -col-1">
-                                <i className="ss-icon-right-arrow right-small-arrow"></i>
+                            <div className="col -col-1 results-arrow-open-close">
+                                <i className="ss-icon-down-arrow"></i>
                             </div>
                         </div>
                         <div className="grid">
@@ -77,8 +77,8 @@ export default class ResultsProfileTable extends React.Component {
                             <div className="col -col-1">
                                 <span className="table-row">5</span>
                             </div>
-                            <div className="col -col-1">
-                                <i className="ss-icon-right-arrow right-small-arrow"></i>
+                            <div className="col -col-1 results-arrow-open-close">
+                                <i className="ss-icon-down-arrow"></i>
                             </div>
                         </div>
                         <div className="grid">
@@ -88,8 +88,8 @@ export default class ResultsProfileTable extends React.Component {
                             <div className="col -col-1">
                                 <span className="table-row">5<i className="validate-pending"></i></span>
                             </div>
-                            <div className="col -col-1">
-                                <i className="ss-icon-right-arrow right-small-arrow"></i>
+                            <div className="col -col-1 results-arrow-open-close">
+                                <i className="ss-icon-down-arrow"></i>
                             </div>
                         </div>
                         <div className="grid">
@@ -99,8 +99,8 @@ export default class ResultsProfileTable extends React.Component {
                             <div className="col -col-1">
                                 <span className="table-row">5</span>
                             </div>
-                            <div className="col -col-1">
-                                <i className="ss-icon-right-arrow right-small-arrow"></i>
+                            <div className="col -col-1 results-arrow-open-close">
+                                <i className="ss-icon-down-arrow"></i>
                             </div>
                         </div>
                         <div className="grid">
@@ -110,8 +110,8 @@ export default class ResultsProfileTable extends React.Component {
                             <div className="col -col-1">
                                 <span className="table-row">5</span>
                             </div>
-                            <div className="col -col-1">
-                                <i className="ss-icon-right-arrow right-small-arrow"></i>
+                            <div className="col -col-1 results-arrow-open-close">
+                                <i className="ss-icon-down-arrow"></i>
                             </div>
                         </div>
                         <div className="grid">
@@ -121,8 +121,8 @@ export default class ResultsProfileTable extends React.Component {
                             <div className="col -col-1">
                                 <span className="table-row">5</span>
                             </div>
-                            <div className="col -col-1">
-                                <i className="ss-icon-right-arrow right-small-arrow"></i>
+                            <div className="col -col-1 results-arrow-open-close">
+                                <i className="ss-icon-down-arrow"></i>
                             </div>
                         </div> 
                     </div>
@@ -141,8 +141,8 @@ export default class ResultsProfileTable extends React.Component {
                             <div className="col -col-1">
                                 <span className="table-row">5<i className="validate-pending"></i></span>
                             </div>
-                            <div className="col -col-1">
-                                <i className="ss-icon-right-arrow right-small-arrow"></i>
+                            <div className="col -col-1 results-arrow-open-close">
+                                <i className="ss-icon-down-arrow"></i>
                             </div>
                         </div>
                         <div className="grid">
@@ -152,8 +152,8 @@ export default class ResultsProfileTable extends React.Component {
                             <div className="col -col-1">
                                 <span className="table-row">5</span>
                             </div>
-                            <div className="col -col-1">
-                                <i className="ss-icon-right-arrow right-small-arrow"></i>
+                            <div className="col -col-1 results-arrow-open-close">
+                                <i className="ss-icon-down-arrow"></i>
                             </div>
                         </div>
                     </div>

@@ -82,12 +82,13 @@ $TYPE-SCALES: (
             font-size: 12
         ),
         '.table-row': (
-            font-size: 18
+            font-size: 18,
+            line-height: 36
         ),
         '.table-row-heading': (
             font-size: 20,
             font-weight: 700,
-            line-height: 16
+            line-height: 36
         ),
         '.table-row-small': (
             font-size: 12,
