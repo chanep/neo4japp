@@ -65,6 +65,24 @@ class SessionController extends BaseController{
         this._respondPromise(req, res, promise);
     }
 
+    /**
+    @api {get} /api/session/check Check
+    @apiDescription Check if user is logged in
+    @apiGroup Session
+
+    @apiSuccessExample {json} Success-Response:
+    HTTP/1.1 200 OK
+    {
+        status: "success",
+        data: true
+    }
+    */
+    check(req, res, next){
+        let logged = req.session && req.session.user;
+
+        this._respondPromise(req, res, P.resolve(logged));
+    }
+
 } 
 
 module.exports = SessionController;

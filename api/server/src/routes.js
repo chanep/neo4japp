@@ -16,6 +16,7 @@ const searchAllController = new (require('./controllers/search-all'));
 // ---------
 router.post('/session/', sessionController.login.bind(sessionController));
 router.delete('/session/', sessionController.logout.bind(sessionController));
+router.get('/session/check', sessionController.check.bind(sessionController));
 
 router.use(security.checkLoggedIn.bind(security));
 
