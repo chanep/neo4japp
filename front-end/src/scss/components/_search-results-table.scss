@@ -70,6 +70,14 @@
 
             &.results--right { float: right; }
 
+            .grid {
+                &:nth-child(odd) {
+                    background-color: $LIGHT-GREY;
+                    border-bottom: 1px solid $LIGHTEST-GREY;
+                    border-top: 1px solid $LIGHTEST-GREY;
+                }
+            }
+
             & > li {
 
                 &.-expanded {
@@ -286,6 +294,13 @@
             font-size: .75em;
             font-weight: bold;
         }
+    }
+
+    .results-arrow-open-close {
+        background: $LIGHTEST-GREY;
+        text-align: center;
+        line-height: 3.5;
+        font-size: .75em;
     }
 }
 
