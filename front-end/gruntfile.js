@@ -135,5 +135,5 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-webpack');
     grunt.loadNpmTasks('grunt-http-server');
     grunt.loadNpmTasks('grunt-contrib-watch');
-    grunt.registerTask('default', ['http-server', 'sass','webpack', 'copy', 'watch']);
+    grunt.registerTask('default', ['http-server', 'sass', 'webpack', 'copy', 'watch']);
 };
