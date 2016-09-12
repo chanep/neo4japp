@@ -71,6 +71,8 @@
             &.results--right { float: right; }
 
             .grid {
+                cursor: pointer;
+                
                 &:nth-child(odd) {
                     background-color: $LIGHT-GREY;
                     border-bottom: 1px solid $LIGHTEST-GREY;

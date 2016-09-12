@@ -26,9 +26,17 @@ export default class EmployeeHeader extends React.Component {
         					<div className="count">10</div>
         					<div className="label">Total Skills</div>
         				</div>
-        				<div className="employee-skills-add">
-        					<a href="#">ADD NEW SKILLS</a>
-        				</div>
+                        {/* Add new skills label */}
+        				{/*
+                            <div className="employee-skills-add">
+                                <a href="#">ADD NEW SKILLS</a>
+                            </div>
+                        */}
+                        {/* Verify skills label */}
+                        <div className="employee-skills-add employee-skills-verify">
+                            <span className="icon-alert">!</span>
+                            <a href="#">VERIFY 3 SKILLS IN TOTAL</a>
+                        </div>
         				<div className="employee-skills-last-update">
         					Last Updated <span>05/04/2016</span>
         				</div>
