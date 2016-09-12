@@ -300,9 +300,18 @@
 
     .results-arrow-open-close {
         background: $LIGHTEST-GREY;
-        text-align: center;
-        line-height: 3.5;
+        display: block;
         font-size: .75em;
+        line-height: 3.5;
+        text-align: center;
+
+        .ss-icon-down-arrow { transition: all .2s ease-in-out;  }
+        
+        &.skill-opened {
+            .ss-icon-down-arrow {
+                transform: rotate(180deg);
+            }
+        }
     }
 }
 

@@ -13,8 +13,17 @@ export default class ResultsProfileTable extends React.Component {
         super();
         this.state = {
             'search': search,
-            'loggedIn': loggedIn
+            'loggedIn': loggedIn,
+            showLevels: false 
         };
+    }
+
+    showHideLevels() {
+        if(this.state.showLevels) {
+            this.setState({ showLevels: false });
+        } else {
+            this.setState({ showLevels: true });
+        }
     }
 
     render() {
@@ -34,11 +43,11 @@ export default class ResultsProfileTable extends React.Component {
                             <div className="col -col-1">
                                 <span className="table-row">5<i className="validate-pending"></i></span>
                             </div>
-                            <div className="col -col-1 results-arrow-open-close">
+                            <div className={this.state.showLevels ? "col -col-1 results-arrow-open-close skill-opened" : "col -col-1 results-arrow-open-close"} onClick={this.showHideLevels.bind(this)}>
                                 <i className="ss-icon-down-arrow"></i>
                             </div>
                         </div>
-                        <SkillsLevelTable />
+                        { this.state.showLevels ? <SkillsLevelTable /> : null }
 
                         <div className="grid">
                             <div className="col -col-10">

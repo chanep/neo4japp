@@ -93,32 +93,6 @@ export default class SkillsLevelTable extends React.Component {
                         <span className="skill-title"></span>
                     </div>
                 </div>
-
-                <div className="skill-level-grid__levels col -col-12 -col-no-gutter">
-                    <div className="col -col-2">
-                        <span className="table-header">Brand Strategy</span>
-                    </div>
-                    <div className="col -col-1">
-                        <span className="skill-title">
-                            <input type="radio" label="skill-want" />
-                        </span>
-                    </div>
-                    <div className="col -col-2 skill-level-box level-selected">
-                        <span className="skill-title"></span>
-                    </div>
-                    <div className="col -col-2 skill-level-box">
-                        <span className="skill-title"></span>
-                    </div>
-                    <div className="col -col-2 skill-level-box">
-                        <span className="skill-title"></span>
-                    </div>
-                    <div className="col -col-2 skill-level-box">
-                        <span className="skill-title"></span>
-                    </div>
-                    <div className="col -col-1">
-                        <span className="skill-title"></span>
-                    </div>
-                </div>
             </div>
         );
     }
