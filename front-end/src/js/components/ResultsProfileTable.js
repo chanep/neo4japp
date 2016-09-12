@@ -5,6 +5,7 @@
 // Dependencies
 import React from 'react';
 import Search from './Header/Search';
+import SkillsLevelTable from "../components/SkillsLevelTable";
 
 // Class: ResultsProfileTable
 export default class ResultsProfileTable extends React.Component {
@@ -37,6 +38,8 @@ export default class ResultsProfileTable extends React.Component {
                                 <i className="ss-icon-down-arrow"></i>
                             </div>
                         </div>
+                        <SkillsLevelTable />
+
                         <div className="grid">
                             <div className="col -col-10">
                                 <p className="table-row-heading">Javascript</p>
