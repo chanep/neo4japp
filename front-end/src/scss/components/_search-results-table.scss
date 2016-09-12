@@ -15,10 +15,10 @@
         .col {
             line-height: em(29);
 
-            &:nth-of-type(2) {
-                @include nestedColumn($width: 2, $context: 9);    
-            }
-            
+            // &:nth-of-type(2) {
+            //     @include nestedColumn($width: 2, $context: 9);
+            // }
+
             &:nth-of-type(5) {
                 text-align: center;
             }
@@ -47,7 +47,7 @@
 
             .filter-title-group {
                 color: $GREY;
-            } 
+            }
 
             .filter-option {
                 color: $GREY;
@@ -70,52 +70,140 @@
 
             &.results--right { float: right; }
 
-            & > * {
-                border: {
-                    bottom: 1px solid $LIGHTEST-GREY;
-                    left: 1px solid $LIGHTEST-GREY;
-                }
-                height: em(75);
+            & > li {
 
-                &:nth-of-type(even) {
-                    background-color: $LIGHT-GREY;
-                }
-            }
-
-            .col {
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                height: 100%;
-
-                &.-col-1 {
-                    @include nestedColumn($width: 1, $context: 9);
-                }
-                &.-col-2 {
-                    @include nestedColumn($width: 2, $context: 9);
-                }
-                &.-col-4 {
-                    @include nestedColumn($width: 4, $context: 9);
-                }
-
-                &:nth-of-type(4) {
-                    align-items: center;
-                    display: flex;
-                    flex-direction: row;
-                    justify-content: space-between;
-
-                    i {
-                        color: $GREY;
-                        font-size: em(25); 
-
-                        &.right-small-arrow { font-size: em(16); }
+                &.-expanded {
+                    .content {
+                        border: {
+                            bottom: 1px solid $LIGHTEST-GREY;
+                            left: 1px solid $LIGHTEST-GREY;
+                        }
+                        height: auto;
                     }
                 }
 
-                &:nth-of-type(5) {
-                    background-color: $LIGHTEST-GREY;
-                    font-size: em(10);
-                    text-align: center;
+                & > * {
+                    border: {
+                        bottom: 1px solid $LIGHTEST-GREY;
+                        left: 1px solid $LIGHTEST-GREY;
+                    }
+                }
+
+                .header {
+                    height: em(75);
+
+                    &:nth-of-type(even) {
+                        background-color: $LIGHT-GREY;
+                    }
+
+                    .col {
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        height: 100%;
+
+                        &.-col-1 {
+                            @include nestedColumn($width: 1, $context: 9);
+                        }
+                        &.-col-2 {
+                            @include nestedColumn($width: 2, $context: 9);
+                        }
+                        &.-col-4 {
+                            @include nestedColumn($width: 4, $context: 9);
+                        }
+                        &.-col-9 {
+                            @include nestedColumn($width: 9, $context: 9);
+                        }
+
+                        &:nth-of-type(4) {
+                            align-items: center;
+                            display: flex;
+                            flex-direction: row;
+                            justify-content: space-between;
+
+                            i {
+                                color: $GREY;
+                                font-size: em(25);
+
+                                &.right-small-arrow { font-size: em(16); }
+                            }
+                        }
+
+                        &:nth-of-type(5) {
+                            background-color: $LIGHTEST-GREY;
+                            font-size: em(10);
+                            text-align: center;
+                        }
+                    }
+                }
+
+                .content {
+                    transition: height 0.3s;
+                    overflow: hidden;
+                    height: 0;
+                    border: 0;
+
+                    .col {
+                        &.-col-4 {
+                            @include nestedColumn($width: 4, $context: 9);
+                        }
+                        &.-col-8 {
+                            @include nestedColumn($width: 8, $context: 9);
+                        }
+                        &.-col-9 {
+                            @include nestedColumn($width: 9, $context: 9);
+                        }
+                    }
+
+                    .manager {
+                        &.col {
+                            padding: {
+                                top: 0;
+                                bottom: 11px;
+                            }
+                        }
+
+                        span {
+                            @include setTypeScale('.filter-title-group');
+                        }
+                    }
+
+                    .title {
+                        span {
+                            @include setTypeScale('.skill-title');
+                        }
+                    }
+
+                    .proficiency {
+                        span {
+                            color: $GREY-FONT;
+                            @include setTypeScale('.filter-title');
+                        }
+                    }
+
+                    .skill-bar {
+                        height: em(7);
+                        display: flex;
+                        justify-content: space-between;
+                        width: 91.36%;
+
+                        & > div {
+                            height: 100%;
+                            float: left;
+                            width: calc(25% - 4px);
+                            background-color: $RED;
+                        }
+                    }
+
+                    .samples {
+                        text-align: right;
+
+                        span {
+                            @include setTypeScale('.filter-title');
+                            text-transform: uppercase;
+                            padding-top: em(4, '.filter-title');
+                        }
+                    }
                 }
             }
         }
@@ -132,7 +220,7 @@
 
             .col {
                &:nth-of-type(2),
-               &:nth-of-type(3) { 
+               &:nth-of-type(3) {
                     & > .table-row .validate-pending {
                         background-color: #e71d39;
                         border-radius: 50%;
@@ -142,7 +230,7 @@
                         vertical-align: middle;
                         width: 6px;
                     }
-               } 
+               }
             }
         }
 
