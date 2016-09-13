@@ -22,7 +22,7 @@ export default class SearchResultsTable extends React.Component {
             <div className="search-results-table">
                 <div className="header-bar">
                     <div className="col -col-3">
-                        <span className="table-header">Filter your results</span>
+                        <span className="table-header">Filter</span>
                     </div>
                     <div className="col -col-4">
                         <span className="table-header">Employee</span>
