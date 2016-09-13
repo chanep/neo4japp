@@ -1,0 +1,64 @@
+.filters {
+    background-color: $LIGHT-GREY;
+    height: 100vh;
+    position: relative;
+    padding: {
+        top: em(40);
+        bottom: 0;
+    }
+
+    &.col.-col-3 {
+        padding-top: em(40);
+    }
+
+    & > div {
+        margin-bottom: 1.5rem;
+        padding-bottom: em(9);
+        padding-top: em(6);
+
+        &:last-of-type {
+            border-bottom: none;
+        }
+    }
+
+    .filter-title-group {
+        color: $GREY;
+    }
+
+    .filter-option {
+        color: $GREY;
+
+        label {
+            user-select: none;
+
+            &:hover {
+                cursor: pointer ;
+            }
+        }
+
+        input {
+            margin-right: 7px;
+        }
+    }
+
+    .filters-search-container {
+        background-color: $LIGHTEST-GREY;
+        left: 0;
+        padding: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+
+        .ss-icon-search {
+            font-size: .875em;
+            margin-left: .5rem;
+        }
+    }
+
+    .filters-search-container__field {
+        background-color: transparent;
+        height: 2rem;
+        text-indent: 1em;
+        width: 85%;
+    }
+}

@@ -57,6 +57,23 @@
     		color: black;
     		text-decoration: none;
     	}
+
+        &.employee-skills-verify a {
+            color: $RED;
+        }
+
+        .icon-alert {
+            background-color: $RED;
+            border-radius: 50%;
+            color: white;
+            display: inline-block;
+            float: left;
+            height: 1.625rem;
+            line-height: 1.7;
+            margin: .3rem .4rem 0 0;
+            text-align: center; 
+            width: 1.625rem;
+        }
     }
 
     .employee-skills-last-update {

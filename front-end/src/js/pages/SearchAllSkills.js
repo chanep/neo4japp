@@ -1,20 +1,20 @@
 /**
- * Pages: ManagerHome
+ * Pages: SearchAllSkills
  */
 
 // Dependencies
 import React from 'react';
 import BasePage from './BasePage';
 import Header from '../components/Header';
-import ManagerHomeTable from '../components/ManagerHomeTable';
+import SearchAllSkillsTable from '../components/SearchAllSkillsTable';
 
-// Class: ManagerHome
-export default class ManagerHome extends BasePage {
+// Class: SearchResults
+export default class SearchResults extends BasePage {
     render() {
         return (
             <div>
                 <Header search={true} loggedIn={true} />
-                <ManagerHomeTable />
+                <SearchAllSkillsTable />
             </div>
         );
     }

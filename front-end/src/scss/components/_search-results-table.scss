@@ -28,49 +28,14 @@
     .results-section {
         @include grid($max-width: em(960));
 
-        .filters {
-            background-color: $LIGHT-GREY;
-            padding: {
-                top: em(10);
-                bottom: 0;
-            }
-
-            & > div {
-                border-bottom: 1px solid $LIGHTEST-GREY;
-                padding-bottom: em(9);
-                padding-top: em(6);
-
-                &:last-of-type {
-                    border-bottom: none;
-                }
-            }
-
-            .filter-title-group {
-                color: $GREY;
-            }
-
-            .filter-option {
-                color: $GREY;
-
-                label {
-                    user-select: none;
-
-                    &:hover {
-                        cursor: pointer ;
-                    }
-                }
-
-                input {
-                    margin-right: 7px;
-                }
-            }
-        }
-
         .results {
+            border-left: 1px solid $LIGHTEST-GREY;
 
             &.results--right { float: right; }
 
             .grid {
+                cursor: pointer;
+                
                 &:nth-child(odd) {
                     background-color: $LIGHT-GREY;
                     border-bottom: 1px solid $LIGHTEST-GREY;
@@ -298,9 +263,18 @@
 
     .results-arrow-open-close {
         background: $LIGHTEST-GREY;
-        text-align: center;
-        line-height: 3.5;
+        display: block;
         font-size: .75em;
+        line-height: 3.5;
+        text-align: center;
+
+        .ss-icon-down-arrow { transition: all .2s ease-in-out;  }
+        
+        &.skill-opened {
+            .ss-icon-down-arrow {
+                transform: rotate(180deg);
+            }
+        }
     }
 }
 

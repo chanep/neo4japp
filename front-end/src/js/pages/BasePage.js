@@ -8,14 +8,14 @@ export default class BasePage extends React.Component {
 	constructor(props) {
 		super(props);
 
-		this._checkLogin();
+		this._checkLoggedIn();
 
 		this.state = {
       		userLogged: cookie.load('currentUser')
     	}
 	}
 
-	_checkLogin() {
+	_checkLoggedIn() {
 		let session = new SessionServices();
 		session.CheckLoggedIn().then(() => {
 			console.log('ESTA LOGEADO');

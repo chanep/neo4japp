@@ -10,12 +10,12 @@ export default class ServicesBase {
 		return new Promise((resolve, reject) => {
 			var urlFinal = ENV().baseServicesURL + path;
 			return request.post(urlFinal).send(sendingData).then(function(response) {
-				data = JSON.parse(response.text);
+				let dataR = JSON.parse(response.text);
 				if (response.statusCode == 200) {
-					resolve(data.data);
+					resolve(dataR.data);
 				}
 				else {
-					reject(data.data);
+					reject(dataR.data);
 				}
 			});
 		});
@@ -28,11 +28,17 @@ export default class ServicesBase {
 			return request.get(urlFinal).withCredentials().then(function(response) {
 				console.log("Response", response);
 
-				data = JSON.parse(response.text);
+				let dataR = JSON.parse(response.text);
 				if (response.statusCode == 200) {
-					resolve(data.data);
+					if (dataR.hasOwnProperty('data'))
+						resolve(dataR.data);
+					else
+						resolve();
 				} else {
-					reject(data.data);
+					if (dataR.hasOwnProperty('data'))
+						reject(dataR.data);
+					else
+						reject();
 				}
 			})
 		});

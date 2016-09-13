@@ -1,10 +1,10 @@
 import React from "react";
 
 import { Link } from "react-router";
-
+import BasePage from './BasePage';
 import Header from "../components/Header";
 
-export default class Allocations extends React.Component {
+export default class Allocations extends BasePage {
     render () {
         return (
             <div>
