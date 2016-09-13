@@ -2,11 +2,12 @@ import React from "react";
 
 import { Link } from "react-router";
 
+import BasePage from './BasePage';
 import Header from "../components/Header";
 import TopSearchedSkills from "../components/ResourceHotspot/TopSearchedSkills";
 import Map from "../components/ResourceHotspot/Map";
 
-export default class ResourceHotspot extends React.Component {
+export default class ResourceHotspot extends BasePage {
     render () {
         return (
             <div>

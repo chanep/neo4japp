@@ -1,41 +1,47 @@
 import React from "react";
 
-import { Link} from "react-router";
+import {Router, Link} from "react-router";
 
 import Header from "../components/Header";
+import SessionServices from '../services/SessionServices'
+import cookie from 'react-cookie';
 
 export default class Login extends React.Component {
+
 	constructor(){
 		super();
+
+    this.state = {
+      username: '',
+      password: ''
+    }
 	}
 
-	query(e) {
+  handleUsernameChange(e) {
+    this.setState({username: e.target.value});
+  }
+
+  handlePasswordChange(e) {
+    this.setState({password: e.target.value});
+  }
+
+  loginSubmit(e) {
+    let self = this;
 		e.preventDefault();
 
-      console.log("queryyy");
-      let params = JSON.stringify({'username':'fabriciom','password':'skill123'});
-      const queryURL = 'http://localhost:15005/api/session/';
-      var request = new XMLHttpRequest();
-      request.open("POST", queryURL, true);
-      request.withCredentials = true;
-      request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    let session = new SessionServices();
+    session.Login(self.state.username, self.state.password).then(data => {
+      cookie.save('currentUser', data);
+      if (data.type == "UserEmployee"){
 
+      }
+      //Router.transitionTo('/ResourceHotspot');
+      this.context.router.push('/ResourceHotspot')
+    }).catch(data => {
+      console.log("Errorrrrr", data);
+    });
+  }
 
-      request.onreadystatechange = function () {
-
-        console.log(request.status);
-        if (request.readyState != 4 || request.status != 200) {
-          console.log("ERROR");
-          return;
-        }
-        var data = request.responseText;
-        console.log(JSON.parse(data));
-        // this.props.history.push('/');
-      };
-    
-
-      request.send(params);
-    }
 	render () {
         return (
           <div>
@@ -43,9 +49,9 @@ export default class Login extends React.Component {
 	    	  <div className="main-content">
 			      <div className="login">
 			        <h1>Welcome!<br />Please log in to continue.</h1>
-			        <span className="ss-icon-user"></span><input type="text" placeholder="User Name" />
-			        <span className="ss-icon-password"></span><input type="password" placeholder="Password" />
-			        <input type="submit" onClick={this.query.bind(this)}  value="LOG IN" />
+			        <span className="ss-icon-user"></span><input id="username" type="text" placeholder="User Name" onChange={this.handleUsernameChange.bind(this)} />
+			        <span className="ss-icon-password"></span><input id="userPass" type="password" placeholder="Password" onChange={this.handlePasswordChange.bind(this)}/>
+			        <input type="submit" onClick={this.loginSubmit.bind(this)}  value="LOG IN" />
 			      </div>
 		      </div>
 	      </div>
