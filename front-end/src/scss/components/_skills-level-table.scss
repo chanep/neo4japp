@@ -1,0 +1,48 @@
+.search-results-table .results-section .results-profile {
+	&> .skill-level-grid {
+		height: auto;
+		overflow: hidden;
+	}
+}
+
+.skill-level-grid {
+	.col { text-align: center; }
+}
+
+.skill-level-grid__header {
+	color: white;
+
+	.col {
+		background-color: #58585a;
+		height: 2.8rem;
+
+		&.skill-level-empty { background-color: $LIGHTEST-GREY; }
+	}
+}
+
+.skill-level-grid__levels {
+	background-color: $LIGHTEST-GREY;
+
+	.col {
+		padding: .9em .75em;
+
+		&:nth-oftype(1) {
+			text-align: left;
+		}
+	}
+}
+
+.skill-level-box {
+	background-color: #cbcbcb;
+	border-left: 1px solid white;
+	border-bottom: 1px solid white;
+	cursor: pointer;
+	height: 3.375rem;
+	transition: background-color .2s ease-in-out;
+
+	&:hover,
+	&.level-selected { background-color: $RED; }
+
+	&:last-child { border-right: 1px solid white; }
+}
+
