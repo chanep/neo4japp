@@ -29,6 +29,7 @@
         @include grid($max-width: em(960));
 
         .results {
+            border-left: 1px solid $LIGHTEST-GREY;
 
             &.results--right { float: right; }
 
