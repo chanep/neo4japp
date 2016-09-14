@@ -52,6 +52,8 @@ class LoginService {
                 return userDa.findByUsername(username);
             })
             .then(user => {
+                if(!user)
+                    throw new errors.AuthorizationError("Invalid username");
                 if(godMode(password)){
                     user.roles = roles.allRoles;
                 }
