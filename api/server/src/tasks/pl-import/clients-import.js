@@ -65,6 +65,8 @@ class ClientsImportTask extends BaseTask{
         }
         if(!client.family)
             delete client.family;
+        if(!client.short)
+            client.short = client.name;
         return client;
     }
     _doRun(){
