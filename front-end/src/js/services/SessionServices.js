@@ -6,6 +6,6 @@ export default class SessionServices extends ServicesBase {
 	}
 
 	CheckLoggedIn() {
-		return super.callGetServices('session/check');
+		return super.callGetServices('session/check', null);
 	}
 }

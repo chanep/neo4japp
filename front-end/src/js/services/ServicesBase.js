@@ -9,7 +9,7 @@ export default class ServicesBase {
 		let sendingData = data;
 		return new Promise((resolve, reject) => {
 			var urlFinal = ENV().baseServicesURL + path;
-			return request.post(urlFinal).send(sendingData).then(function(response) {
+			return request.post(urlFinal).withCredentials().send(sendingData).then(function(response) {
 				let dataR = JSON.parse(response.text);
 				if (response.statusCode == 200) {
 					resolve(dataR.data);
@@ -21,13 +21,12 @@ export default class ServicesBase {
 		});
 	}
 
-	callGetServices(path) {
+	callGetServices(path, query) {
 		var urlFinal = ENV().baseServicesURL + path;
 
+		let queryData = query;
 		return new Promise((resolve, reject) => {
-			return request.get(urlFinal).withCredentials().then(function(response) {
-				console.log("Response", response);
-
+			return request.get(urlFinal).withCredentials().query(queryData).then(function(response) {
 				let dataR = JSON.parse(response.text);
 				if (response.statusCode == 200) {
 					if (dataR.hasOwnProperty('data'))

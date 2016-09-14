@@ -1,12 +1,12 @@
 import React from "react";
 
-import {Router, Link} from "react-router";
+import { hashHistory, Link, browserHistory, withRouter } from 'react-router'
 
 import Header from "../components/Header";
 import SessionServices from '../services/SessionServices'
 import cookie from 'react-cookie';
 
-export default class Login extends React.Component {
+class Login extends React.Component {
 
 	constructor(){
 		super();
@@ -35,8 +35,8 @@ export default class Login extends React.Component {
       if (data.type == "UserEmployee"){
 
       }
-      //Router.transitionTo('/ResourceHotspot');
-      this.context.router.push('/ResourceHotspot')
+      this.context.router.push('/#/');
+      console.log("logeado");
     }).catch(data => {
       console.log("Errorrrrr", data);
     });
@@ -58,3 +58,9 @@ export default class Login extends React.Component {
         );
     }
 }
+
+Login.contextTypes = {
+    router: React.PropTypes.object.isRequired
+}
+
+export default Login;
