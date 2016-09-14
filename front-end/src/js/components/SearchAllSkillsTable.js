@@ -34,10 +34,10 @@ export default class SearchAllSkillsTable extends React.Component {
                     <div className="col -col-3">
                         <span className="table-header">Filter</span>
                     </div>
-                    <div className="col -col-3">
+                    <div className="col -col-4">
                         <span className="table-header">Category</span> 
                     </div>
-                    <div className="col -col-2">
+                    <div className="col -col-3">
                         <span className="table-header">Group</span>
                     </div>
                     <div className="col -col-2">
