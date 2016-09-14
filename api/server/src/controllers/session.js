@@ -78,7 +78,7 @@ class SessionController extends BaseController{
     }
     */
     check(req, res, next){
-        let logged = req.session && req.session.user;
+        let logged = !!(req.session && req.session.user);
 
         this._respondPromise(req, res, P.resolve(logged));
     }
