@@ -98,6 +98,15 @@ let allocation = new Model(
     }
 );
 
+let interest = new Model(
+    'Interest',
+    ['Interest'],
+    {
+        id: Joi.number(),
+        name: Joi.string().required()
+    }
+);
+
 let outgoing = true;
 let incoming = false;
 
@@ -113,11 +122,14 @@ user.relateWithMany(client, "WORKED_FOR", "clients", outgoing, null);
 user.relateWithOne(allocation, "ALLOCATION", "allocation", outgoing, null);
 allocation.relateWithOne(user, "ALLOCATION", "user", incoming, null);
 
+user.relateWithMany(interest, "INTERESTED_IN", "interests", outgoing, null);
+
 module.exports = {
     user: user,
     office: office,
     department: department,
     position: position,
     allocation: allocation,
-    client: client
+    client: client,
+    interest: interest
 }

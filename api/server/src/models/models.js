@@ -7,6 +7,7 @@ module.exports = {
     position: u.position,
     department: u.department,
     client: u.client,
+    interest: u.interest,
     skill: s.skill,
     allocation: u.allocation,
     skillGroup: s.skillGroup,

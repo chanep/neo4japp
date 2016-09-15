@@ -29,9 +29,12 @@ class SkillController extends BaseController{
             paged: {limit: 10, skip: 0},
             orderBy: "name ASC"
         };
-        let name = req.body.name;
-        let type = req.body.type;
-        let limit = req.body.limit;
+
+        let search = this._buildSearch(req);
+
+        let name = search.name;
+        let type = search.type;
+        let limit = search.limit;
 
         if(name)
             query.name= {$ilike:'%' + name + '%'};
@@ -39,7 +42,6 @@ class SkillController extends BaseController{
             query.includes[0].query.type = type;
         if(limit)
             query.paged.limit = limit;
-        
 
         let promise = skillDa.find(query);
 

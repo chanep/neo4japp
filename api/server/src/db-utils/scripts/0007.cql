@@ -1,0 +1,1 @@
+create constraint on (n:Interest${p}) Assert n.name is UNIQUE;

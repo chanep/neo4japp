@@ -4,6 +4,7 @@ const BaseDa = require('./base-da');
 const model = require('../models/models').user;
 const roles = require('../models/roles');
 const AllocationDa = require('./allocation');
+const InterestDa = require('./interest');
 const skillModel = require('../models/models').skill;
 const skillGroupModel = require('../models/models').skillGroup;
 
@@ -26,17 +27,20 @@ class UserDa extends BaseDa{
         let skillL = skillModel.labelsStr;
         let sgRelL = skillModel.getRelationByKey("group").label;
         let kRelL = this.model.getRelationByKey("knowledges").label;
+        let interestRelL = this.model.getRelationByKey("interests").label;
 
         let cmd = `match (n:${label}) where id(n) = {id}
                     match (n)-[:${officeRelL}]->(o),
                     (n)-[:${departmentRelL}]->(d),
-                    (n)-[:${positionRelL}]->(p),
-                    (sg:${sgL})<-[:${sgRelL}]-(s:${skillL})<-[k:${kRelL}]-(n),
-                    (sg)-[:${sgRelL}]->(sgp:${sgL})
+                    (n)-[:${positionRelL}]->(p)
+                    optional match (sg:${sgL})<-[:${sgRelL}]-(s:${skillL})<-[k:${kRelL}]-(n),
+                        (sg)-[:${sgRelL}]->(sgp:${sgL})
                     optional match (n)-[:${approverRelL}]->(a)
                     optional match (n)-[:${clientRelL}]->(c)
-                    with n, o, d, p, collect(a) as approvers, collect(c) as clients, sg, sgp, 
-                        collect({id: id(s), name: s.name, knowledge: {id: id(k), level: k.level, want: k.want, approved: k.approved, approver: k.approverFullname}}) as skills
+                    optional match (n)-[:${interestRelL}]->(i)
+                    with n, o, d, p, collect(distinct a) as approvers, collect(distinct c) as clients, sg, sgp, 
+                        collect(distinct {id: id(s), name: s.name, knowledge: {id: id(k), level: k.level, want: k.want, approved: k.approved, approver: k.approverFullname}}) as skills,
+                        collect(distinct i) as interests
                     return {    
                                 id: id(n), username: n.username, type: n.type, email: n.email, 
                                 fullname: n.fullname, roles: n.roles, phone: n.phone, image: n.image, disabled: n.disabled,
@@ -45,6 +49,7 @@ class UserDa extends BaseDa{
                                 position: {id: id(p), name: p.name},
                                 approvers: approvers,
                                 clients: clients,
+                                interests: interests,
                                 skillGroups: collect({
                                     id: id(sg), name: sg.name,
                                     parent: {id: id(sgp), name: sgp.name},
@@ -59,6 +64,7 @@ class UserDa extends BaseDa{
     findByUsername(username){
         return this.findOne({username: username});
     }
+
     setOffice(id, officeId){
         return this.relate(id, officeId, 'office');
     }
@@ -68,21 +74,38 @@ class UserDa extends BaseDa{
     setPosition(id, positionId){
         return this.relate(id, positionId, 'position');
     }
+
     addApprover(id, approverId){
         return this.relate(id, approverId, 'approvers');
     }
     clearApprovers(id){
         return this.deleteAllRelationships(id, 'approvers');
     }
+
     addResourceManager(id, managerId){
         return this.relate(id, managerId, 'resourceManagers');
     }
+
     addClient(id, clientId){
         return this.relate(id, clientId, 'clients');
     }
     clearClients(id){
         return this.deleteAllRelationships(id, 'clients');
     }
+
+    addInterest(userId, interestName){
+        let interestDa = new InterestDa();
+        return interestDa.findOrCreate(interestName)
+            .then(i => {
+                return this.relate(userId, i.id, "interests")
+                    .then(() => i);
+            });
+    }
+
+    removeInterest(userId, interestId){
+        return this.deleteRelationship(userId, interestId, "interests");
+    }
+    
     /**
      * Update all users role 'approver' based on relationships 'APPROVED_BY'
      */
