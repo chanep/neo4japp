@@ -31,6 +31,11 @@ header {
             span, img {
                 display: inline-block;
                 vertical-align: middle;
+                max-width: 44px;
+                max-height: 44px;
+                border-radius: 22px;
+                -webkit-border-radius: 22px;
+                -moz-border-radius: 22px;
             }
 
             span {
