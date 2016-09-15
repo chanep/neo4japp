@@ -32,13 +32,16 @@ class Login extends React.Component {
     let session = new SessionServices();
     session.Login(self.state.username, self.state.password).then(data => {
       cookie.save('currentUser', data);
-      if (data.roles.includes('admin') || data.roles.includes('resourceManager'))
-        this.context.router.push('/#/');
+      if (data.roles.includes('admin') || data.roles.includes('resourceManager')) {
+        this.context.router.push({pathname: '/resourcesHotspot'});
+      }
       else
-        if (data.roles.includes('approver'))
-          this.context.router.push('/#/ManagerHome');
-        else
-          this.context.router.push('/#/employeeProfile');
+        if (data.roles.includes('approver')){
+          this.context.router.push({pathname: '/ManagerHome'});
+        }
+        else {
+          this.context.router.push({pathname: '/employeeProfile'});
+        }
 
     }).catch(data => {
       console.log("Errorrrrr", data);
