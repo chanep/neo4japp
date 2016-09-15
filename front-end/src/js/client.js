@@ -18,26 +18,15 @@ const app = document.getElementById('app');
 ReactDOM.render(
 	<Router history={hashHistory}>
 		<Route path="/" component={Layout}>
-			<IndexRoute component={ResourceHotspot}></IndexRoute>
-			<Route path="allocations" component={Allocations}></Route>
-		</Route>
-		<Route path="/login" component={Layout}>
 			<IndexRoute component={Login}></IndexRoute>
+            <Route path="/login" component={Login}></Route>
+            <Route path="/resourcesHotspot" component={ResourceHotspot}></Route>
+            <Route path="/allocations" component={Layout}></Route>
+            <Route path="/searchResults" component={SearchResults}></Route>
+            <Route path="/employeeProfile" component={EmployeeProfile}></Route>
+            <Route path="/ManagerHome" component={ManagerHome}></Route>
+            <Route path="/ResultsProfile" component={ResultsProfile}></Route>
+            <Route path="/SearchAllSkills" component={SearchAllSkills}></Route>
 		</Route>
-        <Route path="/searchResults" component={Layout}>
-            <IndexRoute component={SearchResults}></IndexRoute>
-        </Route>
-        <Route path="/employeeProfile" component={Layout}>
-            <IndexRoute component={EmployeeProfile}></IndexRoute>
-        </Route>
-        <Route path="/ManagerHome" component={Layout}>
-            <IndexRoute component={ManagerHome}></IndexRoute>
-        </Route>
-        <Route path="/ResultsProfile" component={Layout}>
-            <IndexRoute component={ResultsProfile}></IndexRoute>
-        </Route>
-        <Route path="/SearchAllSkills" component={Layout}>
-            <IndexRoute component={SearchAllSkills}></IndexRoute>
-        </Route>
 	</Router>,
 app);
