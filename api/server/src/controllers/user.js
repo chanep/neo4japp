@@ -129,6 +129,7 @@ HTTP/1.1 200 OK
         department: { id: 4834, name: "Technology" }, 
         approvers: [{id: 4345, fullname: "Juan Manager"}],
         clients: [{ id: 134, name: "Nike", short: "NIKE" }], 
+        interests: [{ id: 298, name: "Chess"}], 
         skillGroups: [{ 
             id: 4844, 
             name: "languages", 
