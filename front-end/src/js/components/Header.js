@@ -8,7 +8,7 @@ export default class Header extends React.Component {
   constructor (search, loggedIn) {
     super();
     this.state = {'search': search, 'loggedIn': loggedIn, userLogged: cookie.load('currentUser')};
-    console.log("user", this.state.userLogged.image);
+    console.log("user", this.state.userLogged);
   }
 
   render () {
@@ -19,7 +19,7 @@ export default class Header extends React.Component {
             {this.props.loggedIn &&
               <Link to="allocations" className="allocations-btn">
                 <span className="ss-icon-view"></span>View Allocations
-                {(this.state.userLogged.image ?
+                {(this.state.userLogged && this.state.userLogged.image ?
                   <img src={this.state.userLogged.image}></img>
                   :"No hay imagen"
                 )}

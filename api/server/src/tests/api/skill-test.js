@@ -48,9 +48,12 @@ vows.describe('Skill api test')
                 throw err;
             }
             let s = body.data;
-
+            
 
             assert.equal(s.length, skills.length);
+            for(let skill of s){
+                assert.isTrue(skill.name.indexOf('s') >= 0)
+            }
         }
     }
 })
@@ -58,7 +61,7 @@ vows.describe('Skill api test')
 .addBatch({
     '2b. Find Skills by term': {
         topic: function () {
-            req.get('skill?name=s', this.callback);
+            req.get('skill?name=ssdfdfd', this.callback);
         },
         'response is 200': testHelper.assertSuccess(),
         'should return skill groups full hierarchy': function (err, result, body) {
@@ -69,10 +72,7 @@ vows.describe('Skill api test')
             let s = body.data;
             
 
-            assert.equal(s.length, skills.length);
-            for(let skill of s){
-                assert.isTrue(skill.name.indexOf('s') >= 0)
-            }
+            assert.equal(s.length, 0);
         }
     }
 })

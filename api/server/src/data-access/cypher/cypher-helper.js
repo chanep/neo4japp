@@ -107,6 +107,18 @@ class CypherHelper {
 
         return  {cmd:cmd, params:params};;
     }
+    deleteRelationshipCmd(id, otherId, relKey){
+        let r = this.model.getRelationByKey(relKey);
+        let relCypher = this._getRelationshipCypher(relKey, 'r');
+
+        let cmd = `MATCH (n)${relCypher}(m) WHERE ID(n) = {id} AND ID(m) = {otherId}
+             DELETE r
+             RETURN count(r)`;
+
+        let params = {id: neo4j.int(id), otherId: neo4j.int(otherId)};
+
+        return  {cmd:cmd, params:params};;
+    }
     updateRelationshipCmd(relId, relKey, relData, mergeKeys){
         let r = this.model.getRelationByKey(relKey);
         let relCypher = this._getRelationshipCypher(relKey, 'r');

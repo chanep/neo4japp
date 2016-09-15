@@ -9,6 +9,7 @@ const userController = new (require('./controllers/user'));
 const approverController = new (require('./controllers/approver'));
 const resourceManagerController = new (require('./controllers/resource-manager'));
 const searchAllController = new (require('./controllers/search-all'));
+const interestController = new (require('./controllers/interest'));
 
 
 // ---------
@@ -23,8 +24,12 @@ router.use(security.checkLoggedIn.bind(security));
 router.get('/skill', skillController.find.bind(skillController));
 router.get('/skill/all-groups', skillController.findAllGroups.bind(skillController));
 
+router.get('/interest', interestController.find.bind(interestController));
+
 router.get('/user/details', userController.details.bind(userController));
 router.put('/user/knowledge', userController.setKnowledge.bind(userController));
+router.put('/user/interest', userController.addInterest.bind(userController));
+router.delete('/user/interest', userController.removeInterest.bind(userController));
 
 // ---------
 // Approvers
