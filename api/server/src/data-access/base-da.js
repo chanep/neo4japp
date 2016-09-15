@@ -392,6 +392,25 @@ class BaseDa {
             .catch(err => {throw new errors.GenericError("Error relating " + this.model.name, err)});
     }
     /**
+     * Delete a relationship between 2 nodes
+     * @param {Number} selfId
+     * @param {Number} otherId
+     * @param {String} relKey - name of the relationship
+     * @returns Relationships affected count
+     */
+    deleteRelationship(selfId, otherId, relKey){
+        if(!selfId)
+            return P.reject(new errors.GenericError(`BaseDa.deleteRelationship selfId undefined`));
+        if(!otherId)
+            return P.reject(new errors.GenericError(`BaseDa.deleteRelationship otherId undefined`));
+
+        let cypher = this._cypher.deleteRelationshipCmd(selfId, otherId, relKey);
+        return this._run(cypher.cmd, cypher.params)
+            .then(r => this._cypher.parseResultAffected(r))
+            .catch(err => {throw new errors.GenericError(`Error deleteing relationship ${relKey} of ${this.model.name}`, err)});
+    }
+
+    /**
      * Updates relationship data
      * @param {Number} relId - Relationship id
      * @param {any} relKey - Relationship name

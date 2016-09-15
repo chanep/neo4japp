@@ -41,8 +41,9 @@
       "Session",
       "Users",
       "Approvers",
-      "Resource Managers",
-      "Skills"
+      "Resource_Managers",
+      "Skills",
+      "Interests"
     ]
   }
 }

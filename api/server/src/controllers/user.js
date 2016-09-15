@@ -39,6 +39,56 @@ class UserController extends BaseController{
     }
 
     /**
+    @api {put} /api/user/interest Add Interest
+    @apiDescription User add an interest for himself
+    @apiGroup Users
+
+    @apiParam {String} interestName 
+    
+    @apiSuccessExample {json} Success-Response:
+    HTTP/1.1 200 OK
+    {
+        status: "success",
+        data: {
+            id: 11,
+            name: "Football"
+        }
+    }
+    */
+    addInterest(req, res, next){
+        let userId = req.session.user.id;
+        let interestName = req.body.interestName;
+
+        let promise = userDa.addInterest(userId, interestName);
+
+        this._respondPromise(req, res, promise);
+    }
+
+    /**
+    @api {delete} /api/user/interest Remove Interest
+    @apiDescription User removes one of his interests
+    @apiGroup Users
+
+    @apiParam {number} interestId
+    
+    @apiSuccessExample {json} Success-Response:
+    HTTP/1.1 200 OK
+    {
+        status: "success",
+        affected: 1
+    }
+    */
+    removeInterest(req, res, next){
+        let userId = req.session.user.id;
+        let interestId = req.body.interestId;
+
+        let promise = userDa.removeInterest(userId, interestId);
+
+        this._respondPromiseDelete(req, res, promise);
+    }
+
+
+    /**
     @api {get} /api/user/details Details
     @apiDescription Return logged user full data (include knowledges)
     @apiGroup Users
