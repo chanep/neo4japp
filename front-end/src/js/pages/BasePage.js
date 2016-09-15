@@ -20,7 +20,7 @@ class BasePage extends React.Component {
 		this._isUserLoggedIn().then(trueOrFalse => {
 			if (!trueOrFalse) {
 				console.log("no esta logueado");
-				this.context.router.push('/#/login')
+				this.context.router.push({pathname: '/login'});
 				console.log("no hizo redirect");
 			} else {
 				console.log("esta logueado");
