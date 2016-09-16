@@ -11,5 +11,4 @@ api/server/src/tmp/*.json
 api/server/apidoc
 .vagrant
 vagrant-machine/.vagrant
-/dist
-dist/js/client.min.js
+front-end/dist/js/client.min.js
