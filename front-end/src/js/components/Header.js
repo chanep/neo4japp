@@ -24,7 +24,6 @@ export default class Header extends React.Component {
                     <img src={this.state.userLogged.image}></img>
                     :<img src="/img/img_noPortrait.gif"></img>
                   )}
-
                   <ul className="header-menu">
                     <li className="header-menu__item header-menu__item--title">Jane Smith</li>
                     <li className="header-menu__item"><a href="#">Your Skills</a></li>
@@ -37,13 +36,10 @@ export default class Header extends React.Component {
 
                 </Link>
               }
-
-              
             </div>
           </div>
           { this.props.search && <Search /> }
         </header>
     );
   }
-
 }
