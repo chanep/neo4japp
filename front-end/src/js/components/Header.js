@@ -22,7 +22,7 @@ export default class Header extends React.Component {
                   {/*<span className="ss-icon-view"></span>View Allocations*/}
                   {(this.state.userLogged && this.state.userLogged.image ?
                     <img src={this.state.userLogged.image}></img>
-                    :"No hay imagen"
+                    :<img src="/img/img_noPortrait.gif"></img>
                   )}
 
                   <ul className="header-menu">

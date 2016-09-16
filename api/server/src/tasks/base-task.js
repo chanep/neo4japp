@@ -2,6 +2,7 @@
 const errors = require('../shared/errors');
 const P = require('bluebird');
 const TaskStatusDa = require('../data-access/task-status');
+const maxDuration = 20; //minutes
 
 class BaseTask {
     constructor(name){
@@ -18,11 +19,13 @@ class BaseTask {
         return taskStatusDa.findByName(this.name)
             .then(taskStatus => {
                 if(taskStatus && taskStatus.status == 'running'){
-                    running = true;
-				    throw new errors.GenericError("task is already running...");
-                } else{
-                    return taskStatusDa.setRunning(this.name);
+                    let expired = taskStatus.lastStart.getTime() < ((new Date()).getTime() - maxDuration*60*1000)
+                    if(!expired){
+                        running = true;
+				        throw new errors.GenericError("task is already running...");
+                    }
                 }
+                return taskStatusDa.setRunning(this.name);
             })
             .then(() => {
                 console.log(`Task ${this.name} started...`);
