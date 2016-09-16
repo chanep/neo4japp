@@ -3,6 +3,7 @@ const P = require('bluebird');
 const config = require('../shared/config');
 const errors = require('../shared/errors');
 const BaseController = require('./base-controller');
+const roles = require('../models/roles');
 const userDa = new (require('../data-access/user'));
 const approverDa = new (require('../data-access/approver'));
 const rManagerDa = new (require('../data-access/resource-manager'));
@@ -106,9 +107,9 @@ class UserController extends BaseController{
     @apiUse userDetailsResponse
     */
     details(req, res, next){
-        let loggedUserId = req.session.user.id;
-        let userId = req.params.userId || loggedUserId;
-        let promise = this._validateUserAccess(loggedUserId, userId)
+        let loggedUser = req.session.user;
+        let userId = req.params.userId || loggedUser.id;
+        let promise = this._validateUserAccess(loggedUser, userId)
             .then(() => {
                 return userDa.findByIdFull(userId);
             })
@@ -116,19 +117,15 @@ class UserController extends BaseController{
         this._respondPromise(req, res, promise);
     }
 
-    _validateUserAccess(loggedUserId, userId){
-        if(loggedUserId == userId)
+    _validateUserAccess(loggedUser, userId){
+        if(loggedUser.id == userId || roles.hasRole(loggedUser.roles, roles.resourceManager))
             return P.resolve();
-        return approverDa.isApproverOf(loggedUserId, userId)
-            .then(hasAccess => {
-                if(hasAccess)
+        return approverDa.isApproverOf(loggedUser.id, userId)
+            .then(isApproverOf => {
+                if(isApproverOf)
                     return true;
-                return rManagerDa.isResourceManagerOf(loggedUserId, userId);
-            })
-            .then(hasAccess => {
-                if(!hasAccess)
-                    return new errors.ForbiddenError("You don't have access to this user details")
-            })
+                return new errors.ForbiddenError("You don't have access to this user details")
+            });
     }
 
 } 
