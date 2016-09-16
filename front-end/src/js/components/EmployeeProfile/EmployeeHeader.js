@@ -8,19 +8,21 @@ export default class EmployeeHeader extends React.Component {
     constructor(){
         super();
        
-        this.state = {}
+        this.state = {
+            user: []
+        }
 
-        this.getUser();
+        //this.getUser();
+        this.userData = new UserServices();
+        this.isReady = false;
     }
     
 
-    getUser(e) {
-        let self = this;
-        let userData = new UserServices();
-        return userData.GetUserData().then(data => {
-
-            this.setState(data);
-            
+    getUser() {
+        
+        this.userData.GetUserData().then(data => {
+            console.log(data);
+            this.setState({user:data});
         }).catch(data => {
           
             console.log("user data error", data);
@@ -29,11 +31,22 @@ export default class EmployeeHeader extends React.Component {
 
       }
 
+    getChild (obj,key){
+        if (this.isReady) {
+            let result = Object.keys(obj).map(function(k) { return obj[key]});
+            return result[0];
+        }
+    }
 
-    render () {
-        
+    componentDidMount() {
+        this.getUser();
+        this.isReady = true;
+     }
+
+   
 
 
+    render () {       
         return (
            
         	<div className="employee-header-container">
@@ -42,10 +55,13 @@ export default class EmployeeHeader extends React.Component {
 						<img src="img/profile-pic.png" />
         			</div>
         			<div className="col -col-9">
-        				<div className="employee-name">{this.state.fullname}</div>
+        				<div className="employee-name">{this.state.user.fullname}</div>
         				<div className="employee-subtitle">
-                        
+                        {
+                            this.getChild(this.state.user.position, 'name')   
+                        }
                         </div>
+                       
         				<div className="employee-subtitle"><span className="subtitle-annotation">Manager: </span>Mauro Gonzalez</div>
 
         				<div className="employee-interests">
