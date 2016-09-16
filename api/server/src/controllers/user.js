@@ -3,7 +3,10 @@ const P = require('bluebird');
 const config = require('../shared/config');
 const errors = require('../shared/errors');
 const BaseController = require('./base-controller');
+const roles = require('../models/roles');
 const userDa = new (require('../data-access/user'));
+const approverDa = new (require('../data-access/approver'));
+const rManagerDa = new (require('../data-access/resource-manager'));
 
 class UserController extends BaseController{
 
@@ -95,12 +98,34 @@ class UserController extends BaseController{
     
     @apiUse userDetailsResponse
     */
+
+    /**
+    @api {get} /api/user/:userId/details Details by id
+    @apiDescription Return user full data (include knowledges)
+    @apiGroup Users
+    
+    @apiUse userDetailsResponse
+    */
     details(req, res, next){
-        let userId = req.session.user.id;
-
-        let promise = userDa.findByIdFull(userId);
-
+        let loggedUser = req.session.user;
+        let userId = req.params.userId || loggedUser.id;
+        let promise = this._validateUserAccess(loggedUser, userId)
+            .then(() => {
+                return userDa.findByIdFull(userId);
+            })
+            
         this._respondPromise(req, res, promise);
+    }
+
+    _validateUserAccess(loggedUser, userId){
+        if(loggedUser.id == userId || roles.hasRole(loggedUser.roles, roles.resourceManager))
+            return P.resolve();
+        return approverDa.isApproverOf(loggedUser.id, userId)
+            .then(isApproverOf => {
+                if(isApproverOf)
+                    return true;
+                return new errors.ForbiddenError("You don't have access to this user details")
+            });
     }
 
 } 
@@ -129,6 +154,7 @@ HTTP/1.1 200 OK
         department: { id: 4834, name: "Technology" }, 
         approvers: [{id: 4345, fullname: "Juan Manager"}],
         clients: [{ id: 134, name: "Nike", short: "NIKE" }], 
+        interests: [{ id: 298, name: "Chess"}], 
         skillGroups: [{ 
             id: 4844, 
             name: "languages", 

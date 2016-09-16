@@ -38,9 +38,8 @@ class UserDa extends BaseDa{
                     optional match (n)-[:${approverRelL}]->(a)
                     optional match (n)-[:${clientRelL}]->(c)
                     optional match (n)-[:${interestRelL}]->(i)
-                    with n, o, d, p, collect(distinct a) as approvers, collect(distinct c) as clients, sg, sgp, 
-                        collect(distinct {id: id(s), name: s.name, knowledge: {id: id(k), level: k.level, want: k.want, approved: k.approved, approver: k.approverFullname}}) as skills,
-                        collect(distinct i) as interests
+                    with n, o, d, p, collect(distinct a) as approvers, collect(distinct c) as clients, collect(distinct i) as interests, sg, sgp, 
+                        collect(distinct {id: id(s), name: s.name, knowledge: {id: id(k), level: k.level, want: k.want, approved: k.approved, approver: k.approverFullname}}) as skills
                     return {    
                                 id: id(n), username: n.username, type: n.type, email: n.email, 
                                 fullname: n.fullname, roles: n.roles, phone: n.phone, image: n.image, disabled: n.disabled,
@@ -50,11 +49,13 @@ class UserDa extends BaseDa{
                                 approvers: approvers,
                                 clients: clients,
                                 interests: interests,
-                                skillGroups: collect({
-                                    id: id(sg), name: sg.name,
-                                    parent: {id: id(sgp), name: sgp.name},
-                                    skills: skills
-                                })
+                                skillGroups: collect(
+                                    case when sg is not null then {
+                                        id: id(sg), name: sg.name,
+                                        parent: {id: id(sgp), name: sgp.name},
+                                        skills: skills
+                                    } else null end
+                                )
                     }`
         let params = {id: neo4j.int(id)};
         return this._run(cmd, params)
