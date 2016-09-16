@@ -12,8 +12,15 @@ header {
         max-width: 962px;
         margin: 0 auto;
         clear: both;
-        overflow: hidden;
         width: 100%;
+
+        &:after,
+        &:before {
+            content: "";
+            display: table;
+        }
+
+        &:after { clear: both; }
 
         h1 {
             float: left;
@@ -26,7 +33,15 @@ header {
             font-weight: bold;
             float: right;
             font-size: 14px;
-            padding: 10px 20px 10px 48px;
+            //padding: 10px 20px 10px 200px;
+            padding: 10px 20px 10px 15px;
+            transition: all .35s 1.2s ease-in-out;
+            position: relative;
+
+            &:hover {
+                padding-left: 200px;
+                transition: all .35s .5s ease-in-out; 
+            }
 
             span, img {
                 display: inline-block;
@@ -37,6 +52,8 @@ header {
                 border-radius: 22px;
                 -webkit-border-radius: 22px;
                 -moz-border-radius: 22px;
+                position: relative;
+                z-index: 10;
             }
 
             span {
@@ -170,3 +187,52 @@ header {
         }
     }
 }
+
+
+
+.header-menu-wrapper { position: relative; }
+
+.header-menu {
+    background-color: $RED;
+    width: 293px;
+    padding: 30px;
+    padding-bottom: 15px;
+    font-size: 16px;
+    position: absolute;
+    font-weight: normal;
+    top: 0;
+    left: 0;
+    min-height: 65px;
+}
+
+.header-menu__item {
+    margin-bottom: 15px;
+
+    a { color: white; }
+}
+
+.header-menu__item--title {
+    margin-bottom: 30px;
+    font-size: 18px;
+}
+
+
+.allocations-btn {
+    
+
+    .header-menu {
+        opacity: 0;
+        height: 0;
+        overflow: hidden;
+        transition: all .35s .5s ease-in-out; 
+    }
+
+    &:hover {
+        .header-menu {
+            opacity: 1;
+            min-height: 330px;
+            transition: all .35s .5s ease-in-out; 
+        }
+    }
+}
+
