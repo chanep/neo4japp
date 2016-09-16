@@ -3,7 +3,7 @@ const _ = require('lodash');
 const P = require('bluebird');
 let path = require('path');
 //let envFile = path.resolve(__dirname, "../.env");
-let envFile = path.resolve(__dirname, "../.test-env");
+let envFile = path.resolve(__dirname, "../.env");
 let errors = require('../shared/errors');
 
 require('dotenv').config({path: envFile});
@@ -12,22 +12,28 @@ require('dotenv').config({path: envFile});
 // const neo4j = require('neo4j-driver').v1;
 
 
-const async = require('async');
-const timeout = require('async-timeout')
+// const taskStatusDa = new (require('../data-access/task-status'));
+// let date = (new Date()).getTime() - 20*60*1000;
+// date = new Date(date);
+// taskStatusDa.upsert({name:"clients-import", lastStart: date}, ["name"], true);
 
-let x = [1,2,3];
-async.eachSeries(x,
-    timeout(function(z, callback){
-        console.log('z', z);
-        //callback();
-    }, 1000, "error de timeout") //"error de timeout" se pasa como result(o sea 2do parametro) del callback del async, no como error
-, function(err){
-    if(err){
-        console.log('error', err);
-    } else{
-        console.log('ok');
-    }
-});
+
+// const async = require('async');
+// const timeout = require('async-timeout')
+
+// let x = [1,2,3];
+// async.eachSeries(x,
+//     timeout(function(z, callback){
+//         console.log('z', z);
+//         //callback();
+//     }, 1000, "error de timeout") //"error de timeout" se pasa como result(o sea 2do parametro) del callback del async, no como error
+// , function(err){
+//     if(err){
+//         console.log('error', err);
+//     } else{
+//         console.log('ok');
+//     }
+// });
 
 // const Joi = require('joi');
 // let schema = {key: Joi.array().items(Joi.string()).default([])};

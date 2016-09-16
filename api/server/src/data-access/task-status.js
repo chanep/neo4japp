@@ -25,7 +25,7 @@ class TaskStatusDa extends BaseDa{
             lastFinish: new Date(),
             info: info
         };
-        return this.upsert(data, ["name"]);
+        return this.upsert(data, ["name"], true);
     }
     setFinishError(taskName, info){
         let data = {
@@ -34,7 +34,7 @@ class TaskStatusDa extends BaseDa{
             lastFinish: new Date(),
             info: info
         };
-        return this.upsert(data, ["name"]);
+        return this.upsert(data, ["name"], true);
     }
     findByName(name){
         let query = {name: name};
