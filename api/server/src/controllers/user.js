@@ -4,6 +4,8 @@ const config = require('../shared/config');
 const errors = require('../shared/errors');
 const BaseController = require('./base-controller');
 const userDa = new (require('../data-access/user'));
+const approverDa = new (require('../data-access/approver'));
+const rManagerDa = new (require('../data-access/resource-manager'));
 
 class UserController extends BaseController{
 
@@ -95,12 +97,38 @@ class UserController extends BaseController{
     
     @apiUse userDetailsResponse
     */
+
+    /**
+    @api {get} /api/user/:userId/details Details by id
+    @apiDescription Return user full data (include knowledges)
+    @apiGroup Users
+    
+    @apiUse userDetailsResponse
+    */
     details(req, res, next){
-        let userId = req.session.user.id;
-
-        let promise = userDa.findByIdFull(userId);
-
+        let loggedUserId = req.session.user.id;
+        let userId = req.params.userId || loggedUserId;
+        let promise = this._validateUserAccess(loggedUserId, userId)
+            .then(() => {
+                return userDa.findByIdFull(userId);
+            })
+            
         this._respondPromise(req, res, promise);
+    }
+
+    _validateUserAccess(loggedUserId, userId){
+        if(loggedUserId == userId)
+            return P.resolve();
+        return approverDa.isApproverOf(loggedUserId, userId)
+            .then(hasAccess => {
+                if(hasAccess)
+                    return true;
+                return rManagerDa.isResourceManagerOf(loggedUserId, userId);
+            })
+            .then(hasAccess => {
+                if(!hasAccess)
+                    return new errors.ForbiddenError("You don't have access to this user details")
+            })
     }
 
 } 

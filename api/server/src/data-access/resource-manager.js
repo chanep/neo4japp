@@ -56,6 +56,14 @@ class ResourceManagerDa extends UserDa{
         return this.queryPaged(cmd, countCmd, params);
     }
 
+     /**
+     * Returns true if the user is the resource manager of the employee
+     * @param {number} userId
+     * @param {number} employeeId
+     */
+    isResourceManagerOf(userId, employeeId){
+        return this.relationshipExists(employeeId, "resourceManagers", userId);
+    }
 }
 
 module.exports = ResourceManagerDa;
