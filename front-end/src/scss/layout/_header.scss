@@ -28,7 +28,7 @@ header {
             font-size: 14px;
             padding: 10px 20px 10px 48px;
 
-            span, img {
+            img {
                 display: inline-block;
                 vertical-align: middle;
                 max-width: 44px;
@@ -40,6 +40,8 @@ header {
             }
 
             span {
+                display: inline-block;
+                vertical-align: middle;
                 font-size: 10px;
                 margin-right: 7px;
                 padding-bottom: 2px;
