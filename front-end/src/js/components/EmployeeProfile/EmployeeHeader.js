@@ -1,18 +1,67 @@
 import React from "react";
 
 import { Link } from "react-router";
+import UserServices from '../../services/UserServices';
 
 export default class EmployeeHeader extends React.Component {
-    render () {
+
+    constructor(){
+        super();
+       
+        this.state = {
+            user: []
+        }
+
+        //this.getUser();
+        this.userData = new UserServices();
+        this.isReady = false;
+    }
+    
+
+    getUser() {
+        
+        this.userData.GetUserData().then(data => {
+            console.log(data);
+            this.setState({user:data});
+        }).catch(data => {
+          
+            console.log("user data error", data);
+          
+        });
+
+      }
+
+    getChild (obj,key){
+        if (this.isReady) {
+            let result = Object.keys(obj).map(function(k) { return obj[key]});
+            return result[0];
+        }
+    }
+
+    componentDidMount() {
+        this.getUser();
+        this.isReady = true;
+     }
+
+   
+
+
+    render () {       
         return (
+           
         	<div className="employee-header-container">
         		<div className="grid">
         			<div className="col -col-1">
 						<img src="img/profile-pic.png" />
         			</div>
         			<div className="col -col-9">
-        				<div className="employee-name">Manuel Bruno Lazzaro</div>
-        				<div className="employee-subtitle">Senior Open Standards Developer</div>
+        				<div className="employee-name">{this.state.user.fullname}</div>
+        				<div className="employee-subtitle">
+                        {
+                            this.getChild(this.state.user.position, 'name')   
+                        }
+                        </div>
+                       
         				<div className="employee-subtitle"><span className="subtitle-annotation">Manager: </span>Mauro Gonzalez</div>
 
         				<div className="employee-interests">

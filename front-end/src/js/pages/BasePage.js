@@ -1,8 +1,8 @@
 // Dependencies
 import React from 'react';
 import cookie from 'react-cookie';
-import SessionServices from '../services/SessionServices'
-import { hashHistory, Link, browserHistory, withRouter } from 'react-router'
+import SessionServices from '../services/SessionServices';
+import { hashHistory, Link, browserHistory, withRouter } from 'react-router';
 
 // Base class: BasePage
 class BasePage extends React.Component {
