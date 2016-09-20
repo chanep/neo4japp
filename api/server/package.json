@@ -1,13 +1,17 @@
 {
   "name": "skillsearch-api",
   "version": "1.0.0",
-  "description": "",
+  "description": "Skillsearch api",
   "main": "src/server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "vows -v tests/api/*-test.js"
   },
-  "author": "",
+  "author": "RGA",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.web.rga.com/rga-api/skillsearch.git"
+  },
   "devDependencies": {
     "grunt": "^1.0.1",
     "grunt-apidoc": "^0.11.0",
