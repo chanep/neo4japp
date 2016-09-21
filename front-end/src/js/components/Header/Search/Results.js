@@ -17,9 +17,9 @@ export default class Results extends React.Component {
       //console.log("SKILLPROPS" ,props); // THIS ONE TELLS THE ELEMENT THAT HAS BEEN CLICKED
 
       //TODO: check if ID is already in array
-      console.log("CLICK-STATE E" , event);
-      console.log("CLICK-STATE P", props);
-      console.log("CLICK-STATE S", skill);
+      //console.log("CLICK-STATE E" , event);
+      //console.log("CLICK-STATE P", props);
+      //console.log("CLICK-STATE S", skill);
       this.props.addSkill(props);
     }
 
@@ -28,9 +28,9 @@ export default class Results extends React.Component {
       let skills = this.props.results.skills;
       let tools = this.props.results.tools;
       let users = this.props.results.users;
-      console.log("SKILLS", skills);
-      console.log("Tools", tools);
-      console.log("users", users);
+      //console.log("SKILLS", skills);
+      //console.log("Tools", tools);
+      //console.log("users", users);
 
         return (
           <div className="search__results__wrapper">
@@ -62,7 +62,7 @@ export default class Results extends React.Component {
                 <li className="subcategory-list">
                   <ul>
                     {users.map(function (person){
-                      return <li>{person.name}</li>;
+                      return <li>{person.fullname}</li>;
                     })}
                   </ul>
                 </li>

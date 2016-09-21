@@ -13,7 +13,7 @@ export default class Pill extends React.Component {
     }
 
     removeItem () {
-      console.log("Remove ITEM", this.props);
+      //console.log("Remove ITEM", this.props);
 
       this.props.removeSkill(this.props.name,this.props.index);
     }
@@ -21,7 +21,7 @@ export default class Pill extends React.Component {
 
     render () {
         return (
-             <span className="search-field-pill">{this.props.name}<span className="search-field-pill__close" onClick={this.removeItem.bind(this)}></span></span>
+             <span className="search-field-pill">{this.props.name}<span className="search-field-pill__close" onClick={this.removeItem.bind(this)}>x</span></span>
         );
     }
 }

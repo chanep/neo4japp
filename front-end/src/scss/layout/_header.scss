@@ -87,9 +87,12 @@ header {
             input {
                 border: 0;
                 background: transparent;
-                font-size: 22px;
+                font-size: 20px;
                 height: 100%;
-                width: 500px;
+                width: auto;
+                line-height: 50px;
+                font-weight: 100;
+                margin-left: 5px;
             }
 
             .search-button-wrapper {
@@ -115,8 +118,12 @@ header {
 
             .search-field-wrapper {
                 display: inline-block;
-                height: 43px;
+                height: 50px;
+                margin-left: -5px;
+                width: 88%;
+                overflow: hidden;
             }
+            
         }
 
         &__results {
@@ -177,16 +184,25 @@ header {
         background-color: white;
         border-radius: 30px;
         padding: 4px 12px;
-        margin: 12px 8px;
+        margin: 12px 5px;
 
-        .ss-icon-close {
-            display: inline-block;
-            cursor: pointer;
-            width: 14px;
-            height: 14px;
-            font-size: 12px;
-            margin-left: 3px;
-        } 
+      
+
+        &__close {
+          font-size: 10px;
+          position: relative;
+          display: inline-block;
+          background-color: #666767;
+          padding: 2px 5px 4px;
+          border-radius: 20px;
+          color: #fff;
+          height: auto;
+          line-height: 9px;
+          font-weight: 100;
+          margin-left: 5px;
+          top: -2px;
+          cursor: pointer;
+        }
     }
 }
 
