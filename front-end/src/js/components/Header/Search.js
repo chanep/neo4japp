@@ -21,6 +21,7 @@ export default class Search extends React.Component {
       this.addSkill = this.addSkill.bind(this);
       this.removeSkill = this.removeSkill.bind(this);
       this.updateQuery = this.updateQuery.bind(this);
+      
     }
 
     updateQuery(e) {
@@ -28,6 +29,10 @@ export default class Search extends React.Component {
       if (e.target.value.length > 2) {
         this.setState({query: e.target.value});
         this.query();
+         this.setState({ word: e.target.value });
+      
+      } else if (e.target.value.length == 0) {
+        this.hideResults(0);
       }
 
       if (!this.state.hasResults) {
@@ -37,7 +42,7 @@ export default class Search extends React.Component {
 
     addSkill(skill) {
       let currentArr = this.state.skillArr;
-      console.log(currentArr.indexOf(skill.name));
+      //console.log(currentArr.indexOf(skill.name));
       if (currentArr.indexOf(skill.name) == '-1') {
         currentArr.push(skill.name);
         //console.log("ADD SKILL ------->", skill);
@@ -59,9 +64,9 @@ export default class Search extends React.Component {
 
       let searchService = new SearchServices();
       searchService.GetSearchAll(this.state.query, 5).then(data =>{
-         console.log('Search new service')
+         //console.log('Search new service')
          this.setState({ results: data });
-         console.log(data);
+         //console.log(data);
 
       }).catch(data => {
           //console.log("search data error", data);
@@ -105,6 +110,8 @@ export default class Search extends React.Component {
 
     }
 
+    
+
     hideResults() {
       this.setState({ hasResults: false });
     }
@@ -145,7 +152,7 @@ export default class Search extends React.Component {
                 })}
               </div>
               */}
-                 { <Results hasResults={this.state.hasResults} results={this.state.results} addSkill={this.addSkill} /> }
+                 { <Results hasResults={this.state.hasResults} results={this.state.results} word={this.state.word} addSkill={this.addSkill} /> }
             </div>
         );
     }

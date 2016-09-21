@@ -21,7 +21,7 @@ export default class EmployeeHeader extends React.Component {
     getUser() {
         
         this.userData.GetUserData().then(data => {
-            console.log(data);
+            //console.log(data);
             this.setState({user:data});
         }).catch(data => {
           
