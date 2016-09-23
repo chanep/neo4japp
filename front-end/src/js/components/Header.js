@@ -43,7 +43,7 @@ class Header extends React.Component {
                     <li className="header-menu__item header-menu__item--title">{this.state.userLogged.fullname}</li>
                     <li className="header-menu__item"><Link to="/employeeProfile">Your Skills</Link></li>
                     <li className="header-menu__item"><a href="#">Your Work</a></li>
-                    <li className="header-menu__item"><a href="#">Your Allocations</a></li>
+                    <li className="header-menu__item"><a href="http://reporter/newallocations/EmployeeAllocation.aspx" target="_blank">Your Allocations</a></li>
                     <li className="header-menu__item"><a href="#">Manage Skills</a></li>
                     <li className="header-menu__item"><a href="#">FAQ</a></li>
                     <li className="header-menu__item"><input type="button" onClick={this.logout.bind(this)} value="Logout" /></li>

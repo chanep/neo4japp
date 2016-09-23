@@ -55,9 +55,11 @@ class Login extends React.Component {
 	    	  <div className="main-content">
 			      <div className="login">
 			        <h1>Welcome!<br />Please log in to continue.</h1>
-			        <span className="ss-icon-user"></span><input id="username" type="text" placeholder="User Name" onChange={this.handleUsernameChange.bind(this)} />
-			        <span className="ss-icon-password"></span><input id="userPass" type="password" placeholder="Password" onChange={this.handlePasswordChange.bind(this)}/>
-			        <input type="submit" onClick={this.loginSubmit.bind(this)}  value="LOG IN" />
+              <form onSubmit={this.loginSubmit.bind(this)}>
+			         <span className="ss-icon-user"></span><input id="username" type="text" placeholder="User Name" className="inputTextBox" onChange={this.handleUsernameChange.bind(this)} />
+			         <span className="ss-icon-password"></span><input id="userPass" type="password" placeholder="Password" className="inputTextBox" onChange={this.handlePasswordChange.bind(this)}/>
+			         <input type="submit" value="LOG IN" />
+              </form>
 			      </div>
 		      </div>
 	      </div>
