@@ -2,6 +2,7 @@ import React from "react";
 
 import Results from "./Search/Results";
 import Pill from './Search/Pill';
+import SearchServices from '../../services/SearchServices';
 
 import { Link } from "react-router";
 
@@ -20,11 +21,19 @@ export default class Search extends React.Component {
       this.addSkill = this.addSkill.bind(this);
       this.removeSkill = this.removeSkill.bind(this);
       this.updateQuery = this.updateQuery.bind(this);
+      
     }
 
     updateQuery(e) {
-      this.setState({query: e.target.value});
-      this.query();
+
+      if (e.target.value.length > 2) {
+        this.setState({query: e.target.value});
+        this.query();
+         this.setState({ word: e.target.value });
+      
+      } else if (e.target.value.length == 0) {
+        this.hideResults(0);
+      }
 
       if (!this.state.hasResults) {
         this.showResults();
@@ -33,9 +42,13 @@ export default class Search extends React.Component {
 
     addSkill(skill) {
       let currentArr = this.state.skillArr;
-      currentArr.push(skill.name);
-      console.log("ADD SKILL ------->", skill);
-      this.setState({skillArr:currentArr});
+      //console.log(currentArr.indexOf(skill.name));
+      if (currentArr.indexOf(skill.name) == '-1') {
+        currentArr.push(skill.name);
+        //console.log("ADD SKILL ------->", skill);
+        this.setState({skillArr:currentArr});
+      }
+     
     }
 
     removeSkill(skill, index) {
@@ -48,7 +61,21 @@ export default class Search extends React.Component {
     }
 
     query() {
-      let source = 'http://localhost:15005/api/resource-manager/search-all?term='+ this.state.query + '&limit=5'
+
+      let searchService = new SearchServices();
+      searchService.GetSearchAll(this.state.query, 5).then(data =>{
+         //console.log('Search new service')
+         this.setState({ results: data });
+         //console.log(data);
+
+      }).catch(data => {
+          //console.log("search data error", data);
+      });
+
+     
+
+
+     /*let source = 'http://localhost:15005/api/resource-manager/search-all?term='+ this.state.query + '&limit=5'
       var request = new XMLHttpRequest();
       request.open("GET",source, true);
       request.withCredentials = true;
@@ -77,11 +104,22 @@ export default class Search extends React.Component {
         }
       };
 
-      request.send(this.state.query);
+      request.send(this.state.query);*/
+
+     
+
     }
+
+    
 
     hideResults() {
       this.setState({ hasResults: false });
+    }
+
+    clearSearch() {
+      this.hideResults();
+      document.getElementById('querySearch').value = "";
+      this.setState({ skillArr: []});
     }
 
     showResults () {
@@ -96,20 +134,25 @@ export default class Search extends React.Component {
               <div className="search__input__wrapper">
                 <div className="search__input">
                   <div className="search-field-wrapper">
-                    <input type="text" name="query" onChange={this.updateQuery} />
+                    {pills.map((pillName, index)=>{
+                      return (<Pill name={pillName} removeSkill={this.removeSkill} index={index} />)
+                    })}
+                    <input type="text" name="query" id="querySearch" onChange={this.updateQuery} placeholder="enter search..."/>
                   </div> 
                   <span className="search-button-wrapper">
-                    <span className="ss-icon-close"><span className="path1"></span><span className="path2" onClick={this.hideResults.bind(this)}></span></span>
+                    <span className="ss-icon-close"><span className="path1"></span><span className="path2" onClick={this.clearSearch.bind(this)}></span></span>
                     <span className="ss-icon-search" onClick={this.showResults.bind(this)}></span>
                   </span>
                 </div>
               </div>
+              {/*
               <div className="search-pill-wrapper">
                 {pills.map((pillName, index)=>{
                   return (<Pill name={pillName} removeSkill={this.removeSkill} index={index} />)
                 })}
               </div>
-                 { <Results hasResults={this.state.hasResults} results={this.state.results} addSkill={this.addSkill} /> }
+              */}
+                 { <Results hasResults={this.state.hasResults} results={this.state.results} word={this.state.word} addSkill={this.addSkill} /> }
             </div>
         );
     }
