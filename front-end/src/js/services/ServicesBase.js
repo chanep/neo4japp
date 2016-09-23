@@ -42,4 +42,26 @@ export default class ServicesBase {
 			})
 		});
 	}
+
+	callDeleteServices(path, query) {
+		var urlFinal = ENV().baseServicesURL + path;
+
+		let queryData = query;
+		return new Promise((resolve, reject) => {
+			return request.del(urlFinal).withCredentials().query(queryData).then(function(response) {
+				let dataR = JSON.parse(response.text);
+				if (response.statusCode == 200) {
+					if (dataR.hasOwnProperty('data'))
+						resolve(dataR.data);
+					else
+						resolve();
+				} else {
+					if (dataR.hasOwnProperty('data'))
+						reject(dataR.data);
+					else
+						reject();
+				}
+			})
+		});
+	}
 }

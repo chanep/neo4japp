@@ -37,23 +37,67 @@ header {
             padding: 10px 20px 10px 15px;
             transition: all .35s 1.2s ease-in-out;
             position: relative;
+            display: block;
+            cursor: default;
+
+            .header-menu {
+                opacity: 0;
+                height: 0;
+                overflow: hidden;
+                transition: all .35s .5s ease-in-out; 
+
+                background-color: $RED;
+                width: 293px;
+                font-size: 16px;
+                position: absolute;
+                font-weight: normal;
+                top: 0;
+                left: 0;
+                min-height: 65px;
+            }
+
+            .header-menu__item {
+                a, input[type="button"] {
+                    color: white;
+                    display: block;
+                    padding-left: 30px;
+                    padding-right: 30px;
+                    padding-bottom: 7px;
+                    padding-top: 7px;
+                }
+
+                a:hover, input[type="button"]:hover {
+                    background-color: #eb364f;
+                }
+                
+                input[type="button"]{
+                    background: none;
+                    cursor: pointer;
+                    width: 100%;
+                    text-align: left;
+                }
+            }
+
+            .header-menu__item--title {
+                font-size: 18px;
+                line-height: 65px;
+                padding-left: 30px;
+                padding-right: 30px;
+            }
 
             &:hover {
                 padding-left: 200px;
                 transition: all .35s .5s ease-in-out; 
+
+                .header-menu {
+                    opacity: 1;
+                    min-height: 330px;
+                    transition: all .35s .5s ease-in-out; 
+                }
             }
 
             img {
-                display: inline-block;
-                vertical-align: middle;
-                max-width: 44px;
-                max-height: 44px;
-                min-height: 44px;
-                border-radius: 22px;
-                -webkit-border-radius: 22px;
-                -moz-border-radius: 22px;
-                position: relative;
-                z-index: 10;
+                @include userProfilePicture(44px, 44px);
             }
 
             span {
@@ -194,47 +238,4 @@ header {
 
 .header-menu-wrapper { position: relative; }
 
-.header-menu {
-    background-color: $RED;
-    width: 293px;
-    padding: 30px;
-    padding-bottom: 15px;
-    font-size: 16px;
-    position: absolute;
-    font-weight: normal;
-    top: 0;
-    left: 0;
-    min-height: 65px;
-}
-
-.header-menu__item {
-    margin-bottom: 15px;
-
-    a { color: white; }
-}
-
-.header-menu__item--title {
-    margin-bottom: 30px;
-    font-size: 18px;
-}
-
-
-.allocations-btn {
-    
-
-    .header-menu {
-        opacity: 0;
-        height: 0;
-        overflow: hidden;
-        transition: all .35s .5s ease-in-out; 
-    }
-
-    &:hover {
-        .header-menu {
-            opacity: 1;
-            min-height: 330px;
-            transition: all .35s .5s ease-in-out; 
-        }
-    }
-}
 

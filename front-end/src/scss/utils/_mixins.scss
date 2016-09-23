@@ -439,3 +439,18 @@
         @error ('`$style` of `#{$style}` needs to be either `lines` or `bars`');
     }
 }
+
+// Generate the rounded user profile image
+@mixin userProfilePicture($height, $width) {
+    display: inline-block;
+    vertical-align: middle;
+    max-width: $width;
+    min-width: $width;
+    max-height: $height;
+    min-height: $height;
+    border-radius: $width/2;
+    -webkit-border-radius: $width/2;
+    -moz-border-radius: $width/2;
+    position: relative;
+    z-index: 10;
+}

@@ -10,20 +10,12 @@ class BasePage extends React.Component {
 		super(props);
 
 		this._checkLoggedIn();
-
-		this.state = {
-      		userLogged: cookie.load('currentUser')
-    	}
 	}
 
 	_checkLoggedIn() {
 		this._isUserLoggedIn().then(trueOrFalse => {
 			if (!trueOrFalse) {
-				console.log("no esta logueado");
 				this.context.router.push({pathname: '/login'});
-				console.log("no hizo redirect");
-			} else {
-				console.log("esta logueado");
 			}
 		});
 	}

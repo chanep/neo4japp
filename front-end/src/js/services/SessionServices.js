@@ -8,4 +8,8 @@ export default class SessionServices extends ServicesBase {
 	CheckLoggedIn() {
 		return super.callGetServices('session/check', null);
 	}
+
+	Logout() {
+		return super.callDeleteServices('session/', null);
+	}
 }

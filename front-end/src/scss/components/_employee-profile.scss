@@ -3,6 +3,10 @@
     margin-top: em(18);
     line-height: normal;
 
+    .profilePic {
+        @include userProfilePicture(em(45), em(45));
+    }
+
     .employee-name {
     	font-size: em(36);
     	font-weight: bold;

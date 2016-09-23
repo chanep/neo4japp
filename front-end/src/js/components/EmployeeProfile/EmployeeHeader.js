@@ -21,7 +21,6 @@ export default class EmployeeHeader extends React.Component {
     getUser() {
         
         this.userData.GetUserData().then(data => {
-            console.log(data);
             this.setState({user:data});
         }).catch(data => {
           
@@ -52,13 +51,17 @@ export default class EmployeeHeader extends React.Component {
         	<div className="employee-header-container">
         		<div className="grid">
         			<div className="col -col-1">
-						<img src="img/profile-pic.png" />
+                        {(this.state.user.image ?
+                            <img src={this.state.user.image} className="profilePic"></img>
+                            : <img src="/img/img_noPortrait.gif" className="profilePic"></img>
+                        )}
         			</div>
         			<div className="col -col-9">
+                    {console.log("acaaaa", this.state.user)}
         				<div className="employee-name">{this.state.user.fullname}</div>
         				<div className="employee-subtitle">
                         {
-                            this.getChild(this.state.user.position, 'name')   
+                            this.getChild(this.state.user.position, 'name')
                         }
                         </div>
                        
