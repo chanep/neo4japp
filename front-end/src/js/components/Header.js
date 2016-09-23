@@ -53,7 +53,15 @@ class Header extends React.Component {
               }
             </div>
           </div>
-          { this.state.search && <Search /> }
+          { (this.state.search ? <Search /> :
+            <div className="search">
+              <div className="search__input__wrapper">
+                <div className="search__input">
+                  <div className="search-field-wrapper"></div>
+                </div>
+              </div>
+            </div>
+          )}
         </header>
     );
   }

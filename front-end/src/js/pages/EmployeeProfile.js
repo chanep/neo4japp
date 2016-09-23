@@ -9,7 +9,7 @@ export default class EmployeeProfile extends BasePage {
     render () {
         return (
             <div>
-                <Header search={true} loggedIn={true} />
+                <Header search={super._showSearch()} loggedIn={true} />
                 <EmployeeHeader />
                 <ResultsProfileTable /> 
             </div>
