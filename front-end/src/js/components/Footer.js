@@ -10,6 +10,7 @@ export default class Footer extends React.Component {
               <div className="footer-wrapper">
                 <Copyright />
                 <ContactUs />
+                <a href="#" title="Frequently asked questions"><span className="icon-envelope">FAQ</span></a>
               </div>
             </footer>
         );

@@ -22,7 +22,9 @@ ReactDOM.render(
             <Route path="/login" component={Login}></Route>
             <Route path="/resourcesHotspot" component={ResourceHotspot}></Route>
             <Route path="/allocations" component={Layout}></Route>
-            <Route path="/searchResults" component={SearchResults}></Route>
+            <Route path="/searchResults" component={SearchResults}>
+            	<Route path="/searchResults/:skillIds" component={SearchResults}/>
+            </Route>
             <Route path="/employeeProfile" component={EmployeeProfile}></Route>
             <Route path="/ManagerHome" component={ManagerHome}></Route>
             <Route path="/ResultsProfile" component={ResultsProfile}></Route>
