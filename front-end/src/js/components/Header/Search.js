@@ -21,7 +21,7 @@ export default class Search extends React.Component {
       this.addSkill = this.addSkill.bind(this);
       this.removeSkill = this.removeSkill.bind(this);
       this.updateQuery = this.updateQuery.bind(this);
-      
+      this.removeLastPill = this.removeLastPill.bind(this);
     }
 
     updateQuery(e) {
@@ -47,6 +47,7 @@ export default class Search extends React.Component {
         currentArr.push(skill.name);
         //console.log("ADD SKILL ------->", skill);
         this.setState({skillArr:currentArr});
+        document.getElementById('querySearch').value = "";
       }
      
     }
@@ -122,6 +123,16 @@ export default class Search extends React.Component {
       this.setState({ skillArr: []});
     }
 
+    removeLastPill(e) {
+      const DELETE_KEYCODE = 8;
+
+      if (e.keyCode == DELETE_KEYCODE) {
+        let skills = this.state.skillArr;
+        skills.pop();
+        this.setState({ skillArr: skills });
+      }
+    }
+
     showResults () {
       this.setState({ hasResults: true });
     }
@@ -137,7 +148,7 @@ export default class Search extends React.Component {
                     {pills.map((pillName, index)=>{
                       return (<Pill name={pillName} removeSkill={this.removeSkill} index={index} />)
                     })}
-                    <input type="text" name="query" id="querySearch" onChange={this.updateQuery} placeholder="enter search..."/>
+                    <input type="text" name="query" id="querySearch" onChange={this.updateQuery} onKeyUp={this.removeLastPill} placeholder="enter search..."/>
                   </div> 
                   <span className="search-button-wrapper">
                     <span className="ss-icon-close"><span className="path1"></span><span className="path2" onClick={this.clearSearch.bind(this)}></span></span>
