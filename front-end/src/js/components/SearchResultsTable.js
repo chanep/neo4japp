@@ -6,16 +6,41 @@
 import React from 'react';
 import Search from './Header/Search';
 import FiltersSideBar from '../components/FiltersSideBar';
+import { Router, Route, Link } from 'react-router'
+import SearchServices from '../services/SearchServices';
 
 // Class: SearchResultsTable
 export default class SearchResultsTable extends React.Component {
-    constructor(search, loggedIn) {
+    constructor(skillsIds) {
         super();
+
         this.state = {
-            'search': search,
-            'loggedIn': loggedIn
+        	skillsIds: skillsIds.skillsIds,
+        	data: []
         };
+
+		this.searchServices = new SearchServices();
+        this.isReady = false;
     }
+
+    getData() {
+    	let ids = [];
+    	ids.push(this.state.skillsIds);
+
+        this.searchServices.GetSearchBySkills(ids, 20).then(data => {
+        	console.log(data);
+            this.setState({data:data});
+        }).catch(data => {
+          
+            console.log("Error performing search", data);
+          
+        });
+    }
+
+    componentDidMount() {
+        this.getData();
+        this.isReady = true;
+     }
 
     render() {
         return (

@@ -8,7 +8,7 @@ export default class TopSearchedSkills extends React.Component {
             <div>
               <h2>Top Searched Skills</h2>
               <ul>
-              	<li><Link to="searchResults/" query={{skillIds: [1]}}>NodeJS</Link></li>
+              	<li><Link to="searchResults/" query={{skillIds: 5031}}>NodeJS</Link></li>
                 <li><a href="#" className="selected">Javascript</a></li>
                 <li><a href="#">PHP</a></li>
                 <li><a href="#">Sitecore</a></li>

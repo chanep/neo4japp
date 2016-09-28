@@ -1,6 +1,7 @@
 import Promise from 'bluebird';
 import ENV from '../../config.js';
 import request from 'superagent';
+import qs from 'qs'
 
 export default class ServicesBase {
 	callPostServices(path, data) {
@@ -26,7 +27,7 @@ export default class ServicesBase {
 
 		let queryData = query;
 		return new Promise((resolve, reject) => {
-			return request.get(urlFinal).withCredentials().query(queryData).then(function(response) {
+			return request.get(urlFinal).withCredentials().query(qs.stringify(queryData, { encode: false })).then(function(response) {
 				let dataR = JSON.parse(response.text);
 				if (response.statusCode == 200) {
 					if (dataR.hasOwnProperty('data'))

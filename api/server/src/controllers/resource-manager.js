@@ -8,7 +8,7 @@ const skillDa = new (require('../data-access/skill'));
 
 class ResourceManagerController extends BaseController{
     /**
-    @api {get} /api/resource-manager/user-by-skill Find users by skill
+    @api {get} /api/resource-manager/users-by-skill Find users by skill
     @apiDescription List users who have at least one of the searched skills (sorted by skill match count and skill level, descending)
     @apiGroup Resource Managers
 

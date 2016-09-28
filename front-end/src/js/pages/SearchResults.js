@@ -10,11 +10,15 @@ import SearchResultsTable from '../components/SearchResultsTable';
 
 // Class: SearchResults
 export default class SearchResults extends BasePage {
+	constructor(props) {
+		super(props);
+	}
+
     render() {
         return (
             <div>
                 <Header search={true} loggedIn={true} />
-                <SearchResultsTable />
+                <SearchResultsTable skillsIds={this.props.location.query.skillIds} />
             </div>
         );
     }
