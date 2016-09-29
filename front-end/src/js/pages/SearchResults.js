@@ -6,7 +6,7 @@
 import React from 'react';
 import BasePage from './BasePage';
 import Header from '../components/Header';
-import SearchResultsTable from '../components/SearchResultsTable';
+import SearchResultsTable from '../components/SearchResults/SearchResultsTable';
 
 // Class: SearchResults
 export default class SearchResults extends BasePage {
