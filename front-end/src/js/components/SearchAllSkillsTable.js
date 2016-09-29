@@ -8,7 +8,7 @@ import Search from './Header/Search';
 import FiltersSideBar from '../components/FiltersSideBar';
 import SkillsLevelTable from "../components/SkillsLevelTable";
 
-// Class: SearchResultsTable
+// Class: SearchAllSkillsTable
 export default class SearchAllSkillsTable extends React.Component {
     constructor(search, loggedIn) {
         super();
