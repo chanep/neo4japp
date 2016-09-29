@@ -14,14 +14,14 @@ let asyncDoUntil = P.promisify(async.doUntil);
 let asyncMap = P.promisify(async.map);
 let asyncEach = P.promisify(async.each);
 
-const taskname ='approvers-import';
-const phonelistUrl = 'http://phonelist/gateway/json/employeeManager.aspx'
+const taskname ='resource-managers-import';
+const phonelistUrl = 'http://phonelist/gateway/json/employeeResourceManager.aspx'
 
-class ApproversImportTask extends BaseTask{
+class ResourceManagersImportTask extends BaseTask{
     constructor(){
         super(taskname);
     }
-    _getUserApproversEmail(phonelistId){
+    _getUserResourceManagersEmail(phonelistId){
         if(this.phonelistIdToEmail.has(phonelistId))
             return P.resolve(this.phonelistIdToEmail.get(phonelistId));
         return new P((resolve, reject) => {
@@ -29,28 +29,29 @@ class ApproversImportTask extends BaseTask{
             request.get(url, 
                     (err, result, body) => {
                         if(err){
-                            reject(new errors.GenericError('error getting approvers of user ' + phonelistId, err))
+                            reject(new errors.GenericError('error getting resourceManagers of user ' + phonelistId, err))
                         } else {
                             try{
                                 let json = JSON.parse(body);
                                 let user = json.Info[0];
-                                let emails = user.managers.map(m => m.useremail.toLowerCase());
+                                user.RM = user.RM || [];
+                                let emails = user.RM.map(m => m.useremail.toLowerCase());
                                 this.phonelistIdToEmail.set(phonelistId, emails);
                                 resolve(emails);
                             } catch(err){
-                                reject(new errors.GenericError('error getting approvers of user ' + phonelistId, err))
+                                reject(new errors.GenericError('error getting resourceManagers of user ' + phonelistId, err))
                             }
                         }
                     })
         });
     }
-    _getUserApproversId(phonelistId){
-        return this._getUserApproversEmail(phonelistId)
+    _getUserResourceManagersId(phonelistId){
+        return this._getUserResourceManagersEmail(phonelistId)
             .then(emails => {
                 return asyncMap(emails, (email, callback) => {
                     this._getUserIdByEmail(email)
-                        .then(approverId => {
-                            callback(null, approverId);
+                        .then(resourceManagerId => {
+                            callback(null, resourceManagerId);
                         })
                         .catch(err => {
                             callback(err);
@@ -68,7 +69,7 @@ class ApproversImportTask extends BaseTask{
                     this.emailToUserId.set(email, u.id);
                     return u.id;
                 }
-                this.notFoundApprovers.add(email);
+                this.notFoundResourceManagers.add(email);
                 return null;
             });
     }
@@ -76,27 +77,27 @@ class ApproversImportTask extends BaseTask{
         let query = {disabled: false, phonelistId: {$ne: null}, paged: {skip: skip, limit: limit}};
         return userDa.find(query);
     }
-    _getAndUpdateUsersApprovers(users){
+    _getAndUpdateUsersResourceManagers(users){
         return asyncEach(users, (user, callback) =>{
-            this._getAndUpdateUserApprovers(user)
+            this._getAndUpdateUserResourceManagers(user)
                 .finally(() => {
                     callback();
                 })
         })
     }
-    _getAndUpdateUserApprovers(user){
+    _getAndUpdateUserResourceManagers(user){
         let updated = false;
-        return userDa.clearApprovers(user.id)
+        return userDa.clearResourceManagers(user.id)
             .then(() => {
-                return this._getUserApproversId(user.phonelistId);
+                return this._getUserResourceManagersId(user.phonelistId);
             })
-            .then(approversId => {
-                return asyncEach(approversId, (approverId, callback) => {
-                    if(!approverId){
+            .then(resourceManagersId => {
+                return asyncEach(resourceManagersId, (resourceManagerId, callback) => {
+                    if(!resourceManagerId){
                         //this.info.errors++;
                         callback();
                     } else{
-                        userDa.addApprover(user.id, approverId)
+                        userDa.addResourceManager(user.id, resourceManagerId)
                             .then(() => {
                                 updated = true;
                                 callback();
@@ -113,7 +114,7 @@ class ApproversImportTask extends BaseTask{
                     this.info.updated++;
             })
             .catch(err => {
-                console.log(taskname + ` error updating ${user.username} approvers`, err);
+                console.log(taskname + ` error updating ${user.username} resourceManagers`, err);
                 this.info.errors++;
             })
     }
@@ -127,7 +128,7 @@ class ApproversImportTask extends BaseTask{
                 .then(data => {
                     totalUsers = data.paged.totalCount;
                     let users = data.data;
-                    return this._getAndUpdateUsersApprovers(users);
+                    return this._getAndUpdateUsersResourceManagers(users);
                 })
                 .then(() => callback(null))
                 .catch(err => callback(err));
@@ -140,22 +141,23 @@ class ApproversImportTask extends BaseTask{
         });
     }
     _doRun(){
-        this.info = {updated: 0, errors: 0, approversNotFound: 0};
+        this.info = {updated: 0, errors: 0, resourceManagersNotFound: 0};
         this.phonelistIdToEmail = new Map();
         this.emailToUserId = new Map();
-        this.notFoundApprovers = new Set();
+        this.notFoundResourceManagers = new Set();
 
         return this._findAndUpdateAllUsers()
             .then(() => {
-                return userDa.updateApproverRole();;
+                return userDa.updateResourceManagerRole();;
             })
             .then(count => {
-                console.log(count + ' have modified their approver role');
-                console.log('Not found approvers', this.notFoundApprovers);
-                this.info.approversNotFound = this.notFoundApprovers.size;
+                console.log(count + ' have modified their resourceManager role');
+                if(this.notFoundResourceManagers.size > 0)
+                    console.log('Not found resourceManagers', this.notFoundResourceManagers);
+                this.info.resourceManagersNotFound = this.notFoundResourceManagers.size;
                 return this.info;
             });
     }
 }
 
-module.exports = ApproversImportTask;
+module.exports = ResourceManagersImportTask;

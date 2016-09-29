@@ -86,6 +86,9 @@ class UserDa extends BaseDa{
     addResourceManager(id, managerId){
         return this.relate(id, managerId, 'resourceManagers');
     }
+    clearResourceManagers(id){
+        return this.deleteAllRelationships(id, 'resourceManagers');
+    }
 
     addClient(id, clientId){
         return this.relate(id, clientId, 'clients');
@@ -135,6 +138,36 @@ class UserDa extends BaseDa{
                 return updated;
             })
     }
+
+    /**
+     * Update all users role 'resourceManager' based on relationships 'R_MANAGED_BY'
+     */
+    updateResourceManagerRole(){
+        let updated = 0;
+        let label = this.labelsStr;
+        let rel = this.model.getRelationByKey("resourceManagers").label;
+        let role = roles.resourceManager;
+        let cmd1 = `MATCH (a:${label})<-[:${rel}]-(:${label}) WHERE (a.roles IS NULL) OR NONE(role IN a.roles WHERE role = {role})
+                WITH DISTINCT a
+                SET a.roles = CASE WHEN (a.roles IS NULL) then [{role}] ELSE a.roles + {role} END
+                return count(a)`;
+        let cmd2 = `MATCH (a:${label}) WHERE NOT( (a)<-[:${rel}]-(:${label}) ) AND ANY(role IN a.roles WHERE role = {role})
+                WITH DISTINCT a
+                SET a.roles = FILTER(role IN a.roles WHERE role <> {role})
+                return count(a)`;
+        return this._run(cmd1, {role: role})
+            .then(r => this._cypher.parseIntResult(r))
+            .then(count => {
+                updated += count;
+                return this._run(cmd2, {role: role})
+            })
+            .then(r => this._cypher.parseIntResult(r))
+            .then(count => {
+                updated += count;
+                return updated;
+            })
+    }
+
     setKnowledge(id, skillId, level, want){
         level = want? null : level;
         let knowledgeData = {
