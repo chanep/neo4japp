@@ -2,12 +2,12 @@
 const _ = require('lodash');
 const async = require('async');
 const fs = require('fs');
-const errors = require('../shared/errors');
+const errors = require('../../shared/errors');
 const P = require('bluebird');
-const UserDa = require('../data-access/user');
-const BaseTask = require('./base-task');
+const UserDa = require('../../data-access/user');
+const BaseTask = require('../base-task');
 const path = require('path');
-const tmpPhonelistFile = path.resolve(__dirname, "../tmp/employees.json");
+const tmpPhonelistFile = path.resolve(__dirname, "../../tmp/employees.json");
 
 const request = require('request');
 

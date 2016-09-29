@@ -43,7 +43,7 @@
 	},
 	{
 		"name" : "phonelist-id-import",
-		"path" : "./tasks/phonelist-id-import",
+		"path" : "./tasks/pl-import/phonelist-id-import",
 		"cronPattern" : null,
 		"args" : {
 		}
@@ -65,6 +65,13 @@
 	{
 		"name" : "approvers-import",
 		"path" : "./tasks/pl-import/approvers-import",
+		"cronPattern" : null,
+		"args" : {
+		}
+	},
+	{
+		"name" : "resource-managers-import",
+		"path" : "./tasks/pl-import/resource-managers-import",
 		"cronPattern" : null,
 		"args" : {
 		}
