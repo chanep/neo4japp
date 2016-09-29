@@ -15,13 +15,14 @@ export default class Search extends React.Component {
         source:'',
         query:'',
         skillArr: [],
-        results:{}
+        results:{},
+        selection: 0
       };
 
       this.addSkill = this.addSkill.bind(this);
       this.removeSkill = this.removeSkill.bind(this);
       this.updateQuery = this.updateQuery.bind(this);
-      this.removeLastPill = this.removeLastPill.bind(this);
+      this.move = this.move.bind(this);
     }
 
     updateQuery(e) {
@@ -123,13 +124,66 @@ export default class Search extends React.Component {
       this.setState({ skillArr: []});
     }
 
-    removeLastPill(e) {
-      const DELETE_KEYCODE = 8;
+    move(e) {
+      const BACKSPACE_KEYCODE = 8;
+      const UP_KEYCODE = 38;
+      const DOWN_KEYCODE = 40;
+      const ENTER_KEYCODE = 13;
 
-      if (e.keyCode == DELETE_KEYCODE) {
-        let skills = this.state.skillArr;
-        skills.pop();
-        this.setState({ skillArr: skills });
+      let newSkills = this.state.skillArr;
+
+      if (e.keyCode == BACKSPACE_KEYCODE) {
+        // Delete last pill when pressing BACKSPACE
+
+        newSkills.pop();
+        this.setState({ skillArr: newSkills });
+      }
+
+      if (e.keyCode == UP_KEYCODE) {
+        // Move down on the list
+
+        if (this.state.selection > 0) {
+          this.state.selection--;
+        }
+
+        document.getElementById('querySearch').value = this.state.results['tools'][this.state.selection]['name'];
+      }
+
+      if (e.keyCode == DOWN_KEYCODE) {
+        // Move up on the list
+
+        if (this.state.selection < this.state.results['tools'].length - 1) {
+          this.state.selection++;
+        }
+
+        document.getElementById('querySearch').value = this.state.results['tools'][this.state.selection]['name'];
+      }
+
+      if (e.keyCode == ENTER_KEYCODE) {
+        // Choose item
+        let query = document.getElementById('querySearch').value.trim();
+
+        var valid = false,
+            tools = this.state.results['tools'];
+
+        for (var i = 0; i < tools.length; i++) {
+          var element = tools[i];
+
+          if (element.name.toLowerCase() == query.trim().toLowerCase()) {
+            query = element.name; // Copy to mantain letter case
+            valid = true;
+
+            break; // No need to keep looking
+          }
+        }
+
+        if (valid) {
+          // Add pill only if its a valid item
+          newSkills.push(query);
+
+          this.setState({ skillArr: newSkills });
+          document.getElementById('querySearch').value = '';
+        }
       }
     }
 
@@ -148,7 +202,7 @@ export default class Search extends React.Component {
                     {pills.map((pillName, index)=>{
                       return (<Pill name={pillName} removeSkill={this.removeSkill} index={index} />)
                     })}
-                    <input type="text" name="query" id="querySearch" onChange={this.updateQuery} onKeyUp={this.removeLastPill} placeholder="enter search..."/>
+                    <input type="text" name="query" id="querySearch" onChange={this.updateQuery} onKeyUp={this.move} placeholder="enter search..."/>
                   </div> 
                   <span className="search-button-wrapper">
                     <span className="ss-icon-close"><span className="path1"></span><span className="path2" onClick={this.clearSearch.bind(this)}></span></span>
