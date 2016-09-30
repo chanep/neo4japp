@@ -133,27 +133,38 @@ export default class Search extends React.Component {
       let newSkills = this.state.skillArr;
 
       if (e.keyCode == BACKSPACE_KEYCODE) {
+
         // Delete last pill when pressing BACKSPACE
 
-        newSkills.pop();
-        this.setState({ skillArr: newSkills });
+        if (document.getElementById('querySearch').value == '') {
+          newSkills.pop();
+          this.setState({ skillArr: newSkills });
+        }
       }
 
       if (e.keyCode == UP_KEYCODE) {
+        e.preventDefault();
+
         // Move down on the list
 
         if (this.state.selection > 0) {
           this.state.selection--;
+        } else {
+          this.state.selection = this.state.results['tools'].length - 1;
         }
 
         document.getElementById('querySearch').value = this.state.results['tools'][this.state.selection]['name'];
       }
 
       if (e.keyCode == DOWN_KEYCODE) {
+        e.preventDefault();
+
         // Move up on the list
 
         if (this.state.selection < this.state.results['tools'].length - 1) {
           this.state.selection++;
+        } else {
+          this.state.selection = 0;
         }
 
         document.getElementById('querySearch').value = this.state.results['tools'][this.state.selection]['name'];
@@ -169,7 +180,7 @@ export default class Search extends React.Component {
         for (var i = 0; i < tools.length; i++) {
           var element = tools[i];
 
-          if (element.name.toLowerCase() == query.trim().toLowerCase()) {
+          if (element.name.trim().toLowerCase() == query.trim().toLowerCase()) {
             query = element.name; // Copy to mantain letter case
             valid = true;
 
@@ -202,7 +213,7 @@ export default class Search extends React.Component {
                     {pills.map((pillName, index)=>{
                       return (<Pill name={pillName} removeSkill={this.removeSkill} index={index} />)
                     })}
-                    <input type="text" name="query" id="querySearch" onChange={this.updateQuery} onKeyUp={this.move} placeholder="enter search..."/>
+                    <input type="text" name="query" id="querySearch" onChange={this.updateQuery} onKeyDown={this.move} placeholder="enter search..."/>
                   </div> 
                   <span className="search-button-wrapper">
                     <span className="ss-icon-close"><span className="path1"></span><span className="path2" onClick={this.clearSearch.bind(this)}></span></span>
