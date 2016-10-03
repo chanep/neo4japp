@@ -1,5 +1,7 @@
 import React from 'react';
+import ENV from '../../../config.js';
 import { Router, Route, Link } from 'react-router'
+import SkillLevel from './SkillLevel'
 
 export default class SkillResult extends React.Component {
 	constructor(obj, key) {
@@ -15,17 +17,12 @@ export default class SkillResult extends React.Component {
 		return (
             <li className="col -col-4">
                 <div className="title">
-                    <span>Angular</span>
+                    <span>{this.state.obj.obj.name}</span>
                 </div>
                 <div className="proficiency">
-                    <span>4. Can teach / manage others</span>
+                    <span>{this.state.obj.obj.level}. {ENV().knowledgeLevels[this.state.obj.obj.level-1].desc}</span>
                 </div>
-                <div className="skill-bar">
-                    <div className="bar"></div>
-                    <div className="bar"></div>
-                    <div className="bar"></div>
-                    <div className="bar"></div>
-                </div>
+                <SkillLevel level={this.state.obj.obj.level} />
             </li>
 		);
 	}

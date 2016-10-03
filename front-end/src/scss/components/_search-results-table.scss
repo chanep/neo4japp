@@ -33,17 +33,19 @@
 
             &.results--right { float: right; }
 
-            .grid {
-                cursor: pointer;
-                
-                &:nth-child(odd) {
+            & > li:nth-child(even) {
+                .header {
                     background-color: $LIGHT-GREY;
-                    border-bottom: 1px solid $LIGHTEST-GREY;
-                    border-top: 1px solid $LIGHTEST-GREY;
+                }
+            }
+            & > li:nth-child(odd) {
+                .header {
+                    background-color: white;
                 }
             }
 
             & > li {
+                background: white;
 
                 &.-expanded {
                     .content {
@@ -64,10 +66,6 @@
 
                 .header {
                     height: em(75);
-
-                    &:nth-of-type(even) {
-                        background-color: $LIGHT-GREY;
-                    }
 
                     .col {
                         display: flex;
@@ -107,6 +105,14 @@
                             font-size: em(10);
                             text-align: center;
                         }
+
+                        .allocations {
+                            justify-content: flex-start !important;
+                        }
+                    }
+
+                    .btnExpandContract {
+                        cursor: pointer;
                     }
                 }
 
@@ -157,7 +163,6 @@
                     .skill-bar {
                         height: em(7);
                         display: flex;
-                        justify-content: space-between;
                         width: 91.36%;
 
                         & > div {
@@ -165,16 +170,18 @@
                             float: left;
                             width: calc(25% - 4px);
                             background-color: $RED;
+                            margin-right: 4px;
                         }
                     }
 
                     .samples {
                         text-align: right;
 
-                        span {
+                        a {
                             @include setTypeScale('.filter-title');
                             text-transform: uppercase;
                             padding-top: em(4, '.filter-title');
+                            color: black;
                         }
                     }
                 }
@@ -275,6 +282,50 @@
                 transform: rotate(180deg);
             }
         }
+    }
+
+    .pieAllocation {
+        width: 25px;
+        height: 25px;
+        display: inline-block;
+        margin-right: 5px;
+
+        .pie {
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            -moz-border-radius: 12.5px;
+            -webkit-border-radius: 12.5px;
+            -o-border-radius: 12.5px;
+            border-radius: 12.5px;
+            clip: rect(0px, 12.5px, 25px, 0px);
+        }
+
+        .pieBackground {
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            -moz-border-radius: 12.5px;
+            -webkit-border-radius: 12.5px;
+            -o-border-radius: 12.5px;
+            border-radius: 12.5px;
+            border: 1px solid $GREY;
+        }
+
+         .hold {
+              position: absolute;
+              width: 25px;
+              height: 25px;
+              -moz-border-radius: 12.5px;
+              -webkit-border-radius: 12.5px;
+              -o-border-radius: 12.5px;
+              border-radius: 12.5px;
+              clip: rect(0px, 25px, 25px, 12.5px);
+         }
+
+         .pieSlice .pie {
+              background-color: $GREY;
+         }
     }
 }
 
