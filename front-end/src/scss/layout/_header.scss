@@ -39,6 +39,7 @@ header {
             position: relative;
             display: block;
             cursor: default;
+            z-index: 500;
 
             .header-menu {
                 opacity: 0;
