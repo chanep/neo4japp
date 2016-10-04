@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { Router, Route, IndexRoute, hashHistory } from "react-router";
+import { Router, Route, IndexRoute, hashHistory, browserHistory } from "react-router";
 
 import Layout from "./components/Layout";
 import ResourceHotspot from "./pages/ResourceHotspot";
@@ -16,7 +16,7 @@ const app = document.getElementById('app');
 
 
 ReactDOM.render(
-	<Router history={hashHistory}>
+	<Router history={browserHistory}>
 		<Route path="/" component={Layout}>
 			<IndexRoute component={Login}></IndexRoute>
             <Route path="/login" component={Login}></Route>

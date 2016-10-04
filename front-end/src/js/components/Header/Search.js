@@ -4,7 +4,7 @@ import Results from "./Search/Results";
 import Pill from './Search/Pill';
 import SearchServices from '../../services/SearchServices';
 
-import { Link } from "react-router";
+import { Link, browserHistory } from "react-router";
 
 export default class Search extends React.Component {
     constructor () {
@@ -23,6 +23,8 @@ export default class Search extends React.Component {
       this.removeSkill = this.removeSkill.bind(this);
       this.updateQuery = this.updateQuery.bind(this);
       this.move = this.move.bind(this);
+      this.makeQuery = this.makeQuery.bind(this);
+      this.addPill = this.addPill.bind(this);
     }
 
     updateQuery(e) {
@@ -124,10 +126,40 @@ export default class Search extends React.Component {
       this.setState({ skillArr: []});
     }
 
+    addPill(newSkills) {
+        // Choose item
+        let query = document.getElementById('querySearch').value.trim();
+
+        var valid = false,
+            tools = this.state.results['tools'];
+
+        for (var i = 0; i < tools.length; i++) {
+          var element = tools[i];
+
+          if (element.name.trim().toLowerCase() == query.trim().toLowerCase()) {
+            query = element.name; // Copy to mantain letter case
+            valid = true;
+
+            break; // No need to keep looking
+          }
+        }
+
+        if (valid) {
+          if (newSkills.indexOf(query) == -1) {
+            // Add pill only if its a valid item and it has not been added already
+            newSkills.push(query);
+
+            this.setState({ skillArr: newSkills });
+            document.getElementById('querySearch').value = '';
+          }
+        }
+    }
+
     move(e) {
       const BACKSPACE_KEYCODE = 8;
       const UP_KEYCODE = 38;
       const DOWN_KEYCODE = 40;
+      const TAB_KEYCODE = 9;
       const ENTER_KEYCODE = 13;
 
       let newSkills = this.state.skillArr;
@@ -153,7 +185,12 @@ export default class Search extends React.Component {
           this.state.selection = this.state.results['tools'].length - 1;
         }
 
-        document.getElementById('querySearch').value = this.state.results['tools'][this.state.selection]['name'];
+        var item = this.state.results['tools'][this.state.selection]['name'].trim().toLowerCase();
+        console.log(item);
+
+        if (newSkills.indexOf(item) == -1) {
+          document.getElementById('querySearch').value = item;
+        }
       }
 
       if (e.keyCode == DOWN_KEYCODE) {
@@ -167,39 +204,38 @@ export default class Search extends React.Component {
           this.state.selection = 0;
         }
 
-        document.getElementById('querySearch').value = this.state.results['tools'][this.state.selection]['name'];
+        var item = this.state.results['tools'][this.state.selection]['name'].trim().toLowerCase();
+
+        if (newSkills.indexOf(item) == -1) {
+          document.getElementById('querySearch').value = item;
+        }
       }
 
       if (e.keyCode == ENTER_KEYCODE) {
-        // Choose item
-        let query = document.getElementById('querySearch').value.trim();
+        this.addPill(newSkills);
 
-        var valid = false,
-            tools = this.state.results['tools'];
+        this.makeQuery();
+      }
 
-        for (var i = 0; i < tools.length; i++) {
-          var element = tools[i];
+      if (e.keyCode == TAB_KEYCODE) {
+        e.preventDefault();
+        document.getElementById('querySearch').focus();
 
-          if (element.name.trim().toLowerCase() == query.trim().toLowerCase()) {
-            query = element.name; // Copy to mantain letter case
-            valid = true;
-
-            break; // No need to keep looking
-          }
-        }
-
-        if (valid) {
-          // Add pill only if its a valid item
-          newSkills.push(query);
-
-          this.setState({ skillArr: newSkills });
-          document.getElementById('querySearch').value = '';
-        }
+        this.addPill(newSkills);
       }
     }
 
     showResults () {
       this.setState({ hasResults: true });
+    }
+
+    makeQuery() {
+      let newSkills = this.state.skillArr;
+      const itemId = newSkills[0];
+      const path = `/searchResults/${itemId}`;
+      console.log(newSkills);
+
+      browserHistory.push(path);
     }
 
     render () {
@@ -217,7 +253,7 @@ export default class Search extends React.Component {
                   </div> 
                   <span className="search-button-wrapper">
                     <span className="ss-icon-close"><span className="path1"></span><span className="path2" onClick={this.clearSearch.bind(this)}></span></span>
-                    <span className="ss-icon-search" onClick={this.showResults.bind(this)}></span>
+                    <span className="ss-icon-search" onClick={this.makeQuery.bind(this)}></span>
                   </span>
                 </div>
               </div>

@@ -34,7 +34,7 @@ export default class Results extends React.Component {
         for (let i in subcategoryResults) {         
           let result = subcategoryResults[i];
           console.log(result.innerHTML)
-          debugger;
+          //debugger;
         }
       }
 
