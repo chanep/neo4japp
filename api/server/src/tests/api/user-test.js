@@ -37,6 +37,7 @@ vows.describe('User api test')
                 throw err;
             }
             let k = body.data;
+            ks[0].id = k.id;
             assert.isNumber(k.id);
             assert.equal(k.level, ks[0].level)
             assert.equal(k.want, ks[0].want)
@@ -61,6 +62,7 @@ vows.describe('User api test')
                 throw err;
             }
             let k = body.data;
+            ks[1].id = k.id;
             assert.isNumber(k.id);
             assert.equal(k.level, ks[1].level)
             assert.equal(k.want, ks[1].want)
@@ -128,6 +130,39 @@ vows.describe('User api test')
     }
 })
 
+.addBatch({
+    '5. Get all skills (with user knowledges attached)': {
+        topic: function () {
+            req.get('user/all-skills', 
+                this.callback);
+        },
+        'response is 200': testHelper.assertSuccess(),
+        'should return user details including knowledges ': function (err, result, body) {
+            if (err) {
+                console.log("error", err);
+                throw err;
+            }
+            let skillGroups = body.data;
+
+            console.log('skillGoups', JSON.stringify(skillGroups));
+
+            //skills groups must have all the skills
+            for(let s of data.skills){
+                let sAux = findSkill(s.id, skillGroups);
+                assert.isNotNull(sAux);
+            }
+
+            //known skills must have the user knowledge attached
+            
+            for(let k of ks){
+                let sAux = findSkill(k.skill.id, skillGroups);
+                assert.isNotNull(sAux.knowledge);
+                assert.equal(sAux.knowledge.id, k.id);
+            }
+        }
+    }
+})
+
 
 .export(module);
 
@@ -139,7 +174,9 @@ function findSkill(id, groups){
             if(s)
                 return s;
         } else if (g.children){
-            return findSkill(id, g.children);
+           let s = findSkill(id, g.children);
+           if(s)
+                return s;
         }
     }
     return null;
