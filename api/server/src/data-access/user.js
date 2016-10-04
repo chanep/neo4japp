@@ -62,6 +62,23 @@ class UserDa extends BaseDa{
             .then(r => this._cypher.parseResultRaw(r))
 
     }
+	/**
+	 * Return the full skillgroup/skill tree. Skill is attached with the corresponding knwoledge if the user have that skill
+	 */
+	fullSkillTreeWithUserKnowledges(userId){
+        let label = this.labelsStr;
+        let sgL = skillGroupModel.labelsStr;
+        let sgParentRelL = skillGroupModel.getRelationByKey("parent").label;
+        let skillL = skillModel.labelsStr;
+        let sgRelL = skillModel.getRelationByKey("group").label;
+        let kRelL = this.model.getRelationByKey("knowledges").label;
+		let cmd = `match (g:${sgL})<-[:${sgParentRelL}]-(cg:${sgL})<-[:${sgRelL}]-(s:${skillL}) ` +
+            `optional match (s)<-[k:${kRelL}]-(n:${label}) where id(n) = {userId}` +
+			`with g, cg, collect({_:s, knowledge: k}) as skills ` + 
+			`return {_:g, children: collect({_:cg, skills: skills})}`;
+        let params = {userId: neo4j.int(userId)};
+		return this.query(cmd, params, null);
+	}
     findByUsername(username){
         return this.findOne({username: username});
     }
