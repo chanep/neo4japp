@@ -383,12 +383,13 @@ class BaseDa {
             return P.reject(new errors.GenericError(`BaseDa.relate selfId undefined`));
         if(!otherId)
             return P.reject(new errors.GenericError(`BaseDa.relate otherId undefined`));
+        let r = this.model.getRelationByKey(relKey);
         return this._validateRelationship(relData, relKey)
             .then(d => {
                 let cypher = this._cypher.relateCmd(selfId, otherId, relKey, d, mergeKeys);
                 return this._run(cypher.cmd, cypher.params);
             })
-            .then(r => this._cypher.parseResultRaw(r, null))
+            .then(relData => this._cypher.parseResultRaw(relData, r.schema))
             .catch(err => {throw new errors.GenericError("Error relating " + this.model.name, err)});
     }
     /**

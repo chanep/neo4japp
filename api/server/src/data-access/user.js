@@ -62,39 +62,56 @@ class UserDa extends BaseDa{
             .then(r => this._cypher.parseResultRaw(r))
 
     }
+	/**
+	 * Return the full skillgroup/skill tree. Skill is attached with the corresponding knwoledge if the user have that skill
+	 */
+	fullSkillTreeWithUserKnowledges(userId){
+        let label = this.labelsStr;
+        let sgL = skillGroupModel.labelsStr;
+        let sgParentRelL = skillGroupModel.getRelationByKey("parent").label;
+        let skillL = skillModel.labelsStr;
+        let sgRelL = skillModel.getRelationByKey("group").label;
+        let kRelL = this.model.getRelationByKey("knowledges").label;
+		let cmd = `match (g:${sgL})<-[:${sgParentRelL}]-(cg:${sgL})<-[:${sgRelL}]-(s:${skillL}) \n` +
+            `optional match (s)<-[k:${kRelL}]-(n:${label}) where id(n) = {userId} \n` +
+			`with g, cg, collect({_:s, knowledge: k}) as skills \n` + 
+			`return {_:g, children: collect({_:cg, skills: skills})}`;
+        let params = {userId: neo4j.int(userId)};
+		return this.query(cmd, params, null);
+	}
     findByUsername(username){
         return this.findOne({username: username});
     }
 
-    setOffice(id, officeId){
-        return this.relate(id, officeId, 'office');
+    setOffice(userId, officeId){
+        return this.relate(userId, officeId, 'office');
     }
-    setDepartment(id, departmentId){
-        return this.relate(id, departmentId, 'department');
+    setDepartment(userId, departmentId){
+        return this.relate(userId, departmentId, 'department');
     }
-    setPosition(id, positionId){
-        return this.relate(id, positionId, 'position');
-    }
-
-    addApprover(id, approverId){
-        return this.relate(id, approverId, 'approvers');
-    }
-    clearApprovers(id){
-        return this.deleteAllRelationships(id, 'approvers');
+    setPosition(userId, positionId){
+        return this.relate(userId, positionId, 'position');
     }
 
-    addResourceManager(id, managerId){
-        return this.relate(id, managerId, 'resourceManagers');
+    addApprover(userId, approverId){
+        return this.relate(userId, approverId, 'approvers');
     }
-    clearResourceManagers(id){
-        return this.deleteAllRelationships(id, 'resourceManagers');
+    clearApprovers(userId){
+        return this.deleteAllRelationships(userId, 'approvers');
     }
 
-    addClient(id, clientId){
-        return this.relate(id, clientId, 'clients');
+    addResourceManager(userId, managerId){
+        return this.relate(userId, managerId, 'resourceManagers');
     }
-    clearClients(id){
-        return this.deleteAllRelationships(id, 'clients');
+    clearResourceManagers(userId){
+        return this.deleteAllRelationships(userId, 'resourceManagers');
+    }
+
+    addClient(userId, clientId){
+        return this.relate(userId, clientId, 'clients');
+    }
+    clearClients(userId){
+        return this.deleteAllRelationships(userId, 'clients');
     }
 
     addInterest(userId, interestName){
@@ -168,7 +185,7 @@ class UserDa extends BaseDa{
             })
     }
 
-    setKnowledge(id, skillId, level, want){
+    setKnowledge(userId, skillId, level, want){
         level = want? null : level;
         let knowledgeData = {
             level: level,
@@ -178,10 +195,13 @@ class UserDa extends BaseDa{
             approvedFullname: null
         }
 
-        return this.relate(id, skillId, 'knowledges', knowledgeData, true);
+        return this.relate(userId, skillId, 'knowledges', knowledgeData, true);
     }
-    setAllocation(id, allocationData){
-        return this.setChild(id, "allocation", allocationData);
+    setAllocation(userId, allocationData){
+        return this.setChild(userId, "allocation", allocationData);
+    }
+    addSkillSearch(userId, skillId, date){
+        return this.relate(userId, skillId, 'searches', {date: date}, false);
     }
 }
 

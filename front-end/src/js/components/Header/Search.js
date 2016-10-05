@@ -4,7 +4,7 @@ import Results from "./Search/Results";
 import Pill from './Search/Pill';
 import SearchServices from '../../services/SearchServices';
 
-import { Link } from "react-router";
+import { Link, browserHistory } from "react-router";
 
 export default class Search extends React.Component {
     constructor () {
@@ -23,11 +23,13 @@ export default class Search extends React.Component {
       this.removeSkill = this.removeSkill.bind(this);
       this.updateQuery = this.updateQuery.bind(this);
       this.move = this.move.bind(this);
+      this.makeQuery = this.makeQuery.bind(this);
+      this.addPill = this.addPill.bind(this);
     }
 
     updateQuery(e) {
 
-      if (e.target.value.length > 2) {
+      if (e.target.value.length > 0) {
         this.setState({query: e.target.value});
         this.query();
          this.setState({ word: e.target.value });
@@ -124,53 +126,7 @@ export default class Search extends React.Component {
       this.setState({ skillArr: []});
     }
 
-    move(e) {
-      const BACKSPACE_KEYCODE = 8;
-      const UP_KEYCODE = 38;
-      const DOWN_KEYCODE = 40;
-      const ENTER_KEYCODE = 13;
-
-      let newSkills = this.state.skillArr;
-
-      if (e.keyCode == BACKSPACE_KEYCODE) {
-
-        // Delete last pill when pressing BACKSPACE
-
-        if (document.getElementById('querySearch').value == '') {
-          newSkills.pop();
-          this.setState({ skillArr: newSkills });
-        }
-      }
-
-      if (e.keyCode == UP_KEYCODE) {
-        e.preventDefault();
-
-        // Move down on the list
-
-        if (this.state.selection > 0) {
-          this.state.selection--;
-        } else {
-          this.state.selection = this.state.results['tools'].length - 1;
-        }
-
-        document.getElementById('querySearch').value = this.state.results['tools'][this.state.selection]['name'];
-      }
-
-      if (e.keyCode == DOWN_KEYCODE) {
-        e.preventDefault();
-
-        // Move up on the list
-
-        if (this.state.selection < this.state.results['tools'].length - 1) {
-          this.state.selection++;
-        } else {
-          this.state.selection = 0;
-        }
-
-        document.getElementById('querySearch').value = this.state.results['tools'][this.state.selection]['name'];
-      }
-
-      if (e.keyCode == ENTER_KEYCODE) {
+    addPill(newSkills) {
         // Choose item
         let query = document.getElementById('querySearch').value.trim();
 
@@ -189,17 +145,109 @@ export default class Search extends React.Component {
         }
 
         if (valid) {
-          // Add pill only if its a valid item
-          newSkills.push(query);
+          if (newSkills.indexOf(query) == -1) {
+            // Add pill only if its a valid item and it has not been added already
+            newSkills.push(query);
 
-          this.setState({ skillArr: newSkills });
-          document.getElementById('querySearch').value = '';
+            this.setState({ skillArr: newSkills });
+            document.getElementById('querySearch').value = '';
+          }
         }
+    }
+
+    move(e) {
+      const BACKSPACE_KEYCODE = 8;
+      const UP_KEYCODE = 38;
+      const DOWN_KEYCODE = 40;
+      const TAB_KEYCODE = 9;
+      const ENTER_KEYCODE = 13;
+
+      let skillArr = this.state.skillArr;
+
+      if (e.keyCode == BACKSPACE_KEYCODE) {
+
+        // Delete last pill when pressing BACKSPACE, only if there's no text in the search field
+
+        if (document.getElementById('querySearch').value == '') {
+          skillArr.pop();
+          this.setState({ skillArr: skillArr });
+        }
+      }
+
+      if (e.keyCode == DOWN_KEYCODE || e.keyCode == UP_KEYCODE) {
+        e.preventDefault();
+
+        // Iterate through the list
+
+        if (e.keyCode == UP_KEYCODE) {
+          if (this.state.selection > 0) {
+            this.state.selection--;
+          } else {
+            this.state.selection = this.state.results['tools'].length - 1;
+          }
+        } else if (e.keyCode == DOWN_KEYCODE) {
+          if (this.state.selection < this.state.results['tools'].length - 1) {
+            this.state.selection++;
+          } else {
+            this.state.selection = 0;
+          }
+        }
+
+        var item = this.state.results['tools'][this.state.selection]['name'].trim().toLowerCase();
+
+        var index = -1;
+
+        skillArr.some(function(element, i) {
+          if (item === element.trim().toLowerCase()) {
+              index = i;
+              return true;
+          }
+        });
+
+        if (index == -1) {
+          document.getElementById('querySearch').value = item;
+        }
+      }
+
+      if (e.keyCode == ENTER_KEYCODE) {
+        this.addPill(skillArr);
+
+        this.makeQuery();
+      }
+
+      if (e.keyCode == TAB_KEYCODE) {
+        e.preventDefault();
+        document.getElementById('querySearch').focus();
+
+        this.addPill(skillArr);
       }
     }
 
     showResults () {
       this.setState({ hasResults: true });
+    }
+
+    makeQuery() {
+      var skillArr = this.state.skillArr,
+          tools = this.state.results.tools,
+          ids = [],
+          idsConcat,
+          path,
+          element,
+          i;
+
+      for (i = 0; i < tools.length; i++) {
+          element = tools[i];
+
+          if (skillArr.indexOf(element.name) !== -1) {
+              ids.push(element.id);
+          }
+      }
+
+      idsConcat = ids.join(),
+      path = `/searchResults/${idsConcat}`;
+
+      browserHistory.push(path);
     }
 
     render () {
@@ -217,7 +265,7 @@ export default class Search extends React.Component {
                   </div> 
                   <span className="search-button-wrapper">
                     <span className="ss-icon-close"><span className="path1"></span><span className="path2" onClick={this.clearSearch.bind(this)}></span></span>
-                    <span className="ss-icon-search" onClick={this.showResults.bind(this)}></span>
+                    <span className="ss-icon-search" onClick={this.makeQuery.bind(this)}></span>
                   </span>
                 </div>
               </div>

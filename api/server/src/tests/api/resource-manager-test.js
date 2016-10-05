@@ -178,6 +178,59 @@ vows.describe('Resource Manager api test')
     }
 })
 
+.addBatch({
+    '6. Find top skill search': {
+        topic: function () {
+            var search = {
+                limit: 20
+            };
+            var queryString = qs.stringify(search, { encode: false });
+
+            req.get('resource-manager/top-skill-searches?'+ queryString, 
+                this.callback);
+        },
+        'response is 200': testHelper.assertSuccess(),
+        'should return user with searched skills': function (err, result, body) {
+            if (err) {
+                console.log("error", err);
+                throw err;
+            }
+            let skills = body.data;
+            //console.log('skills', JSON.stringify(skills));
+            assert.isArray(skills);
+            assert.equal(skills.length, 3);
+            for(let s of skills){
+                assert.isNumber(s.searches);
+            }
+        }
+    }
+})
+
+.addBatch({
+    '7. Find skilled user count by office': {
+        topic: function () {
+            let skillId = data.skills[0].id;
+
+            req.get('/resource-manager/skilled-users-by-office/' + skillId, 
+                this.callback);
+        },
+        'response is 200': testHelper.assertSuccess(),
+        'should return user with searched skills': function (err, result, body) {
+            if (err) {
+                console.log("error", err);
+                throw err;
+            }
+            let offices = body.data;
+            //console.log('offices', JSON.stringify(offices));
+            assert.isArray(offices);
+            assert.equal(offices.length, 1);
+            for(let o of offices){
+                assert.isNumber(o.skilledUserCount);
+            }
+        }
+    }
+})
+
 
 .export(module);
 

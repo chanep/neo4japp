@@ -31,6 +31,7 @@ router.get('/office', officeController.find.bind(officeController));
 
 router.get('/user/details', userController.details.bind(userController));
 router.get('/user/:userId/details', userController.details.bind(userController));
+router.get('/user/all-skills', userController.fullSkillTreeWithUserKnowledges.bind(userController));
 router.put('/user/knowledge', userController.setKnowledge.bind(userController));
 router.put('/user/interest', userController.addInterest.bind(userController));
 router.delete('/user/interest', userController.removeInterest.bind(userController));
@@ -50,6 +51,7 @@ router.get('/approver/search-all', searchAllController.searchAll.bind(searchAllC
 router.use('/resource-manager', security.checkRole(roles.resourceManager).bind(security));
 router.get('/resource-manager/search-all', searchAllController.searchAll.bind(searchAllController));
 router.get('/resource-manager/users-by-skill', resourceManagerController.findUsersBySkill.bind(resourceManagerController));
-
+router.get('/resource-manager/top-skill-searches', resourceManagerController.topSkillSearches.bind(resourceManagerController));
+router.get('/resource-manager/skilled-users-by-office/:skillId', resourceManagerController.skilledUsersByOffice.bind(resourceManagerController));
 
 module.exports = router;

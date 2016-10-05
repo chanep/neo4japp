@@ -64,6 +64,49 @@ class ResourceManagerDa extends UserDa{
     isResourceManagerOf(userId, employeeId){
         return this.relationshipExists(employeeId, "resourceManagers", userId);
     }
+
+    topSkillSearches(limit, fromDate, toDate){
+        limit = limit || 10;
+        fromDate = fromDate || null;
+        toDate = toDate || null;
+
+        let skillL = skillModel.labelsStr;
+        let groupLbl = skillModel.getRelationByKey("group").label;
+        let parentGroupLbl = skillGroupModel.getRelationByKey("parent").label;
+        let searchedLbl = this.model.getRelationByKey("searches").label;
+
+        let cmd = `match (s:${skillL})-[:${groupLbl}]->(sg)-[:${parentGroupLbl}]->(psg), \n` +
+        `(s)<-[r:${searchedLbl}]-(rm) \n` +
+        `where ({fromDate} is null or r.date >= {fromDate}) and ({toDate} is null or r.date <= {toDate}) \n` +
+        `with s, sg, psg, count(r) as searches \n` +
+        `order by searches desc \n limit {limit} \n` +
+        `return {_:s, group: {_:sg, parent: psg}, searches: searches}`;
+
+        limit = neo4j.int(limit);
+        if(fromDate)
+            fromDate = neo4j.int(fromDate);
+        if(toDate)
+            toDate = neo4j.int(toDate);
+
+        let params = {limit: limit, fromDate: fromDate, toDate: toDate};
+
+        return this.query(cmd, params);
+    }
+
+    skilledUsersByOffice(skillId){
+        let label = this.labelsStr;
+        let officeL = this.model.getRelationByKey("office").model.labelsStr;
+        let works = this.model.getRelationByKey("office").label;
+        let knows = this.model.getRelationByKey("knowledges").label;
+
+        let cmd = `match (o:${officeL})<-[:${works}]-(u:${label})-[:${knows}]->(s) \n` +
+        `where id(s) = {skillId} \n` +
+        `return {_:o, skilledUserCount: count(u)}`;
+
+        let params = {skillId: neo4j.int(skillId)};
+
+        return this.query(cmd, params);
+    }
 }
 
 module.exports = ResourceManagerDa;

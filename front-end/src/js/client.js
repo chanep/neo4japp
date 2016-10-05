@@ -16,7 +16,7 @@ const app = document.getElementById('app');
 
 
 ReactDOM.render(
-	<Router history={hashHistory}>
+	<Router history={browserHistory}>
 		<Route path="/" component={Layout}>
 			<IndexRoute component={Login}></IndexRoute>
                   <Route path="/login" component={Login}></Route>

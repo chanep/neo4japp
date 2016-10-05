@@ -68,6 +68,7 @@ class SkillDa extends BaseDa{
             }
         });
     }
+
 }
 
 module.exports = SkillDa;
