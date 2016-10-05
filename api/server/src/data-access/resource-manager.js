@@ -64,6 +64,16 @@ class ResourceManagerDa extends UserDa{
     isResourceManagerOf(userId, employeeId){
         return this.relationshipExists(employeeId, "resourceManagers", userId);
     }
+
+     /**
+     * Save a skill search made by a resource manager for statistics
+     * @param {number} userId Resource Manager Id
+     * @param {number} skillId Id of the skill searched
+     * @param {Date} date of the search
+     */
+    addSkillSearch(userId, skillId, date){
+
+    }
 }
 
 module.exports = ResourceManagerDa;

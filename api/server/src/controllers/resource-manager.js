@@ -5,6 +5,9 @@ const errors = require('../shared/errors');
 const BaseController = require('./base-controller');
 const resourceManagerDa = new (require('../data-access/resource-manager'));
 const skillDa = new (require('../data-access/skill'));
+const postal = require('postal');
+
+const skillChannel = postal.channel('skill');
 
 class ResourceManagerController extends BaseController{
     /**
@@ -24,6 +27,12 @@ class ResourceManagerController extends BaseController{
 
         let skillIds = search.skills;
 
+        let searchData = {
+            userId: req.session.user.id,
+            skillIds: skillIds
+        };
+        skillChannel.publish("searched", searchData);
+
         let filters = {};
         filters.offices = search.offices;
         
@@ -32,7 +41,7 @@ class ResourceManagerController extends BaseController{
 
         let promise = resourceManagerDa.findUsersBySkill(skillIds, filters, skip, limit);
 
-        this._respondPromise(req, res, promise);
+        this._respondPromise(req, res, promise);   
     }
 } 
 

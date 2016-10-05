@@ -15,6 +15,8 @@ const expressQSParser = require('express-qs-parser');
 const session = require('express-session');
 const cors = require('cors');
 const routes = require('./routes');
+const statisticsService = require('./services/statistics');
+statisticsService.start();
 
 const config = require('./shared/config');
 
@@ -37,6 +39,7 @@ app.use('/apidoc', express.static('../apidoc'));
 
 // mount all routes on /api path
 app.use('/api', routes);
+
 
 const port = 5005;
 app.listen(port, () => {
