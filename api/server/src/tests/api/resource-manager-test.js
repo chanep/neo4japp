@@ -178,6 +178,35 @@ vows.describe('Resource Manager api test')
     }
 })
 
+.addBatch({
+    '6. Find top skill search': {
+        topic: function () {
+            let s = data.skills;
+            var search = {
+                limit: 20
+            };
+            var queryString = qs.stringify(search, { encode: false });
+
+            req.get('resource-manager/top-skill-searches?'+ queryString, 
+                this.callback);
+        },
+        'response is 200': testHelper.assertSuccess(),
+        'should return user with searched skills': function (err, result, body) {
+            if (err) {
+                console.log("error", err);
+                throw err;
+            }
+            let skills = body.data;
+            //console.log('skills', JSON.stringify(skills));
+            assert.isArray(skills);
+            assert.equal(skills.length, 3);
+            for(let s of skills){
+                assert.isNumber(s.searches);
+            }
+        }
+    }
+})
+
 
 .export(module);
 

@@ -72,9 +72,9 @@ class UserDa extends BaseDa{
         let skillL = skillModel.labelsStr;
         let sgRelL = skillModel.getRelationByKey("group").label;
         let kRelL = this.model.getRelationByKey("knowledges").label;
-		let cmd = `match (g:${sgL})<-[:${sgParentRelL}]-(cg:${sgL})<-[:${sgRelL}]-(s:${skillL}) ` +
-            `optional match (s)<-[k:${kRelL}]-(n:${label}) where id(n) = {userId}` +
-			`with g, cg, collect({_:s, knowledge: k}) as skills ` + 
+		let cmd = `match (g:${sgL})<-[:${sgParentRelL}]-(cg:${sgL})<-[:${sgRelL}]-(s:${skillL}) \n` +
+            `optional match (s)<-[k:${kRelL}]-(n:${label}) where id(n) = {userId} \n` +
+			`with g, cg, collect({_:s, knowledge: k}) as skills \n` + 
 			`return {_:g, children: collect({_:cg, skills: skills})}`;
         let params = {userId: neo4j.int(userId)};
 		return this.query(cmd, params, null);

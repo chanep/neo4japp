@@ -43,6 +43,56 @@ class ResourceManagerController extends BaseController{
 
         this._respondPromise(req, res, promise);   
     }
+
+    /**
+    @api {get} /api/resource-manager/top-skill-searches Top Skills
+    @apiDescription List most searched skills
+    @apiGroup Resource Managers
+
+    @apiParam (Filter) {number} [limit] limit the skill count
+    @apiParam (Filter) {number} [fromDate] (in milliseconds from Unix epoch datetime)
+    @apiParam (Filter) {number} [toDate] (in milliseconds from Unix epoch datetime)
+    
+    @apiSuccessExample {json} Success-Response:
+    HTTP/1.1 200 OK
+    {
+        status: "success",
+        data: [{
+            id: 260,
+            name: "Php",
+            searches: 38,
+            group: {
+                id: 261,
+                name: "Languages",
+                type: "tool"
+                parent: {
+                    id: 262,
+                    name: "Technology",
+                    type: "tool"
+            },{
+            id: 261,
+            name: "Javascript",
+            searches: 35,
+            group: {
+                id: 261,
+                name: "Languages",
+                type: "tool"
+                parent: {
+                    id: 262,
+                    name: "Technology",
+                    type: "tool"
+            }
+        }, {...}]
+    }
+    */
+
+    topSkillSearches(req, res, next){
+        let search = this._buildSearch(req);
+
+        let promise = resourceManagerDa.topSkillSearches(search.limit, search.fromDate, search.toDate);
+
+        this._respondPromise(req, res, promise);   
+    }
 } 
 
 module.exports = ResourceManagerController;
