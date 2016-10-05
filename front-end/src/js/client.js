@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { Router, Route, IndexRoute, hashHistory } from "react-router";
+import { Router, Route, IndexRoute, hashHistory, browserHistory } from "react-router";
 
 import Layout from "./components/Layout";
 import ResourceHotspot from "./pages/ResourceHotspot";
@@ -19,16 +19,17 @@ ReactDOM.render(
 	<Router history={hashHistory}>
 		<Route path="/" component={Layout}>
 			<IndexRoute component={Login}></IndexRoute>
-            <Route path="/login" component={Login}></Route>
-            <Route path="/resourcesHotspot" component={ResourceHotspot}></Route>
-            <Route path="/allocations" component={Layout}></Route>
-            <Route path="/searchResults" component={SearchResults}>
-            	<Route path="/searchResults/:skillIds" component={SearchResults}/>
-            </Route>
-            <Route path="/employeeProfile" component={EmployeeProfile}></Route>
-            <Route path="/ManagerHome" component={ManagerHome}></Route>
-            <Route path="/ResultsProfile" component={ResultsProfile}></Route>
-            <Route path="/SearchAllSkills" component={SearchAllSkills}></Route>
+                  <Route path="/login" component={Login}></Route>
+                  <Route path="/resourcesHotspot" component={ResourceHotspot}></Route>
+                  <Route path="/allocations" component={Layout}></Route>
+                  <Route path="/searchResults" component={SearchResults}>
+            	     <Route path="/searchResults/:skillIds" component={SearchResults}/>
+                  </Route>
+                  <Route path="/myprofile" component={EmployeeProfile}></Route>
+                  <Route path="/employee/:employeeID" component={EmployeeProfile}/>
+                  <Route path="/ManagerHome" component={ManagerHome}></Route>
+                  <Route path="/ResultsProfile" component={ResultsProfile}></Route>
+                  <Route path="/SearchAllSkills" component={SearchAllSkills}></Route>
 		</Route>
 	</Router>,
 app);
