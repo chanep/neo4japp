@@ -87,6 +87,12 @@ let knowledgeSchema = {
         approverFullname: Joi.string().allow(null)
     };
 
+let searchSchema = {
+        id: Joi.number(),
+        date: Joi.date().required()
+    };
+
+
 let allocation = new Model(
     'Allocation',
     ['Allocation'],
@@ -94,7 +100,7 @@ let allocation = new Model(
         id: Joi.number(),
         startDate: Joi.array().items(Joi.string()).required(),
         weekHours: Joi.array().items(Joi.number()).required(),
-        totalHours: Joi.number().required(),
+        totalHours: Joi.number().required()
     }
 );
 
@@ -110,10 +116,14 @@ let interest = new Model(
 let outgoing = true;
 let incoming = false;
 
+let multiple = true;
+let single = false;
+
 user.relateWithMany(skill, "KNOWS", "knowledges", outgoing, knowledgeSchema);
 user.relateWithOne(office, "OF_OFFICE", "office", outgoing, null);
 user.relateWithOne(department, "OF_DEPARTMENT", "department", outgoing, null);
 user.relateWithOne(position, "OF_POSITION", "position", outgoing, null);
+user.relateWithMany(skill, "SEARCHED", "searches", outgoing, searchSchema, multiple);
 
 user.relateWithMany(user, "APPROVED_BY", "approvers", outgoing, null);
 user.relateWithMany(user, "R_MANAGED_BY", "resourceManagers", outgoing, null);

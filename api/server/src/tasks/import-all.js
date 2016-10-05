@@ -8,6 +8,7 @@ const cwImportAllTask = new (require('./cw-import/cw-import-all'));
 const phonelistIdImportTask = new (require('./pl-import/phonelist-id-import'));
 const clientsImportTask = new (require('./pl-import/clients-import'));
 const approversImportTask = new (require('./pl-import/approvers-import'));
+const resourceManagersImportTask = new (require('./pl-import/resource-managers-import'));
 const allocationsImportTask = new (require('./pl-import/allocations-import'));
 
 class ImportAllTask extends BaseTask{
@@ -27,6 +28,9 @@ class ImportAllTask extends BaseTask{
             })
             .then(info => {
                 return approversImportTask.run();
+            })
+            .then(info => {
+                return resourceManagersImportTask.run();
             })
             .then(info => {
                 return allocationsImportTask.run();

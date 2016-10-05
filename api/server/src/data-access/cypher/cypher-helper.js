@@ -84,7 +84,7 @@ class CypherHelper {
         let relCypher = this._getRelationshipCypher(relKey, 'r');
         let oldRelCypher = this._getRelationshipCypher(relKey, 'oldr');
 
-        relData = relData || {};
+        relData = this.convertToNative(relData, r.schema) || {};
         let cmd;
         let operator = mergeKeys? '+=' : '=';
         if(r.isToOne()){
@@ -96,9 +96,10 @@ class CypherHelper {
              DELETE oldr
              RETURN r`;
         } else{
+            let create = r.multiple ? 'CREATE' : 'MERGE';
             cmd = `MATCH (n:${this.model.labelsStr}) where ID(n) = {id}
              MATCH (m:${r.model.labelsStr}) where ID(m) = {otherId}
-             MERGE (n)${relCypher}(m)
+             ${create} (n)${relCypher}(m)
              SET r ${operator} {relData}
              RETURN r`;
         }
@@ -123,7 +124,7 @@ class CypherHelper {
         let r = this.model.getRelationByKey(relKey);
         let relCypher = this._getRelationshipCypher(relKey, 'r');
 
-        relData = relData || {};
+        relData = this.convertToNative(relData, r.schema)  || {};
         let operator = mergeKeys? '+=' : '=';
         let cmd = `MATCH ()${relCypher}() where ID(r) = {relId}
              SET r ${operator} {relData}
@@ -154,7 +155,7 @@ class CypherHelper {
     createAndRelateCmd(data, otherId, relKey, relData){
         let r = this.model.getRelationByKey(relKey);
         let relCypher = this._getRelationshipCypher(relKey, 'r', relData);
-        relData = relData || {};
+        relData = this.convertToNative(relData, r.schema) || {};
         let cmd = `
             MATCH (m:${r.model.labelsStr}) WHERE ID(m) = {otherId}
             CREATE (n:${this.model.labelsStr} {data})${relCypher}(m)
