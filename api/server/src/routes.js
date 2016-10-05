@@ -52,6 +52,6 @@ router.use('/resource-manager', security.checkRole(roles.resourceManager).bind(s
 router.get('/resource-manager/search-all', searchAllController.searchAll.bind(searchAllController));
 router.get('/resource-manager/users-by-skill', resourceManagerController.findUsersBySkill.bind(resourceManagerController));
 router.get('/resource-manager/top-skill-searches', resourceManagerController.topSkillSearches.bind(resourceManagerController));
-
+router.get('/resource-manager/skilled-users-by-office/:skillId', resourceManagerController.skilledUsersByOffice.bind(resourceManagerController));
 
 module.exports = router;

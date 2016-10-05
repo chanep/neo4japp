@@ -92,6 +92,21 @@ class ResourceManagerDa extends UserDa{
 
         return this.query(cmd, params);
     }
+
+    skilledUsersByOffice(skillId){
+        let label = this.labelsStr;
+        let officeL = this.model.getRelationByKey("office").model.labelsStr;
+        let works = this.model.getRelationByKey("office").label;
+        let knows = this.model.getRelationByKey("knowledges").label;
+
+        let cmd = `match (o:${officeL})<-[:${works}]-(u:${label})-[:${knows}]->(s) \n` +
+        `where id(s) = {skillId} \n` +
+        `return {_:o, skilledUserCount: count(u)}`;
+
+        let params = {skillId: neo4j.int(skillId)};
+
+        return this.query(cmd, params);
+    }
 }
 
 module.exports = ResourceManagerDa;

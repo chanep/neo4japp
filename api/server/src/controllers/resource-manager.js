@@ -86,10 +86,47 @@ class ResourceManagerController extends BaseController{
     }
     */
 
+
     topSkillSearches(req, res, next){
         let search = this._buildSearch(req);
 
         let promise = resourceManagerDa.topSkillSearches(search.limit, search.fromDate, search.toDate);
+
+        this._respondPromise(req, res, promise);   
+    }
+
+    /**
+    @api {get} /api/resource-manager/skilled-users-by-office/:skillId Skilled users by office
+    @apiDescription List offices with the number of users who knows the given skill
+    @apiGroup Resource Managers
+
+    @apiParam {number} skillId
+    
+    @apiSuccessExample {json} Success-Response:
+    HTTP/1.1 200 OK
+    {
+        status: "success",
+        data: [{
+            id: 260,
+            name: "Buenos Aires", 
+            description: "Buenos Aires", 
+            sourceId: "5679ad1fd7c7c2aaf75ab508", 
+            zip: "C1414DAP", 
+            country: "Argentina", 
+            address: "Uriarte 1572", 
+            acronym: "BA", 
+            phone: "+54 11 5984 0500", 
+            longitude: -58.43251
+            latitude: -34.587572, 
+            uri: "buenos-aires",
+            skilledUserCount: 14
+        }, {...}]
+    }
+    */
+    skilledUsersByOffice(req, res, next){
+        let skillId = req.params.skillId;
+
+        let promise = resourceManagerDa.skilledUsersByOffice(skillId);
 
         this._respondPromise(req, res, promise);   
     }
