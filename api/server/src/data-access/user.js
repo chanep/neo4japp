@@ -62,6 +62,37 @@ class UserDa extends BaseDa{
             .then(r => this._cypher.parseResultRaw(r))
 
     }
+
+    findUsersWithSimilarSkills(userId, limit){
+        limit = limit || 10;
+        let label = this.labelsStr;
+        let officeRelL = this.model.getRelationByKey("office").label;
+        let departmentRelL = this.model.getRelationByKey("department").label;
+        let positionRelL = this.model.getRelationByKey("position").label;
+
+        let skillL = skillModel.labelsStr;
+        let kRelL = this.model.getRelationByKey("knowledges").label;
+
+        let cmd = `match (n2:${label}) where id(n2) = {userId}
+        match (n)-[:${officeRelL}]->(o),
+        (n)-[:${departmentRelL}]->(d),
+        (n)-[:${positionRelL}]->(p),
+        (n)-[k1:${kRelL}]->(s:${skillL})<-[k2:${kRelL}]-(n2) where not(n.disabled) and not(k2.want) and not(k1.want)
+        with n, o, d, p, collect({level1: k1.level, level2: k2.level}) as knowledges
+        with n, o, d, p, reduce(acc = 0, k in knowledges | acc + (5 - abs(k.level1 - k.level2))) as score
+        order by score desc limit {limit}
+        return {    
+                id: id(n), username: n.username, email: n.email, 
+                fullname: n.fullname, image: n.image,
+                office: {id: id(o), name: o.name, country: o.country, acronym: o.acronym},
+                department: {id: id(d), name: d.name},
+                position: {id: id(p), name: p.name},
+                similitudeScore: score
+        }`
+
+        let params = {userId: neo4j.int(userId), limit: neo4j.int(limit)};
+        return this.query(cmd, params);
+    }
 	/**
 	 * Return the full skillgroup/skill tree. Skill is attached with the corresponding knwoledge if the user have that skill
 	 */
