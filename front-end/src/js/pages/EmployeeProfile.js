@@ -23,14 +23,15 @@ export default class EmployeeProfile extends BasePage {
     	console.log('userId', userId);
 
         this.userData.GetUserData(userId).then(data => {
-            this.setState({user:data});
-
             let skillsCount = 0;
             this.state.user.skillGroups.forEach(obj => {
                 skillsCount += obj.skills.length;
             });
 
-            this.setState({skillsCount:skillsCount});
+            this.setState({
+                user: data,
+                skillsCount: skillsCount
+            });
         }).catch(data => {
           
             console.log("user data error", data);

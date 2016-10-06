@@ -11,16 +11,20 @@ import SearchResult from '../../components/SearchResults/SearchResult';
 // Class: SearchResultsTable
 export default class SearchResultsTable extends React.Component {
 
-    constructor() {
+    constructor(data) {
         super();
 
         this.state = {
-        	data: []
+        	data: data.data,
+            skillsCount: data.skillsCount
         };
     }
 
     componentWillReceiveProps(nextProps) {
-        this.setState({data: nextProps.data});
+        this.setState({
+            data: nextProps.data,
+            skillsCount: nextProps.skillsCount
+        });
     }
 
     render() {
@@ -52,7 +56,7 @@ export default class SearchResultsTable extends React.Component {
                     <ul className="results col -col-9 -col-no-gutter">
                     	{
                     		this.state.data.map((x, i) =>
-                    			<SearchResult obj={x} key={i} skillsCount={1} />
+                    			<SearchResult obj={x} key={i} skillsCount={this.state.skillsCount} />
                     		)
                     	}
                     </ul>
