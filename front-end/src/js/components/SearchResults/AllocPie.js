@@ -3,16 +3,18 @@ import { Router, Route, Link } from 'react-router'
 
 // Class: SearchResult
 export default class AllocPie extends React.Component {
-	constructor(obj) {
+	constructor(obj, key) {
 		super();
 
 		this.state = {
-			obj: obj
+			obj: obj,
+			key: key
 		}
 	}
 
 	componentWillReceiveProps(nextProps) {
 		this.setState({obj: nextProps.obj});
+		this.setState({key: nextProps.key});
 	}
 
 	render() {
