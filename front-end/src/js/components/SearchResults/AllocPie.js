@@ -13,8 +13,10 @@ export default class AllocPie extends React.Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		this.setState({obj: nextProps.obj});
-		this.setState({key: nextProps.key});
+		this.setState({
+			obj: nextProps.obj,
+			key: nextProps.key
+		});
 	}
 
 	render() {

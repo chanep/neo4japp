@@ -2,6 +2,7 @@ import React from 'react';
 import { Router, Route, Link } from 'react-router'
 import SkillResult from '../../components/SearchResults/SkillResult';
 import AllocPie from './AllocPie'
+import update from 'react-addons-update';
 
 // Class: SearchResult
 export default class SearchResult extends React.Component {
@@ -29,7 +30,13 @@ export default class SearchResult extends React.Component {
     }
 
     expandContract() {
-    	this.setState({showDetails: !this.state.showDetails});
+		var newState = update(this.state, {
+		  showDetails: {$set: !this.state.showDetails}
+		});
+		this.setState(newState);
+		console.log("new state", this.state);
+
+    	//this.setState({showDetails: !this.state.showDetails});
     }
 
 	render() {
@@ -49,8 +56,8 @@ export default class SearchResult extends React.Component {
 			        <div className="col -col-2">
 			        	<div className="allocations">
 				        	{
-				        		this.getChild(this.state.obj.allocation, 'weekHours').map((obj, key) =>
-				        			<AllocPie obj={obj} key={key} />
+				        		this.getChild(this.state.obj.allocation, 'weekHours').map((o, k) =>
+				        			<AllocPie obj={o} key={k} />
 				        		)
 				        	}
 				        </div>
