@@ -144,7 +144,7 @@ vows.describe('User api test')
             }
             let skillGroups = body.data;
 
-            console.log('skillGoups', JSON.stringify(skillGroups));
+            //console.log('skillGoups', JSON.stringify(skillGroups));
 
             //skills groups must have all the skills
             for(let s of data.skills){
