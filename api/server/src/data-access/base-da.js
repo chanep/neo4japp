@@ -66,6 +66,7 @@ class BaseDa {
     }
     _logCmd(cmd, params){
         if(config.logCommands){
+            cmd = cmd.replace(/\n[\t|\s]+/g, "\n ")
             console.log("----------------------");
             console.log("Command:\n" + cmd);
             console.log("\nParams:", params);
