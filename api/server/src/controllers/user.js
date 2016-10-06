@@ -117,6 +117,27 @@ class UserController extends BaseController{
         this._respondPromise(req, res, promise);
     }
 
+
+    /**
+    @api {get} /api/user/:userId/similar-skilled-users Similar Users
+    @apiDescription Return users with similar skills
+    @apiGroup Users
+
+    @apiParam (Filter) {number} limit Limits the result user count
+
+    
+    @apiUse similarSkilledUserResponse
+    */
+    findUsersWithSimilarSkills(req, res, next){
+        let userId = req.params.userId;
+        let search = this._buildSearch(req);
+        let limit = search.limit;
+
+        let promise = userDa.findUsersWithSimilarSkills(userId, limit);
+            
+        this._respondPromise(req, res, promise);
+    }
+
     /**
     @api {get} /api/user/all-skills All skills
     @apiDescription Return the full skillgroup/skill tree. Skill is attached with the corresponding knwoledge if the user have that skill
@@ -204,6 +225,29 @@ HTTP/1.1 200 OK
                 knowledge: { id: 18753, level: 3, want: false } 
             }]
         }]
+    }, {
+       ... 
+    }]
+}
+*/
+
+/**
+@apiDefine similarSkilledUserResponse
+
+@apiSuccessExample {json} Success-Response:
+HTTP/1.1 200 OK
+{
+    status: "success",
+    data: [{ 
+        id: 4839, 
+        fullname: "Pepe Test4", 
+        email: "pepe.test4@rga.com", 
+        username: "pepetest4", 
+        image: "http://x.com/pic.jpg",
+        position: { id: 4835, name: "Developer" }, 
+        office: { id: 4832, name: "Buenos Aires", country: "Argentina", acronym: "BA" }, 
+        department: { id: 4834, name: "Technology" }, 
+        similitudeScore: 38
     }, {
        ... 
     }]

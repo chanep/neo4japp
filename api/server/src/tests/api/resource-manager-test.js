@@ -108,7 +108,6 @@ vows.describe('Resource Manager api test')
             };
             var queryString = qs.stringify(search, { encode: false });
 
-            console.log('query', queryString);
             req.get('resource-manager/users-by-skill?'+ queryString, 
                 this.callback);
         },
@@ -227,6 +226,33 @@ vows.describe('Resource Manager api test')
             for(let o of offices){
                 assert.isNumber(o.skilledUserCount);
             }
+        }
+    }
+})
+
+.addBatch({
+    '6. Find similar skilled users': {
+        topic: function () {
+            var search = {
+                limit: 10
+            };
+            var queryString = qs.stringify(search, { encode: false });
+
+            let userId = data.employees[1].id;
+            req.get(`user/${userId}/similar-skilled-users?` + queryString, 
+                this.callback);
+        },
+        'response is 200': testHelper.assertSuccess(),
+        'should return user with searched skills': function (err, result, body) {
+            if (err) {
+                console.log("error", err);
+                throw err;
+            }
+            let similarUsers = body.data;
+            //console.log('similarUsers', JSON.stringify(similarUsers));
+            assert.isArray(similarUsers);
+            assert.equal(similarUsers[0].id, data.employees[0].id);
+            assert.equal(similarUsers[0].similitudeScore, 5);
         }
     }
 })
