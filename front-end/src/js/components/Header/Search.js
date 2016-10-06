@@ -255,10 +255,8 @@ class Search extends React.Component {
       }
 
       idsConcat = ids.join(),
-      path = `/searchResults/${idsConcat}`;
+      path = '/searchResults/' + idsConcat;
       this.context.router.push({pathname: path});
-
-      browserHistory.push(path);
     }
 
     render () {
@@ -268,6 +266,7 @@ class Search extends React.Component {
             <div className="search">
               <div className="search__input__wrapper">
                 <div className="search__input">
+                  { <Results hasResults={this.state.hasResults} results={this.state.results} word={this.state.word} addSkill={this.addSkill} /> }
                   <div className="search-field-wrapper">
                     {pills.map((pillName, index)=>{
                       return (<Pill name={pillName} removeSkill={this.removeSkill} index={index} />)
@@ -287,7 +286,7 @@ class Search extends React.Component {
                 })}
               </div>
               */}
-                 { <Results hasResults={this.state.hasResults} results={this.state.results} word={this.state.word} addSkill={this.addSkill} /> }
+                 
             </div>
         );
     }
