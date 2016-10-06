@@ -24,7 +24,7 @@ export default class EmployeeProfile extends BasePage {
 
         this.userData.GetUserData(userId).then(data => {
             let skillsCount = 0;
-            this.state.user.skillGroups.forEach(obj => {
+            data.skillGroups.forEach(obj => {
                 skillsCount += obj.skills.length;
             });
 

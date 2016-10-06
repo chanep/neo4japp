@@ -31,6 +31,15 @@
         .results {
             border-left: 1px solid $LIGHTEST-GREY;
 
+            .performingSearch, .noResults {
+                text-align: center;
+                padding: em(15);
+                font-size: em(14);
+                font-weight: bold;
+                color: $GREY;
+                display: block;
+            }
+
             &.results--right { float: right; }
 
             & > li:nth-child(even) {

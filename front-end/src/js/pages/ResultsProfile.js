@@ -11,6 +11,15 @@ import ResultsProfileTable from "../components/ResultsProfileTable";
 
 // Class: ResultsProfile
 export default class ResultsProfile extends BasePage {
+	constructor() {
+		super();
+
+		this.state = {
+			user: [],
+            skillsCount: 0
+		}
+	}
+
     render() {
         return (
             <div>

@@ -22,8 +22,10 @@ export default class EmployeeHeader extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        this.setState({user: nextProps.employee});
-        this.setState({skillsCount: nextProps.skillsCount});
+        this.setState({
+            user: nextProps.employee,
+            skillsCount: nextProps.skillsCount
+        });
     }
 
     render () {
