@@ -10,6 +10,10 @@ export default class SkillLevel extends React.Component {
 		}
 	}
 
+	componentWillReceiveProps(nextProps) {
+		this.setState({level: nextProps.level});
+	}
+
 	render() {
 		return (
 			<div className="skill-bar">

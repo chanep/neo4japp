@@ -9,26 +9,10 @@ export default class EmployeeHeader extends React.Component {
         super();
        
         this.state = {
-            user: []
+            user: [],
+            skillsCount: 0
         }
-
-        //this.getUser();
-        this.userData = new UserServices();
-        this.isReady = false;
     }
-    
-
-    getUser() {
-        
-        this.userData.GetUserData().then(data => {
-            this.setState({user:data});
-        }).catch(data => {
-          
-            console.log("user data error", data);
-          
-        });
-
-      }
 
     getChild (obj,key){
         if (this.isReady) {
@@ -37,15 +21,12 @@ export default class EmployeeHeader extends React.Component {
         }
     }
 
-    componentDidMount() {
-        this.getUser();
-        this.isReady = true;
-     }
+    componentWillReceiveProps(nextProps) {
+        this.setState({user: nextProps.employee});
+        this.setState({skillsCount: nextProps.skillsCount});
+    }
 
-   
-
-
-    render () {       
+    render () {
         return (
            
         	<div className="employee-header-container">
@@ -57,7 +38,6 @@ export default class EmployeeHeader extends React.Component {
                         )}
         			</div>
         			<div className="col -col-9">
-                    {console.log("acaaaa", this.state.user)}
         				<div className="employee-name">{this.state.user.fullname}</div>
         				<div className="employee-subtitle">
                         {
@@ -75,7 +55,7 @@ export default class EmployeeHeader extends React.Component {
         			</div>
         			<div className="col -col-2">
         				<div className="employee-skills-counter">
-        					<div className="count">10</div>
+        					<div className="count">{this.state.skillsCount}</div>
         					<div className="label">Total Skills</div>
         				</div>
                         {/* Add new skills label */}

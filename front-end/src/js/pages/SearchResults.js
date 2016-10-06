@@ -6,19 +6,51 @@
 import React from 'react';
 import BasePage from './BasePage';
 import Header from '../components/Header';
+import SearchServices from '../services/SearchServices';
 import SearchResultsTable from '../components/SearchResults/SearchResultsTable';
 
 // Class: SearchResults
 export default class SearchResults extends BasePage {
 	constructor(props) {
 		super(props);
+
+        this.searchServices = new SearchServices();
+        this.state = {
+            data: []
+        };
 	}
+
+    getData(ids) {
+        this.searchServices.GetSearchBySkills(ids, 20).then(data => {
+            this.setState({data:data});
+        }).catch(data => {
+          
+            console.log("Error performing search", data);
+          
+        });
+    }
+
+    componentDidMount() {
+        if (this.props.params.skillIds !== undefined) {
+            let ids = this.props.params.skillIds.split(',');
+
+            this.getData(ids);
+        }
+    }
+
+    componentWillReceiveProps(newProps) {
+        if (newProps.params.skillIds !== undefined) {
+            let ids = this.props.params.skillIds.split(',');
+
+            this.getData(ids);
+        }
+    }
 
     render() {
         return (
             <div>
                 <Header search={true} loggedIn={true} />
-                <SearchResultsTable skillsIds={this.props.location.query.skillIds} />
+                <SearchResultsTable data={this.state.data} />
             </div>
         );
     }

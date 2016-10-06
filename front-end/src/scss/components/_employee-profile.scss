@@ -4,7 +4,7 @@
     line-height: normal;
 
     .profilePic {
-        @include userProfilePicture(em(45), em(45));
+        @include userProfilePicture(45px, 45px);
     }
 
     .employee-name {
@@ -87,5 +87,65 @@
     	span {
     		font-weight: bold;
     	}
+    }
+}
+
+.employee-related-employees {
+    @include grid($max-width: em(960));
+    margin-top: em(45);
+    display: flex;
+
+    .related-employee {
+        padding-top: em(10);
+        border-bottom: em(1) $LIGHTEST-GREY solid;
+        padding-bottom: em(10);
+        height: 100%;
+        float: left;
+        width: calc(33% - 20px);
+        margin-right: 20px;
+
+        .header {
+            font-weight: bold;
+            border-bottom: em(1) $LIGHTEST-GREY solid;
+            padding-left: em(6);
+        }
+
+        .employeeData {
+            padding-left: em(6);
+            padding-top: em(15);
+            padding-bottom: em(25);
+
+            .picture {
+                float: left;
+                width: em(55);
+                height: em(55);
+            }
+
+            .nameData {
+                float: left;
+                overflow: hidden;
+                line-height: normal;
+                min-height: em(55);
+                vertical-align: middle;
+
+                .name {
+                    font-size: em(14);
+                    font-weight: bold;
+                }
+
+                .position, .area {
+                    font-size: em(12);
+                    color: $GREY;
+                }
+            }
+
+            .mail {
+                float: right;
+                width: em(30);
+                height: em(30);
+                background-color: black;
+                margin-top: em(12);
+            }
+        }
     }
 }

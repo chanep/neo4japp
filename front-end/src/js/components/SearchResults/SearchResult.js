@@ -13,8 +13,12 @@ export default class SearchResult extends React.Component {
 			key: key,
 			showDetails: false
 		};
+	}
 
-		console.log(this.state);
+	componentWillReceiveProps(nextProps) {
+		this.setState({obj: nextProps.obj.obj});
+		this.setState({key: nextProps.key});
+		this.setState({showDetails: false});
 	}
 
     getChild (obj,key){

@@ -40,7 +40,7 @@ class Login extends React.Component {
           this.context.router.push({pathname: '/ManagerHome'});
         }
         else {
-          this.context.router.push({pathname: '/employeeProfile'});
+          this.context.router.push({pathname: '/myprofile'});
         }
 
     }).catch(data => {

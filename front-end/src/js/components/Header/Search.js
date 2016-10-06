@@ -29,7 +29,7 @@ export default class Search extends React.Component {
 
     updateQuery(e) {
 
-      if (e.target.value.length > 2) {
+      if (e.target.value.length > 0) {
         this.setState({query: e.target.value});
         this.query();
          this.setState({ word: e.target.value });
@@ -162,57 +162,55 @@ export default class Search extends React.Component {
       const TAB_KEYCODE = 9;
       const ENTER_KEYCODE = 13;
 
-      let newSkills = this.state.skillArr;
+      let skillArr = this.state.skillArr;
 
       if (e.keyCode == BACKSPACE_KEYCODE) {
 
-        // Delete last pill when pressing BACKSPACE
+        // Delete last pill when pressing BACKSPACE, only if there's no text in the search field
 
         if (document.getElementById('querySearch').value == '') {
-          newSkills.pop();
-          this.setState({ skillArr: newSkills });
+          skillArr.pop();
+          this.setState({ skillArr: skillArr });
         }
       }
 
-      if (e.keyCode == UP_KEYCODE) {
+      if (e.keyCode == DOWN_KEYCODE || e.keyCode == UP_KEYCODE) {
         e.preventDefault();
 
-        // Move down on the list
+        // Iterate through the list
 
-        if (this.state.selection > 0) {
-          this.state.selection--;
-        } else {
-          this.state.selection = this.state.results['tools'].length - 1;
-        }
-
-        var item = this.state.results['tools'][this.state.selection]['name'].trim().toLowerCase();
-        console.log(item);
-
-        if (newSkills.indexOf(item) == -1) {
-          document.getElementById('querySearch').value = item;
-        }
-      }
-
-      if (e.keyCode == DOWN_KEYCODE) {
-        e.preventDefault();
-
-        // Move up on the list
-
-        if (this.state.selection < this.state.results['tools'].length - 1) {
-          this.state.selection++;
-        } else {
-          this.state.selection = 0;
+        if (e.keyCode == UP_KEYCODE) {
+          if (this.state.selection > 0) {
+            this.state.selection--;
+          } else {
+            this.state.selection = this.state.results['tools'].length - 1;
+          }
+        } else if (e.keyCode == DOWN_KEYCODE) {
+          if (this.state.selection < this.state.results['tools'].length - 1) {
+            this.state.selection++;
+          } else {
+            this.state.selection = 0;
+          }
         }
 
         var item = this.state.results['tools'][this.state.selection]['name'].trim().toLowerCase();
 
-        if (newSkills.indexOf(item) == -1) {
+        var index = -1;
+
+        skillArr.some(function(element, i) {
+          if (item === element.trim().toLowerCase()) {
+              index = i;
+              return true;
+          }
+        });
+
+        if (index == -1) {
           document.getElementById('querySearch').value = item;
         }
       }
 
       if (e.keyCode == ENTER_KEYCODE) {
-        this.addPill(newSkills);
+        this.addPill(skillArr);
 
         this.makeQuery();
       }
@@ -221,7 +219,7 @@ export default class Search extends React.Component {
         e.preventDefault();
         document.getElementById('querySearch').focus();
 
-        this.addPill(newSkills);
+        this.addPill(skillArr);
       }
     }
 
@@ -230,10 +228,24 @@ export default class Search extends React.Component {
     }
 
     makeQuery() {
-      let newSkills = this.state.skillArr;
-      const itemId = newSkills[0];
-      const path = `/searchResults/${itemId}`;
-      console.log(newSkills);
+      var skillArr = this.state.skillArr,
+          tools = this.state.results.tools,
+          ids = [],
+          idsConcat,
+          path,
+          element,
+          i;
+
+      for (i = 0; i < tools.length; i++) {
+          element = tools[i];
+
+          if (skillArr.indexOf(element.name) !== -1) {
+              ids.push(element.id);
+          }
+      }
+
+      idsConcat = ids.join(),
+      path = `/searchResults/${idsConcat}`;
 
       browserHistory.push(path);
     }
