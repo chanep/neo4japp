@@ -16,14 +16,16 @@ export default class SearchResultsTable extends React.Component {
 
         this.state = {
         	data: data.data,
-            skillsCount: data.skillsCount
+            skillsCount: data.skillsCount,
+            searching: data.searching
         };
     }
 
     componentWillReceiveProps(nextProps) {
         this.setState({
             data: nextProps.data,
-            skillsCount: nextProps.skillsCount
+            skillsCount: nextProps.skillsCount,
+            searching: nextProps.searching
         });
     }
 
@@ -55,9 +57,15 @@ export default class SearchResultsTable extends React.Component {
 
                     <ul className="results col -col-9 -col-no-gutter">
                     	{
-                    		this.state.data.map((x, i) =>
-                    			<SearchResult obj={x} key={i} skillsCount={this.state.skillsCount} />
-                    		)
+                            this.state.searching ?
+                                <li className="performingSearch">Searching...</li>
+                            :
+                                this.state.data.length == 0 ?
+                                    <li className="noResults">No results found for your search</li>
+                                :
+                            		this.state.data.map((x, i) =>
+                                        <SearchResult obj={x} key={i} skillsCount={this.state.skillsCount} />
+                                    )
                     	}
                     </ul>
                 </div>
