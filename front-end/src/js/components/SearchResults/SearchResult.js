@@ -2,23 +2,26 @@ import React from 'react';
 import { Router, Route, Link } from 'react-router'
 import SkillResult from '../../components/SearchResults/SkillResult';
 import AllocPie from './AllocPie'
+import update from 'react-addons-update';
 
 // Class: SearchResult
 export default class SearchResult extends React.Component {
-	constructor(obj, key) {
+	constructor(obj) {
 		super();
 
 		this.state = {
 			obj: obj.obj,
-			key: key,
-			showDetails: false
+			showDetails: false,
+			skillsCount: obj.skillsCount
 		};
 	}
 
 	componentWillReceiveProps(nextProps) {
-		this.setState({obj: nextProps.obj.obj});
-		this.setState({key: nextProps.key});
-		this.setState({showDetails: false});
+		this.setState({
+			obj: nextProps.obj.obj,
+			showDetails: false,
+			skillsCount: nextProps.skillsCount
+		});
 	}
 
     getChild (obj,key){
@@ -27,7 +30,13 @@ export default class SearchResult extends React.Component {
     }
 
     expandContract() {
-    	this.setState({showDetails: !this.state.showDetails});
+		var newState = update(this.state, {
+		  showDetails: {$set: !this.state.showDetails}
+		});
+		this.setState(newState);
+		console.log("new state", this.state);
+
+    	//this.setState({showDetails: !this.state.showDetails});
     }
 
 	render() {
@@ -42,13 +51,13 @@ export default class SearchResult extends React.Component {
 			            <span className="table-row">{this.getChild(this.state.obj.office, 'acronym')}</span>
 			        </div>
 			        <div className="col -col-1">
-			            <span className="table-row">{this.state.obj.skills.length}/{this.props.skillsCount}</span>
+			            <span className="table-row">{this.state.obj.skills.length}/{this.state.skillsCount}</span>
 			        </div>
 			        <div className="col -col-2">
 			        	<div className="allocations">
 				        	{
-				        		this.getChild(this.state.obj.allocation, 'weekHours').map((obj, key) =>
-				        			<AllocPie obj={obj} key={key} />
+				        		this.getChild(this.state.obj.allocation, 'weekHours').map((o, k) =>
+				        			<AllocPie obj={o} key={k} />
 				        		)
 				        	}
 				        </div>

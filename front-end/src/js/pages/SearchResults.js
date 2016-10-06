@@ -16,13 +16,21 @@ export default class SearchResults extends BasePage {
 
         this.searchServices = new SearchServices();
         this.state = {
-            data: []
+            data: [],
+            skillsCount: 0,
+            searching: true
         };
 	}
 
     getData(ids) {
+        this.setState({data: [], skillsCount: 0, searching: true});
+
         this.searchServices.GetSearchBySkills(ids, 20).then(data => {
-            this.setState({data:data});
+            this.setState({
+                data: data,
+                skillsCount:ids.length,
+                searching: false
+            });
         }).catch(data => {
           
             console.log("Error performing search", data);
@@ -50,7 +58,7 @@ export default class SearchResults extends BasePage {
         return (
             <div>
                 <Header search={true} loggedIn={true} />
-                <SearchResultsTable data={this.state.data} />
+                <SearchResultsTable data={this.state.data} skillsCount={this.state.skillsCount} searching={this.state.searching} />
             </div>
         );
     }

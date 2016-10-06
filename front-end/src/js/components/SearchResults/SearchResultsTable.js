@@ -11,16 +11,22 @@ import SearchResult from '../../components/SearchResults/SearchResult';
 // Class: SearchResultsTable
 export default class SearchResultsTable extends React.Component {
 
-    constructor() {
+    constructor(data) {
         super();
 
         this.state = {
-        	data: []
+        	data: data.data,
+            skillsCount: data.skillsCount,
+            searching: data.searching
         };
     }
 
     componentWillReceiveProps(nextProps) {
-        this.setState({data: nextProps.data});
+        this.setState({
+            data: nextProps.data,
+            skillsCount: nextProps.skillsCount,
+            searching: nextProps.searching
+        });
     }
 
     render() {
@@ -51,9 +57,15 @@ export default class SearchResultsTable extends React.Component {
 
                     <ul className="results col -col-9 -col-no-gutter">
                     	{
-                    		this.state.data.map((x, i) =>
-                    			<SearchResult obj={x} key={i} skillsCount={1} />
-                    		)
+                            this.state.searching ?
+                                <li className="performingSearch">Searching...</li>
+                            :
+                                this.state.data.length == 0 ?
+                                    <li className="noResults">No results found for your search</li>
+                                :
+                            		this.state.data.map((x, i) =>
+                                        <SearchResult obj={x} key={i} skillsCount={this.state.skillsCount} />
+                                    )
                     	}
                     </ul>
                 </div>

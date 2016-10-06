@@ -76,7 +76,7 @@ export default class Results extends React.Component {
                     {
                       
                         tools.map(function (tool, props){
-                          return <li data-skill={tool.name} className="subcategory-result" key={tool.id} onClick={self.clickingState.bind(self, props, tool)}>{tool.name}</li>;
+                          return <li data-skill={tool.name} className="subcategory-result" data-suggested={tool.suggested} key={tool.id} onClick={self.clickingState.bind(self, props, tool)}>{tool.name}</li>;
                         })
                       
                     }

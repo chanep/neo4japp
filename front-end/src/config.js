@@ -6,7 +6,10 @@ module.exports = function() {
     		{level: 2, desc: 'Light Survision'},
     		{level: 3, desc: 'No Survision'},
     		{level: 4, desc: 'Can teach / manage others'},
-    	]
+    	],
+        resourceManagerHome: {
+            topSearchedSkillsCount: 10
+        }
     }
 
     return ENV;
