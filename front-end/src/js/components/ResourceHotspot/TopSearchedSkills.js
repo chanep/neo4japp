@@ -32,7 +32,7 @@ export default class TopSearchedSkills extends React.Component {
               <ul>
                 {
                   this.state.data.map((x, i) =>
-                    <li><Link to={'searchResults/' + x.id}>{x.name}</Link></li>
+                    <li key={i}><Link to={'searchResults/' + x.id}>{x.name}</Link></li>
                   )
                 }
               </ul>

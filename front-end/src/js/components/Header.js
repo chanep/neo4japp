@@ -30,7 +30,7 @@ class Header extends React.Component {
     return (
         <header>
           <div className="header-wrapper">
-            <h1><img src="img/rga-logo.png"></img></h1>
+            <Link to="/resourcesHotspot"><h1><img src="img/rga-logo.png"></img></h1></Link>
             <div className="header-menu-wrapper">
               {this.state.loggedIn &&
                 <div className="allocations-btn">

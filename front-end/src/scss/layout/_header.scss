@@ -208,6 +208,11 @@ header {
                                 &.selected {
                                     color: #e71d39;
                                 }
+
+                                &[data-suggested="suggested"] {
+                                    color: red;
+                                    font-weight: bold;
+                                }
                             }
                         }
                     }
