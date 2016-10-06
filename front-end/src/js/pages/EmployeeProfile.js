@@ -19,14 +19,8 @@ export default class EmployeeProfile extends BasePage {
         this.isReady = false;
 	}
 
-    getUser() {
-    	console.log("entro aca");
-    	let userId = null;
-    	if (this.props.params.employeeID !== undefined)
-    		userId = this.props.params.employeeID;
-
-    	console.log('this.props.params.employeeID', this.props.params.employeeID);
-    	console.log('neeeewwwww', userId);
+    getUser(userId) {
+    	console.log('userId', userId);
 
         this.userData.GetUserData(userId).then(data => {
             this.setState({user:data});
@@ -46,12 +40,20 @@ export default class EmployeeProfile extends BasePage {
     }
 
     componentDidMount() {
-    	this.getUser();
+        let userId = null;
+        if (this.props.params.employeeID !== undefined)
+            userId = this.props.params.employeeID;
+
+    	this.getUser(userId);
         this.isReady = true;
     }
 
-    componentWillReceiveProps(props) {
-        this.getUser();
+    componentWillReceiveProps(newProps) {
+    	let userId = null;
+        if (newProps.params.employeeID !== undefined)
+            userId = newProps.params.employeeID;
+
+        this.getUser(userId);
         this.isReady = true;
      }
 

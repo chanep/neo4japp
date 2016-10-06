@@ -13,6 +13,11 @@ export default class SkillResult extends React.Component {
 		};
 	}
 
+	componentWillReceiveProps(nextProps) {
+		this.setState({obj: nextProps.obj});
+		this.setState({key: nextProps.key});
+	}
+
 	render() {
 		return (
             <li className="col -col-4">
