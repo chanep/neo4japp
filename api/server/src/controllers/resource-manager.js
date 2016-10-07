@@ -11,7 +11,7 @@ const skillChannel = postal.channel('skill');
 
 class ResourceManagerController extends BaseController{
     /**
-    @api {get} /api/resource-manager/users-by-skill Find users by skill
+    @api {get} /api/resource-manager/users-by-skill 1 Find users by skill
     @apiDescription List users who have at least one of the searched skills (sorted by skill match count and skill level, descending)
     @apiGroup Resource Managers
 
@@ -45,7 +45,7 @@ class ResourceManagerController extends BaseController{
     }
 
     /**
-    @api {get} /api/resource-manager/top-skill-searches Top Skills
+    @api {get} /api/resource-manager/top-skill-searches 3 Top Skills
     @apiDescription List most searched skills
     @apiGroup Resource Managers
 
@@ -96,7 +96,7 @@ class ResourceManagerController extends BaseController{
     }
 
     /**
-    @api {get} /api/resource-manager/skilled-users-by-office/:skillId Skilled users by office
+    @api {get} /api/resource-manager/skilled-users-by-office/:skillId 4 Skilled users by office
     @apiDescription List offices with the number of users who knows the given skill
     @apiGroup Resource Managers
 

@@ -9,7 +9,7 @@ const skillgroupDa = new (require('../data-access/skill-group'));
 class SkillController extends BaseController{
 
     /**
-    @api {get} /api/skill Find skills
+    @api {get} /api/skill 1 Find skills
     @apiGroup Skills
 
     @apiParam (Filters) {string} [name] Skill name (find skills containing name parameter case insensitive) 
@@ -49,7 +49,7 @@ class SkillController extends BaseController{
     }
 
     /**
-    @api {get} /api/skill/all-groups Find all groups
+    @api {get} /api/skill/all-groups 2 Find all groups
     @apiDescription Finds all skill groups hierarchy (includes sub groups and skills)
     @apiGroup Skills
     

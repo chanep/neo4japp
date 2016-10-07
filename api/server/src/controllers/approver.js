@@ -8,7 +8,7 @@ const approverDa = new (require('../data-access/approver'));
 class ApproverController extends BaseController{
 
     /**
-    @api {get} /api/approver/my-team Team
+    @api {get} /api/approver/my-team 1 Team
     @apiDescription List the logged user's team users (sorted by pending approval skills count descending)
     @apiGroup Approvers
 
@@ -30,7 +30,7 @@ class ApproverController extends BaseController{
     }
 
     /**
-    @api {put} /api/approver/approve Approve
+    @api {put} /api/approver/approve 3 Approve
     @apiDescription An Approver (manager) approves (verify) a employee's skill knowledge 
     @apiGroup Approvers
 

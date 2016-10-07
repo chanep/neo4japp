@@ -11,7 +11,97 @@ const rManagerDa = new (require('../data-access/resource-manager'));
 class UserController extends BaseController{
 
     /**
-    @api {put} /api/user/knowledge Set Knowledge
+    @api {get} /api/user/details 1 Details
+    @apiDescription Return logged user full data (include knowledges)
+    @apiGroup Users
+    
+    @apiUse userDetailsResponse
+    */
+
+    /**
+    @api {get} /api/user/:userId/details 2 Details by id
+    @apiDescription Return user full data (include knowledges)
+    @apiGroup Users
+    
+    @apiUse userDetailsResponse
+    */
+    details(req, res, next){
+        let loggedUser = req.session.user;
+        let userId = req.params.userId || loggedUser.id;
+        let promise = this._validateUserAccess(loggedUser, userId)
+            .then(() => {
+                return userDa.findByIdFull(userId);
+            })
+            
+        this._respondPromise(req, res, promise);
+    }
+
+    /**
+    @api {get} /api/user/skills 3 Skills
+    @apiDescription Return the full skillgroup/skill tree. Skill is attached with the corresponding user knwoledge
+    @apiGroup Users
+
+    @apiParam (Filter) {boolean} [all] if true returns the full skill tree (even skills user doesn't have kinowledge in)
+    
+    @apiSuccessExample {json} Success-Response:
+    HTTP/1.1 200 OK
+    {
+        status: "success",
+        data: [{
+            id: 11,
+            name: "Technology",
+            type: "tool"
+            children: [{
+                id: 12,
+                name: "Languages",
+                type: "tool",
+                skills: [{
+                    id: 15,
+                    name: 'Php',
+                    knowledge: null
+                },
+                {
+                    id: 15,
+                    name: 'C++',
+                    knowledge: {id: 345, level: 3, want: false, approved: false}  
+                }]
+        }, {...}]
+    }
+    */
+    findUserSkills(req, res, next){
+        let loggedUser = req.session.user;
+        let userId = loggedUser.id;
+        let search = this._buildSearch(req);
+        let allSkills = search.all;
+
+        let promise = userDa.findUserSkills(userId, allSkills);
+
+        this._respondPromise(req, res, promise);
+    }
+
+    /**
+    @api {get} /api/user/:userId/similar-skilled-users 4 Similar Users
+    @apiDescription Return users with similar skills
+    @apiGroup Users
+
+    @apiParam (Filter) {number} limit Limits the result user count
+
+    
+    @apiUse similarSkilledUserResponse
+    */
+    findUsersWithSimilarSkills(req, res, next){
+        let userId = req.params.userId;
+        let search = this._buildSearch(req);
+        let limit = search.limit;
+
+        let promise = userDa.findUsersWithSimilarSkills(userId, limit);
+            
+        this._respondPromise(req, res, promise);
+    }
+
+
+    /**
+    @api {put} /api/user/knowledge 5 Set Knowledge
     @apiDescription User sets his knowledge level in one skill
     @apiGroup Users
 
@@ -42,7 +132,7 @@ class UserController extends BaseController{
     }
 
     /**
-    @api {put} /api/user/interest Add Interest
+    @api {put} /api/user/interest 6 Add Interest
     @apiDescription User add an interest for himself
     @apiGroup Users
 
@@ -68,7 +158,7 @@ class UserController extends BaseController{
     }
 
     /**
-    @api {delete} /api/user/interest Remove Interest
+    @api {delete} /api/user/interest 7 Remove Interest
     @apiDescription User removes one of his interests
     @apiGroup Users
 
@@ -91,90 +181,6 @@ class UserController extends BaseController{
     }
 
 
-    /**
-    @api {get} /api/user/details Details
-    @apiDescription Return logged user full data (include knowledges)
-    @apiGroup Users
-    
-    @apiUse userDetailsResponse
-    */
-
-    /**
-    @api {get} /api/user/:userId/details Details by id
-    @apiDescription Return user full data (include knowledges)
-    @apiGroup Users
-    
-    @apiUse userDetailsResponse
-    */
-    details(req, res, next){
-        let loggedUser = req.session.user;
-        let userId = req.params.userId || loggedUser.id;
-        let promise = this._validateUserAccess(loggedUser, userId)
-            .then(() => {
-                return userDa.findByIdFull(userId);
-            })
-            
-        this._respondPromise(req, res, promise);
-    }
-
-
-    /**
-    @api {get} /api/user/:userId/similar-skilled-users Similar Users
-    @apiDescription Return users with similar skills
-    @apiGroup Users
-
-    @apiParam (Filter) {number} limit Limits the result user count
-
-    
-    @apiUse similarSkilledUserResponse
-    */
-    findUsersWithSimilarSkills(req, res, next){
-        let userId = req.params.userId;
-        let search = this._buildSearch(req);
-        let limit = search.limit;
-
-        let promise = userDa.findUsersWithSimilarSkills(userId, limit);
-            
-        this._respondPromise(req, res, promise);
-    }
-
-    /**
-    @api {get} /api/user/all-skills All skills
-    @apiDescription Return the full skillgroup/skill tree. Skill is attached with the corresponding knwoledge if the user have that skill
-    @apiGroup Users
-    
-    @apiSuccessExample {json} Success-Response:
-    HTTP/1.1 200 OK
-    {
-        status: "success",
-        data: [{
-            id: 11,
-            name: "Technology",
-            type: "tool"
-            children: [{
-                id: 12,
-                name: "Languages",
-                type: "tool",
-                skills: [{
-                    id: 15,
-                    name: 'Php',
-                    knowledge: null
-                },
-                {
-                    id: 15,
-                    name: 'C++',
-                    knowledge: {id: 345, level: 3, want: false, approved: false}  
-                }]
-        }, {...}]
-    }
-    */
-    fullSkillTreeWithUserKnowledges(req, res, next){
-        let loggedUser = req.session.user;
-        let userId = loggedUser.id;
-        let promise = userDa.fullSkillTreeWithUserKnowledges(userId);
-
-        this._respondPromise(req, res, promise);
-    }
 
     _validateUserAccess(loggedUser, userId){
         if(loggedUser.id == userId || roles.hasRole(loggedUser.roles, roles.resourceManager))

@@ -32,7 +32,7 @@ router.get('/office', officeController.find.bind(officeController));
 router.get('/user/details', userController.details.bind(userController));
 router.get('/user/:userId/details', userController.details.bind(userController));
 router.get('/user/:userId/similar-skilled-users', userController.findUsersWithSimilarSkills.bind(userController));
-router.get('/user/all-skills', userController.fullSkillTreeWithUserKnowledges.bind(userController));
+router.get('/user/skills', userController.findUserSkills.bind(userController));
 router.put('/user/knowledge', userController.setKnowledge.bind(userController));
 router.put('/user/interest', userController.addInterest.bind(userController));
 router.delete('/user/interest', userController.removeInterest.bind(userController));
