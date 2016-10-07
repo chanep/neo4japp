@@ -34,7 +34,6 @@ export default class SearchResult extends React.Component {
 		  showDetails: {$set: !this.state.showDetails}
 		});
 		this.setState(newState);
-		console.log("new state", this.state);
 
     	//this.setState({showDetails: !this.state.showDetails});
     }
