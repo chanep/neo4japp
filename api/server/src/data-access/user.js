@@ -94,17 +94,24 @@ class UserDa extends BaseDa{
         return this.query(cmd, params);
     }
 	/**
-	 * Return the full skillgroup/skill tree. Skill is attached with the corresponding knwoledge if the user have that skill
+	 * Return user skill tree
+	 * @param {number} userId
+	 * @param {boolean} allSkills - returns the full skill tree (even skills user doesn't have kinowledge in)
+	 * @returns Skill tree
+	 * @memberOf UserDa
 	 */
-	fullSkillTreeWithUserKnowledges(userId){
+	findUserSkills(userId, allSkills){
         let label = this.labelsStr;
         let sgL = skillGroupModel.labelsStr;
-        let sgParentRelL = skillGroupModel.getRelationByKey("parent").label;
+        let parent = skillGroupModel.getRelationByKey("parent").label;
         let skillL = skillModel.labelsStr;
-        let sgRelL = skillModel.getRelationByKey("group").label;
+        let group = skillModel.getRelationByKey("group").label;
         let kRelL = this.model.getRelationByKey("knowledges").label;
-		let cmd = `match (g:${sgL})<-[:${sgParentRelL}]-(cg:${sgL})<-[:${sgRelL}]-(s:${skillL})
-            optional match (s)<-[k:${kRelL}]-(n:${label}) where id(n) = {userId}
+        let operator = '';
+        if(allSkills)
+            operator = 'optional'
+		let cmd = `match (g:${sgL})<-[:${parent}]-(cg:${sgL})<-[:${group}]-(s:${skillL})
+            ${operator} match (s)<-[k:${kRelL}]-(n:${label}) where id(n) = {userId}
             with g, cg, s, k
             order by s.name
 			with g, cg, collect({_:s, knowledge: k}) as skills 

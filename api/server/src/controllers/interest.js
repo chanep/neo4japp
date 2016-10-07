@@ -8,7 +8,7 @@ const interestDa = new (require('../data-access/interest'));
 class InterestController extends BaseController{
 
     /**
-    @api {get} /api/interest Find interests
+    @api {get} /api/interest 1 Find interests
     @apiGroup Interests
 
     @apiParam (Filters) {string} [name] Interest name (find interests containing name parameter case insensitive) 

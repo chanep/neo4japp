@@ -9,7 +9,7 @@ const skillDa = new (require('../data-access/skill'));
 class SearchAllController extends BaseController{
 
     /**
-    @api {get} /api/resource-manager/search-all Search all
+    @api {get} /api/resource-manager/search-all 2 Search all
     @apiDescription Search skills, tools and users (people)
     @apiGroup Resource Managers 
 
@@ -19,7 +19,7 @@ class SearchAllController extends BaseController{
     */
 
     /**
-    @api {get} /api/approver/search-all Search all
+    @api {get} /api/approver/search-all 2 Search all
     @apiDescription Search skills, tools and users (people)
     @apiGroup Approvers
 

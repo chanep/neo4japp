@@ -133,7 +133,7 @@ vows.describe('User api test')
 .addBatch({
     '5. Get all skills (with user knowledges attached)': {
         topic: function () {
-            req.get('user/all-skills', 
+            req.get('user/skills?all=true', 
                 this.callback);
         },
         'response is 200': testHelper.assertSuccess(),
@@ -150,6 +150,42 @@ vows.describe('User api test')
             for(let s of data.skills){
                 let sAux = findSkill(s.id, skillGroups);
                 assert.isNotNull(sAux);
+            }
+
+            //known skills must have the user knowledge attached
+            
+            for(let k of ks){
+                let sAux = findSkill(k.skill.id, skillGroups);
+                assert.isNotNull(sAux.knowledge);
+                assert.equal(sAux.knowledge.id, k.id);
+            }
+        }
+    }
+})
+
+.addBatch({
+    '6. Get user skills (with user knowledges attached)': {
+        topic: function () {
+            req.get('user/skills', 
+                this.callback);
+        },
+        'response is 200': testHelper.assertSuccess(),
+        'should return user details including knowledges ': function (err, result, body) {
+            if (err) {
+                console.log("error", err);
+                throw err;
+            }
+            let skillGroups = body.data;
+
+            //console.log('skillGoups', JSON.stringify(skillGroups));
+
+            //skills groups must have only the skills with knowledge
+            for(let g of skillGroups){
+                for(let cg of g.children){
+                    for(let s of cg.skills){
+                        assert.isNotNull(s.knowledge);
+                    }
+                }
             }
 
             //known skills must have the user knowledge attached

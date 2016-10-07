@@ -8,7 +8,7 @@ const authenticationService = new (require('../services/authentication'));
 class SessionController extends BaseController{
 
     /**
-    @api {post} /api/session Login
+    @api {post} /api/session 1 Login
     @apiGroup Session
 
     @apiParam {string} username
@@ -48,7 +48,7 @@ class SessionController extends BaseController{
     }
 
     /**
-    @api {delete} /api/session Logout
+    @api {delete} /api/session 2 Logout
     @apiGroup Session
     */
     logout(req, res, next){
@@ -66,7 +66,7 @@ class SessionController extends BaseController{
     }
 
     /**
-    @api {get} /api/session/check Check
+    @api {get} /api/session/check 3 Check
     @apiDescription Check if user is logged in
     @apiGroup Session
 

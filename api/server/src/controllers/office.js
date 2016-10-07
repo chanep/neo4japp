@@ -8,7 +8,7 @@ const officeDa = new (require('../data-access/office'));
 class OfficeController extends BaseController{
 
     /**
-    @api {get} /api/office Find Offices
+    @api {get} /api/office 1 Find Offices
     @apiGroup Offices
     
     @apiUse findResponse
