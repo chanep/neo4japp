@@ -6,7 +6,9 @@
 }
 
 .skill-level-grid {
-	.col { text-align: center; }
+	overflow: hidden;
+	
+	.col {  }
 }
 
 .skill-level-grid__header {
@@ -17,6 +19,11 @@
 		height: 2.8rem;
 
 		&.skill-level-empty { background-color: $LIGHTEST-GREY; }
+	}
+
+	.table-header {
+		display: block;
+		text-align: center;
 	}
 }
 
@@ -36,13 +43,14 @@
 	background-color: #cbcbcb;
 	border-left: 1px solid white;
 	border-bottom: 1px solid white;
-	cursor: pointer;
 	height: 3.375rem;
 	transition: background-color .2s ease-in-out;
 
-	&:hover,
 	&.level-selected { background-color: $RED; }
 
 	&:last-child { border-right: 1px solid white; }
 }
 
+.skill-level-want-wrapper {
+	text-align: center;
+}

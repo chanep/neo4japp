@@ -28,7 +28,7 @@ export default class ResultsProfileTable extends React.Component {
             skills: []
         });
 
-        this.employeeServices.GetEmployeeAllSkills().then(data => {
+        this.employeeServices.GetEmployeeSkills(false).then(data => {
 
             this.setState({
                 employeeId: employeeId,
@@ -47,16 +47,16 @@ export default class ResultsProfileTable extends React.Component {
 
     render() {
         return (
+            <div className="search-results-table">
+            {    
                 this.state.searching ?
-                    <div className="">Searching...</div>
-                :
-                    <div className="search-results-table">
-                    {
-                        this.state.skills.map(function(obj, key) {
-                            return (<EmployeeSkillsGroup groupData={obj} key={key} />);
-                        })
-                    }
-                    </div>
+                    <div className="searching">Searching...</div>
+                :                    
+                    this.state.skills.map(function(obj, key) {
+                        return (<EmployeeSkillsGroup groupData={obj} key={key} />);
+                    })
+            }
+            </div>
         );
     }
 }

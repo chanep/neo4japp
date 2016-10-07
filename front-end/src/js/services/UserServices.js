@@ -8,7 +8,7 @@ export default class UserServices extends ServicesBase {
 			return super.callGetServices('user/' + id + '/details', null);
 	}
 
-	GetEmployeeAllSkills() {
-		return super.callGetServices('user/all-skills', null);
+	GetEmployeeSkills(all) {
+		return super.callGetServices('user/skills', {all: all});
 	}
 }

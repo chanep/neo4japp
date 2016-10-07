@@ -5,12 +5,25 @@
 .search-results-table {
     @include grid($max-width: em(960));
     margin-top: 1.5rem;
+    overflow: hidden;
+
+    .searching {
+        text-align: center;
+        padding: em(15);
+        font-size: em(14);
+        font-weight: bold;
+        color: $GREY;
+        display: block;
+    }
 
     .header-bar {
         background-color: $DARK-GREY;
         color: $WHITE;
         height: 50px;
         margin: 0;
+        text-align: center;
+        font-size: 12pt;
+        font-weight: bold;
 
         .col {
             line-height: em(29);
@@ -204,7 +217,7 @@
                 justify-content: space-between;
                 transition: background-color .2s ease-in-out;
 
-                &:hover { background-color: $LIGHTEST-GREY; }
+                //&:hover { background-color: $LIGHTEST-GREY; }
             }
 
             .col {
@@ -225,7 +238,8 @@
 
         .results-profile {
             &> * {
-                height: em(55);
+                //height: em(55);
+                //overflow: hidden;
             }
         }
     }
@@ -283,6 +297,7 @@
         font-size: .75em;
         line-height: 3.5;
         text-align: center;
+        cursor: pointer;
 
         .ss-icon-down-arrow { transition: all .2s ease-in-out;  }
         
