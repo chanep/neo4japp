@@ -1,9 +1,9 @@
 import React from "react";
 import ReactDom from "react-dom";
 
-import { Link } from "react-router";
+import { hashHistory, Link, browserHistory, withRouter } from "react-router";
 
-export default class Results extends React.Component {
+class Results extends React.Component {
 
     constructor () {
       super();
@@ -21,6 +21,11 @@ export default class Results extends React.Component {
       //console.log("CLICK-STATE P", props);
       //console.log("CLICK-STATE S", skill);
       this.props.addSkill(props);
+    }
+
+    showEmployee(self) {
+      var path = '/employee/' + self.id;
+      this.context.router.push({pathname: path});
     }
 
     componentDidMount() {
@@ -74,11 +79,9 @@ export default class Results extends React.Component {
                 <li className="subcategory-list">
                   <ul>
                     {
-                      
                         tools.map(function (tool, props){
                           return <li data-skill={tool.name} className="subcategory-result" data-suggested={tool.suggested} key={tool.id} onClick={self.clickingState.bind(self, props, tool)}>{tool.name}</li>;
                         })
-                      
                     }
                   </ul>
                 </li>
@@ -90,7 +93,7 @@ export default class Results extends React.Component {
                     {
                      
                         users.map(function (person){
-                          return <li key={person.id} className="subcategory-result">{person.fullname}</li>;
+                          return <li key={person.id} className="subcategory-result" data-id={person.id} onClick={self.showEmployee.bind(self)}>{person.fullname}</li>;
                         })
 
                     }
@@ -102,3 +105,9 @@ export default class Results extends React.Component {
         );
     }
 }
+
+Results.contextTypes = {
+    router: React.PropTypes.object.isRequired
+}
+
+export default Results;
