@@ -63,7 +63,7 @@ class UserController extends BaseController{
                 {
                     id: 15,
                     name: 'C++',
-                    knowledge: {id: 345, level: 3, want: false, approved: false}  
+                    knowledge: {id: 345, level: 3, want: false, approved: true, approverId: 2345, approverFullname: "Juan Manager"}  
                 }]
         }, {...}]
     }
@@ -228,7 +228,7 @@ HTTP/1.1 200 OK
             skills: [{ 
                 id: 4850, 
                 name: "Php", 
-                knowledge: { id: 18753, level: 3, want: false } 
+                knowledge: { id: 18753, level: 3, want: false, approved: true, approverId: 2345, approverFullname: "Juan Manager" } 
             }]
         }]
     }, {
