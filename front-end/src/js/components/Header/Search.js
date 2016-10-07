@@ -257,6 +257,9 @@ class Search extends React.Component {
       idsConcat = ids.join(),
       path = '/searchResults/' + idsConcat;
       this.context.router.push({pathname: path});
+
+      this.state.hasResults = false;
+      this.clearSearch();
     }
 
     render () {
