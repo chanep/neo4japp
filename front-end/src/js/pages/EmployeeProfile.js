@@ -20,8 +20,6 @@ export default class EmployeeProfile extends BasePage {
 	}
 
     getUser(userId) {
-    	console.log('userId', userId);
-
         this.userData.GetUserData(userId).then(data => {
             let skillsCount = 0;
             data.skillGroups.forEach(obj => {
@@ -63,7 +61,7 @@ export default class EmployeeProfile extends BasePage {
             <div>
                 <Header search={super._showSearch()} loggedIn={true} />
                 <EmployeeHeader employee={this.state.user} skillsCount={this.state.skillsCount} />
-                <ResultsProfileTable /> 
+                <ResultsProfileTable employeeId={this.state.user.id} />
                 <RelatedEmployees />
             </div>
         );

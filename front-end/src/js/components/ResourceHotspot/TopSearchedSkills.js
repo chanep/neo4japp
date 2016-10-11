@@ -18,14 +18,12 @@ export default class TopSearchedSkills extends React.Component {
     componentDidMount() {
       this.skillsServices.GetTopSkillSearchs(ENV().resourceManagerHome.topSearchedSkillsCount).then(data =>{
         this.setState({data: data});
-        console.log("state component", this.state);
       }).catch(data => {
         console.log("Error performing search", data);
       });
     }
 
     render () {
-        console.log("state", this.state);
         return (
             <div>
               <h2>Top Searched Skills</h2>
