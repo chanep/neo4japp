@@ -34,7 +34,7 @@ class UserDa extends BaseDa{
                     (n)-[:${departmentRelL}]->(d),
                     (n)-[:${positionRelL}]->(p)
                     optional match (sg:${sgL})<-[:${sgRelL}]-(s:${skillL})<-[k:${kRelL}]-(n),
-                        (sg)-[:${sgRelL}]->(sgp:${sgL})
+                        (sg)-[:${sgRelL}]->(sgp:${sgL}) where sg.type IN ['skill', 'tool']
                     optional match (n)-[:${approverRelL}]->(a)
                     optional match (n)-[:${clientRelL}]->(c)
                     optional match (n)-[:${interestRelL}]->(i)
@@ -110,7 +110,7 @@ class UserDa extends BaseDa{
         let operator = '';
         if(allSkills)
             operator = 'optional'
-		let cmd = `match (g:${sgL})<-[:${parent}]-(cg:${sgL})<-[:${group}]-(s:${skillL})
+		let cmd = `match (g:${sgL})<-[:${parent}]-(cg:${sgL})<-[:${group}]-(s:${skillL}) where g.type IN ['skill', 'tool']
             ${operator} match (s)<-[k:${kRelL}]-(n:${label}) where id(n) = {userId}
             with g, cg, s, k
             order by s.name
