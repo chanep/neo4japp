@@ -14,17 +14,19 @@ class Search extends React.Component {
         hasResults: false,
         source:'',
         query:'',
-        skillArr: [],
+        //skillArr: [],
+        chosenItems: [],
         results:{},
-        selection: 0
+        selection: 1
       };
 
-      this.addSkill = this.addSkill.bind(this);
+      this.addItem = this.addItem.bind(this);
       this.removeSkill = this.removeSkill.bind(this);
       this.updateQuery = this.updateQuery.bind(this);
       this.move = this.move.bind(this);
       this.makeQuery = this.makeQuery.bind(this);
       this.addPill = this.addPill.bind(this);
+      this.clearSearchField = this.clearSearchField.bind(this);
     }
 
     updateQuery(e) {
@@ -33,6 +35,7 @@ class Search extends React.Component {
         this.setState({query: e.target.value});
         this.query();
          this.setState({ word: e.target.value });
+        this.setState({ selection: 1 });
       
       } else if (e.target.value.length == 0) {
         this.hideResults(0);
@@ -43,25 +46,33 @@ class Search extends React.Component {
       }
     }
 
-    addSkill(skill) {
-      let currentArr = this.state.skillArr;
-      //console.log(currentArr.indexOf(skill.name));
-      if (currentArr.indexOf(skill.name) == '-1') {
-        currentArr.push(skill.name);
-        //console.log("ADD SKILL ------->", skill);
-        this.setState({skillArr:currentArr});
-        document.getElementById('querySearch').value = "";
+    clearSearchField() {
+      document.getElementById('querySearch').value = "";
+    }
+
+    addItem(item) {
+      let currentChosenItems = this.state.chosenItems;
+
+      var repeated = false;
+
+      currentChosenItems.forEach(function (v) {
+        if (v.id == item.id) {
+          repeated = true;
+        }
+      });
+
+      if (!repeated) {
+        currentChosenItems.push(item);
       }
-     
+
+      this.clearSearchField();
+      this.setState({ chosenItems: currentChosenItems });
     }
 
     removeSkill(skill, index) {
-      //console.log('removido');
-      let currentArr = this.state.skillArr;
-      currentArr.splice(index, 1);
-      this.setState({skillArr:currentArr});
-
-      console.log(currentArr);
+      let currentChosenItems = this.state.chosenItems;
+      currentChosenItems.splice(index, 1);
+      this.setState({ chosenItems: currentChosenItems });
     }
 
     query() {
@@ -122,8 +133,8 @@ class Search extends React.Component {
 
     clearSearch() {
       this.hideResults();
-      document.getElementById('querySearch').value = "";
-      this.setState({ skillArr: []});
+      this.clearSearchField();
+      this.setState({ chosenItems: []});
     }
 
     addPill(chosenItems) {
@@ -131,13 +142,16 @@ class Search extends React.Component {
         let query = document.getElementById('querySearch').value.trim();
 
         var valid = false,
-            results = this.state.results;
+            results = this.state.results,
+            chosenItems = this.state.chosenItems,
+            name, id, repeated = false;
 
         for (var i = 0; i < results.tools.length; i++) {
           var element = results.tools[i];
 
           if (element.name.trim().toLowerCase() == query.trim().toLowerCase()) {
-            query = element.name; // Copy to mantain letter case
+            name = element.name; // Copy to mantain letter case
+            id = element.id;
             valid = true;
 
             break; // No need to keep looking
@@ -145,16 +159,22 @@ class Search extends React.Component {
         }
 
         if (valid) {
-          if (chosenItems.indexOf(query) == -1) {
+          chosenItems.forEach(function (v) {
+            if (v.id == id || v.name == name) {
+              repeated = true;
+            }
+          });
+
+          if (!repeated) {
             // Add pill only if its a valid item and it has not been added already
-            chosenItems.push(query);
+            chosenItems.push({ id: id, name: name });
 
-            results.tools.forEach(function(v){ delete v.suggested });
+            results.tools.forEach(function (v) { delete v.suggested });
 
-            this.setState({ skillArr: chosenItems });
+            this.setState({ chosenItems: chosenItems });
             this.setState({ results: results });
 
-            document.getElementById('querySearch').value = '';
+            this.clearSearchField();
           }
         }
     }
@@ -166,7 +186,7 @@ class Search extends React.Component {
       const TAB_KEYCODE = 9;
       const ENTER_KEYCODE = 13;
 
-      let chosenItems = this.state.skillArr;
+      let chosenItems = this.state.chosenItems;
       let results = this.state.results;
 
       if (e.keyCode == BACKSPACE_KEYCODE) {
@@ -176,7 +196,13 @@ class Search extends React.Component {
         if (document.getElementById('querySearch').value == '') {
           chosenItems.pop();
 
-          this.setState({ skillArr: chosenItems });
+          if (chosenItems.length == 0) {
+            this.setState({ results: { skills: [], tools: [], users: [] } });
+            this.setState({ selection: 1 });
+            this.clearSearch();
+          }
+
+          this.setState({ chosenItems: chosenItems });
         }
       }
 
@@ -204,14 +230,15 @@ class Search extends React.Component {
         var index = -1;
 
         chosenItems.some(function(element, i) {
-          if (item === element.trim().toLowerCase()) {
+          if (item === element.name.trim().toLowerCase()) {
               index = i;
+
               return true;
           }
         });
 
         if (index == -1) {
-          results.tools.forEach(function(v){ delete v.suggested });
+          results.tools.forEach(function (v) { delete v.suggested });
 
           results.tools[this.state.selection]['suggested'] = 'suggested';
           this.setState({ results: results });
@@ -238,38 +265,36 @@ class Search extends React.Component {
     }
 
     makeQuery() {
-      var chosenItems = this.state.skillArr,
-          tools = this.state.results.tools,
-          ids = [],
-          idsConcat,
-          path,
-          element,
-          i;
+      var chosenItems = this.state.chosenItems,
+          ids = [], idsConcat, path, i;
 
-      for (i = 0; i < tools.length; i++) {
-          element = tools[i];
-
-          if (chosenItems.indexOf(element.name) !== -1) {
-              ids.push(element.id);
-          }
+      for (i = 0; i < chosenItems.length; i++) {
+          ids.push(chosenItems[i].id);
       }
 
-      idsConcat = ids.join(),
+      idsConcat = ids.join();
+
       path = '/searchResults/' + idsConcat;
-      this.context.router.push({pathname: path});
+      this.context.router.push({ pathname: path });
 
       this.state.hasResults = false;
       this.clearSearch();
     }
 
     render () {
-      var pills = this.state.skillArr;
+      var pills = [],
+          chosenItems = this.state.chosenItems;
+
+      chosenItems.forEach(function (v) {
+        pills.push(v.name);
+      });
+
       var self = this;
         return (
             <div className="search">
               <div className="search__input__wrapper">
                 <div className="search__input">
-                  { <Results hasResults={this.state.hasResults} results={this.state.results} word={this.state.word} addSkill={this.addSkill} /> }
+                  { <Results hasResults={this.state.hasResults} results={this.state.results} word={this.state.word} addItem={this.addItem} /> }
                   <div className="search-field-wrapper">
                     {pills.map((pillName, index)=>{
                       return (<Pill name={pillName} removeSkill={this.removeSkill} index={index} />)
