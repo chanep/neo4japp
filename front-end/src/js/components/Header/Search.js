@@ -33,7 +33,7 @@ class Search extends React.Component {
 
       if (e.target.value.length > 0) {
         this.setState({query: e.target.value});
-        this.query();
+        this.query(e.target.value);
          this.setState({ word: e.target.value });
         this.setState({ selection: 1 });
       
@@ -75,10 +75,10 @@ class Search extends React.Component {
       this.setState({ chosenItems: currentChosenItems });
     }
 
-    query() {
+    query(queryString) {
 
       let searchService = new SearchServices();
-      searchService.GetSearchAll(this.state.query, 5).then(data =>{
+      searchService.GetSearchAll(queryString, 5).then(data =>{
          //console.log('Search new service')
          this.setState({ results: data });
          //console.log(data);
@@ -299,7 +299,7 @@ class Search extends React.Component {
                     {pills.map((pillName, index)=>{
                       return (<Pill name={pillName} removeSkill={this.removeSkill} index={index} />)
                     })}
-                    <input type="text" name="query" id="querySearch" onChange={this.updateQuery} onKeyDown={this.move} placeholder="enter search..."/>
+                    <input type="text" name="query" id="querySearch" onKeyUp={this.updateQuery} onKeyDown={this.move} placeholder="enter search..."/>
                   </div> 
                   <span className="search-button-wrapper">
                     <span className="ss-icon-close"><span className="path1"></span><span className="path2" onClick={this.clearSearch.bind(this)}></span></span>
