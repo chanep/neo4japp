@@ -11,6 +11,7 @@ import EmployeeProfile from "./pages/EmployeeProfile";
 import ManagerHome from "./pages/ManagerHome";
 import ResultsProfile from "./pages/ResultsProfile";
 import SearchAllSkills from "./pages/SearchAllSkills";
+import MySkills from "./pages/MySkills";
 
 const app = document.getElementById('app');
 
@@ -26,6 +27,7 @@ ReactDOM.render(
             	     <Route path="/searchResults/:skillIds" component={SearchResults}/>
                   </Route>
                   <Route path="/myprofile" component={EmployeeProfile}></Route>
+                  <Route path="/myprofile/myskills" component={MySkills}></Route>
                   <Route path="/employee/:employeeID" component={EmployeeProfile}/>
                   <Route path="/ManagerHome" component={ManagerHome}></Route>
                   <Route path="/ResultsProfile" component={ResultsProfile}></Route>
