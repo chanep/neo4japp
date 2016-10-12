@@ -100,7 +100,7 @@ class ResourceManagerDa extends UserDa{
         let knows = this.model.getRelationByKey("knowledges").label;
 
         let cmd = `match (o:${officeL})<-[:${works}]-(u:${label})-[:${knows}]->(s) \n` +
-        `where id(s) = {skillId} \n` +
+        `where id(s) = {skillId} and not(u.disabled)\n` +
         `return {_:o, skilledUserCount: count(u)}`;
 
         let params = {skillId: neo4j.int(skillId)};
