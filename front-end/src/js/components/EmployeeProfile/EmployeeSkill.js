@@ -36,19 +36,19 @@ export default class EmployeeSkill extends React.Component {
                 </div>
                 <div className="col -col-1 skill-level-want-wrapper">
                     <span className="skill-title">
-                        <input type="checkbox" label="skill-want"  disabled readonly />
+                        <input type="checkbox" label="skill-want" readOnly checked={this.state.data.knowledge.want} />
                     </span>
                 </div>
-                <div className={"col -col-2 skill-level-box " + (this.state.data.knowledge.level >= 1? "level-selected": "")}>
+                <div className={"col -col-2 skill-level-box " + (this.state.data.knowledge.level == 1? "level-selected": "")}>
                     <span className="skill-title"></span>
                 </div>
-                <div className={"col -col-2 skill-level-box " + (this.state.data.knowledge.level >= 2? "level-selected": "")}>
+                <div className={"col -col-2 skill-level-box " + (this.state.data.knowledge.level == 2? "level-selected": "")}>
                     <span className="skill-title"></span>
                 </div>
-                <div className={"col -col-2 skill-level-box " + (this.state.data.knowledge.level >= 3? "level-selected": "")}>
+                <div className={"col -col-2 skill-level-box " + (this.state.data.knowledge.level == 3? "level-selected": "")}>
                     <span className="skill-title"></span>
                 </div>
-                <div className={"col -col-2 skill-level-box " + (this.state.data.knowledge.level >= 4? "level-selected": "")}>
+                <div className={"col -col-2 skill-level-box " + (this.state.data.knowledge.level == 4? "level-selected": "")}>
                     <span className="skill-title"></span>
                 </div>
                 <div className="col -col-1">
