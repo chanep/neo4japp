@@ -82,8 +82,36 @@ class Search extends React.Component {
       let searchService = new SearchServices();
       searchService.GetSearchAll(queryString, 5).then(data =>{
          //console.log('Search new service')
-         this.setState({ results: data });
-         //console.log(data);
+         //this.setState({ results: data });
+
+         var results = [];
+
+         data.skills.forEach(function (skill) {
+          results.push({ "id": skill.id, "name": skill.name, "type": 'skill'});
+         });
+
+         data.tools.forEach(function (tool) {
+          results.push({ "id": tool.id, "name": tool.name, "type": 'tool'});
+         });
+
+         data.users.forEach(function (user) {
+          results.push({
+            "id": user.id,
+            "email": user.email,
+            "first": user.first,
+            "name": user.fullname,
+            "fullname": user.fullname,
+            "last": user.last,
+            "phone": user.phone,
+            "phonelistId": user.phonelistId,
+            "roles": user.roles,
+            "sourceId": user.sourceId,
+            "type": user.type,
+            "username": user.username,
+            "type": "user"});
+         });
+
+         this.setState({ results: results });
 
       }).catch(data => {
           //console.log("search data error", data);
@@ -148,8 +176,8 @@ class Search extends React.Component {
             chosenItems = this.state.chosenItems,
             name, id, repeated = false;
 
-        for (var i = 0; i < results.tools.length; i++) {
-          var element = results.tools[i];
+        for (var i = 0; i < results.length; i++) {
+          var element = results[i];
 
           if (element.name.trim().toLowerCase() == query.trim().toLowerCase()) {
             name = element.name; // Copy to mantain letter case
@@ -171,7 +199,7 @@ class Search extends React.Component {
             // Add pill only if its a valid item and it has not been added already
             chosenItems.push({ id: id, name: name });
 
-            results.tools.forEach(function (v) { delete v.suggested });
+            results.forEach(function (v) { delete v.suggested });
 
             this.setState({ chosenItems: chosenItems });
             this.setState({ results: results });
@@ -202,7 +230,7 @@ class Search extends React.Component {
           chosenItems.pop();
 
           if (chosenItems.length == 0) {
-            this.setState({ results: { skills: [], tools: [], users: [] } });
+            this.setState({ results: [] });
             this.setState({ pointerDirty: false });
             this.clearSearch();
           }
@@ -220,10 +248,10 @@ class Search extends React.Component {
           if (selection > 0) {
             selection--;
           } else {
-            selection = results.tools.length - 1;
+            selection = results.length - 1;
           }
         } else if (e.keyCode == DOWN_KEYCODE) {
-          if (selection < results.tools.length - 1) {
+          if (selection < results.length - 1) {
             selection++;
           } else {
             selection = 0;
@@ -240,13 +268,13 @@ class Search extends React.Component {
           pointerDirty: pointerDirty
         });
 
-        var item = results.tools[selection]['name'].trim().toLowerCase();
+        var item = results[selection]['name'].trim().toLowerCase();
 
-        results.tools.forEach(function (v) {
+        results.forEach(function (v) {
           delete v.suggested
         });
 
-        results.tools[selection]['suggested'] = 'suggested';
+        results[selection]['suggested'] = 'suggested';
         this.setState({ results: results });
         document.getElementById('querySearch').value = item;
       }
@@ -294,6 +322,8 @@ class Search extends React.Component {
       chosenItems.forEach(function (v) {
         pills.push(v.name);
       });
+
+      console.log(this.state.results);
 
       var self = this;
         return (

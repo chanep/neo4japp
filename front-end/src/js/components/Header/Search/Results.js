@@ -47,9 +47,24 @@ class Results extends React.Component {
 
     render () {
       let self = this;
-      let skills = this.props.results.skills || {};
-      let tools = this.props.results.tools || {};
-      let users = this.props.results.users || {};
+      let results = this.props.results || [];
+
+      var skills = [], tools = [], users = [], i = 0;
+
+      for (i; i < results.length; i++) {
+        if (results[i].type == 'skill') {
+          skills.push(results[i]);
+        }
+
+        if (results[i].type == 'tool') {
+          tools.push(results[i]);
+        }
+
+        if (results[i].type == 'user') {
+          users.push(results[i]);
+        }
+      };
+
       //console.log("SKILLS", skills);
       //console.log("Tools", tools);
       //console.log("users", users);
@@ -67,7 +82,7 @@ class Results extends React.Component {
                     {
                      
                         skills.map(function (skill, props){
-                          return <li data-skill={skill.name} className="subcategory-result" key={skill.id} onClick={self.clickingState.bind(self, props, skill)}>{skill.name}</li>;
+                          return <li data-skill={skill.name} className="subcategory-result" data-suggested={skill.suggested} key={skill.id} onClick={self.clickingState.bind(self, props, skill)}>{skill.name}</li>;
                         })
                       
                     }
@@ -93,7 +108,7 @@ class Results extends React.Component {
                     {
                      
                         users.map(function (person){
-                          return <li key={person.id} className="subcategory-result" data-id={person.id} onClick={self.showEmployee.bind(self)}>{person.fullname}</li>;
+                          return <li key={person.id} className="subcategory-result" data-suggested={person.suggested} data-id={person.id} onClick={self.showEmployee.bind(self)}>{person.fullname}</li>;
                         })
 
                     }
