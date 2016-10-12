@@ -17,7 +17,8 @@ class Search extends React.Component {
         //skillArr: [],
         chosenItems: [],
         results:{},
-        selection: 1
+        selection: 0,
+        pointerDirty: false
       };
 
       this.addItem = this.addItem.bind(this);
@@ -190,6 +191,9 @@ class Search extends React.Component {
       let chosenItems = this.state.chosenItems;
       let results = this.state.results;
 
+      var selection = this.state.selection,
+          pointerDirty = this.state.pointerDirty;
+
       if (e.keyCode == BACKSPACE_KEYCODE) {
 
         // Delete last pill when pressing BACKSPACE, only if there's no text in the search field
@@ -199,7 +203,7 @@ class Search extends React.Component {
 
           if (chosenItems.length == 0) {
             this.setState({ results: { skills: [], tools: [], users: [] } });
-            this.setState({ selection: 1 });
+            this.setState({ pointerDirty: false });
             this.clearSearch();
           }
 
@@ -213,38 +217,38 @@ class Search extends React.Component {
         // Iterate through the list
 
         if (e.keyCode == UP_KEYCODE) {
-          if (this.state.selection > 0) {
-            this.state.selection--;
+          if (selection > 0) {
+            selection--;
           } else {
-            this.state.selection = results.tools.length - 1;
+            selection = results.tools.length - 1;
           }
         } else if (e.keyCode == DOWN_KEYCODE) {
-          if (this.state.selection < results.tools.length - 1) {
-            this.state.selection++;
+          if (selection < results.tools.length - 1) {
+            selection++;
           } else {
-            this.state.selection = 0;
+            selection = 0;
           }
         }
 
-        var item = results.tools[this.state.selection]['name'].trim().toLowerCase();
+        if (this.state.pointerDirty == false) {
+          selection = 0;
+          pointerDirty = true;
+        }
 
-        var index = -1;
-
-        chosenItems.some(function(element, i) {
-          if (item === element.name.trim().toLowerCase()) {
-              index = i;
-
-              return true;
-          }
+        this.setState({
+          selection: selection,
+          pointerDirty: pointerDirty
         });
 
-        if (index == -1) {
-          results.tools.forEach(function (v) { delete v.suggested });
+        var item = results.tools[selection]['name'].trim().toLowerCase();
 
-          results.tools[this.state.selection]['suggested'] = 'suggested';
-          this.setState({ results: results });
-          document.getElementById('querySearch').value = item;
-        }
+        results.tools.forEach(function (v) {
+          delete v.suggested
+        });
+
+        results.tools[selection]['suggested'] = 'suggested';
+        this.setState({ results: results });
+        document.getElementById('querySearch').value = item;
       }
 
       if (e.keyCode == ENTER_KEYCODE) {
@@ -256,6 +260,7 @@ class Search extends React.Component {
       if (e.keyCode == TAB_KEYCODE) {
         e.preventDefault();
         document.getElementById('querySearch').focus();
+        this.setState({ pointerDirty: false })
 
         this.addPill(chosenItems);
       }
