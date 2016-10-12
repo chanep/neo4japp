@@ -30,6 +30,7 @@ class Search extends React.Component {
     }
 
     updateQuery(e) {
+      e.preventDefault();
 
       if (e.target.value.length > 0) {
         this.setState({query: e.target.value});
@@ -299,7 +300,7 @@ class Search extends React.Component {
                     {pills.map((pillName, index)=>{
                       return (<Pill name={pillName} removeSkill={this.removeSkill} index={index} />)
                     })}
-                    <input type="text" name="query" id="querySearch" onKeyUp={this.updateQuery} onKeyDown={this.move} placeholder="enter search..."/>
+                    <input type="text" name="query" id="querySearch" onChange={this.updateQuery} onKeyDown={this.move} placeholder="enter search..."/>
                   </div> 
                   <span className="search-button-wrapper">
                     <span className="ss-icon-close"><span className="path1"></span><span className="path2" onClick={this.clearSearch.bind(this)}></span></span>
