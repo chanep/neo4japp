@@ -23,7 +23,7 @@ class Results extends React.Component {
       this.props.addItem(props);
     }
 
-    showEmployee(self) {
+    showEmployee(self, person) {
       var path = '/employee/' + self.id;
       this.context.router.push({pathname: path});
     }
@@ -108,7 +108,7 @@ class Results extends React.Component {
                     {
                      
                         users.map(function (person){
-                          return <li key={person.id} className="subcategory-result" data-suggested={person.suggested} data-id={person.id} onClick={self.showEmployee.bind(self)}>{person.fullname}</li>;
+                          return <li key={person.id} className="subcategory-result" data-suggested={person.suggested} data-id={person.id} onClick={self.showEmployee.bind(self, person)}>{person.fullname}</li>;
                         })
 
                     }
