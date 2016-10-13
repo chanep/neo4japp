@@ -75,6 +75,12 @@ class Search extends React.Component {
       let currentChosenItems = this.state.chosenItems;
       currentChosenItems.splice(index, 1);
       this.setState({ chosenItems: currentChosenItems });
+
+      if (currentChosenItems.length == 0) {
+          this.setState({ results: [] });
+          this.setState({ pointerDirty: false });
+          this.clearSearch();
+      }
     }
 
     query(queryString) {
@@ -321,10 +327,10 @@ class Search extends React.Component {
 
         path = '/searchResults/' + idsConcat;
         this.context.router.push({ pathname: path });
-
-        this.state.hasResults = false;
-        this.clearSearch();
       }
+
+      this.state.hasResults = false;
+      this.clearSearch();
     }
 
     render () {
