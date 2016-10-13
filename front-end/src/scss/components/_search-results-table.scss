@@ -2,7 +2,7 @@
  * Components: Search Results Table
  */
 
-.search-results-table {
+.search-results-table, .my-profile-add-skills-table {
     @include grid($max-width: em(960));
     margin-top: 1.5rem;
     overflow: hidden;
@@ -356,6 +356,48 @@
             -moz-transform:rotate(180deg);
             -o-transform:rotate(180deg);
             transform:rotate(180deg);
+        }
+    }
+
+    .addSkillsFilter {
+        .filterType {
+            margin-bottom: em(50);
+        }
+    }
+
+    .addSkillsList {
+        ul {
+            li {
+                display: block;
+                border-bottom: em(1) solid $LIGHTEST-GREY;
+                position: relative;
+                overflow: hidden;
+
+                .colTable {
+                    float: left;
+                    overflow: hidden;
+                    width: 30%;
+                    padding: em(15);
+                }
+
+                .colArrow {
+                    float: left;
+                    overflow: hidden;
+                    width: 10%;
+                    background-color: $LIGHTEST-GREY;
+                    font-size: em(10);
+                    text-align: center;
+                }
+
+                .colName {
+                    font-size: em(14);
+                    font-weight: bold;
+                }
+
+                .colCategory, .colSkills {
+                    font-size: em(14);
+                }
+            }
         }
     }
 }

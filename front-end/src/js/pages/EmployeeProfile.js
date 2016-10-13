@@ -6,45 +6,22 @@ import Header from '../components/Header';
 import EmployeeHeader from "../components/EmployeeProfile/EmployeeHeader";
 import ResultsProfileTable from "../components/ResultsProfileTable";
 import RelatedEmployees from '../components/EmployeeProfile/RelatedEmployees';
-import UserServices from '../services/UserServices';
 
 export default class EmployeeProfile extends BasePage {
 	constructor(props){
 		super(props);
 
         this.state = {
-            user: []
+            userId: null
         }
-        this.userData = new UserServices();
-        this.isReady = false;
 	}
-
-    getUser(userId) {
-        this.userData.GetUserData(userId).then(data => {
-            let skillsCount = 0;
-            data.skillGroups.forEach(obj => {
-                skillsCount += obj.skills.length;
-            });
-
-            this.setState({
-                user: data,
-                skillsCount: skillsCount
-            });
-        }).catch(data => {
-          
-            console.log("user data error", data);
-          
-        });
-
-    }
 
     componentDidMount() {
         let userId = null;
         if (this.props.params.employeeID !== undefined)
             userId = this.props.params.employeeID;
 
-    	this.getUser(userId);
-        this.isReady = true;
+    	this.setState({userId: userId});
     }
 
     componentWillReceiveProps(newProps) {
@@ -52,16 +29,15 @@ export default class EmployeeProfile extends BasePage {
         if (newProps.params.employeeID !== undefined)
             userId = newProps.params.employeeID;
 
-        this.getUser(userId);
-        this.isReady = true;
+        this.setState({userId: userId});
      }
 
     render () {
         return (
             <div>
                 <Header search={super._showSearch()} loggedIn={true} />
-                <EmployeeHeader employee={this.state.user} skillsCount={this.state.skillsCount} />
-                <ResultsProfileTable employeeId={this.state.user.id} />
+                <EmployeeHeader userId={this.state.userId} addSkills={true} />
+                <ResultsProfileTable employeeId={this.state.userId} />
                 <RelatedEmployees />
             </div>
         );

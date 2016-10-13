@@ -48,7 +48,7 @@ export default class SearchResults extends BasePage {
 
     componentWillReceiveProps(newProps) {
         if (newProps.params.skillIds !== undefined) {
-            let ids = this.props.params.skillIds.split(',');
+            let ids = newProps.params.skillIds.split(',');
 
             this.getData(ids);
         }
