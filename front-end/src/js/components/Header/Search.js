@@ -17,7 +17,8 @@ class Search extends React.Component {
         //skillArr: [],
         chosenItems: [],
         results:{},
-        selection: 1
+        selection: 0,
+        pointerDirty: false
       };
 
       this.addItem = this.addItem.bind(this);
@@ -30,10 +31,11 @@ class Search extends React.Component {
     }
 
     updateQuery(e) {
+      e.preventDefault();
 
       if (e.target.value.length > 0) {
         this.setState({query: e.target.value});
-        this.query();
+        this.query(e.target.value);
          this.setState({ word: e.target.value });
         this.setState({ selection: 1 });
       
@@ -75,13 +77,41 @@ class Search extends React.Component {
       this.setState({ chosenItems: currentChosenItems });
     }
 
-    query() {
+    query(queryString) {
 
       let searchService = new SearchServices();
-      searchService.GetSearchAll(this.state.query, 5).then(data =>{
+      searchService.GetSearchAll(queryString, 5).then(data =>{
          //console.log('Search new service')
-         this.setState({ results: data });
-         //console.log(data);
+         //this.setState({ results: data });
+
+         var results = [];
+
+         data.skills.forEach(function (skill) {
+          results.push({ "id": skill.id, "name": skill.name, "type": 'skill'});
+         });
+
+         data.tools.forEach(function (tool) {
+          results.push({ "id": tool.id, "name": tool.name, "type": 'tool'});
+         });
+
+         data.users.forEach(function (user) {
+          results.push({
+            "id": user.id,
+            "email": user.email,
+            "first": user.first,
+            "name": user.fullname,
+            "fullname": user.fullname,
+            "last": user.last,
+            "phone": user.phone,
+            "phonelistId": user.phonelistId,
+            "roles": user.roles,
+            "sourceId": user.sourceId,
+            "type": user.type,
+            "username": user.username,
+            "type": "user"});
+         });
+
+         this.setState({ results: results });
 
       }).catch(data => {
           //console.log("search data error", data);
@@ -146,8 +176,8 @@ class Search extends React.Component {
             chosenItems = this.state.chosenItems,
             name, id, repeated = false;
 
-        for (var i = 0; i < results.tools.length; i++) {
-          var element = results.tools[i];
+        for (var i = 0; i < results.length; i++) {
+          var element = results[i];
 
           if (element.name.trim().toLowerCase() == query.trim().toLowerCase()) {
             name = element.name; // Copy to mantain letter case
@@ -169,7 +199,7 @@ class Search extends React.Component {
             // Add pill only if its a valid item and it has not been added already
             chosenItems.push({ id: id, name: name });
 
-            results.tools.forEach(function (v) { delete v.suggested });
+            results.forEach(function (v) { delete v.suggested });
 
             this.setState({ chosenItems: chosenItems });
             this.setState({ results: results });
@@ -189,6 +219,9 @@ class Search extends React.Component {
       let chosenItems = this.state.chosenItems;
       let results = this.state.results;
 
+      var selection = this.state.selection,
+          pointerDirty = this.state.pointerDirty;
+
       if (e.keyCode == BACKSPACE_KEYCODE) {
 
         // Delete last pill when pressing BACKSPACE, only if there's no text in the search field
@@ -197,8 +230,8 @@ class Search extends React.Component {
           chosenItems.pop();
 
           if (chosenItems.length == 0) {
-            this.setState({ results: { skills: [], tools: [], users: [] } });
-            this.setState({ selection: 1 });
+            this.setState({ results: [] });
+            this.setState({ pointerDirty: false });
             this.clearSearch();
           }
 
@@ -212,38 +245,38 @@ class Search extends React.Component {
         // Iterate through the list
 
         if (e.keyCode == UP_KEYCODE) {
-          if (this.state.selection > 0) {
-            this.state.selection--;
+          if (selection > 0) {
+            selection--;
           } else {
-            this.state.selection = results.tools.length - 1;
+            selection = results.length - 1;
           }
         } else if (e.keyCode == DOWN_KEYCODE) {
-          if (this.state.selection < results.tools.length - 1) {
-            this.state.selection++;
+          if (selection < results.length - 1) {
+            selection++;
           } else {
-            this.state.selection = 0;
+            selection = 0;
           }
         }
 
-        var item = results.tools[this.state.selection]['name'].trim().toLowerCase();
+        if (this.state.pointerDirty == false) {
+          selection = 0;
+          pointerDirty = true;
+        }
 
-        var index = -1;
-
-        chosenItems.some(function(element, i) {
-          if (item === element.name.trim().toLowerCase()) {
-              index = i;
-
-              return true;
-          }
+        this.setState({
+          selection: selection,
+          pointerDirty: pointerDirty
         });
 
-        if (index == -1) {
-          results.tools.forEach(function (v) { delete v.suggested });
+        var item = results[selection]['name'].trim().toLowerCase();
 
-          results.tools[this.state.selection]['suggested'] = 'suggested';
-          this.setState({ results: results });
-          document.getElementById('querySearch').value = item;
-        }
+        results.forEach(function (v) {
+          delete v.suggested
+        });
+
+        results[selection]['suggested'] = 'suggested';
+        this.setState({ results: results });
+        document.getElementById('querySearch').value = item;
       }
 
       if (e.keyCode == ENTER_KEYCODE) {
@@ -255,6 +288,7 @@ class Search extends React.Component {
       if (e.keyCode == TAB_KEYCODE) {
         e.preventDefault();
         document.getElementById('querySearch').focus();
+        this.setState({ pointerDirty: false })
 
         this.addPill(chosenItems);
       }
@@ -288,6 +322,8 @@ class Search extends React.Component {
       chosenItems.forEach(function (v) {
         pills.push(v.name);
       });
+
+      console.log(this.state.results);
 
       var self = this;
         return (

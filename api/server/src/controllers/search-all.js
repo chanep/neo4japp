@@ -37,6 +37,11 @@ class SearchAllController extends BaseController{
         
         let skills, tools, users;
 
+        if(term){
+            term = term.replace('.', '\\.').replace('*', '\\*').replace('^', '\\^');
+        }
+        
+
         let promise = skillDa.findByTerm(term, "skill", limit)
             .then(data => {
                 skills = data.data;

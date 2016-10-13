@@ -29,7 +29,7 @@ class ApproverDa extends UserDa{
         if(includeWantSkills){
             wantCondition = '';
         }
-        let cmd = `match (n:${label})-[:${approverRelL}]->(me:${label}) where id(me) = {id}
+        let cmd = `match (n:${label})-[:${approverRelL}]->(me:${label}) where id(me) = {id} and not(n.disabled)
             match (n)-[:${officeRelL}]->(o),
             (n)-[:${departmentRelL}]->(d),
             (n)-[:${positionRelL}]->(p)

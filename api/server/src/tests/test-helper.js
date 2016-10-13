@@ -70,6 +70,9 @@ module.exports = {
                             "password": password
                         }
                     }, function (err, res, body) {
+                        if(err){
+                            console.log("err",err);
+                        }
                         let cookie = res.headers['set-cookie'].pop().match(/(connect\.sid=.+?);/)[1];
                         reqDefaults.headers.Cookie = cookie;
                         req = request.defaults(reqDefaults);

@@ -73,7 +73,7 @@ class UserDa extends BaseDa{
         let skillL = skillModel.labelsStr;
         let kRelL = this.model.getRelationByKey("knowledges").label;
 
-        let cmd = `match (n2:${label}) where id(n2) = {userId}
+        let cmd = `match (n2:${label}) where id(n2) = {userId} and not(n2.disabled)
         match (n)-[:${officeRelL}]->(o),
         (n)-[:${departmentRelL}]->(d),
         (n)-[:${positionRelL}]->(p),
