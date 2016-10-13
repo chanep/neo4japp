@@ -200,6 +200,13 @@ class Search extends React.Component {
             if (v.id == id || v.name == name) {
               repeated = true;
             }
+
+            if (v.type == 'user') {
+              path = '/employee/' + v.id;
+              this.context.router.push({ pathname: path });
+              this.state.hasResults = false;
+              this.clearSearch();
+            }
           });
 
           if (!repeated) {
