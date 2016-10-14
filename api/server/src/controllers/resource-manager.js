@@ -154,7 +154,12 @@ HTTP/1.1 200 OK
         position: { id: 4835, name: "Developer" }, 
         office: { id: 4832, name: "Buenos Aires", country: "Argentina", acronym: "BA" }, 
         approvers: [{id: 4345, fullname: "Juan Manager"}],
-        allocation: {id: 6519 totalHours:120, weekHours:30,30,30,30, startDate:09-05-2016,09-12-2016,09-19-2016,09-26-2016},
+        allocation: {
+            id: 6519, 
+            totalHours:120, 
+            weekHours:[30,30,30,30], 
+            workingWeekHours:[40,40,40,40], 
+            startDate: ["09-05-2016","09-12-2016","09-19-2016","09-26-2016"]},
         score: 15,
         skills: [{ 
             id: 4844, 

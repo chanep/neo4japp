@@ -37,7 +37,7 @@ class UserController extends BaseController{
     }
 
     /**
-    @api {get} /api/user/skills 3 Skills
+    @api {get} /api/user/:userId/skills 3 Skills
     @apiDescription Return the full skillgroup/skill tree. Skill is attached with the corresponding user knwoledge
     @apiGroup Users
 
@@ -70,11 +70,13 @@ class UserController extends BaseController{
     */
     findUserSkills(req, res, next){
         let loggedUser = req.session.user;
-        let userId = loggedUser.id;
+        let userId = req.params.userId;
         let search = this._buildSearch(req);
         let allSkills = search.all;
-
-        let promise = userDa.findUserSkills(userId, allSkills);
+        let promise = this._validateUserAccess(loggedUser, userId)
+            .then(() => {
+                return userDa.findUserSkills(userId, allSkills);
+            });
 
         this._respondPromise(req, res, promise);
     }
@@ -218,19 +220,10 @@ HTTP/1.1 200 OK
         office: { id: 4832, name: "Buenos Aires", country: "Argentina", acronym: "BA" }, 
         department: { id: 4834, name: "Technology" }, 
         approvers: [{id: 4345, fullname: "Juan Manager"}],
+        resourceManagers: [{id: 4346, fullname: "Agostina Gomez"}],
         clients: [{ id: 134, name: "Nike", short: "NIKE" }], 
-        interests: [{ id: 298, name: "Chess"}], 
-        skillGroups: [{ 
-            id: 4844, 
-            name: "languages", 
-            type: "tool", 
-            parent: { id: 4841, name: "Technology", type: "tool" }, 
-            skills: [{ 
-                id: 4850, 
-                name: "Php", 
-                knowledge: { id: 18753, level: 3, want: false, approved: true, approverId: 2345, approverFullname: "Juan Manager" } 
-            }]
-        }]
+        interests: [{ id: 298, name: "Chess"}],
+        industries: [{ id: 346, name: "Financial"}]
     }, {
        ... 
     }]
