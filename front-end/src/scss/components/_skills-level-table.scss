@@ -32,6 +32,10 @@
 
 	.col {
 		padding: .9em .75em;
+		white-space: nowrap;
+    	text-overflow: ellipsis;
+    	max-width: 100%;
+    	overflow: hidden;
 
 		&:nth-oftype(1) {
 			text-align: left;
@@ -49,6 +53,14 @@
 	&.level-selected { background-color: $RED; }
 
 	&:last-child { border-right: 1px solid white; }
+
+	&.selectable {
+		cursor: pointer;
+	}
+
+	&.selectable:hover {
+		background-color: $RED;
+	}
 }
 
 .skill-level-want-wrapper {

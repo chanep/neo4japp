@@ -366,38 +366,32 @@
     }
 
     .addSkillsList {
-        ul {
-            li {
-                display: block;
-                border-bottom: em(1) solid $LIGHTEST-GREY;
-                position: relative;
-                overflow: hidden;
+        .row-add-skill {
+            border-bottom: em(1) solid $LIGHTEST-GREY;
 
-                .colTable {
-                    float: left;
-                    overflow: hidden;
-                    width: 30%;
-                    padding: em(15);
-                }
-
-                .colArrow {
-                    float: left;
-                    overflow: hidden;
-                    width: 10%;
-                    background-color: $LIGHTEST-GREY;
-                    font-size: em(10);
-                    text-align: center;
-                }
-
-                .colName {
-                    font-size: em(14);
-                    font-weight: bold;
-                }
-
-                .colCategory, .colSkills {
-                    font-size: em(14);
-                }
+            .-col-name {
+                font-weight: bold;
             }
+
+            .results-arrow-open-close {
+                line-height: 2.5 !important;
+            }
+
+            .overflowHidden {
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                max-width: 100%;
+                overflow: hidden;
+            }
+        }
+
+        .selectCategory {
+            text-align: center;
+            padding: em(15);
+            font-size: em(14);
+            font-weight: bold;
+            color: $GREY;
+            display: block;
         }
     }
 }
