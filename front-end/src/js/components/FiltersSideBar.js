@@ -9,13 +9,13 @@ import React from 'react';
 export default class FiltersSideBar extends React.Component {
     render() {
         return (
-            <div className="filters col -col-3">
+            <div className="filters col -col-3 -col-no-gutter">
             	<div className="filters-search-container">
             		<span className="ss-icon-search"></span>
             		<input type="text" className="filters-search-container__field" />
             	</div>
             	
-                <div>
+                <div className="filterContent">
                     <span className="filter-title">Locations</span> <span className="filter-title-group">(All)</span>
                     <ul>
                         <li className="filter-option">

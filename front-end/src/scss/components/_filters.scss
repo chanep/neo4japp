@@ -3,19 +3,14 @@
     height: 100vh;
     position: relative;
     padding: {
-        top: em(40);
         bottom: 0;
     }
 
-    &.col.-col-3 {
-        padding-top: em(40);
+    .filterContent {
+        padding: em(12);
     }
 
     & > div {
-        margin-bottom: 1.5rem;
-        padding-bottom: em(9);
-        padding-top: em(6);
-
         &:last-of-type {
             border-bottom: none;
         }
@@ -43,10 +38,6 @@
 
     .filters-search-container {
         background-color: $LIGHTEST-GREY;
-        left: 0;
-        padding: 0;
-        position: absolute;
-        top: 0;
         width: 100%;
 
         .ss-icon-search {

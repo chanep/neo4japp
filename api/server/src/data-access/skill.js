@@ -10,8 +10,12 @@ class SkillDa extends BaseDa{
 
     findByTerm(term, type, limit){
         let query = {name: {$ilike: `%${term}%`}};
-        if(type)
-            query.includes = [{key: "group", query: {type: type}, notInclude: true}];
+        if(type){
+            if(!Array.isArray(type))
+                type = [type];
+            query.includes = [{key: "group", query: {type: {$in: type}}, notInclude: true}];
+        }
+            
         if(limit)
             query.paged = {skip: 0, limit: limit};
         
@@ -19,6 +23,18 @@ class SkillDa extends BaseDa{
 
         return this.find(query);
     }
+
+    /**
+	 * Find all skills of a given group type
+	 * @param {string} type - Skill Group type
+	 * @memberOf SkillGroupDa
+	 */
+	findByType(type){
+        if(!type)
+            return P.reject(new errors.GenericError(`SkillDa.findByType type undefined`));
+        let query = { includes: [{key: "group", query: {type: type}, notInclude: true}] };
+        return this.find(query);
+	}
 
     createAndRelate(data, groupId){
         return super.createAndRelate(data, groupId, "group");

@@ -4,7 +4,7 @@
   "description": "Skillsearch api",
   "main": "src/server.js",
   "scripts": {
-    "test": "vows -v tests/api/*-test.js"
+    "test": "vows -v src/tests/api/*-test.js"
   },
   "author": "RGA",
   "license": "ISC",
@@ -18,7 +18,7 @@
     "vows": "^0.8.1"
   },
   "dependencies": {
-    "async": "^2.0.1",
+    "async": "^2.1.1",
     "bluebird": "^3.4.3",
     "body-parser": "^1.15.2",
     "cors": "^2.8.1",
@@ -27,10 +27,11 @@
     "express-qs-parser": "0.0.1",
     "express-session": "^1.14.1",
     "google-spreadsheet": "^2.0.3",
-    "joi": "^9.0.4",
+    "joi": "^9.1.1",
     "ldapauth-fork": "^2.5.3",
     "lodash": "^4.16.4",
     "moment": "^2.15.1",
+    "morgan": "^1.7.0",
     "neo4j-driver": "^1.1.0-M02",
     "node-schedule": "^1.1.1",
     "postal": "^2.0.4",

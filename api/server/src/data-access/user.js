@@ -23,6 +23,7 @@ class UserDa extends BaseDa{
         let positionRelL = this.model.getRelationByKey("position").label;
         let clientRelL = this.model.getRelationByKey("clients").label;
         let approverRelL = this.model.getRelationByKey("approvers").label;
+        let rmRelL = this.model.getRelationByKey("resourceManagers").label;
         let sgL = skillGroupModel.labelsStr;
         let skillL = skillModel.labelsStr;
         let sgRelL = skillModel.getRelationByKey("group").label;
@@ -33,13 +34,13 @@ class UserDa extends BaseDa{
                     match (n)-[:${officeRelL}]->(o),
                     (n)-[:${departmentRelL}]->(d),
                     (n)-[:${positionRelL}]->(p)
-                    optional match (sg:${sgL})<-[:${sgRelL}]-(s:${skillL})<-[k:${kRelL}]-(n),
-                        (sg)-[:${sgRelL}]->(sgp:${sgL}) where sg.type IN ['skill', 'tool']
                     optional match (n)-[:${approverRelL}]->(a)
+                    optional match (n)-[:${rmRelL}]->(rm)
                     optional match (n)-[:${clientRelL}]->(c)
                     optional match (n)-[:${interestRelL}]->(i)
-                    with n, o, d, p, collect(distinct a) as approvers, collect(distinct c) as clients, collect(distinct i) as interests, sg, sgp, 
-                        collect(distinct {id: id(s), name: s.name, knowledge: {id: id(k), level: k.level, want: k.want, approved: k.approved, approver: k.approverFullname}}) as skills
+                    optional match (n)-[:${kRelL}]->(ind)-[:${sgRelL}]->(sg) where sg.type = 'industry' 
+                    with n, o, d, p, collect(distinct a) as approvers, collect(distinct rm) as resourceManagers, collect(distinct c) as clients, collect(distinct i) as interests,
+                        collect(distinct ind) as industries
                     return {    
                                 id: id(n), username: n.username, type: n.type, email: n.email, 
                                 fullname: n.fullname, roles: n.roles, phone: n.phone, image: n.image, disabled: n.disabled,
@@ -47,15 +48,10 @@ class UserDa extends BaseDa{
                                 department: {id: id(d), name: d.name},
                                 position: {id: id(p), name: p.name},
                                 approvers: approvers,
+                                resourceManagers: resourceManagers,
                                 clients: clients,
                                 interests: interests,
-                                skillGroups: collect(
-                                    case when sg is not null then {
-                                        id: id(sg), name: sg.name,
-                                        parent: {id: id(sgp), name: sgp.name},
-                                        skills: skills
-                                    } else null end
-                                )
+                                industries: industries
                     }`
         let params = {id: neo4j.int(id)};
         return this._run(cmd, params)

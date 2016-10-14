@@ -10,8 +10,11 @@ export default class EmployeeHeader extends React.Component {
        
         this.state = {
             user: [],
-            skillsCount: 0
+            skillsCount: 0,
+            addSkills: true
         }
+
+        this.userData = new UserServices();
     }
 
     getChild (obj,key){
@@ -21,16 +24,39 @@ export default class EmployeeHeader extends React.Component {
         }
     }
 
-    componentWillReceiveProps(nextProps) {
-        this.setState({
-            user: nextProps.employee,
-            skillsCount: nextProps.skillsCount
+    getUser(userId) {
+        let userIdFinal = userId;
+        if (userId == 0) userIdFinal = null;
+
+        this.userData.GetUserData(userIdFinal).then(data => {
+            let skillsCount = 0;
+            data.skillGroups.forEach(obj => {
+                skillsCount += obj.skills.length;
+            });
+
+            this.setState({
+                user: data,
+                skillsCount: skillsCount
+            });
+        }).catch(data => {
+          
+            console.log("user data error", data);
+          
         });
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.getUser(nextProps.userId);
+        this.setState({addSkills: nextProps.addSkills})
+    }
+
+    componentDidMount() {
+        this.getUser(this.props.userId);
+        this.setState({addSkills: this.props.addSkills})
     }
 
     render () {
         return (
-           
         	<div className="employee-header-container">
         		<div className="grid">
         			<div className="col -col-1">
@@ -60,16 +86,23 @@ export default class EmployeeHeader extends React.Component {
         					<div className="count">{this.state.skillsCount}</div>
         					<div className="label">Total Skills</div>
         				</div>
-                        <div className="employee-skills-add">
-                            <Link to="/myprofile/myskills">ADD NEW SKILLS</Link>
-                        </div>
+
                         
-                        {/* Add new skills label */}
+                        {this.state.addSkills?
+                            <div className="employee-skills-add">
+                                <Link to="/myprofile/myskills">ADD NEW SKILLS</Link>
+                            </div>
+                            :
+                            <div className="employee-skills-add">
+                                <Link to="/myprofile">VIEW YOUR SKILLS</Link>
+                            </div>
+                        }
                         {/*
                         <div className="employee-skills-add employee-skills-verify">
                             <span className="icon-alert">!</span>
                             <a href="#">VERIFY 3 SKILLS IN TOTAL</a>
                         </div>
+                        *}
                         {/* Verify skills label */}
         				<div className="employee-skills-last-update">
         					Last Updated <span>05/04/2016</span>

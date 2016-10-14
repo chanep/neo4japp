@@ -13,18 +13,18 @@ class SkillController extends BaseController{
     @apiGroup Skills
 
     @apiParam (Filters) {string} [name] Skill name (find skills containing name parameter case insensitive) 
-    @apiParam (Filters) {string} [type] Skillgroup type (find skills of certain group type) 
+    @apiParam (Filters) {Array} [type] Skillgroup type (find skills of certain group type) 
     @apiParam (Filters) {number} [limit] Limits the result 
 
     @apiExample {curl} Example usage:
-        /api/skill?name=hp&type=tool&limit=20
+        /api/skill?name=hp&type[]=tool&limit=20
     
     @apiUse findSkillResponse
     */
     find(req, res, next){
         let query = {
             includes: [
-                {key: "group", includes: ["parent"]}
+                {key: "group", includes: ["parent"], query: {}}
             ],
             paged: {limit: 10, skip: 0},
             orderBy: "name ASC"
@@ -39,7 +39,7 @@ class SkillController extends BaseController{
         if(name)
             query.name= {$ilike:'%' + name + '%'};
         if(type)
-            query.includes[0].query.type = type;
+            query.includes[0].query.type = {$in: type};
         if(limit)
             query.paged.limit = limit;
 
@@ -60,6 +60,35 @@ class SkillController extends BaseController{
 
         this._respondPromise(req, res, promise);
     }
+
+    /**
+    @api {get} /api/skill/by-group-type/:type 3 Find by type
+    @apiDescription Find all skills of a given group type
+    @apiGroup Skills
+
+    @apiExample {curl} Example usage:
+        /api/skill/by-group-type/industry
+    
+    @apiSuccessExample {json} Success-Response:
+          HTTP/1.1 200 OK
+          {
+            status: "success",
+            data: [{
+                id: 260,
+                name: "Financial"
+            },
+            {
+                id: 261,
+                name: "Health & Beauty"
+            }, {...}]
+          }
+    */
+    findByType(req, res, next){
+        let type = req.params.type;
+        let promise = skillDa.findByType(type);
+
+        this._respondPromise(req, res, promise);
+	}
 
 } 
 

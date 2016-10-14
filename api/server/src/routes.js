@@ -24,6 +24,7 @@ router.use(security.checkLoggedIn.bind(security));
 
 router.get('/skill', skillController.find.bind(skillController));
 router.get('/skill/all-groups', skillController.findAllGroups.bind(skillController));
+router.get('/skill/by-group-type/:type', skillController.findByType.bind(skillController));
 
 router.get('/interest', interestController.find.bind(interestController));
 
@@ -32,7 +33,7 @@ router.get('/office', officeController.find.bind(officeController));
 router.get('/user/details', userController.details.bind(userController));
 router.get('/user/:userId/details', userController.details.bind(userController));
 router.get('/user/:userId/similar-skilled-users', userController.findUsersWithSimilarSkills.bind(userController));
-router.get('/user/skills', userController.findUserSkills.bind(userController));
+router.get('/user/:userId/skills', userController.findUserSkills.bind(userController));
 router.put('/user/knowledge', userController.setKnowledge.bind(userController));
 router.put('/user/interest', userController.addInterest.bind(userController));
 router.delete('/user/interest', userController.removeInterest.bind(userController));
