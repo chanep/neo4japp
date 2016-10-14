@@ -13,6 +13,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const expressQSParser = require('express-qs-parser');
 const session = require('express-session');
+const morgan = require('morgan');
 const cors = require('cors');
 const routes = require('./routes');
 const statisticsService = require('./services/statistics');
@@ -21,12 +22,14 @@ statisticsService.start();
 const config = require('./shared/config');
 
 const app = express();
+const logger = morgan('common');
 
 // parse body params and attache them to req.body
 app.use(expressQSParser({}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(session({ secret: config.session_secret, resave: true, saveUninitialized: false }));
+app.use(logger);
 
 // enable CORS - Cross Origin Resource Sharing
 var corsOptions = {

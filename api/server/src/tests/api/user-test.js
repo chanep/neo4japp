@@ -105,35 +105,24 @@ vows.describe('User api test')
             assert.isArray(u.approvers);
             assert.isTrue(!!u.approvers[0].fullname);
 
+            assert.isArray(u.resourceManagers);
+            assert.isTrue(!!u.resourceManagers[0].fullname);
+
             assert.isArray(u.clients);
             assert.isTrue(!!u.clients[0].short);
 
-            assert.isArray(u.skillGroups);
-            assert.equal(u.skillGroups.length, 2);
-
-            let sk0 = findSkill(skills[0].id, u.skillGroups);
-
-            assert.isObject(sk0);
-            assert.equal(sk0.name, skills[0].name);
-            assert.isObject(sk0.knowledge);
-            assert.equal(sk0.knowledge.level, ks[0].level);
-            assert.equal(sk0.knowledge.want, ks[0].want);
-
-            let sk1 = findSkill(skills[1].id, u.skillGroups);
-            assert.isObject(sk1);
-            assert.equal(sk1.name, skills[1].name);
-            assert.isObject(sk1.knowledge);
-            assert.equal(sk1.knowledge.level, ks[1].level);
-            assert.equal(sk1.knowledge.want, ks[1].want);
 
         }
     }
 })
 
+.addBatch(testHelper.loginBatch(r => req = r, () => data.resourceManager.username))
+
 .addBatch({
     '5. Get all skills (with user knowledges attached)': {
         topic: function () {
-            req.get('user/skills?all=true', 
+            let userId = data.employee.id;
+            req.get(`user/${userId}/skills?all=true`, 
                 this.callback);
         },
         'response is 200': testHelper.assertSuccess(),
@@ -166,7 +155,8 @@ vows.describe('User api test')
 .addBatch({
     '6. Get user skills (with user knowledges attached)': {
         topic: function () {
-            req.get('user/skills', 
+            let userId = data.employee.id;
+            req.get(`user/${userId}/skills`, 
                 this.callback);
         },
         'response is 200': testHelper.assertSuccess(),
