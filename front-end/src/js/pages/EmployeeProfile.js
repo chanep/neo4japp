@@ -37,8 +37,8 @@ export default class EmployeeProfile extends BasePage {
             <div>
                 <Header search={super._showSearch()} loggedIn={true} />
                 <EmployeeHeader employee={this.state.user} addSkills={true} />
-                <ResultsProfileTable employeeId={this.state.user.id} />
-                <RelatedEmployees userId={this.state.user.id} />
+                <ResultsProfileTable employeeId={this.state.userId} />
+                <RelatedEmployees userId={this.state.userId} />
             </div>
         );
     }
