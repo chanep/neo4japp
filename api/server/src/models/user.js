@@ -100,6 +100,7 @@ let allocation = new Model(
         id: Joi.number(),
         startDate: Joi.array().items(Joi.string()).required(),
         weekHours: Joi.array().items(Joi.number()).required(),
+        workingWeekHours: Joi.array().items(Joi.number()).required(),
         totalHours: Joi.number().required()
     }
 );

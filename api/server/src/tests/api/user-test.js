@@ -46,6 +46,26 @@ vows.describe('User api test')
 })
 
 .addBatch({
+    '1b. Set an industry': {
+        topic: function () {
+            let ind = data.industries[0];
+            req.put('user/knowledge', 
+                {body: {skillId: ind.id, level: 5, want: false}},
+                this.callback);
+        },
+        'response is 200': testHelper.assertSuccess(),
+        'should return knowledge ': function (err, result, body) {
+            if (err) {
+                console.log("error", err);
+                throw err;
+            }
+            let k = body.data;
+            assert.isNumber(k.id);
+        }
+    }
+})
+
+.addBatch({
     '2. Set an other knowledge': {
         topic: function () {
             let skill1 = data.skills[data.skills.length - 1];
@@ -110,6 +130,9 @@ vows.describe('User api test')
 
             assert.isArray(u.clients);
             assert.isTrue(!!u.clients[0].short);
+
+            assert.isArray(u.industries);
+            assert.equal(u.industries[0].name, data.industries[0].name);
 
 
         }

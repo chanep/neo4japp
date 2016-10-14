@@ -144,6 +144,32 @@ function upsertPosition(name){
     return positionDa.upsert({name: name}, ["name"]);
 }
 
+function createIndustries(){
+    let sg = {name: 'Industry', type: 'industry'};
+    let ind = [{name: 'Industry A'}, {name: 'Industry B'}, {name: 'Industry C'}, {name: 'Industry D'}];
+    return skillGroupDa.create(sg)
+        .then(g => {
+            sg.id = g.id;
+            return skillDa.createAndRelate(ind[0], sg.id, "group");
+        })
+        .then(i => {
+            ind[0].id = i.id;
+            return skillDa.createAndRelate(ind[1], sg.id, "group");
+        })
+        .then(i => {
+            ind[1].id = i.id;
+            return skillDa.createAndRelate(ind[2], sg.id, "group");
+        })
+        .then(i => {
+            ind[2].id = i.id;
+            return skillDa.createAndRelate(ind[3], sg.id, "group");
+        })
+        .then(i => {
+            ind[3].id = i.id;
+            return ind;
+        });
+}
+
 function createSkillGroups(){
     let data = {};
     let sg = [
@@ -288,6 +314,10 @@ function createBasicData(){
             return userDa.addResourceManager(data.employees[1].id, data.resourceManager.id);
         })
         .then(() => {
+            return createIndustries();
+        })
+        .then(ind => {
+            data.industries = ind;
             return createSkillGroups();
         })
         .then(sgData => {

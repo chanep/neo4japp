@@ -107,12 +107,13 @@ class AllocationsImportTask extends PlBaseTask{
                     var userData = dataAlloc.filter(function(findItem) {
                         return findItem.id == item['UserID'];
                     });
-
+                    
                     if (userData.length == 0){
                         var newUser = {
                             'id': item['UserID'],
                             'startDate': [stDate],
                             'weekHours': [item['AllocatedHrs']],
+                            'workingWeekHours': [item['AvailableHrs']],
                             'totalHours': item['AllocatedHrs']
                         };
 
@@ -122,6 +123,7 @@ class AllocationsImportTask extends PlBaseTask{
                         
                         currentUser.startDate.push(stDate);
                         currentUser.weekHours.push(item['AllocatedHrs']);
+                        currentUser.workingWeekHours.push(item['AvailableHrs']);
                         currentUser.totalHours += item['AllocatedHrs'];
                     }
                 });
@@ -138,6 +140,7 @@ class AllocationsImportTask extends PlBaseTask{
                     var newAllocs = {
                         'startDate': userData.startDate,
                         'weekHours': userData.weekHours,
+                        'workingWeekHours': userData.workingWeekHours,
                         'totalHours': userData.totalHours
                     };
 

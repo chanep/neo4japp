@@ -222,7 +222,8 @@ HTTP/1.1 200 OK
         approvers: [{id: 4345, fullname: "Juan Manager"}],
         resourceManagers: [{id: 4346, fullname: "Agostina Gomez"}],
         clients: [{ id: 134, name: "Nike", short: "NIKE" }], 
-        interests: [{ id: 298, name: "Chess"}]
+        interests: [{ id: 298, name: "Chess"}],
+        industries: [{ id: 346, name: "Financial"}]
     }, {
        ... 
     }]

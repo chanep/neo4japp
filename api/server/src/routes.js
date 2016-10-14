@@ -24,6 +24,7 @@ router.use(security.checkLoggedIn.bind(security));
 
 router.get('/skill', skillController.find.bind(skillController));
 router.get('/skill/all-groups', skillController.findAllGroups.bind(skillController));
+router.get('/skill/by-group-type/:type', skillController.findByType.bind(skillController));
 
 router.get('/interest', interestController.find.bind(interestController));
 
