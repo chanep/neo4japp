@@ -75,6 +75,12 @@ class Search extends React.Component {
       let currentChosenItems = this.state.chosenItems;
       currentChosenItems.splice(index, 1);
       this.setState({ chosenItems: currentChosenItems });
+
+      if (currentChosenItems.length == 0) {
+          this.setState({ results: [] });
+          this.setState({ pointerDirty: false });
+          this.clearSearch();
+      }
     }
 
     query(queryString) {
@@ -174,7 +180,7 @@ class Search extends React.Component {
         var valid = false,
             results = this.state.results,
             chosenItems = this.state.chosenItems,
-            name, id, repeated = false;
+            name, id, type, repeated = false;
 
         for (var i = 0; i < results.length; i++) {
           var element = results[i];
@@ -182,6 +188,7 @@ class Search extends React.Component {
           if (element.name.trim().toLowerCase() == query.trim().toLowerCase()) {
             name = element.name; // Copy to mantain letter case
             id = element.id;
+            type = element.type;
             valid = true;
 
             break; // No need to keep looking
@@ -193,14 +200,22 @@ class Search extends React.Component {
             if (v.id == id || v.name == name) {
               repeated = true;
             }
+
+            if (v.type == 'user') {
+              path = '/employee/' + v.id;
+              this.context.router.push({ pathname: path });
+              this.state.hasResults = false;
+              this.clearSearch();
+            }
           });
 
           if (!repeated) {
             // Add pill only if its a valid item and it has not been added already
-            chosenItems.push({ id: id, name: name });
+            chosenItems.push({ "id": id, "name": name, "type": type });
 
             results.forEach(function (v) { delete v.suggested });
 
+            this.setState({ pointerDirty: false });
             this.setState({ chosenItems: chosenItems });
             this.setState({ results: results });
 
@@ -224,6 +239,9 @@ class Search extends React.Component {
 
       if (e.keyCode == BACKSPACE_KEYCODE) {
 
+        this.setState({ selection: 0 });
+        this.setState({ pointerDirty: false });
+
         // Delete last pill when pressing BACKSPACE, only if there's no text in the search field
 
         if (document.getElementById('querySearch').value == '') {
@@ -231,7 +249,6 @@ class Search extends React.Component {
 
           if (chosenItems.length == 0) {
             this.setState({ results: [] });
-            this.setState({ pointerDirty: false });
             this.clearSearch();
           }
 
@@ -288,7 +305,6 @@ class Search extends React.Component {
       if (e.keyCode == TAB_KEYCODE) {
         e.preventDefault();
         document.getElementById('querySearch').focus();
-        this.setState({ pointerDirty: false })
 
         this.addPill(chosenItems);
       }
@@ -300,16 +316,25 @@ class Search extends React.Component {
 
     makeQuery() {
       var chosenItems = this.state.chosenItems,
-          ids = [], idsConcat, path, i;
+          ids = [], idsConcat, path, i,
+          hasUsers = false;
 
       for (i = 0; i < chosenItems.length; i++) {
           ids.push(chosenItems[i].id);
+
+          if (chosenItems[i].type == 'user') {
+            path = '/employee/' + chosenItems[i].id;
+            hasUsers = true;
+            this.context.router.push({ pathname: path });
+          }
       }
 
-      idsConcat = ids.join();
+      if (!hasUsers) {
+        idsConcat = ids.join();
 
-      path = '/searchResults/' + idsConcat;
-      this.context.router.push({ pathname: path });
+        path = '/searchResults/' + idsConcat;
+        this.context.router.push({ pathname: path });
+      }
 
       this.state.hasResults = false;
       this.clearSearch();
@@ -317,13 +342,12 @@ class Search extends React.Component {
 
     render () {
       var pills = [],
-          chosenItems = this.state.chosenItems;
+          chosenItems = this.state.chosenItems, i = 0;
 
       chosenItems.forEach(function (v) {
-        pills.push(v.name);
+        pills[i] = v.name;
+        i++;
       });
-
-      console.log(this.state.results);
 
       var self = this;
         return (
@@ -333,7 +357,7 @@ class Search extends React.Component {
                   { <Results hasResults={this.state.hasResults} results={this.state.results} word={this.state.word} addItem={this.addItem} /> }
                   <div className="search-field-wrapper">
                     {pills.map((pillName, index)=>{
-                      return (<Pill name={pillName} removeSkill={this.removeSkill} index={index} />)
+                      return (<Pill name={pillName} key={index} removeSkill={this.removeSkill} index={index} />)
                     })}
                     <input type="text" name="query" id="querySearch" onChange={this.updateQuery} onKeyDown={this.move} placeholder="enter search..."/>
                   </div> 

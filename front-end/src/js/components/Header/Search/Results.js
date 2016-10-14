@@ -26,6 +26,10 @@ class Results extends React.Component {
     showEmployee(self, person) {
       var path = '/employee/' + self.id;
       this.context.router.push({pathname: path});
+
+      this.setState({ results: [] });
+      this.setState({ pointerDirty: false });
+      this.clearSearch();
     }
 
     componentDidMount() {
