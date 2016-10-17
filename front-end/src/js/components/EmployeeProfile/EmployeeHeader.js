@@ -26,7 +26,6 @@ export default class EmployeeHeader extends React.Component {
     }
 
     getUser(userId) {
-        console.log("userId", userId);
         if (userId > 0) {
             this.userData.GetUserData(userId).then(data => {
                 let skillsCount = 0;
@@ -63,7 +62,6 @@ export default class EmployeeHeader extends React.Component {
     }
 
     render () {
-        console.log("state final", this.state);
         if (this.state.user === null)
             return <div />
 

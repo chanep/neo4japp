@@ -15,7 +15,7 @@ export default class MySkills extends BasePage {
 		super(props);
 
         this.state = {
-            userId: 0
+            userId: super.GetUserLogged().id
         };
 	}
 

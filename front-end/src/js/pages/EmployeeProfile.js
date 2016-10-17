@@ -33,7 +33,6 @@ export default class EmployeeProfile extends BasePage {
      }
 
     render () {
-        console.log("this.state", this.state);
         let showActions = false;
         if (this.state.userId === null || this.state.userId === 0 || this.state.userId === super.GetUserLogged().id)
             showActions = true;
