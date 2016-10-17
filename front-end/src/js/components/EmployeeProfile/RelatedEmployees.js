@@ -26,14 +26,14 @@ export default class RelatedEmployees extends React.Component {
                     department: "Resource Management",
                     image: "http://x.com/pic.jpg"
                 },
-                "similarSkilledUsers": {
+                "similarSkilledUser": {
                     section: "",
                     name: "",
                     position: "",
                     department: "",
                     image: ""
-                }
-            } // TO POPULATE WITH REAL DATA
+                }  
+            }
         };
 
         this.getRelatedUsers = this.getRelatedUsers.bind(this);
@@ -52,23 +52,23 @@ export default class RelatedEmployees extends React.Component {
             // -------------------------------------------
             users = [{
                 id: 4839, 
-                fullname: "Pepe Test4", 
-                email: "pepe.test4@rga.com", 
-                username: "pepetest4", 
+                fullname: "Test 1", 
+                email: "test.1@rga.com", 
+                username: "test1", 
                 image: "http://x.com/pic.jpg",
-                position: { id: 4835, name: "Developer" }, 
+                position: { id: 4835, name: "Software Engineer" }, 
                 office: { id: 4832, name: "Buenos Aires", country: "Argentina", acronym: "BA" }, 
                 department: { id: 4834, name: "Technology" }, 
                 similitudeScore: 38
             }, {
                 id: 5000, 
-                fullname: "JEJEJ", 
-                email: "pepe.test4@rga.com", 
-                username: "pepetest4", 
+                fullname: "Test 2", 
+                email: "test.2@rga.com", 
+                username: "test2", 
                 image: "http://x.com/pic.jpg",
-                position: { id: 4835, name: "DEV" }, 
+                position: { id: 4835, name: "Visual Designer" }, 
                 office: { id: 4832, name: "Buenos Aires", country: "Argentina", acronym: "BA" }, 
-                department: { id: 4834, name: "TECH" }, 
+                department: { id: 4834, name: "Creative" }, 
                 similitudeScore: 38
             }];
             // ---------------------------------------------
@@ -97,7 +97,7 @@ export default class RelatedEmployees extends React.Component {
             // Populate the relatedUsers object with the first similar skilled user
 
             var relatedUsers = this.state.relatedUsers;
-            relatedUsers.similarSkilledUsers = similarSkilledUsers[0];
+            relatedUsers.similarSkilledUser = similarSkilledUsers[0];
 
             this.setState({ relatedUsers: relatedUsers });
         });
@@ -110,14 +110,16 @@ export default class RelatedEmployees extends React.Component {
     render() {
         let areaCoordinator = this.state.relatedUsers.areaCoordinator;
         let resourceManager = this.state.relatedUsers.resourceManager;
-        let similarSkilledUser = this.state.relatedUsers.similarSkilledUsers;
+        let similarSkilledUser = this.state.relatedUsers.similarSkilledUser;
 
     	return (
     		<div className="employee-related-employees">
-                <RelatedEmployee section={areaCoordinator.section} image={areaCoordinator.image} name={areaCoordinator.name} position={areaCoordinator.position} department={areaCoordinator.department} />
-                <RelatedEmployee section={resourceManager.section} image={resourceManager.image} name={resourceManager.name} position={resourceManager.position} department={resourceManager.department} />
-                <RelatedEmployee section={similarSkilledUser.section} image={similarSkilledUser.image} name={similarSkilledUser.name} position={similarSkilledUser.position} department={similarSkilledUser.department} />
-    		</div>
+                <RelatedEmployee user={areaCoordinator} />
+                <RelatedEmployee user={resourceManager} />
+                {this.state.similarSkilledUsers.length > 0 ?
+                    <RelatedEmployee user={similarSkilledUser} similar="true" similarSkilledUsers={this.state.similarSkilledUsers} />
+    		    : false}
+            </div>
     	);
     }
 
