@@ -34,7 +34,7 @@ export default class AddSkill extends React.Component {
         return (
             <div className="skill-level-grid__levels col -col-12 -col-no-gutter">
                 <div className="col -col-2 overflowHidden">
-                    <span className="table-header" title={this.state.skill.name}>{this.state.skill.name}</span>
+                    <span className="sub-table-header" title={this.state.skill.name}>{this.state.skill.name}</span>
                 </div>
                 <div className="col -col-1 skill-level-want-wrapper">
                     <span className="skill-title">

@@ -58,22 +58,22 @@ export default class AddSkillItem extends React.Component {
 					<div className="skill-level-grid">
                         <div className="skill-level-grid__header col -col-12 -col-no-gutter">
                             <div className="col -col-2">
-                                <span className="table-header">Skill</span>
+                                <span className="sub-table-header">Skill</span>
                             </div>
                             <div className="col -col-1">
-                                <span className="table-header">Want?</span>
+                                <span className="sub-table-header">Want?</span>
                             </div>
                             <div className="col -col-2">
-                                <span className="table-header">Heavy Survision</span>
+                                <span className="sub-table-header">Heavy Supervision</span>
                             </div>
                             <div className="col -col-2">
-                                <span className="table-header">Light Survision</span>
+                                <span className="sub-table-header">Light Supervision</span>
                             </div>
                             <div className="col -col-2">
-                                <span className="table-header">No Survision</span>
+                                <span className="sub-table-header">No Supervision</span>
                             </div>
                             <div className="col -col-2">
-                                <span className="table-header">Teach/Manage</span>
+                                <span className="sub-table-header">Teach/Manage</span>
                             </div>
                             <div className="col -col-1 skill-level-empty">
                                 <span className="table-header"></span>

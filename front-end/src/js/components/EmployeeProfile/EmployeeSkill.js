@@ -32,7 +32,7 @@ export default class EmployeeSkill extends React.Component {
     	return (
             <div className="skill-level-grid__levels col -col-12 -col-no-gutter">
                 <div className="col -col-2">
-                    <span className="table-header">{this.state.data.name}</span>
+                    <span className="sub-table-header">{this.state.data.name}</span>
                 </div>
                 <div className="col -col-1 skill-level-want-wrapper">
                     <span className="skill-title">

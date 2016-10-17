@@ -26,13 +26,13 @@ export default class SkillsLevelTable extends React.Component {
                         <span className="table-header">Want?</span>
                     </div>
                     <div className="col -col-2">
-                        <span className="table-header">Heavy Survision</span>
+                        <span className="table-header">Heavy Supervision</span>
                     </div>
                     <div className="col -col-2">
-                        <span className="table-header">Light Survision</span>
+                        <span className="table-header">Light Supervision</span>
                     </div>
                     <div className="col -col-2">
-                        <span className="table-header">No Survision</span>
+                        <span className="table-header">No Supervision</span>
                     </div>
                     <div className="col -col-2">
                         <span className="table-header">Teach/Manage</span>
