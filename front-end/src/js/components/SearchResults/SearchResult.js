@@ -39,6 +39,7 @@ export default class SearchResult extends React.Component {
     }
 
 	render() {
+		let self = this;
         return (
 			<li className="-expanded">
 			    <div className="header grid">
@@ -55,9 +56,16 @@ export default class SearchResult extends React.Component {
 			        <div className="col -col-2">
 			        	<div className="allocations">
 				        	{
-				        		this.getChild(this.state.obj.allocation, 'weekHours').map((o, k) =>
-				        			<AllocPie obj={o} key={k} />
-				        		)
+				        		[0,1,2,3].map(function(index) {
+				        			let allocHours = 0;
+				        			let totalWekHour = 0 ;
+				        			if (index+1 <= self.getChild(self.state.obj.allocation, 'weekHours').length) {
+				        				allocHours = self.getChild(self.state.obj.allocation, 'weekHours')[index];
+				        				totalWekHour = self.getChild(self.state.obj.allocation, 'workingWeekHours')[index];
+				        			}
+
+				        			return (<AllocPie allocatedHour={allocHours} totalWeekHour={totalWekHour} key={index} />);
+				        		})
 				        	}
 				        </div>
 			        </div>
@@ -72,7 +80,7 @@ export default class SearchResult extends React.Component {
 			    {this.state.showDetails ? 
 				    <div className="content grid" ref="employeeData">
 				        <div className="col -col-9 manager">
-				            <span>Manager: <strong>----</strong></span>
+				            <span>Manager: <strong>{self.state.obj.approvers.length > 0? self.state.obj.approvers[0].fullname: "----"}</strong></span>
 				        </div>
 				        <ul className="skills grid">
 				        	{

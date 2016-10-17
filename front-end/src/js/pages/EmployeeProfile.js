@@ -17,7 +17,7 @@ export default class EmployeeProfile extends BasePage {
 	}
 
     componentDidMount() {
-        let userId = null;
+        let userId = super.GetUserLogged().id;
         if (this.props.params.employeeID !== undefined)
             userId = this.props.params.employeeID;
 
@@ -25,7 +25,7 @@ export default class EmployeeProfile extends BasePage {
     }
 
     componentWillReceiveProps(newProps) {
-    	let userId = null;
+    	let userId = super.GetUserLogged().id;
         if (newProps.params.employeeID !== undefined)
             userId = newProps.params.employeeID;
 
@@ -33,6 +33,7 @@ export default class EmployeeProfile extends BasePage {
      }
 
     render () {
+        console.log("this.state", this.state);
         let showActions = false;
         if (this.state.userId === null || this.state.userId === 0 || this.state.userId === super.GetUserLogged().id)
             showActions = true;
