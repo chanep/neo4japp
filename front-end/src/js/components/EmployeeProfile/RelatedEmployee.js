@@ -60,7 +60,7 @@ export default class RelatedEmployee extends React.Component {
     					<div className="area">{user.department}</div>
     				</div>
                     {this.props.similar ?
-    				    <div className="arrows"><span onClick={this.goToPrev}>&lt;</span> <span onClick={this.goToNext}>&gt;</span></div>
+    				    <div className="arrows"><span className="ss-icon-right-arrow arrow-prev" title="Go to previous" onClick={this.goToPrev}></span> <span className="ss-icon-right-arrow arrow-next" title="Go to next" onClick={this.goToNext}></span></div>
                     : <div className="mail"></div>}
     			</div>
     		</div>
