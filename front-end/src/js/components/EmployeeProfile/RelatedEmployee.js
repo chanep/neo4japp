@@ -1,8 +1,8 @@
 import React from "react";
 
-import { Link } from "react-router";
+import { hashHistory, Link, browserHistory, withRouter } from "react-router";
 
-export default class RelatedEmployee extends React.Component {
+class RelatedEmployee extends React.Component {
 
     constructor(){
         super();
@@ -42,7 +42,14 @@ export default class RelatedEmployee extends React.Component {
         this.setState({ index: index });
     }
 
+    goTo(self, userId) {
+        var path = '/employee/' + self;
+        this.context.router.push({ pathname: path });
+    }
+
     render() {
+        let self = this;
+
         var user = this.props.user;
 
         if (this.state.data.similarSkilledUsers != undefined) {
@@ -53,8 +60,8 @@ export default class RelatedEmployee extends React.Component {
     		<div className="related-employee">
     			<div className="header">{user.section}</div>
     			<div className="employeeData">
-    				<div className="picture"><img src="{user.image}" /></div>
-    				<div className="nameData">
+    				<div className="picture"><img src={user.image} /></div>
+    				<div className="nameData" onClick={self.goTo.bind(this, user.id)}>
     					<div className="name">{user.name}</div>
     					<div className="position">{user.position}</div>
     					<div className="area">{user.department}</div>
@@ -68,3 +75,9 @@ export default class RelatedEmployee extends React.Component {
     }
 
 }
+
+RelatedEmployee.contextTypes = {
+    router: React.PropTypes.object.isRequired
+}
+
+export default RelatedEmployee;
