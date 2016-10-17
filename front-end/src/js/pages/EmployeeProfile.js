@@ -33,10 +33,14 @@ export default class EmployeeProfile extends BasePage {
      }
 
     render () {
+        let showActions = false;
+        if (this.state.userId === null || this.state.userId === 0 || this.state.userId === super.GetUserLogged().id)
+            showActions = true;
+
         return (
             <div>
                 <Header search={super._showSearch()} loggedIn={true} />
-                <EmployeeHeader userId={this.state.userId} addSkills={true} />
+                <EmployeeHeader userId={this.state.userId} addSkills={true} showActions={showActions} />
                 <ResultsProfileTable employeeId={this.state.userId} />
                 <RelatedEmployees />
             </div>

@@ -23,7 +23,7 @@ export default class MySkills extends BasePage {
         return (
             <div>
                 <Header search={true} loggedIn={true} />
-                <EmployeeHeader userId={this.state.userId} addSkills={false} />
+                <EmployeeHeader userId={this.state.userId} addSkills={false} showActions={true} />
                 <EmployeeAddSkillsTable userId={this.state.userId} />
             </div>
         );

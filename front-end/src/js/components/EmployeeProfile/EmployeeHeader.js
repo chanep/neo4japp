@@ -11,7 +11,8 @@ export default class EmployeeHeader extends React.Component {
         this.state = {
             user: [],
             skillsCount: 0,
-            addSkills: true
+            addSkills: true,
+            showActions: false
         }
 
         this.userData = new UserServices();
@@ -47,12 +48,18 @@ export default class EmployeeHeader extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         this.getUser(nextProps.userId);
-        this.setState({addSkills: nextProps.addSkills})
+        this.setState({
+            addSkills: nextProps.addSkills,
+            showActions: nextProps.showActions
+        })
     }
 
     componentDidMount() {
         this.getUser(this.props.userId);
-        this.setState({addSkills: this.props.addSkills})
+        this.setState({
+            addSkills: this.props.addSkills,
+            showActions: this.props.showActions
+        })
     }
 
     render () {
@@ -87,15 +94,17 @@ export default class EmployeeHeader extends React.Component {
         					<div className="label">Total Skills</div>
         				</div>
 
-                        
-                        {this.state.addSkills?
-                            <div className="employee-skills-add">
-                                <Link to="/myprofile/myskills">ADD NEW SKILLS</Link>
-                            </div>
-                            :
-                            <div className="employee-skills-add">
-                                <Link to="/myprofile">VIEW YOUR SKILLS</Link>
-                            </div>
+                        {
+                            this.state.showActions?
+                                this.state.addSkills?
+                                    <div className="employee-skills-add">
+                                        <Link to="/myprofile/myskills">ADD NEW SKILLS</Link>
+                                    </div>
+                                    :
+                                    <div className="employee-skills-add">
+                                        <Link to="/myprofile">VIEW YOUR SKILLS</Link>
+                                    </div>
+                            : null
                         }
                         {/*
                         <div className="employee-skills-add employee-skills-verify">
