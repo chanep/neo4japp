@@ -114,6 +114,7 @@
             padding-left: em(6);
             padding-top: em(15);
             padding-bottom: em(25);
+            position: relative;
 
             .picture {
                 float: left;
@@ -145,6 +146,20 @@
                 height: em(30);
                 background-color: black;
                 margin-top: em(12);
+            }
+
+            .arrows {
+                position: absolute;
+                right: 2em;
+                top: 1.6em;
+
+                .arrow-prev {
+                    transform: scaleX(-1);
+                }
+
+                .arrow-prev, .arrow-next {
+                    cursor: pointer;
+                }
             }
         }
     }
