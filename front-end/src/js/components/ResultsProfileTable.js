@@ -28,7 +28,7 @@ export default class ResultsProfileTable extends React.Component {
             skills: []
         });
 
-        this.employeeServices.GetEmployeeSkills(false).then(data => {
+        this.employeeServices.GetEmployeeSkills(employeeId, false).then(data => {
 
             this.setState({
                 employeeId: employeeId,
@@ -42,6 +42,7 @@ export default class ResultsProfileTable extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
+        console.log("nextProps", nextProps);
         this.getData(nextProps.employeeId);
     }
 

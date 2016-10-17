@@ -9,7 +9,7 @@ export default class EmployeeHeader extends React.Component {
         super();
        
         this.state = {
-            user: [],
+            user: null,
             skillsCount: 0,
             addSkills: true,
             showActions: false
@@ -26,24 +26,23 @@ export default class EmployeeHeader extends React.Component {
     }
 
     getUser(userId) {
-        let userIdFinal = userId;
-        if (userId == 0) userIdFinal = null;
+        if (userId > 0) {
+            this.userData.GetUserData(userId).then(data => {
+                let skillsCount = 0;
+                /*data.skillGroups.forEach(obj => {
+                    skillsCount += obj.skills.length;
+                });*/
 
-        this.userData.GetUserData(userIdFinal).then(data => {
-            let skillsCount = 0;
-            data.skillGroups.forEach(obj => {
-                skillsCount += obj.skills.length;
+                this.setState({
+                    user: data,
+                    skillsCount: skillsCount
+                });
+            }).catch(data => {
+              
+                console.log("user data error", data);
+              
             });
-
-            this.setState({
-                user: data,
-                skillsCount: skillsCount
-            });
-        }).catch(data => {
-          
-            console.log("user data error", data);
-          
-        });
+        }
     }
 
     componentWillReceiveProps(nextProps) {
@@ -63,6 +62,9 @@ export default class EmployeeHeader extends React.Component {
     }
 
     render () {
+        if (this.state.user === null)
+            return <div />
+
         return (
         	<div className="employee-header-container">
         		<div className="grid">

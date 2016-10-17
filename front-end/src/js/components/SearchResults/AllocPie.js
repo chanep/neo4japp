@@ -3,24 +3,34 @@ import { Router, Route, Link } from 'react-router'
 
 // Class: SearchResult
 export default class AllocPie extends React.Component {
-	constructor(obj, key) {
-		super();
+	constructor(obj) {
+		super(obj);
 
 		this.state = {
-			obj: obj,
-			key: key
+			allocatedHour: 0,
+			totalWeekHour: 0
 		}
 	}
 
+	componentDidMount() {
+    	this.setState({
+    		allocatedHour: this.props.allocatedHour,
+    		totalWeekHour: this.props.totalWeekHour
+    	});
+    }
+
 	componentWillReceiveProps(nextProps) {
 		this.setState({
-			obj: nextProps.obj,
-			key: nextProps.key
+			allocatedHour: nextProps.allocatedHour,
+			totalWeekHour: nextProps.totalWeekHour
 		});
 	}
 
 	render() {
-		let percent = this.state.obj.obj * 360 / 40;
+		let percent = 0;
+		if (this.state.totalWeekHour > 0)
+			percent = this.state.allocatedHour * 360 / this.state.totalWeekHour;
+
 		if (percent > 360) percent = 360;
 		let percent2 = 0;
 
@@ -49,7 +59,7 @@ export default class AllocPie extends React.Component {
 		}
 
 		return(
-        	<div className="pieAllocation" title={this.state.obj.obj + '/40'}>
+        	<div className="pieAllocation" title={this.state.allocatedHour + '/' + this.state.totalWeekHour}>
         		<div className="pieBackground"></div>
         		<div className="pieSlice hold"><div className="pie" style={style}></div></div>
         		{percent2 > 0 ?

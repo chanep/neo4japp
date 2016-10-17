@@ -25,8 +25,8 @@ export default class EmployeeAddSkillsTable extends React.Component {
     	this.setState({selectedGroup: selectedValue});
     }
 
-    getData() {
-        this.userData.GetEmployeeSkills(true).then(data => {
+    getData(employeeId) {
+        this.userData.GetEmployeeSkills(employeeId, true).then(data => {
             this.setState({
                 data: data
             });
@@ -38,11 +38,13 @@ export default class EmployeeAddSkillsTable extends React.Component {
     }
 
     componentDidMount() {
-    	this.getData();
+        let employeeId = this.props.userId;
+        this.getData(employeeId);
     }
 
 	componentWillReceiveProps(nextProps) {
-
+        let employeeId = nextProps.skill.userId;
+        this.getData(employeeId);
 	}
 
     render() {

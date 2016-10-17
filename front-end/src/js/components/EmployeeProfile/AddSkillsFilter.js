@@ -75,7 +75,7 @@ export default class AddSkillsFilter extends React.Component {
 
 								return (
 									<li className="filter-option" key={key}>
-										<label><input type="radio" /> {obj.name} ({countPerSkill})</label>
+										<label><input type="radio" name="skillstools" onChange={self.onValueChanged.bind(self, obj.id)} /> {obj.name} ({countPerSkill})</label>
 									</li>
 								)
 							})
