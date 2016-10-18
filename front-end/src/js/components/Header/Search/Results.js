@@ -23,13 +23,13 @@ class Results extends React.Component {
       this.props.addItem(props);
     }
 
-    showEmployee(self, person) {
-      var path = '/employee/' + self.id;
+    showEmployee(self, props, person) {
+      var path = '/employee/' + props.id;
       this.context.router.push({pathname: path});
 
       this.setState({ results: [] });
       this.setState({ pointerDirty: false });
-      this.clearSearch();
+      this.props.clearSearch(props);
     }
 
     componentDidMount() {
@@ -111,8 +111,8 @@ class Results extends React.Component {
                   <ul>
                     {
                      
-                        users.map(function (person){
-                          return <li key={person.id} className="subcategory-result" data-suggested={person.suggested} data-id={person.id} onClick={self.showEmployee.bind(self, person)}>{person.fullname}</li>;
+                        users.map(function (person, props){
+                          return <li key={person.id} className="subcategory-result" data-suggested={person.suggested} data-id={person.id} onClick={self.showEmployee.bind(self, props, person)}>{person.fullname}</li>;
                         })
 
                     }
