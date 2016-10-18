@@ -56,6 +56,9 @@ class RelatedEmployee extends React.Component {
             user = this.state.data.similarSkilledUsers[this.state.index];
         }
 
+        if (user.image == null)
+            user.image = "/img/img_noPortrait.gif";
+
     	return (
     		<div className="related-employee">
     			<div className="header">{user.section}</div>
@@ -66,9 +69,12 @@ class RelatedEmployee extends React.Component {
     					<div className="position">{user.position}</div>
     					<div className="area">{user.department}</div>
     				</div>
-                    {this.props.similar ?
+                    {this.props.similar && this.props.multiple ?
     				    <div className="arrows"><span className="ss-icon-right-arrow arrow-prev" title="Go to previous" onClick={this.goToPrev}></span> <span className="ss-icon-right-arrow arrow-next" title="Go to next" onClick={this.goToNext}></span></div>
-                    : <div className="mail"></div>}
+                    : false}
+                    {!this.props.similar ?
+                        <div className="mail"></div>
+                    : false}
     			</div>
     		</div>
     	);

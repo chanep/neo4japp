@@ -26,7 +26,7 @@ export default class RelatedEmployees extends React.Component {
                     name: "Agostina Gomez",
                     position: "Associate Resource Manager",
                     department: "Resource Management",
-                    image: "http://x.com/pic.jpg"
+                    image: "/img/img_noPortrait.gif"
                 },
                 "similarSkilledUser": {
                     id: 0,
@@ -160,6 +160,11 @@ export default class RelatedEmployees extends React.Component {
         let resourceManager = this.state.relatedUsers.resourceManager;
         let similarSkilledUser = this.state.relatedUsers.similarSkilledUser;
 
+        var multiple = false;
+
+        if (this.state.similarSkilledUsers.length > 1)
+            multiple = true;
+
     	return (
     		<div className="employee-related-employees">
                 {this.state.relatedUsers.areaCoordinator.id != 0 ?
@@ -167,7 +172,7 @@ export default class RelatedEmployees extends React.Component {
                 : false }
                 <RelatedEmployee user={resourceManager} />
                 {this.state.similarSkilledUsers.length > 0 ?
-                    <RelatedEmployee user={similarSkilledUser} similar="true" similarSkilledUsers={this.state.similarSkilledUsers} />
+                    <RelatedEmployee user={similarSkilledUser} similar="true" multiple={multiple} similarSkilledUsers={this.state.similarSkilledUsers} />
     		    : false}
             </div>
     	);
