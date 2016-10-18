@@ -59,6 +59,8 @@ class RelatedEmployee extends React.Component {
         if (user.image == null)
             user.image = "/img/img_noPortrait.gif";
 
+        var emailSnippet = 'mailto:' + user.email;
+
     	return (
     		<div className="related-employee">
     			<div className="header">{user.section}</div>
@@ -73,7 +75,7 @@ class RelatedEmployee extends React.Component {
     				    <div className="arrows"><span className="ss-icon-right-arrow arrow-prev" title="Go to previous" onClick={this.goToPrev}></span> <span className="ss-icon-right-arrow arrow-next" title="Go to next" onClick={this.goToNext}></span></div>
                     : false}
                     {!this.props.similar ?
-                        <div className="mail"></div>
+                        <a className="mail" href={emailSnippet}></a>
                     : false}
     			</div>
     		</div>

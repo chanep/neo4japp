@@ -18,7 +18,8 @@ export default class RelatedEmployees extends React.Component {
                     name: "",
                     position: "",
                     department: "",
-                    image: ""
+                    image: "",
+                    email: ""
                 },
                 "resourceManager": {
                     id: 1420,
@@ -26,7 +27,8 @@ export default class RelatedEmployees extends React.Component {
                     name: "Agostina Gomez",
                     position: "Associate Resource Manager",
                     department: "Resource Management",
-                    image: "/img/img_noPortrait.gif"
+                    image: "/img/img_noPortrait.gif",
+                    email: ""
                 },
                 "similarSkilledUser": {
                     id: 0,
@@ -34,7 +36,8 @@ export default class RelatedEmployees extends React.Component {
                     name: "",
                     position: "",
                     department: "",
-                    image: ""
+                    image: "",
+                    email: ""
                 }  
             }
         };
@@ -92,7 +95,8 @@ export default class RelatedEmployees extends React.Component {
                     "name": user.fullname,
                     "position": user.position.name,
                     "department": user.department.name,
-                    "image": user.image
+                    "image": user.image,
+                    "email": user.email
                 });
             });
 
@@ -126,7 +130,8 @@ export default class RelatedEmployees extends React.Component {
                         "name": approver.fullname,
                         "position": approver.position.name,
                         "department": approver.department.name,
-                        "image": approver.image
+                        "image": approver.image,
+                        "email": approver.email
                     };
                 } else {
                     relatedUsers.areaCoordinator = {
@@ -135,7 +140,8 @@ export default class RelatedEmployees extends React.Component {
                         "name": "",
                         "position": "",
                         "department": "",
-                        "image": ""
+                        "image": "",
+                        "email": ""
                     };
                 }
 
