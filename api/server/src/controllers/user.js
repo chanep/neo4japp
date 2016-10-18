@@ -134,7 +134,30 @@ class UserController extends BaseController{
     }
 
     /**
-    @api {put} /api/user/interest 6 Add Interest
+    @api {delete} /api/user/knowledge 6 Delete Knowledge
+    @apiDescription User deletes his knowledge in one skill
+    @apiGroup Users
+
+    @apiParam {number} skillId 
+    
+    @apiSuccessExample {json} Success-Response:
+    HTTP/1.1 200 OK
+    {
+        status: "success",
+        affected: 1
+    }
+    */
+    deleteKnowledge(req, res, next){
+        let userId = req.session.user.id;
+        let skillId = req.body.skillId;
+
+        let promise = userDa.deleteKnowledge(userId, skillId);
+
+        this._respondPromiseDelete(req, res, promise);
+    }
+
+    /**
+    @api {put} /api/user/interest 7 Add Interest
     @apiDescription User add an interest for himself
     @apiGroup Users
 
@@ -160,7 +183,7 @@ class UserController extends BaseController{
     }
 
     /**
-    @api {delete} /api/user/interest 7 Remove Interest
+    @api {delete} /api/user/interest 8 Remove Interest
     @apiDescription User removes one of his interests
     @apiGroup Users
 

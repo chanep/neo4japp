@@ -238,6 +238,9 @@ class UserDa extends BaseDa{
 
         return this.relate(userId, skillId, 'knowledges', knowledgeData, true);
     }
+    deleteKnowledge(userId, skillId){
+        return this.deleteRelationship(userId, skillId, 'knowledges');
+    }
     setAllocation(userId, allocationData){
         return this.setChild(userId, "allocation", allocationData);
     }
