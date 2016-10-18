@@ -124,9 +124,13 @@ vows.describe('User api test')
 
             assert.isArray(u.approvers);
             assert.isTrue(!!u.approvers[0].fullname);
+            assert.isTrue(!!u.approvers[0].department.name);
+            assert.isTrue(!!u.approvers[0].position.name);
 
             assert.isArray(u.resourceManagers);
             assert.isTrue(!!u.resourceManagers[0].fullname);
+            assert.isTrue(!!u.resourceManagers[0].department.name);
+            assert.isTrue(!!u.resourceManagers[0].position.name);
 
             assert.isArray(u.clients);
             assert.isTrue(!!u.clients[0].short);

@@ -243,8 +243,18 @@ HTTP/1.1 200 OK
         position: { id: 4835, name: "Developer" }, 
         office: { id: 4832, name: "Buenos Aires", country: "Argentina", acronym: "BA" }, 
         department: { id: 4834, name: "Technology" }, 
-        approvers: [{id: 4345, fullname: "Juan Manager"}],
-        resourceManagers: [{id: 4346, fullname: "Agostina Gomez"}],
+        approvers: [{
+            id: 4345, 
+            fullname: "Juan Manager",
+            department: { id: 4834, name: "Technology" },
+            position: { id: 4835, name: "Developer" },
+        }],
+        resourceManagers: [{
+            id: 4346, 
+            fullname: "Agostina Gomez",
+            department: { id: 4846, name: "Resource Management" },
+            position: { id: 4897, name: "Associate Resource Manager" },
+        }],
         clients: [{ id: 134, name: "Nike", short: "NIKE" }], 
         interests: [{ id: 298, name: "Chess"}],
         industries: [{ id: 346, name: "Financial"}]
