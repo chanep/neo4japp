@@ -124,8 +124,8 @@ export default class RelatedEmployees extends React.Component {
                         "id": approver.id,
                         "section": "Area Coordination",
                         "name": approver.fullname,
-                        "position": "",
-                        "department": "",
+                        "position": approver.position.name,
+                        "department": approver.department.name,
                         "image": approver.image
                     };
                 } else {
