@@ -27,8 +27,15 @@ export default class AddSkill extends React.Component {
 		});
 	}
 
-    levelChanged(arg1, arg2, arg3) {
-        console.log("args", arg1, arg2, arg3);
+    levelChanged(arg1, arg2) {
+        console.log("args", this.state, arg1, arg2);
+        this.setState({
+            'skill.knowledge': {
+                want: arg1,
+                level: arg2
+            }
+        });
+        console.log(this.state);
     }
 
     render() {

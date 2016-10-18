@@ -19,10 +19,8 @@ export default class EmployeeHeader extends React.Component {
     }
 
     getChild (obj,key){
-        if (this.isReady) {
-            let result = Object.keys(obj).map(function(k) { return obj[key]});
-            return result[0];
-        }
+        let result = Object.keys(obj).map(function(k) { return obj[key]});
+        return result[0];
     }
 
     getUser(userId) {
@@ -64,7 +62,8 @@ export default class EmployeeHeader extends React.Component {
     render () {
         if (this.state.user === null)
             return <div />
-
+        
+        let position = this.state.user.position.name;
         return (
         	<div className="employee-header-container">
         		<div className="grid">
@@ -76,13 +75,9 @@ export default class EmployeeHeader extends React.Component {
         			</div>
         			<div className="col -col-9">
         				<div className="employee-name">{this.state.user.fullname}</div>
-        				<div className="employee-subtitle">
-                        {
-                            this.getChild(this.state.user.position, 'name')
-                        }
-                        </div>
+        				<div className="employee-subtitle">{position}</div>
                        
-        				<div className="employee-subtitle"><span className="subtitle-annotation">Manager: </span>Mauro Gonzalez</div>
+                        <div className="employee-subtitle"><span className="subtitle-annotation">Manager: </span>{this.getChild(this.state.user, "approvers").length > 0?this.getChild(this.state.user, "approvers")[0].fullname:"----"}</div>
 
         				<div className="employee-interests">
         					<div className="interest"><span className="ss-icon-heart"></span> Photography, Drones, Airplanes, Football</div>
