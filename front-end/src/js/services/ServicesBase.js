@@ -65,4 +65,22 @@ export default class ServicesBase {
 			})
 		});
 	}
+
+	callPutServices(path, data) {
+		//todo: call reject on the promise when something is going bad.
+
+		let sendingData = data;
+		return new Promise((resolve, reject) => {
+			var urlFinal = ENV().baseServicesURL + path;
+			return request.put(urlFinal).withCredentials().send(sendingData).then(function(response) {
+				let dataR = JSON.parse(response.text);
+				if (response.statusCode == 200) {
+					resolve(dataR.data);
+				}
+				else {
+					reject(dataR.data);
+				}
+			});
+		});
+	}
 }
