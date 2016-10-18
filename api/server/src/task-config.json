@@ -1,15 +1,36 @@
 [
 	{
-		"name" : "import-all",
-		"path" : "./tasks/import-all",
+		"name" : "skill-import",
+		"path" : "./tasks/skills-import",
 		"cronPattern" : null,
+		"args" : {
+		}
+	},
+	{
+		"name" : "allocations-import",
+		"path" : "./tasks/pl-import/allocations-import",
+		"cronPattern" : "0 0,12 * * *",
 		"args" : {
 		}
 	},
 	{
 		"name" : "cw-import-all",
 		"path" : "./tasks/cw-import/cw-import-all",
-		"cronPattern" : "0 1 * * 0",
+		"cronPattern" : "0 1 * * *",
+		"args" : {
+		}
+	},
+	{
+		"name" : "pl-import-all",
+		"path" : "./tasks/pl-import/pl-import-all",
+		"cronPattern" : "0 2 * * *",
+		"args" : {
+		}
+	},
+	{
+		"name" : "import-all",
+		"path" : "./tasks/import-all",
+		"cronPattern" : null,
 		"args" : {
 		}
 	},
@@ -72,20 +93,6 @@
 	{
 		"name" : "resource-managers-import",
 		"path" : "./tasks/pl-import/resource-managers-import",
-		"cronPattern" : null,
-		"args" : {
-		}
-	},
-	{
-		"name" : "skill-import",
-		"path" : "./tasks/skills-import",
-		"cronPattern" : "0 0 0 1/1 * ? *",
-		"args" : {
-		}
-	},
-	{
-		"name" : "allocations-import",
-		"path" : "./tasks/pl-import/allocations-import",
 		"cronPattern" : null,
 		"args" : {
 		}
