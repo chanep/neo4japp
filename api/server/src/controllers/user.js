@@ -134,7 +134,30 @@ class UserController extends BaseController{
     }
 
     /**
-    @api {put} /api/user/interest 6 Add Interest
+    @api {delete} /api/user/knowledge 6 Delete Knowledge
+    @apiDescription User deletes his knowledge in one skill
+    @apiGroup Users
+
+    @apiParam {number} skillId 
+    
+    @apiSuccessExample {json} Success-Response:
+    HTTP/1.1 200 OK
+    {
+        status: "success",
+        affected: 1
+    }
+    */
+    deleteKnowledge(req, res, next){
+        let userId = req.session.user.id;
+        let skillId = req.body.skillId;
+
+        let promise = userDa.deleteKnowledge(userId, skillId);
+
+        this._respondPromiseDelete(req, res, promise);
+    }
+
+    /**
+    @api {put} /api/user/interest 7 Add Interest
     @apiDescription User add an interest for himself
     @apiGroup Users
 
@@ -160,7 +183,7 @@ class UserController extends BaseController{
     }
 
     /**
-    @api {delete} /api/user/interest 7 Remove Interest
+    @api {delete} /api/user/interest 8 Remove Interest
     @apiDescription User removes one of his interests
     @apiGroup Users
 
@@ -216,11 +239,22 @@ HTTP/1.1 200 OK
         phone: null,
         disabled: false, 
         type: "UserEmployee",  
+        skillCount: 5,
         position: { id: 4835, name: "Developer" }, 
         office: { id: 4832, name: "Buenos Aires", country: "Argentina", acronym: "BA" }, 
         department: { id: 4834, name: "Technology" }, 
-        approvers: [{id: 4345, fullname: "Juan Manager"}],
-        resourceManagers: [{id: 4346, fullname: "Agostina Gomez"}],
+        approvers: [{
+            id: 4345, 
+            fullname: "Juan Manager",
+            department: { id: 4834, name: "Technology" },
+            position: { id: 4835, name: "Developer" },
+        }],
+        resourceManagers: [{
+            id: 4346, 
+            fullname: "Agostina Gomez",
+            department: { id: 4846, name: "Resource Management" },
+            position: { id: 4897, name: "Associate Resource Manager" },
+        }],
         clients: [{ id: 134, name: "Nike", short: "NIKE" }], 
         interests: [{ id: 298, name: "Chess"}],
         industries: [{ id: 346, name: "Financial"}]
