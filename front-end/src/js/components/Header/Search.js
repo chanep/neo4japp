@@ -22,6 +22,7 @@ class Search extends React.Component {
       };
 
       this.addItem = this.addItem.bind(this);
+      this.clearSearch = this.clearSearch.bind(this);
       this.removeSkill = this.removeSkill.bind(this);
       this.updateQuery = this.updateQuery.bind(this);
       this.move = this.move.bind(this);
@@ -354,7 +355,7 @@ class Search extends React.Component {
             <div className="search">
               <div className="search__input__wrapper">
                 <div className="search__input">
-                  { <Results hasResults={this.state.hasResults} results={this.state.results} word={this.state.word} addItem={this.addItem} /> }
+                  { <Results hasResults={this.state.hasResults} results={this.state.results} word={this.state.word} addItem={this.addItem} clearSearch={this.clearSearch} /> }
                   <div className="search-field-wrapper">
                     {pills.map((pillName, index)=>{
                       return (<Pill name={pillName} key={index} removeSkill={this.removeSkill} index={index} />)
