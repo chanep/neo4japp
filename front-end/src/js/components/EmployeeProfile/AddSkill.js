@@ -5,6 +5,9 @@
 // Dependencies
 import React from 'react';
 import { Link } from 'react-router';
+import update from 'react-addons-update';
+import UserServices from '../../services/UserServices';
+import AlertContainer from 'react-alert';
 
 export default class AddSkill extends React.Component {
     constructor(props) {
@@ -13,6 +16,10 @@ export default class AddSkill extends React.Component {
         this.state = {
         	skill: null
         };
+
+
+
+        this.userServices = new UserServices();
     }
 
     componentDidMount() {
@@ -27,15 +34,31 @@ export default class AddSkill extends React.Component {
 		});
 	}
 
-    levelChanged(arg1, arg2) {
-        console.log("args", this.state, arg1, arg2);
-        this.setState({
-            'skill.knowledge': {
-                want: arg1,
-                level: arg2
-            }
+    showAlert(){
+        msg.show('Skill added', {
+            time: 10000,
+            type: 'success',
+            icon: <img src="/img/success-ico.png" />
         });
-        console.log(this.state);
+    }
+
+    levelChanged(arg1, arg2) {
+        let self = this;
+
+        if (this.state.skill.knowledge !== null)
+            return;
+
+        this.userServices.SetKnowledge(this.state.skill.id, arg2, arg1).then(data => {
+            this.setState({
+                skill: update(
+                    this.state.skill, {knowledge: {$set: data}}
+                )
+            });
+
+            self.showAlert();
+        }).catch(err => {
+
+        });
     }
 
     render() {
