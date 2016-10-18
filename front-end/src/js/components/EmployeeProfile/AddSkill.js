@@ -112,7 +112,7 @@ export default class AddSkill extends React.Component {
                     <span className="skill-title"></span>
                 </div>
                 <div className={"col -col-1 " + (this.state.skill.knowledge !== null?"remove-skill": "")}>
-                    {this.state.skill.knowledge !== null? <span title="Remove skill" onClick={this.removeKnowledge.bind(this)}>X</span> : null}
+                    {this.state.skill.knowledge !== null?<span className="ss-icon-close" title="Remove skill" onClick={this.removeKnowledge.bind(this)}><span className="path1"></span><span className="path2"></span></span>: null}
                 </div>
             </div>
         );
