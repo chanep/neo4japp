@@ -308,6 +308,20 @@
         }
     }
 
+    .remove-skill {
+        display: block;
+        font-size: 1em;
+        text-align: center;
+        padding: .45em .6em;
+        font-weight: lighter;
+        text-align: center;
+        color: $GREY;
+
+        span {
+            cursor: pointer;
+        }
+    }
+
     .pieAllocation {
         width: 26px;
         height: 26px;

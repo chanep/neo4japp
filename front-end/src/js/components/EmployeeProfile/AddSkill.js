@@ -49,9 +49,9 @@ export default class AddSkill extends React.Component {
             return;
 
         this.userServices.SetKnowledge(this.state.skill.id, arg2, arg1).then(data => {
-            this.setState({
+            self.setState({
                 skill: update(
-                    this.state.skill, {knowledge: {$set: data}}
+                    self.state.skill, {knowledge: {$set: data}}
                 )
             });
 
@@ -61,12 +61,29 @@ export default class AddSkill extends React.Component {
         });
     }
 
+    removeKnowledge() {
+        let self = this;
+
+        if (this.state.skill.knowledge !== null)
+            return;
+        
+        self.setState({
+            skill: update(
+                self.state.skill, {knowledge: {$set: null}}
+            )
+        });
+    }
+
     render() {
         if (this.state.skill === null)
             return <div />
 
-        let readOnly = (this.state.skill.knowledge !== null);
         let checked = (this.state.skill.knowledge !== null && this.state.skill.knowledge.want);
+
+        var opts = {};
+        if (this.state.skill.knowledge !== null) {
+            opts['readOnly'] = 'readOnly';
+        }
 
         return (
             <div className="skill-level-grid__levels col -col-12 -col-no-gutter">
@@ -75,7 +92,7 @@ export default class AddSkill extends React.Component {
                 </div>
                 <div className="col -col-1 skill-level-want-wrapper">
                     <span className="skill-title">
-                        <input type="checkbox" label="skill-want" readOnly={readOnly} defaultChecked={checked} onClick={this.levelChanged.bind(this, true, null)} />
+                        <input className={this.state.skill.knowledge === null?"selectable":"readOnly"} type="checkbox" label="skill-want" checked={checked} onChange={this.levelChanged.bind(this, true, null)} {...opts} />
                     </span>
                 </div>
                 <div className={"col -col-2 skill-level-box " + (this.state.skill.knowledge === null? "selectable" : (this.state.skill.knowledge.level === 1? "level-selected" : ""))}
@@ -94,8 +111,8 @@ export default class AddSkill extends React.Component {
                     onClick={this.levelChanged.bind(this, false, 4)}>
                     <span className="skill-title"></span>
                 </div>
-                <div className="col -col-1">
-                    <span className="skill-title"></span>
+                <div className={"col -col-1 " + (this.state.skill.knowledge !== null?"remove-skill": "")}>
+                    {this.state.skill.knowledge !== null? <span title="Remove skill" onClick={this.removeKnowledge.bind(this)}>X</span> : null}
                 </div>
             </div>
         );

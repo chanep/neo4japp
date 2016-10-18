@@ -65,4 +65,12 @@
 
 .skill-level-want-wrapper {
 	text-align: center;
+
+	input[type="checkbox"].readOnly {
+		cursor: default;
+	}
+
+	input[type="checkbox"].selectable {
+		cursor: pointer;
+	}
 }
