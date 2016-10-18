@@ -13,6 +13,7 @@ export default class RelatedEmployees extends React.Component {
             similarSkilledUsers: [],
             relatedUsers: {
                 "areaCoordinator": {
+                    id: 1622,
                     section: "Area Coordination",
                     name: "Leopoldo Simini",
                     position: "Executive Technology Director",
@@ -20,6 +21,7 @@ export default class RelatedEmployees extends React.Component {
                     image: "http://x.com/pic.jpg"
                 },
                 "resourceManager": {
+                    id: 1420,
                     section: "Resource Management",
                     name: "Agostina Gomez",
                     position: "Associate Resource Manager",
@@ -27,6 +29,7 @@ export default class RelatedEmployees extends React.Component {
                     image: "http://x.com/pic.jpg"
                 },
                 "similarSkilledUser": {
+                    id: 0,
                     section: "",
                     name: "",
                     position: "",
@@ -84,6 +87,7 @@ export default class RelatedEmployees extends React.Component {
             users.forEach(function (user) {
                 similarSkilledUsers.push({
                     section: "People with similar skills",
+                    id: user.id,
                     name: user.fullname,
                     position: user.position.name,
                     department: user.department.name,
