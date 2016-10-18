@@ -34,13 +34,20 @@ class UserDa extends BaseDa{
                     match (n)-[:${officeRelL}]->(o),
                     (n)-[:${departmentRelL}]->(d),
                     (n)-[:${positionRelL}]->(p)
+
                     optional match (n)-[:${approverRelL}]->(a)
+                    optional match (a)-[:${departmentRelL}]->(ad)
+                    optional match (a)-[:${positionRelL}]->(ap)
+
                     optional match (n)-[:${rmRelL}]->(rm)
+                    optional match (rm)-[:${departmentRelL}]->(rmd)
+                    optional match (rm)-[:${positionRelL}]->(rmp)
+
                     optional match (n)-[:${clientRelL}]->(c)
                     optional match (n)-[:${interestRelL}]->(i)
                     optional match (n)-[:${kRelL}]->(ind)-[:${sgRelL}]->(sg) where sg.type = 'industry' 
                     optional match (n)-[:${kRelL}]->(s)-[:${sgRelL}]->(sg2) where sg2.type in ['tool', 'skill']
-                    with n, o, d, p, collect(distinct a) as approvers, collect(distinct rm) as resourceManagers, collect(distinct c) as clients, collect(distinct i) as interests,
+                    with n, o, d, p, collect(distinct {_:a, department: ad, position: ap}) as approvers, collect(distinct {_:rm, department: rmd, position: rmp}) as resourceManagers, collect(distinct c) as clients, collect(distinct i) as interests,
                         collect(distinct ind) as industries, count(distinct s) as skillCount
                     return {    
                                 id: id(n), username: n.username, type: n.type, email: n.email, 
