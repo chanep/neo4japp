@@ -134,6 +134,7 @@ vows.describe('User api test')
             assert.isArray(u.industries);
             assert.equal(u.industries[0].name, data.industries[0].name);
 
+            assert.equal(u.skillCount, 2);
 
         }
     }
