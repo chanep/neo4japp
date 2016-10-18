@@ -21,17 +21,17 @@ ReactDOM.render(
 		<Route path="/" component={Layout}>
 			<IndexRoute component={Login}></IndexRoute>
                   <Route path="/login" component={Login}></Route>
-                  <Route path="/resourcesHotspot" component={ResourceHotspot}></Route>
+                  <Route path="/resourceshotspot" component={ResourceHotspot}></Route>
                   <Route path="/allocations" component={Layout}></Route>
-                  <Route path="/searchResults" component={SearchResults}>
-            	     <Route path="/searchResults/:skillIds" component={SearchResults}/>
+                  <Route path="/searchresults" component={SearchResults}>
+            	     <Route path="/searchresults/:skillIds" component={SearchResults}/>
                   </Route>
                   <Route path="/myprofile" component={EmployeeProfile}></Route>
                   <Route path="/myprofile/myskills" component={MySkills}></Route>
                   <Route path="/employee/:employeeID" component={EmployeeProfile}/>
-                  <Route path="/ManagerHome" component={ManagerHome}></Route>
-                  <Route path="/ResultsProfile" component={ResultsProfile}></Route>
-                  <Route path="/SearchAllSkills" component={SearchAllSkills}></Route>
+                  <Route path="/managerhome" component={ManagerHome}></Route>
+                  <Route path="/resultsprofile" component={ResultsProfile}></Route>
+                  <Route path="/searchallskills" component={SearchAllSkills}></Route>
 		</Route>
 	</Router>,
 app);

@@ -2,8 +2,9 @@ import React from "react";
 
 import Search from "./Header/Search";
 import cookie from 'react-cookie';
-import { hashHistory, Link, browserHistory, withRouter } from 'react-router'
-import SessionServices from '../services/SessionServices'
+import { hashHistory, Link, browserHistory, withRouter } from 'react-router';
+import SessionServices from '../services/SessionServices';
+import BasePage from '../pages/BasePage';
 
 class Header extends React.Component {
   constructor (props) {
@@ -27,10 +28,12 @@ class Header extends React.Component {
   }
 
   render () {
+    let base = new BasePage();
+
     return (
         <header>
           <div className="header-wrapper">
-            <Link to="/resourcesHotspot"><h1><img src="img/rga-logo.png"></img></h1></Link>
+            <Link to={base.GetMyRootPath()}><h1><img src="img/rga-logo.png"></img></h1></Link>
             <div className="header-menu-wrapper">
               {this.state.loggedIn &&
                 <div className="allocations-btn">

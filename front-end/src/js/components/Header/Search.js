@@ -333,7 +333,7 @@ class Search extends React.Component {
       if (!hasUsers) {
         idsConcat = ids.join();
 
-        path = '/searchResults/' + idsConcat;
+        path = '/searchresults/' + idsConcat;
         this.context.router.push({ pathname: path });
       }
 

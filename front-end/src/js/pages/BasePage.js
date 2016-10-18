@@ -36,6 +36,26 @@ class BasePage extends React.Component {
 		let data = cookie.load('currentUser');
 		return data;
 	}
+
+	GetMyRootPath() {
+		let data = cookie.load('currentUser');
+
+		if (data === undefined || data.roles === undefined || data === null || data.roles === null)
+			return '/login';
+
+		if (data.roles.includes('admin') || data.roles.includes('resourceManager')) {
+        	return '/resourceshotspot';
+      	}
+      	else
+        	if (data.roles.includes('approver')){
+          		return '/managerhome';
+        	}
+        	else {
+          		return '/myprofile';
+        	}
+
+        return '/';
+	}
 }
 
 BasePage.contextTypes = {
