@@ -33,7 +33,7 @@
     "moment": "^2.15.1",
     "morgan": "^1.7.0",
     "neo4j-driver": "^1.1.0-M02",
-    "node-schedule": "^1.1.1",
+    "node-schedule": "^1.2.0",
     "postal": "^2.0.4",
     "qs": "^6.3.0",
     "request": "^2.75.0",
