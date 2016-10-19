@@ -20,8 +20,35 @@ export default class Map extends React.Component {
                 <li className="ba">
                   <a href="#"><span className="location">BA</span><span className="amount">5</span></a>
                 </li>
+                <li className="sy">
+                  <a href="#"><span className="location">SY</span><span className="amount">3</span></a>
+                </li>
+                <li className="sh">
+                  <a href="#"><span className="location">SH</span><span className="amount">2</span></a>
+                </li>
+                <li className="sg">
+                  <a href="#"><span className="location">SG</span><span className="amount">3</span></a>
+                </li>
+                <li className="bu">
+                  <a href="#"><span className="location">BU</span><span className="amount">3</span></a>
+                </li>
                 <li className="au">
                   <a href="#"><span className="location">AU</span><span className="amount">3</span></a>
+                </li>
+                <li className="ch">
+                  <a href="#"><span className="location">CH</span><span className="amount">3</span></a>
+                </li>
+                <li className="la">
+                  <a href="#"><span className="location">LA</span><span className="amount">3</span></a>
+                </li>
+                <li className="pl">
+                  <a href="#"><span className="location">PL</span><span className="amount">3</span></a>
+                </li>
+                <li className="sf">
+                  <a href="#"><span className="location">SF</span><span className="amount">3</span></a>
+                </li>
+                <li className="is">
+                  <a href="#"><span className="location">IS</span><span className="amount">3</span></a>
                 </li>
               </ul>
             </div>

@@ -96,10 +96,40 @@
                     }
                 }
 
+                &.bu {
+                    top: 170px;
+                    left: 340px;
+                }
+
                 &.sp {
                     top: 284px;
                     left: 256px;
                     z-index: 2;
+                }
+
+                &.sf {
+                    top: 200px;
+                    left: 100px;
+                }
+
+                &.la {
+                    left: 105px;
+                    top: 220px;
+                }
+
+                &.ch {
+                    left: 170px;
+                    top: 170px;
+                }
+
+                &.au {
+                    left: 150px;
+                    top: 220px;
+                }
+
+                &.pl {
+                    left: 105px;
+                    top: 160px;
                 }
 
                 &.ba {
@@ -114,9 +144,24 @@
                     }
                 }
 
-                &.au {
+                &.sy {
                     right: 90px;
                     top: 293px;
+                }
+
+                &.sg {
+                    top: 260px;
+                    right: 170px;
+                }
+
+                &.sh {
+                    top: 220px;
+                    right: 130px;
+                }
+
+                &.is {
+                    top: 190px;
+                    left: 380px;  
                 }
             }
         }
