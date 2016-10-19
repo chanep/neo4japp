@@ -5,10 +5,7 @@ const P = require('bluebird');
 const BaseTask = require('./base-task');
 const skillsImportTask = new (require('./skills-import'));
 const cwImportAllTask = new (require('./cw-import/cw-import-all'));
-const phonelistIdImportTask = new (require('./pl-import/phonelist-id-import'));
-const clientsImportTask = new (require('./pl-import/clients-import'));
-const approversImportTask = new (require('./pl-import/approvers-import'));
-const resourceManagersImportTask = new (require('./pl-import/resource-managers-import'));
+const plImportAllTask = new (require('./pl-import/pl-import-all'));
 const allocationsImportTask = new (require('./pl-import/allocations-import'));
 
 class ImportAllTask extends BaseTask{
@@ -21,16 +18,7 @@ class ImportAllTask extends BaseTask{
                 return cwImportAllTask.run();
             })
             .then(info => {
-                return phonelistIdImportTask.run();
-            })
-            .then(info => {
-                return clientsImportTask.run();
-            })
-            .then(info => {
-                return approversImportTask.run();
-            })
-            .then(info => {
-                return resourceManagersImportTask.run();
+                return plImportAllTask.run();
             })
             .then(info => {
                 return allocationsImportTask.run();
