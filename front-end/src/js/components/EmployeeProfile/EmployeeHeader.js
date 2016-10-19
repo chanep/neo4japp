@@ -26,10 +26,7 @@ export default class EmployeeHeader extends React.Component {
     getUser(userId) {
         if (userId > 0) {
             this.userData.GetUserData(userId).then(data => {
-                let skillsCount = 0;
-                /*data.skillGroups.forEach(obj => {
-                    skillsCount += obj.skills.length;
-                });*/
+                let skillsCount = data.skillCount;
 
                 this.setState({
                     user: data,

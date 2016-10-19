@@ -19,4 +19,8 @@ export default class UserServices extends ServicesBase {
 	SetKnowledge(skillId, level, want) {
 		return super.callPutServices('user/knowledge', {'skillId': skillId, 'level': level, 'want': want});
 	}
+
+	GetMyTeam() {
+		return super.callGetServices('approver/my-team', {'onlyPendingApprove': false, 'includeWantSkills': true});
+	}
 }

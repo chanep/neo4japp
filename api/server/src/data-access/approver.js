@@ -43,6 +43,7 @@ class ApproverDa extends UserDa{
             order by pendingApprovalCount DESC
             with n, o, d, p, (case when sg is not null then collect({_:sg, parent:sgp, skills: skills, pendingApprovalCount: pendingApprovalCount}) else [] end) as skillGroups,
                 sum(pendingApprovalCount) as totalPendingApproval
+            order by totalPendingApproval DESC, n.fullname ASC
             return {    
                         id: id(n), username: n.username, type: n.type, email: n.email, 
                         fullname: n.fullname, roles: n.roles, phone: n.phone, image: n.image, disabled: n.disabled,
@@ -51,7 +52,7 @@ class ApproverDa extends UserDa{
                         position: p,
                         skillGroups: skillGroups,
                         totalPendingApproval: totalPendingApproval
-            } order by totalPendingApproval DESC`
+            }`
         let params = {id: neo4j.int(approverId)};
         return this.query(cmd, params);
 

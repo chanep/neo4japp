@@ -5,214 +5,75 @@
 // Dependencies
 import React from 'react';
 import Search from './Header/Search';
+import MyTeamTable from './ManagerHome/MyTeamTable';
+import UserServices from '../services/UserServices';
 
 // Class: ManagerHomeTable
 export default class ManagerHomeTable extends React.Component {
-    constructor(search, loggedIn) {
+    constructor() {
         super();
+        this.userServices = new UserServices();
+
         this.state = {
-            'search': search,
-            'loggedIn': loggedIn
-        };
+            data: null
+        }
+    }
+
+    componentDidMount() {
+        this.userServices.GetMyTeam().then(data => {
+            let skillsValidations = 0;
+            let userToValidate = 0;
+
+            data.forEach(function(employee) {
+                let addedToValidation = false;
+                employee.skillGroups.forEach(function(skillsGroup) {
+                    skillsGroup.skills.forEach(function(skill) {
+                        if (skill.knowledge.approved === undefined) {
+                            skillsValidations++;
+                            if (!addedToValidation) {
+                                userToValidate++;
+                                addedToValidation = true;
+                            }
+                        }
+                    });
+                });
+            });
+
+            this.setState({
+                data: data,
+                skillsValidations: skillsValidations,
+                userToValidate: userToValidate
+            });
+        }).catch(err => {
+            console.log("Error retrieving my team", err);
+        })
     }
 
     render() {
+        if (this.state.data === null)
+            return <div />
+
         return (
             <div className="search-results-table">
                 <div className="manager-notifications filters col -col-3">
-                    <h1 className="manager-notifications__status">You have 10 Skills validation requests from 3 members of your team</h1>
+                    {
+                        this.state.skillsValidations > 0?
+                            <h1 className="manager-notifications__status">{"You have " + this.state.skillsValidations + " skill/s validation requests from " + this.state.userToValidate + " member/s of your team"}</h1>
+                        : null
+                    }
+                    
                     <p className="manager-notifications__subtitle">My Team</p>
                     <div className="manager-notifications__employee">
                         <span className="manager-notifications-icon">
                             <span className="ss-icon-employee"></span>
                         </span>
                         <div className="manager-notifications-qty">
-                            <h3>14</h3>
-                            <p>Employee</p>
+                            <h3>{this.state.data.length}</h3>
+                            <p>Employees</p>
                         </div>
                     </div>
                 </div>
-                <div className="header-bar col -col-9 -col-no-gutter">
-                    <div className="col -col-6">
-                        <span className="table-header">Employee</span>
-                    </div>
-                    <div className="col -col-2">
-                        <span className="table-header">Location</span>
-                    </div>
-                    <div className="col -col-2">
-                        <span className="table-header">Review Skills</span>
-                    </div>
-                    <div className="col -col-0">&nbsp;</div>
-                </div>
-                <div className="results-section">
-                    <div className="manager-home results results--right col -col-9 -col-no-gutter">
-                        <div className="grid">
-                            <div className="col -col-8">
-                                <p className="table-row-heading">Manuel Bruno Lazzaro</p>
-                                <p className="table-row-small">Senior Open Standards Developer</p>
-                            </div>
-                            <div className="col -col-2">
-                                <span className="table-row">BA</span>
-                            </div>
-                            <div className="col -col-2">
-                                <span className="table-row">5<i className="validate-pending"></i></span>
-                            </div>
-                            <div className="col -col-1">
-                                <i className="ss-icon-right-arrow right-small-arrow"></i>
-                            </div>
-                        </div>
-                        <div className="grid">
-                            <div className="col -col-8">
-                                <p className="table-row-heading">First Last</p>
-                                <p className="table-row-small">Position</p>
-                            </div>
-                            <div className="col -col-2">
-                                <span className="table-row">BA</span>
-                            </div>
-                            <div className="col -col-2">
-                                <span className="table-row">5</span>
-                            </div>
-                            <div className="col -col-1">
-                                <i className="ss-icon-right-arrow right-small-arrow"></i>
-                            </div>
-                        </div>
-                        <div className="grid">
-                            <div className="col -col-8">
-                                <p className="table-row-heading">First Last</p>
-                                <p className="table-row-small">Position</p>
-                            </div>
-                            <div className="col -col-2">
-                                <span className="table-row">BA</span>
-                            </div>
-                            <div className="col -col-2">
-                                <span className="table-row">5<i className="validate-pending"></i></span>
-                            </div>
-                            <div className="col -col-1">
-                                <i className="ss-icon-right-arrow right-small-arrow"></i>
-                            </div>
-                        </div>
-                        <div className="grid">
-                            <div className="col -col-8">
-                                <p className="table-row-heading">First Last</p>
-                                <p className="table-row-small">Position</p>
-                            </div>
-                            <div className="col -col-2">
-                                <span className="table-row">BA</span>
-                            </div>
-                            <div className="col -col-2">
-                                <span className="table-row">5<i className="validate-pending"></i></span>
-                            </div>
-                            <div className="col -col-1">
-                                <i className="ss-icon-right-arrow right-small-arrow"></i>
-                            </div>
-                        </div>
-                        <div className="grid">
-                            <div className="col -col-8">
-                                <p className="table-row-heading">First Last</p>
-                                <p className="table-row-small">Position</p>
-                            </div>
-                            <div className="col -col-2">
-                                <span className="table-row">BA</span>
-                            </div>
-                            <div className="col -col-2">
-                                <span className="table-row">5<i className="validate-pending"></i></span>
-                            </div>
-                            <div className="col -col-1">
-                                <i className="ss-icon-right-arrow right-small-arrow"></i>
-                            </div>
-                        </div>
-                        <div className="grid">
-                            <div className="col -col-8">
-                                <p className="table-row-heading">First Last</p>
-                                <p className="table-row-small">Position</p>
-                            </div>
-                            <div className="col -col-2">
-                                <span className="table-row">BA</span>
-                            </div>
-                            <div className="col -col-2">
-                                <span className="table-row">5</span>
-                            </div>
-                            <div className="col -col-1">
-                                <i className="ss-icon-right-arrow right-small-arrow"></i>
-                            </div>
-                        </div>
-                        <div className="grid">
-                            <div className="col -col-8">
-                                <p className="table-row-heading">First Last</p>
-                                <p className="table-row-small">Position</p>
-                            </div>
-                            <div className="col -col-2">
-                                <span className="table-row">BA</span>
-                            </div>
-                            <div className="col -col-2">
-                                <span className="table-row">5<i className="validate-pending"></i></span>
-                            </div>
-                            <div className="col -col-1">
-                                <i className="ss-icon-right-arrow right-small-arrow"></i>
-                            </div>
-                        </div>
-                        <div className="grid">
-                            <div className="col -col-8">
-                                <p className="table-row-heading">First Last</p>
-                                <p className="table-row-small">Position</p>
-                            </div>
-                            <div className="col -col-2">
-                                <span className="table-row">BA</span>
-                            </div>
-                            <div className="col -col-2">
-                                <span className="table-row">5</span>
-                            </div>
-                            <div className="col -col-1">
-                                <i className="ss-icon-right-arrow right-small-arrow"></i>
-                            </div>
-                        </div>
-                        <div className="grid">
-                            <div className="col -col-8">
-                                <p className="table-row-heading">First Last</p>
-                                <p className="table-row-small">Position</p>
-                            </div>
-                            <div className="col -col-2">
-                                <span className="table-row">BA</span>
-                            </div>
-                            <div className="col -col-2">
-                                <span className="table-row">5<i className="validate-pending"></i></span>
-                            </div>
-                            <div className="col -col-1">
-                                <i className="ss-icon-right-arrow right-small-arrow"></i>
-                            </div>
-                        </div>
-                        <div className="grid">
-                            <div className="col -col-8">
-                                <p className="table-row-heading">First Last</p>
-                                <p className="table-row-small">Position</p>
-                            </div>
-                            <div className="col -col-2">
-                                <span className="table-row">BA</span>
-                            </div>
-                            <div className="col -col-2">
-                                <span className="table-row">5<i className="validate-pending"></i></span>
-                            </div>
-                            <div className="col -col-1">
-                                <i className="ss-icon-right-arrow right-small-arrow"></i>
-                            </div>
-                        </div>
-                        <div className="grid">
-                            <div className="col -col-8">
-                                <p className="table-row-heading">First Last</p>
-                                <p className="table-row-small">Position</p>
-                            </div>
-                            <div className="col -col-2">
-                                <span className="table-row">BA</span>
-                            </div>
-                            <div className="col -col-2">
-                                <span className="table-row">5</span>
-                            </div>
-                            <div className="col -col-1">
-                                <i className="ss-icon-right-arrow right-small-arrow"></i>
-                            </div>
-                        </div>     
-                    </div>
-                </div>
+                <MyTeamTable myTeam={this.state.data} />
             </div>
         );
     }

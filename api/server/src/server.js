@@ -46,7 +46,8 @@ app.use('/api', routes);
 
 const port = 5005;
 app.listen(port, () => {
-    console.log(`server started on port ${port}`);
+    console.log(`${new Date()} server started on port ${port}`);
+    console.log(`NODE_ENV: ${config.nodeEnv}`);
 });
 
 

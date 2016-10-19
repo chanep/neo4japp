@@ -5,6 +5,7 @@ import { hashHistory, Link, browserHistory, withRouter } from 'react-router'
 import Header from "../components/Header";
 import SessionServices from '../services/SessionServices'
 import cookie from 'react-cookie';
+import BasePage from "./BasePage";
 
 class Login extends React.Component {
 
@@ -32,16 +33,8 @@ class Login extends React.Component {
     let session = new SessionServices();
     session.Login(self.state.username, self.state.password).then(data => {
       cookie.save('currentUser', data);
-      if (data.roles.includes('admin') || data.roles.includes('resourceManager')) {
-        this.context.router.push({pathname: '/resourcesHotspot'});
-      }
-      else
-        if (data.roles.includes('approver')){
-          this.context.router.push({pathname: '/ManagerHome'});
-        }
-        else {
-          this.context.router.push({pathname: '/myprofile'});
-        }
+      let basePage = new BasePage();
+      this.context.router.push({pathname: basePage.GetMyRootPath()});
 
     }).catch(data => {
       console.log("Errorrrrr", data);
