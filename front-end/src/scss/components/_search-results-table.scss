@@ -212,6 +212,10 @@
 
         .manager-home,
         .results-profile {
+            .zebra-table:nth-child(even) {
+                background-color: #fafafb;
+            }
+
             .grid {
                 display: flex;
                 justify-content: space-between;
