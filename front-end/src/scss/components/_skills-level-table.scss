@@ -31,7 +31,7 @@
 	background-color: $LIGHTEST-GREY;
 
 	.col {
-		padding: .9em .75em;
+		padding: .45em .6em;
 		white-space: nowrap;
     	text-overflow: ellipsis;
     	max-width: 100%;
@@ -47,7 +47,7 @@
 	background-color: #cbcbcb;
 	border-left: 1px solid white;
 	border-bottom: 1px solid white;
-	height: 3.375rem;
+	height: 2.55rem;
 	transition: background-color .2s ease-in-out;
 
 	&.level-selected { background-color: $RED; }
@@ -65,4 +65,12 @@
 
 .skill-level-want-wrapper {
 	text-align: center;
+
+	input[type="checkbox"].readOnly {
+		cursor: default;
+	}
+
+	input[type="checkbox"].selectable {
+		cursor: pointer;
+	}
 }

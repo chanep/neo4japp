@@ -121,6 +121,10 @@
                 float: left;
                 width: em(55);
                 height: em(55);
+
+                img {
+                    border-radius: 4rem;
+                }
             }
 
             .nameData {
@@ -129,6 +133,9 @@
                 line-height: normal;
                 min-height: em(55);
                 vertical-align: middle;
+                margin-top: .2rem;
+                margin-left: 1rem;
+                width: 10rem;
 
                 .name {
                     font-size: em(14);
@@ -147,11 +154,12 @@
                 height: em(30);
                 background-color: black;
                 margin-top: em(12);
+                display: block;
             }
 
             .arrows {
                 position: absolute;
-                right: 2em;
+                right: 0;
                 top: 1.6em;
 
                 .arrow-prev {

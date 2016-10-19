@@ -15,4 +15,12 @@ export default class UserServices extends ServicesBase {
 	GetSimilarSkilledUsers(id) {
 		return super.callGetServices('user/' + id + '/similar-skilled-users');
 	}
+
+	SetKnowledge(skillId, level, want) {
+		return super.callPutServices('user/knowledge', {'skillId': skillId, 'level': level, 'want': want});
+	}
+
+	GetMyTeam() {
+		return super.callGetServices('approver/my-team', {'onlyPendingApprove': false, 'includeWantSkills': true});
+	}
 }
