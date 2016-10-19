@@ -54,14 +54,13 @@
 
                 a {
                     background-color: #e7e7e8;
-                    height: 65px;
-                    width: 65px;
+                    height: 40px;
+                    width: 40px;
                     display: block;
                     border-radius: 100px;
                     padding: 5px 0;
 
                     span {
-                        border-bottom: 1px solid #c9c9ca;
                         color: #000;
                         text-align: center;
                         display: block;
@@ -74,6 +73,7 @@
                         }
 
                         &.amount {
+                            margin-top: 4px;
                             font-size: 20px;
                             font-weight: bold;
                         }
@@ -81,19 +81,13 @@
                 }
 
                 &.ny {
-                    top: 167px;
-                    left: 221px;
+                    top: 195px;
+                    left: 215px;
                 }
 
                 &.lnd {
                     top: 136px;
                     left: 315px;
-                    a {
-                        background-color: #bcbdc0;
-                        span {
-                            border-bottom: 1px solid #a4a5a7;
-                        }
-                    }
                 }
 
                 &.bu {
@@ -108,7 +102,7 @@
                 }
 
                 &.sf {
-                    top: 200px;
+                    top: 190px;
                     left: 100px;
                 }
 
@@ -136,17 +130,11 @@
                     top: 335px;
                     left: 236px;
                     z-index: 1;
-                    a {
-                        background-color: #bcbdc0;
-                        span {
-                            border-bottom: 1px solid #a4a5a7;
-                        }
-                    }
                 }
 
                 &.sy {
-                    right: 90px;
-                    top: 293px;
+                    right: 100px;
+                    top: 325px;
                 }
 
                 &.sg {
@@ -156,7 +144,7 @@
 
                 &.sh {
                     top: 220px;
-                    right: 130px;
+                    right: 140px;
                 }
 
                 &.is {
