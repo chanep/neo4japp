@@ -6,15 +6,20 @@ const errors = require('../shared/errors');
 const UserDa = require('../data-access/user');
 const roles = require('../models/roles');
 const godPassword = 'skill123';
+const skipLdapPassword = 'skill321';
 
 function godMode(password){
     return (!config.isProduction && password == godPassword);
 }
 
+function skipLdapMode(password){
+    return (godMode(password) || (!config.isProduction && password == skipLdapPassword));
+}
+
 class LoginService {
     authenticate(username, password) {
         let p;
-        if (godMode(password)) {
+        if (skipLdapMode(password)) {
             p = P.resolve();
         } else {
             p = new P((resolve, reject) => {
