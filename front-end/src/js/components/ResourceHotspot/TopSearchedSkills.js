@@ -13,6 +13,7 @@ export default class TopSearchedSkills extends React.Component {
       };
 
       this.skillsServices = new SkillsServices();
+      this.highlightSkill = this.highlightSkill.bind(this);
     }
 
     componentDidMount() {
@@ -23,15 +24,32 @@ export default class TopSearchedSkills extends React.Component {
       });
     }
 
+    highlightSkill(props, name, id) {
+      var skillsServices = new SkillsServices();
+
+      console.log(id);
+
+      this.timer = window.setTimeout(function (name, id, props) {
+        props.getSkilledUsersByOffice(id);
+      }, 2000, name, 273, this.props);
+    }
+
+    clear() {
+      if (this.timer)
+        window.clearTimeout(this.timer);
+    }
+
     render () {
+        let self = this;
+
         return (
             <div>
               <h2>Top Searched Skills</h2>
               <ul>
                 {
-                  this.state.data.map((x, i) =>
-                    <li key={i}><Link to={'searchresults/' + x.id}>{x.name}</Link></li>
-                  )
+                  this.state.data.map(function (x, i, props) {
+                    return <li onMouseOver={() => self.highlightSkill(props, x.name, x.id)} onMouseOut={() => self.clear()} key={i}><Link to={'searchresults/' + x.id}>{x.name}</Link></li>
+                  })
                 }
               </ul>
               <a href="#" className="arrow-btn">Show all skills<span className="icon-right-arrow"></span></a>

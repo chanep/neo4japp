@@ -75,7 +75,7 @@ class RelatedEmployee extends React.Component {
     				    <div className="arrows"><span className="ss-icon-right-arrow arrow-prev" title="Go to previous" onClick={this.goToPrev}></span> <span className="ss-icon-right-arrow arrow-next" title="Go to next" onClick={this.goToNext}></span></div>
                     : false}
                     {!this.props.similar ?
-                        <a className="mail" href={emailSnippet}></a>
+                        <a className="mail" href={emailSnippet}><span className="ss-icon-envelope related-email"></span></a>
                     : false}
     			</div>
     		</div>
