@@ -55,7 +55,7 @@ export default class ManagerHomeTable extends React.Component {
 
         return (
             <div className="search-results-table">
-                <div className="manager-notifications filters col -col-3">
+                <div className="manager-notifications col -col-3">
                     {
                         this.state.skillsValidations > 0?
                             <h1 className="manager-notifications__status">{"You have " + this.state.skillsValidations + " skill/s validation requests from " + this.state.userToValidate + " member/s of your team"}</h1>
