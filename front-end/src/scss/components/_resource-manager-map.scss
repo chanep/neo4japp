@@ -71,6 +71,7 @@
 
             li {
                 position: absolute;
+                transition: color 0.5s ease;
 
                 a {
                     background-color: #e7e7e8;
@@ -79,6 +80,11 @@
                     display: block;
                     border-radius: 100px;
                     padding: 5px 0;
+
+                    &:hover {
+                        transition: background-color 0.5s ease;
+                        background-color: #bcbdc0;
+                    }
 
                     span {
                         border-bottom: 1px solid #c9c9ca;
