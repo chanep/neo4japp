@@ -27,11 +27,9 @@ export default class TopSearchedSkills extends React.Component {
     highlightSkill(props, name, id) {
       var skillsServices = new SkillsServices();
 
-      console.log(id);
-
       this.timer = window.setTimeout(function (name, id, props) {
         props.getSkilledUsersByOffice(id);
-      }, 2000, name, 273, this.props);
+      }, 2000, name, id, this.props);
     }
 
     clear() {
