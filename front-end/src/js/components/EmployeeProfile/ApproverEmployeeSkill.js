@@ -1,24 +1,24 @@
 /**
- * Components: EmployeeSkill
+ * Components: ApproverEmployeeSkill
  */
 
 // Dependencies
 import React from 'react';
 import { Link } from 'react-router'
 
-export default class EmployeeSkill extends React.Component {
+export default class ApproverEmployeeSkill extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-        	data: props.skill
+            data: props.skill
         };
     }
 
     componentWillReceiveProps(nextProps) {
-    	this.setState({
-    		data: nextProps.skill
-    	});
+        this.setState({
+            data: nextProps.skill
+        });
     }
 
     getChild (obj,key){
@@ -34,7 +34,7 @@ export default class EmployeeSkill extends React.Component {
             approver = this.getChild(this.state.data.knowledge, "approverFullname");
         }
 
-    	return (
+        return (
             <div className="skill-level-grid__levels col -col-12 -col-no-gutter">
                 <div className="col -col-2">
                     <span className="sub-table-header">{this.state.data.name}</span>
@@ -60,6 +60,6 @@ export default class EmployeeSkill extends React.Component {
                     <span className="skill-title"></span>
                 </div>
             </div>
-    	)
+        )
     }
 }

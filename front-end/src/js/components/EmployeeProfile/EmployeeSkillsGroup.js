@@ -12,17 +12,20 @@ export default class EmployeeSkillsGroup extends React.Component {
         super(props);
 
         this.state = {
-        	data: props.groupData
+        	data: props.groupData,
+        	approverMode: (props.approverMode !== undefined? props.approverMode:false)
         };
     }
 
     componentWillReceiveProps(nextProps) {
     	this.setState({
-    		data: nextProps.groupData
+    		data: nextProps.groupData,
+    		approverMode: (nextProps.approverMode !== undefined? nextProps.approverMode:false)
     	});
     }
 
     render() {
+    	let self = this;
     	return(
     		<div>
 		        <div className="header-bar col -col-12 -col-no-gutter">
@@ -35,7 +38,7 @@ export default class EmployeeSkillsGroup extends React.Component {
 		            	{
 		            		this.state.data.children.map(function(obj, key) {
 		            			return (
-		            				<EmployeeSkillSubGroup subGroupData={obj} key={key} />
+		            				<EmployeeSkillSubGroup subGroupData={obj} key={key} approverMode={self.state.approverMode} />
 		            			);
 		            		})
 						

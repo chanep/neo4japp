@@ -6,6 +6,7 @@
 import React from 'react';
 import { Link } from 'react-router'
 import EmployeeSkill from "./EmployeeSkill";
+import ApproverEmployeeSkill from "./ApproverEmployeeSkill";
 
 export default class EmployeeSkillSubGroup extends React.Component {
     constructor(props) {
@@ -13,14 +14,16 @@ export default class EmployeeSkillSubGroup extends React.Component {
 
         this.state = {
         	showLevels: false,
-        	data: props.subGroupData
+        	data: props.subGroupData,
+            approverMode: (props.approverMode !== undefined?props.approverMode:false)
         };
     }
 
     componentWillReceiveProps(nextProps) {
     	this.setState({
     		showLevels: false,
-    		data: nextProps.subGroupData
+    		data: nextProps.subGroupData,
+            approverMode: (nextProps.approverMode !== undefined? nextProps.approverMode:false)
     	});
     }
 
@@ -33,10 +36,11 @@ export default class EmployeeSkillSubGroup extends React.Component {
     }
 
     render() {
+        let self = this;
         let skillsCount = this.state.data.skills.length;
         let pendings = 0;
         this.state.data.skills.forEach(function(skill) {
-            if (skill.knowledge.approved === undefined) pendings++;
+            if (skill.knowledge !== null && skill.knowledge.approved === undefined) pendings++;
         });
 
         return (
@@ -59,7 +63,7 @@ export default class EmployeeSkillSubGroup extends React.Component {
                                 <span className="sub-table-header"></span>
                             </div>
                             <div className="col -col-1">
-                                <span className="sub-table-header">Want?</span>
+                                <span className="sub-table-header">{this.state.approverMode?"Verified?":"Want?"}</span>
                             </div>
                             <div className="col -col-2">
                                 <span className="sub-table-header">Heavy Supervision</span>
@@ -80,7 +84,9 @@ export default class EmployeeSkillSubGroup extends React.Component {
                         {
                             this.state.data.skills.map(function(skill, key) {
                                 return(
-                                    <EmployeeSkill skill={skill} key={key} />
+                                        self.state.approverMode?
+                                          <ApproverEmployeeSkill skill={skill} key={key} />
+                                        : <EmployeeSkill skill={skill} key={key} />
                                 );
                             })
                         }

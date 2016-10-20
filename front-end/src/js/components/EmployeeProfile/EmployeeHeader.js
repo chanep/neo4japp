@@ -24,14 +24,13 @@ export default class EmployeeHeader extends React.Component {
         return result[0];
     }
 
-    getUser(userId) {
+    getUser(userId) {        
         if (userId > 0) {
             this.userData.GetUserData(userId).then(data => {
-                let skillsCount = data.skillCount;
-
                 this.setState({
                     user: data,
-                    skillsCount: skillsCount
+                    skillsCount: data.skillCount,
+                    unapprovedSkillCount: data.unapprovedSkillCount
                 });
             }).catch(data => {
               
@@ -106,7 +105,7 @@ export default class EmployeeHeader extends React.Component {
                         {this.state.showForManagerVerification?
                             <div className="employee-skills-add employee-skills-verify">
                                 <span className="icon-alert">!</span>
-                                <span className="label">VERIFY 3 SKILLS IN TOTAL</span>
+                                <span className="label">VERIFY {this.state.unapprovedSkillCount} SKILLS IN TOTAL</span>
                             </div>
                         : null}
         				<div className="employee-skills-last-update">
