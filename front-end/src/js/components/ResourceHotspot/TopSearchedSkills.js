@@ -9,7 +9,8 @@ export default class TopSearchedSkills extends React.Component {
       super();
       
       this.state = {
-        data: []
+        data: [],
+        hoveredSkillId: 0
       };
 
       this.skillsServices = new SkillsServices();
@@ -19,17 +20,20 @@ export default class TopSearchedSkills extends React.Component {
     componentDidMount() {
       this.skillsServices.GetTopSkillSearchs(ENV().resourceManagerHome.topSearchedSkillsCount).then(data =>{
         this.setState({data: data});
+        this.setState({ hoveredSkillId: data[0].id });
+        this.highlightSkill(this.props, data[0].id);
       }).catch(data => {
         console.log("Error performing search", data);
       });
     }
 
-    highlightSkill(props, name, id) {
+    highlightSkill(props, id) {
       var skillsServices = new SkillsServices();
 
-      this.timer = window.setTimeout(function (name, id, props) {
-        props.getSkilledUsersByOffice(id);
-      }, 2000, name, id, this.props);
+      this.timer = window.setTimeout(function (id, that) {
+        that.setState({ hoveredSkillId: id });
+        that.props.getSkilledUsersByOffice(id);
+      }, 750, id, this);
     }
 
     clear() {
@@ -43,11 +47,11 @@ export default class TopSearchedSkills extends React.Component {
         return (
             <div>
               <h2>Top Searched Skills</h2>
-              <ul>
+              <ul className="top-searched-skills">
                 {
                   this.state.data.map(function (x, i, props) {
-                    return <li onMouseOver={() => self.highlightSkill(props, x.name, x.id)} onMouseOut={() => self.clear()} key={i}><Link to={'searchresults/' + x.id}>{x.name}</Link></li>
-                  })
+                    return <li className={(this.state.hoveredSkillId == x.id ? 'highlighted' : '')} onMouseOver={() => self.highlightSkill(props, x.id)} onMouseOut={() => self.clear()} key={i}><Link to={'searchresults/' + x.id}>{x.name}</Link></li>
+                  }, this)
                 }
               </ul>
               <a href="#" className="arrow-btn">Show all skills<span className="icon-right-arrow"></span></a>

@@ -12,6 +12,26 @@
             padding: 4px 0 11px 20px;
         }
 
+        .top-searched-skills {
+            li {
+                &:hover {
+                    a {
+                        transition: color 0.5s ease;
+                        color: red;
+                    }
+                }
+
+                &.highlighted {
+                    transition: font-weight 0.5s ease;
+                    font-weight: bold;
+
+                    a {
+                        color: red;
+                    }
+                }
+            }
+        }
+
         ul {
             padding-left: 20px;
             margin: 16px 0;
@@ -81,8 +101,8 @@
                 }
 
                 &.ny {
-                    top: 167px;
-                    left: 221px;
+                    top: 185px;
+                    left: 200px;
                 }
 
                 &.ldn {
