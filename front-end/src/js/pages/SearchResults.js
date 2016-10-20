@@ -18,7 +18,8 @@ export default class SearchResults extends BasePage {
         this.state = {
             data: [],
             skillsCount: 0,
-            searching: true
+            searching: true,
+            location: ''
         };
 	}
 
@@ -43,6 +44,11 @@ export default class SearchResults extends BasePage {
             let ids = this.props.params.skillIds.split(',');
 
             this.getData(ids);
+        }
+
+        if (this.props.location.search !== undefined) {
+            let location = this.props.location.search.split('=')[1];
+            this.setState({ location: location });
         }
     }
 
