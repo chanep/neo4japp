@@ -139,12 +139,36 @@ vows.describe('User api test')
             assert.equal(u.industries[0].name, data.industries[0].name);
 
             assert.equal(u.skillCount, 2);
+            assert.equal(u.unapprovedSkillCount, 2);
 
         }
     }
 })
 
 .addBatch(testHelper.loginBatch(r => req = r, () => data.resourceManager.username))
+
+.addBatch({
+    '4b. Get user details': {
+        topic: function () {
+            req.get('user/details', 
+                this.callback);
+        },
+        'response is 200': testHelper.assertSuccess(),
+        'should return user details including knowledges ': function (err, result, body) {
+            if (err) {
+                console.log("error", err);
+                throw err;
+            }
+            let u = body.data;
+
+            console.log("user", JSON.stringify(u));
+
+            assert.isObject(u);
+            assert.equal(u.unapprovedSkillCount, 0);
+
+        }
+    }
+})
 
 .addBatch({
     '5. Get all skills (with user knowledges attached)': {

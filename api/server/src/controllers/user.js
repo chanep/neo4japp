@@ -240,6 +240,7 @@ HTTP/1.1 200 OK
         disabled: false, 
         type: "UserEmployee",  
         skillCount: 5,
+        unapprovedSkillCount: 3,
         position: { id: 4835, name: "Developer" }, 
         office: { id: 4832, name: "Buenos Aires", country: "Argentina", acronym: "BA" }, 
         department: { id: 4834, name: "Technology" }, 
