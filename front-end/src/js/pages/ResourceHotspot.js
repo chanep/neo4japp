@@ -14,11 +14,8 @@ export default class ResourceHotspot extends BasePage {
       super();
 
       this.state = {
-        skilledUsersByOffice: {
-          "BA": 3,
-          "NY": 12,
-          "LDN": 11
-        }
+        skilledUsersByOffice: {},
+        skillId: 0
       };
 
       this.getSkilledUsersByOffice = this.getSkilledUsersByOffice.bind(this);
@@ -28,7 +25,6 @@ export default class ResourceHotspot extends BasePage {
       var skillsServices = new SkillsServices();
 
       skillsServices.GetSkilledUsersByOffice(skillId, ENV().resourceManagerHome.topSearchedSkillsCount).then(offices =>{
-        console.log(offices);
 
         var skilledUsersByOffice = [];
 
@@ -36,10 +32,8 @@ export default class ResourceHotspot extends BasePage {
           skilledUsersByOffice[office.acronym] = office.skilledUserCount;
         });
 
-        console.log('prepared data');
-        console.log(skilledUsersByOffice);
-
         this.setState({ skilledUsersByOffice: skilledUsersByOffice });
+        this.setState({ skillId: skillId });
       }).catch(data => {
           console.log("skill data error", data);
       });
@@ -55,7 +49,7 @@ export default class ResourceHotspot extends BasePage {
                      <TopSearchedSkills getSkilledUsersByOffice={this.getSkilledUsersByOffice} />
                     </div>
                     <div className="right-col">
-                     <Map skilledUsersByOffice={this.state.skilledUsersByOffice} />
+                     <Map skilledUsersByOffice={this.state.skilledUsersByOffice} skillId={this.state.skillId} />
                     </div>
                   </div>
                 </section>
