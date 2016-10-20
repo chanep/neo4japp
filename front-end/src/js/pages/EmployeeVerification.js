@@ -14,14 +14,15 @@ export default class EmployeeVerification extends BasePage {
     constructor(props) {
         super(props);
 
+        console.log("props", props);
         this.state = {
-        	employee: null
+        	employeeId: props.params.employeeID
         };
     }
 
     componentDidMount() {
     	this.setState({
-    		employee: this.props.employee
+    		employeeId: this.props.employeeID
     	});
     }
 
@@ -34,8 +35,8 @@ export default class EmployeeVerification extends BasePage {
     render() {
         return (
             <div className="body-layout">
-                <Header search={super._showSearch()} loggedIn={true} />
-                <EmployeeHeader userId={this.state.userId} addSkills={true} showActions={false} />
+                <Header search={true} loggedIn={true} />
+                <EmployeeHeader userId={this.state.employeeId} showActions={false} showForManagerVerification={true} />
             </div>
         );
     }

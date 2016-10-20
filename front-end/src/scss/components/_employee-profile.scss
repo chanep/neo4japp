@@ -62,8 +62,11 @@
     		text-decoration: none;
     	}
 
-        &.employee-skills-verify a {
+        &.employee-skills-verify span.label {
             color: $RED;
+            font-size: em(12);
+            font-weight: bold;
+            text-decoration: none;
         }
 
         .icon-alert {

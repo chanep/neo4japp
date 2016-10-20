@@ -22,7 +22,7 @@ export default class MySkills extends BasePage {
     render() {
         return (
             <div>
-                <Header search={true} loggedIn={true} />
+                <Header search={super._showSearch()} loggedIn={true} />
                 <EmployeeHeader userId={this.state.userId} addSkills={false} showActions={true} />
                 <EmployeeAddSkillsTable userId={this.state.userId} />
             </div>

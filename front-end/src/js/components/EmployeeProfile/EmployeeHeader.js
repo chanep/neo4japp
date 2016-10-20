@@ -12,7 +12,8 @@ export default class EmployeeHeader extends React.Component {
             user: null,
             skillsCount: 0,
             addSkills: true,
-            showActions: false
+            showActions: false,
+            showForManagerVerification: false
         }
 
         this.userData = new UserServices();
@@ -44,7 +45,8 @@ export default class EmployeeHeader extends React.Component {
         this.getUser(nextProps.userId);
         this.setState({
             addSkills: nextProps.addSkills,
-            showActions: nextProps.showActions
+            showActions: nextProps.showActions,
+            showForManagerVerification: nextProps.showForManagerVerification
         })
     }
 
@@ -52,7 +54,8 @@ export default class EmployeeHeader extends React.Component {
         this.getUser(this.props.userId);
         this.setState({
             addSkills: this.props.addSkills,
-            showActions: this.props.showActions
+            showActions: this.props.showActions,
+            showForManagerVerification: this.props.showForManagerVerification
         })
     }
 
@@ -100,13 +103,12 @@ export default class EmployeeHeader extends React.Component {
                                     </div>
                             : null
                         }
-                        {/*
-                        <div className="employee-skills-add employee-skills-verify">
-                            <span className="icon-alert">!</span>
-                            <a href="#">VERIFY 3 SKILLS IN TOTAL</a>
-                        </div>
-                        *}
-                        {/* Verify skills label */}
+                        {this.state.showForManagerVerification?
+                            <div className="employee-skills-add employee-skills-verify">
+                                <span className="icon-alert">!</span>
+                                <span className="label">VERIFY 3 SKILLS IN TOTAL</span>
+                            </div>
+                        : null}
         				<div className="employee-skills-last-update">
         					Last Updated <span>05/04/2016</span>
         				</div>

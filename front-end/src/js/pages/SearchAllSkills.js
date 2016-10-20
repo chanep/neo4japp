@@ -13,7 +13,7 @@ export default class SearchResults extends BasePage {
     render() {
         return (
             <div>
-                <Header search={true} loggedIn={true} />
+                <Header search={super._showSearch()} loggedIn={true} />
                 <SearchAllSkillsTable />
             </div>
         );

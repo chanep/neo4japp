@@ -29,7 +29,7 @@ class BasePage extends React.Component {
 
 	_showSearch() {
 		let data = cookie.load('currentUser');
-		return (data.roles.includes('admin') || data.roles.includes('resourceManager'));
+		return (data.roles.includes('admin') || data.roles.includes('resourceManager') || data.roles.includes('approver'));
 	}
 
 	GetUserLogged() {
