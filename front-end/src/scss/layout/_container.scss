@@ -1,3 +1,7 @@
 .container {
     @include grid($max-width: em(960));
 }
+
+.body-layout {
+	min-height: em(400);
+}

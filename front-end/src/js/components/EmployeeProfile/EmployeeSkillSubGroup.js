@@ -40,7 +40,7 @@ export default class EmployeeSkillSubGroup extends React.Component {
         });
 
         return (
-            <div>
+            <div className="zebra-table">
                 <div className="grid">
                     <div className="col -col-10">
                         <p className="table-row-heading">{this.state.data.name}</p>

@@ -14,7 +14,9 @@ export default class ManagerHome extends BasePage {
         return (
             <div>
                 <Header search={true} loggedIn={true} />
-                <ManagerHomeTable />
+                <div className="body-layout">
+                	<ManagerHomeTable />
+                </div>
             </div>
         );
     }

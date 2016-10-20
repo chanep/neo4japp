@@ -155,6 +155,13 @@
                 background-color: black;
                 margin-top: em(12);
                 display: block;
+
+                .related-email {
+                    transform: scale(.5);
+                    color: white;
+                    margin-top: 7px;
+                    margin-left: 2px;
+                }
             }
 
             .arrows {

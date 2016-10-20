@@ -4,6 +4,7 @@
 
 // Dependencies
 import React from 'react';
+import { Link } from 'react-router';
 
 // Class: MyTeemEmployee
 export default class MyTeemEmployee extends React.Component {
@@ -44,21 +45,23 @@ export default class MyTeemEmployee extends React.Component {
         })
 
         return(
-            <div className="grid">
-                <div className="col -col-8">
-                    <p className="table-row-heading">{this.state.employee.fullname}</p>
-                    <p className="table-row-small">{this.state.employee.position.name}</p>
+            <Link to={"/employee/" + this.state.employee.id + "/verification"}>
+                <div className="grid zebra-table lined-table manager-home-employee">
+                    <div className="col -col-7 title">
+                        <div className="name">{this.state.employee.fullname}</div>
+                        <div className="position">{this.state.employee.position.name}</div>
+                    </div>
+                    <div className="col -col-2">
+                        <span className="table-row">{this.state.employee.office.acronym}</span>
+                    </div>
+                    <div className="col -col-2">
+                        <span className="table-row">{skillsCount} {skillsPendingValidation > 0? <i className="validate-pending" title={skillsPendingValidation + " pending skills for validation"}></i>: null}</span>
+                    </div>
+                    <div className="col -col-1 -col-arrow">
+                        <i className="ss-icon-right-arrow right-small-arrow"></i>
+                    </div>
                 </div>
-                <div className="col -col-2">
-                    <span className="table-row">{this.state.employee.office.acronym}</span>
-                </div>
-                <div className="col -col-2">
-                    <span className="table-row">{skillsCount} {skillsPendingValidation > 0? <i className="validate-pending" title={skillsPendingValidation + " pending skills for validation"}></i>: null}</span>
-                </div>
-                <div className="col -col-1">
-                    <i className="ss-icon-right-arrow right-small-arrow"></i>
-                </div>
-            </div>
+            </Link>
         );
     }
 }

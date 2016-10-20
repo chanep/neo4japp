@@ -21,7 +21,6 @@
         color: $WHITE;
         height: 50px;
         margin: 0;
-        text-align: center;
         font-size: 12pt;
         font-weight: bold;
 
@@ -42,7 +41,7 @@
         @include grid($max-width: em(960));
 
         .results {
-            border-left: 1px solid $LIGHTEST-GREY;
+            //border-left: 1px solid $LIGHTEST-GREY;
 
             .performingSearch, .noResults {
                 text-align: center;
@@ -210,8 +209,51 @@
             }
         }
 
+        .manager-home {
+            a:link {
+                text-decoration: inherit;
+                color: inherit;
+            }
+
+            a:visited {
+                text-decoration: inherit;
+                color: inherit;
+            }
+        }
+
         .manager-home,
         .results-profile {
+            .manager-home-employee {
+                cursor: pointer;
+
+                .title {
+                    line-height: normal;
+
+                    .name {
+                        font-size: em(20);
+                        font-weight: bold;
+                    }
+
+                    .position {
+                        font-size: em(12);
+                        color: $GREY;
+                    }
+                }
+
+                .-col-arrow {
+                    text-align: center;
+                    margin: auto auto;
+                }
+            }
+
+            .zebra-table:nth-child(even) {
+                background-color: #fafafb;
+            }
+
+            .lined-table {
+                border-bottom: em(1) solid $LIGHTEST-GREY;
+            }
+
             .grid {
                 display: flex;
                 justify-content: space-between;
@@ -271,9 +313,9 @@
 
     .manager-notifications-icon {
         background-color: $LIGHTEST-GREY;
-        height: 3.25rem;
+        height: em(50);
         text-align: center;
-        width: 3.25rem;
+        width: em(50);
 
         &> .ss-icon-employee {
             font-size: em(24);
@@ -282,11 +324,17 @@
     }
 
     .manager-notifications-qty {
+        padding-top: em(5);
         flex: 0 0 70%;
+
+        h3 {
+            font-size: em(20);
+            font-weight: bold;
+        }
 
         p {
             color: $GREY;
-            font-size: .75em;
+            font-size: em(12);
             font-weight: bold;
         }
     }
