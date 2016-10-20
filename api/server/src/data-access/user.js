@@ -47,8 +47,9 @@ class UserDa extends BaseDa{
                     optional match (n)-[:${interestRelL}]->(i)
                     optional match (n)-[:${kRelL}]->(ind)-[:${sgRelL}]->(sg) where sg.type = 'industry' 
                     optional match (n)-[:${kRelL}]->(s)-[:${sgRelL}]->(sg2) where sg2.type in ['tool', 'skill']
+                    optional match (n)-[ku:${kRelL}]->(su)-[:${sgRelL}]->(sg3) where (sg3.type in ['tool', 'skill'] and (ku.approved is null or ku.approved = false))
                     with n, o, d, p, collect(distinct {_:a, department: ad, position: ap}) as approvers, collect(distinct {_:rm, department: rmd, position: rmp}) as resourceManagers, collect(distinct c) as clients, collect(distinct i) as interests,
-                        collect(distinct ind) as industries, count(distinct s) as skillCount
+                        collect(distinct ind) as industries, count(distinct s) as skillCount, count(distinct su) as unapprovedSkillCount
                     return {    
                                 id: id(n), username: n.username, type: n.type, email: n.email, 
                                 fullname: n.fullname, roles: n.roles, phone: n.phone, image: n.image, disabled: n.disabled,
@@ -60,7 +61,8 @@ class UserDa extends BaseDa{
                                 clients: clients,
                                 interests: interests,
                                 industries: industries,
-                                skillCount: skillCount
+                                skillCount: skillCount,
+                                unapprovedSkillCount: unapprovedSkillCount
                     }`
         let params = {id: neo4j.int(id)};
         return this._run(cmd, params)
