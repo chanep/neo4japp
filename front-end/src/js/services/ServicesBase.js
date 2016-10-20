@@ -49,7 +49,7 @@ export default class ServicesBase {
 
 		let queryData = query;
 		return new Promise((resolve, reject) => {
-			return request.del(urlFinal).withCredentials().query(queryData).then(function(response) {
+			return request.del(urlFinal).withCredentials().send(queryData).then(function(response) {
 				let dataR = JSON.parse(response.text);
 				if (response.statusCode == 200) {
 					if (dataR.hasOwnProperty('data'))

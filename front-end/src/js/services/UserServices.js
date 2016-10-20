@@ -20,6 +20,10 @@ export default class UserServices extends ServicesBase {
 		return super.callPutServices('user/knowledge', {'skillId': skillId, 'level': level, 'want': want});
 	}
 
+	DeleteKnowledge(skillId) {
+		return super.callDeleteServices('user/knowledge', {'skillId': skillId});
+	}
+
 	GetMyTeam() {
 		return super.callGetServices('approver/my-team', {'onlyPendingApprove': false, 'includeWantSkills': true});
 	}

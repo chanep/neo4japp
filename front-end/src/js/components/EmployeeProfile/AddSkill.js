@@ -34,9 +34,9 @@ export default class AddSkill extends React.Component {
 		});
 	}
 
-    showAlert(){
-        msg.show('Skill added', {
-            time: 10000,
+    showAlert(messg){
+        msg.show(messg, {
+            time: 3500,
             type: 'success',
             icon: <img src="/img/success-ico.png" />
         });
@@ -55,22 +55,28 @@ export default class AddSkill extends React.Component {
                 )
             });
 
-            self.showAlert();
+            self.showAlert('Skill added');
         }).catch(err => {
-
+            console.log("Error adding skill", err);
         });
     }
 
     removeKnowledge() {
         let self = this;
 
-        if (this.state.skill.knowledge !== null)
+        if (this.state.skill.knowledge === null)
             return;
         
-        self.setState({
-            skill: update(
-                self.state.skill, {knowledge: {$set: null}}
-            )
+        this.userServices.DeleteKnowledge(this.state.skill.id).then(data => {
+            self.setState({
+                skill: update(
+                    self.state.skill, {knowledge: {$set: null}}
+                )
+            });
+
+            self.showAlert('Skill removed');
+        }).catch(err => {
+            console.log("Error removing skill", err);
         });
     }
 

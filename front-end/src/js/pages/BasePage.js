@@ -56,6 +56,11 @@ class BasePage extends React.Component {
 
         return '/';
 	}
+
+	ResourceManagerLoggedIn() {
+		let data = cookie.load('currentUser');
+		return (data.roles.includes('admin') || data.roles.includes('resourceManager'));
+	}
 }
 
 BasePage.contextTypes = {

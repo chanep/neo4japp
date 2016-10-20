@@ -3,6 +3,7 @@ import React from "react";
 import { Link } from "react-router";
 import RelatedEmployee from './RelatedEmployee';
 import UserServices from '../../services/UserServices';
+import BasePage from '../../pages/BasePage';
 
 export default class RelatedEmployees extends React.Component {
 
@@ -162,6 +163,8 @@ export default class RelatedEmployees extends React.Component {
     }
 
     render() {
+        let basePage = new BasePage();
+
         let areaCoordinator = this.state.relatedUsers.areaCoordinator;
         let resourceManager = this.state.relatedUsers.resourceManager;
         let similarSkilledUser = this.state.relatedUsers.similarSkilledUser;
@@ -177,7 +180,7 @@ export default class RelatedEmployees extends React.Component {
                     <RelatedEmployee user={areaCoordinator} />
                 : false }
                 <RelatedEmployee user={resourceManager} />
-                {this.state.similarSkilledUsers.length > 0 ?
+                {basePage.ResourceManagerLoggedIn() && this.state.similarSkilledUsers.length > 0 ?
                     <RelatedEmployee user={similarSkilledUser} similar="true" multiple={multiple} similarSkilledUsers={this.state.similarSkilledUsers} />
     		    : false}
             </div>
