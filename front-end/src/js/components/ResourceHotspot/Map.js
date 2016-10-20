@@ -9,8 +9,6 @@ export default class Map extends React.Component {
         var skilledUsersByOffice = this.props.skilledUsersByOffice,
             skillId = this.props.skillId;
 
-        console.log(skilledUsersByOffice);
-
         return (
             <div>
               <h2>Resource hotspot</h2>            
