@@ -26,12 +26,26 @@ export default class ApproverEmployeeSkill extends React.Component {
         return result[0];
     }
 
+    approve() {
+        let self = this;
+
+        if (this.state.skill.knowledge === null)
+            return;
+        
+        
+    }
+
     render() {
         let verified = false;
         let approver = "";
         if (this.state.data.knowledge !== null && this.getChild(this.state.data.knowledge, "approved") !== undefined) {
             verified = true;
             approver = this.getChild(this.state.data.knowledge, "approverFullname");
+        }
+
+        var opts = {};
+        if (verified) {
+            opts['readOnly'] = 'readOnly';
         }
 
         return (
@@ -41,7 +55,7 @@ export default class ApproverEmployeeSkill extends React.Component {
                 </div>
                 <div className="col -col-1 skill-level-want-wrapper">
                     <span className="skill-title">
-                        <input type="checkbox" label="skill-want" readOnly checked={this.state.data.knowledge.want} />
+                        <input className={this.state.skill.knowledge === null?"selectable":"readOnly"} type="checkbox" label="skill-want" checked={checked} onChange={this.approve.bind(this)} {...opts} />
                     </span>
                 </div>
                 <div title={verified?"Approved by " + approver: "Verification pending"} className={"col -col-2 " + (this.state.data.knowledge.level >= 1? "skill-level-box " + (verified? "level-verified": "level-non-verified"): "")}>
