@@ -50,8 +50,8 @@ class UserClientsImportTask extends BaseTask{
                     })
         });
     }
-    _updateUserClients(user, clientIds){
-        let query = {phonelistId: {$in: clientIds}};
+    _updateUserClients(user){
+        let query = {phonelistId: {$in: user.clientIds}};
 
         return userDa.clearClients(user.id)
             .then(() => clientDa.find(query))
@@ -64,9 +64,8 @@ class UserClientsImportTask extends BaseTask{
             });
     }
     _updateUsersClients(users){
-        return asyncEach(users, (user, callback) => {
-            this._getClientIds(user.phonelistId)
-                .then(clientIds => this._updateUserClients(user, clientIds))
+        return asyncEachSeries(users, (user, callback) => {
+            this._updateUserClients(user)
                 .then(() => this.info.updated++)
                 .catch(err => {
                     this.info.errors++;
@@ -74,6 +73,22 @@ class UserClientsImportTask extends BaseTask{
                 })
                 .then(() => callback());
         })
+    }
+    _getAndUpdateUsersClients(users){
+        return this._getUsersClients(users)
+            .then(usrs => {
+                return this._updateUsersClients(usrs);
+            })
+    }
+    _getUsersClients(users){
+        return asyncEach(users, (user, callback) => {
+            this._getClientIds(user.phonelistId)
+                .then(clientIds => {
+                    user.clientIds = clientIds;
+                    callback();
+                })
+        })
+        .then(() => users);
     }
     _processAllUsers() {
         const limit = 20;
@@ -84,7 +99,7 @@ class UserClientsImportTask extends BaseTask{
                 .then(data => {
                     totalUsers = data.paged.totalCount;
                     let users = data.data;
-                    return this._updateUsersClients(users);
+                    return this._getAndUpdateUsersClients(users);
                 })
                 .then(() => callback(null))
                 .catch(err => callback(err));
