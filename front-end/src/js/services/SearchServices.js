@@ -5,7 +5,7 @@ export default class SearchServices extends ServicesBase {
 		return super.callGetServices('resource-manager/search-all', {term: query, limit: limit});
 	}
 
-	GetSearchBySkills(skillsIds,limit) {
-		return super.callGetServices('resource-manager/users-by-skill', {skills:skillsIds, limit:limit});
+	GetSearchBySkills(skillsIds,limit, officesIds = []) {
+		return super.callGetServices('resource-manager/users-by-skill', {skills:skillsIds, limit:limit, offices: officesIds});
 	}
 }
