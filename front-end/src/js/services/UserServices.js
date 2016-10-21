@@ -31,4 +31,8 @@ export default class UserServices extends ServicesBase {
 	GetOffice() {
 		return super.callGetServices('office', null);
 	}
+
+	ApproveKnowledge(knowledgeId) {
+		return super.callPutServices('approver/approve', {'knowledgeId': knowledgeId});
+	}
 }
