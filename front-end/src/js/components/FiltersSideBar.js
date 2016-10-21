@@ -5,89 +5,45 @@
 // Dependencies
 import React from 'react';
 
+import UserServices from '../services/UserServices';
+
 // Class: SearchResults
 export default class FiltersSideBar extends React.Component {
+    constructor() {
+        super();
+
+        this.state = {
+            "offices": []
+        };
+    }
+
+    componentDidMount() {
+        var userServices = new UserServices();
+
+        userServices.GetOffice().then(data => {
+            this.setState({ "offices": data });
+        }).catch(data => {
+            console.log("Error performing search", data);
+        });
+    }
+
     render() {
+        var self = this;
+
         return (
-            <div className="filters col -col-3 -col-no-gutter">
-            	<div className="filters-search-container">
-            		<span className="ss-icon-search"></span>
-            		<input type="text" className="filters-search-container__field" />
-            	</div>
-            	
+            <div className="filters col -col-3 -col-no-gutter">          	
                 <div className="filterContent">
                     <span className="filter-title">Locations</span> <span className="filter-title-group">(All)</span>
                     <ul>
-                        <li className="filter-option">
-                            <label>
-                                <input type="checkbox" /> Austin
-                            </label>
-                        </li>
-                        <li className="filter-option">
-                            <label>
-                                <input type="checkbox" /> Bucharest
-                            </label>
-                        </li>
-                        <li className="filter-option">
-                            <label>
-                                <input type="checkbox" /> Buenos Aires
-                            </label>
-                        </li>
-                        <li className="filter-option">
-                            <label>
-                                <input type="checkbox" /> Chicago
-                            </label>
-                        </li>
-                        <li className="filter-option">
-                            <label>
-                                <input type="checkbox" /> Istanbul
-                            </label>
-                        </li>
-                        <li className="filter-option">
-                            <label>
-                                <input type="checkbox" /> London
-                            </label>
-                        </li>
-                        <li className="filter-option">
-                            <label>
-                                <input type="checkbox" /> Los Angeles
-                            </label>
-                        </li>
-                        <li className="filter-option">
-                            <label>
-                                <input type="checkbox" /> New York
-                            </label>
-                        </li>
-                        <li className="filter-option">
-                            <label>
-                                <input type="checkbox" /> Portland
-                            </label>
-                        </li>
-                        <li className="filter-option">
-                            <label>
-                                <input type="checkbox" /> São Paulo
-                            </label>
-                        </li>
-                        <li className="filter-option">
-                            <label>
-                                <input type="checkbox" /> San Francisco
-                            </label>
-                        </li>
-                        <li className="filter-option">
-                            <label>
-                                <input type="checkbox" /> Shanghai
-                            </label>
-                        </li>
-                        <li className="filter-option">
-                            <label>
-                                <input type="checkbox" /> Singapore
-                            </label>
-                        </li>
-                        <li className="filter-option">
-                            <label>
-                                <input type="checkbox" /> Sydney
-                            </label>
-                        </li>
+                        {
+                            this.state.offices.map(function (office) {
+                                return <li key={office.id} className="filter-option">
+                                    <label>
+                                        <input type="checkbox" id={office.id} checked={office.id == self.props.locations[0]} data-test={self.props.locations[0]} /> {office.name}
+                                    </label>
+                                </li>
+                            })
+                        }
                     </ul>
                 </div>
                 <div>

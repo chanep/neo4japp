@@ -53,7 +53,7 @@ export default class SearchResultsTable extends React.Component {
                 <div className="results-section">
 
                     {/*FILTERS SIDE BAR*/}
-                    <FiltersSideBar /> 
+                    <FiltersSideBar locations={this.props.locations} /> 
 
                     <ul className="results col -col-9 -col-no-gutter">
                     	{

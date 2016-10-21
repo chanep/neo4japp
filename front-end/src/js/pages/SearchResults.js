@@ -14,21 +14,24 @@ export default class SearchResults extends BasePage {
 	constructor(props) {
 		super(props);
 
+        let locations = [];
+        if (this.props.location.search !== undefined) {
+            locations.push(this.props.location.search.split("=")[1]);
+        }
+
         this.searchServices = new SearchServices();
         this.state = {
-            data: [],
-            skillsCount: 0,
-            searching: true,
-            location: 0
+            "data": [],
+            "skillsCount": 0,
+            "searching": true,
+            "locations": locations
         };
 	}
 
     getData(ids) {
         this.setState({data: [], skillsCount: 0, searching: true});
 
-        var offices = [this.state.location];
-
-        this.searchServices.GetSearchBySkills(ids, 20, offices).then(data => {
+        this.searchServices.GetSearchBySkills(ids, 20, this.state.locations).then(data => {
             this.setState({
                 data: data,
                 skillsCount:ids.length,
@@ -47,11 +50,6 @@ export default class SearchResults extends BasePage {
 
             this.getData(ids);
         }
-
-        if (this.props.location.search !== undefined) {
-            let location = this.props.location.search.split("=")[1];
-            this.setState({ "location": location });
-        }
     }
 
     componentWillReceiveProps(newProps) {
@@ -66,7 +64,7 @@ export default class SearchResults extends BasePage {
         return (
             <div>
                 <Header search={super._showSearch()} loggedIn={true} />
-                <SearchResultsTable data={this.state.data} skillsCount={this.state.skillsCount} searching={this.state.searching} />
+                <SearchResultsTable data={this.state.data} skillsCount={this.state.skillsCount} searching={this.state.searching} locations={this.state.locations} />
             </div>
         );
     }
