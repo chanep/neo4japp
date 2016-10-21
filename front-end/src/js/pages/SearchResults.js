@@ -19,14 +19,16 @@ export default class SearchResults extends BasePage {
             data: [],
             skillsCount: 0,
             searching: true,
-            location: ''
+            location: 0
         };
 	}
 
     getData(ids) {
         this.setState({data: [], skillsCount: 0, searching: true});
 
-        this.searchServices.GetSearchBySkills(ids, 20).then(data => {
+        var offices = [this.state.location];
+
+        this.searchServices.GetSearchBySkills(ids, 20, offices).then(data => {
             this.setState({
                 data: data,
                 skillsCount:ids.length,
@@ -47,8 +49,8 @@ export default class SearchResults extends BasePage {
         }
 
         if (this.props.location.search !== undefined) {
-            let location = this.props.location.search.split('=')[1];
-            this.setState({ location: location });
+            let location = this.props.location.search.split("=")[1];
+            this.setState({ "location": location });
         }
     }
 
