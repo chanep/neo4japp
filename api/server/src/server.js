@@ -22,7 +22,7 @@ statisticsService.start();
 const config = require('./shared/config');
 
 const app = express();
-const logger = morgan('common');
+const logger = morgan('short');
 
 // parse body params and attache them to req.body
 app.use(expressQSParser({}));

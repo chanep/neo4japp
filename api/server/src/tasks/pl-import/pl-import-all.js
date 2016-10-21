@@ -12,7 +12,7 @@ const allocationsImportTask = new (require('./allocations-import'));
 
 class ImportAllTask extends BaseTask{
     constructor(){
-        super('import-all');
+        super('pl-import-all');
     }
     _doRun(){
         return phonelistIdImportTask.run()

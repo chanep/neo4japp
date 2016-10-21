@@ -2,6 +2,9 @@
     "apps": [{
         "name": "API",
         "script": "server.js",
+        "log_date_format": "YYYY-MM-DD HH:mm:ss.sss Z",
+        "error_file"      : "../logs/api-err.log",
+        "out_file"        : "../logs/api-out.log",
         /*"watch": true,
         "ignore_watch" : ["[\\/\\\\]\\./", "node_modules", ".bower-cache", ".bower-registry", ".bower-tmp", "uploads"],*/
         "env": {
@@ -10,6 +13,9 @@
     {
         "name": "TASK-SCHEDULER",
         "script": "task-scheduler.js",
+        "log_date_format": "YYYY-MM-DD HH:mm:ss.sss Z",
+        "error_file"      : "../logs/tasks-err.log",
+        "out_file"        : "../logs/tasks-out.log",
         /*"watch": true,
         "ignoreWatch" : ["node_modules", ".sass-cache", ".bower-cache", ".bower-registry", ".bower-tmp", "build", "uploads"],*/
         "env": {

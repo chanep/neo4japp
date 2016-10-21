@@ -9,6 +9,7 @@ css/styles.css.map
 .vscode
 api/server/src/tmp/*.json
 api/server/apidoc
+api/server/logs/*.log
 .vagrant
 vagrant-machine/.vagrant
 /dist
