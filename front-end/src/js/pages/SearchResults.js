@@ -25,8 +25,9 @@ export default class SearchResults extends BasePage {
         }
 
         let ids = [];
-        if (this.props.params.skillIds !== undefined)
+        if (this.props.params.skillIds !== undefined) {
             ids = this.props.params.skillIds.split(",");
+        }
 
         this.searchServices = new SearchServices();
         this.state = {
@@ -56,6 +57,9 @@ export default class SearchResults extends BasePage {
 
         var skillsConcat = this.state.skillsIds.join(),
             locationsConcat = this.state.locations.join(),
+            path = '/searchresults/' + skillsConcat;
+
+        if (locationsConcat != '')
             path = '/searchresults/' + skillsConcat + '?location=' + locationsConcat;
 
         this.context.router.push({ pathname: path });
@@ -88,7 +92,9 @@ export default class SearchResults extends BasePage {
 
     componentWillReceiveProps(newProps) {
         if (newProps.params.skillIds !== undefined) {
-            let ids = newProps.params.skillIds.split(',');
+            let ids = newProps.params.skillIds;
+            ids = ids.split('?')[0];
+            ids = ids.split(',');
             this.setState({ "skillsIds": ids });
 
             this.getData(ids);
