@@ -18,7 +18,6 @@ export default class Pill extends React.Component {
       this.props.removeSkill(this.props.name,this.props.index);
     }
 
-
     render () {
         return (
              <span className="search-field-pill">{this.props.name}<span className="search-field-pill__close" onClick={this.removeItem.bind(this)}>x</span></span>
