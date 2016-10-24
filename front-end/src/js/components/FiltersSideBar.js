@@ -55,26 +55,6 @@ export default class FiltersSideBar extends React.Component {
                         }
                     </ul>
                 </div>
-                <div>
-                    <span className="filter-title">Tools</span> <span className="filter-title-group">(All)</span>
-                    <ul>
-                        <li className="filter-option">
-                            <label>
-                                <input type="checkbox" /> Design
-                            </label>
-                        </li>
-                        <li className="filter-option">
-                            <label>
-                                <input type="checkbox" /> Technology
-                            </label>
-                        </li>
-                        <li className="filter-option">
-                            <label>
-                                <input type="checkbox" /> Other
-                            </label>
-                        </li>
-                    </ul>
-                </div>
             </div>
         );
     }
