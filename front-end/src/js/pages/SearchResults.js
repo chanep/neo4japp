@@ -19,14 +19,33 @@ export default class SearchResults extends BasePage {
             locations.push(this.props.location.search.split("=")[1]);
         }
 
+        let ids = this.props.params.skillIds.split(',');
+
         this.searchServices = new SearchServices();
         this.state = {
             "data": [],
             "skillsCount": 0,
             "searching": true,
-            "locations": locations
+            "skillsIds": ids,
+            "locations": locations,
+            "key": 0
         };
+
+        this.addLocation = this.addLocation.bind(this);
 	}
+
+    addLocation(locationId) {
+        var locations = this.state.locations;
+        locations.push(locationId);
+
+        this.setState({ "locations": locations });
+
+        this.getData(this.state.skillsIds);
+
+        console.log(this.state.key);
+
+        this.setState({ key: Math.random() });
+    }
 
     getData(ids) {
         this.setState({data: [], skillsCount: 0, searching: true});
@@ -64,7 +83,7 @@ export default class SearchResults extends BasePage {
         return (
             <div>
                 <Header search={super._showSearch()} loggedIn={true} />
-                <SearchResultsTable data={this.state.data} skillsCount={this.state.skillsCount} searching={this.state.searching} locations={this.state.locations} />
+                <SearchResultsTable key={this.state.key} data={this.state.data} skillsCount={this.state.skillsCount} searching={this.state.searching} locations={this.state.locations} addLocation={this.addLocation} />
             </div>
         );
     }
