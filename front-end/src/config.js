@@ -1,6 +1,6 @@
 module.exports = function() {
 	var ENV = {
-    	baseServicesURL: 'skillsearch2-qa/api/',
+    	baseServicesURL: 'http://skillsearch2-qa:5005/api/',
     	knowledgeLevels: [
     		{level: 1, desc: 'Heavy Supervision'},
     		{level: 2, desc: 'Light Supervision'},
