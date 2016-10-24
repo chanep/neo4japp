@@ -15,6 +15,8 @@ export default class FiltersSideBar extends React.Component {
         this.state = {
             "offices": []
         };
+
+        this.handleChange = this.handleChange.bind(this);
     }
 
     componentDidMount() {
@@ -27,6 +29,13 @@ export default class FiltersSideBar extends React.Component {
         });
     }
 
+    handleChange(event) {
+        let offices = this.state.offices,
+            locationId = event.target.value;
+
+        this.props.addLocation(locationId);
+    }
+
     render() {
         var self = this;
 
@@ -36,34 +45,14 @@ export default class FiltersSideBar extends React.Component {
                     <span className="filter-title">Locations</span> <span className="filter-title-group">(All)</span>
                     <ul>
                         {
-                            this.state.offices.map(function (office) {
+                            this.state.offices.map((office) => {
                                 return <li key={office.id} className="filter-option">
                                     <label>
-                                        <input type="checkbox" id={office.id} checked={office.id == self.props.locations[0]} data-test={self.props.locations[0]} /> {office.name}
+                                        <input type="checkbox" id={office.id} value={office.id} checked={this.props.locations.indexOf(office.id.toString()) != -1} data-test={this.props.locations[0]} onChange={this.handleChange} /> {office.name}
                                     </label>
                                 </li>
                             })
                         }
-                    </ul>
-                </div>
-                <div>
-                    <span className="filter-title">Tools</span> <span className="filter-title-group">(All)</span>
-                    <ul>
-                        <li className="filter-option">
-                            <label>
-                                <input type="checkbox" /> Design
-                            </label>
-                        </li>
-                        <li className="filter-option">
-                            <label>
-                                <input type="checkbox" /> Technology
-                            </label>
-                        </li>
-                        <li className="filter-option">
-                            <label>
-                                <input type="checkbox" /> Other
-                            </label>
-                        </li>
                     </ul>
                 </div>
             </div>
