@@ -94,7 +94,7 @@ export default class EmployeeHeader extends React.Component {
                             this.state.showActions?
                                 this.state.addSkills?
                                     <div className="employee-skills-add">
-                                        <Link to="/myprofile/myskills">ADD NEW SKILLS</Link>
+                                        <Link to="/myprofile/myskills">ADD / REMOVE SKILLS</Link>
                                     </div>
                                     :
                                     <div className="employee-skills-add">
