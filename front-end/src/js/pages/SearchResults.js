@@ -24,7 +24,9 @@ export default class SearchResults extends BasePage {
                 locations = locationsString.split(",");
         }
 
-        let ids = this.props.params.skillIds.split(",");
+        let ids = [];
+        if (this.props.params.skillIds !== undefined)
+            ids = this.props.params.skillIds.split(",");
 
         this.searchServices = new SearchServices();
         this.state = {
@@ -78,6 +80,7 @@ export default class SearchResults extends BasePage {
     componentDidMount() {
         if (this.props.params.skillIds !== undefined) {
             let ids = this.props.params.skillIds.split(',');
+            this.setState({ "skillsIds": ids });
 
             this.getData(ids);
         }
@@ -86,6 +89,7 @@ export default class SearchResults extends BasePage {
     componentWillReceiveProps(newProps) {
         if (newProps.params.skillIds !== undefined) {
             let ids = newProps.params.skillIds.split(',');
+            this.setState({ "skillsIds": ids });
 
             this.getData(ids);
         }
