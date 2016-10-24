@@ -1,0 +1,12 @@
+/**
+ * Components: FAQ
+ */
+
+ .faq {
+    @include grid($max-width: em(960));
+    margin-top: 1.5rem;
+
+    .faq-entry {
+    	margin: .4rem 0;
+    }
+ }

@@ -3,6 +3,8 @@ import React from "react";
 import Copyright from "./Footer/Copyright";
 import ContactUs from "./Footer/ContactUs";
 
+import { Link } from "react-router";
+
 export default class Footer extends React.Component {
     render () {
         return (
@@ -10,7 +12,7 @@ export default class Footer extends React.Component {
               <div className="footer-wrapper">
                 <Copyright />
                 <ContactUs />
-                <a href="#" title="Frequently asked questions"><span className="icon-envelope">FAQ</span></a>
+                <Link to={"faq"}><span className="icon-envelope">FAQ</span></Link>
               </div>
             </footer>
         );
