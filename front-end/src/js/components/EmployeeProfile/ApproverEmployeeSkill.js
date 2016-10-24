@@ -21,6 +21,8 @@ export default class ApproverEmployeeSkill extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
+        console.log("nextProps data", nextProps);
+
         this.setState({
             data: nextProps.skill
         });
@@ -44,16 +46,20 @@ export default class ApproverEmployeeSkill extends React.Component {
 
         if (this.state.data.knowledge === null)
             return;
+        if (this.state.data.knowledge !== null && this.getChild(this.state.data.knowledge, "approved") !== undefined)
+            return;
         
         this.userServices.ApproveKnowledge(this.state.data.knowledge.id).then(data => {
-            console.log("data confirmacion", data);
             self.setState({
                 data: update(
-                    self.state.skill, {knowledge: {$set: data}}
+                    self.state.data, {knowledge: {$set: data}}
                 )
             });
 
-            showAlert('Skill knowledge approve');
+            self.showAlert('Skill knowledge approved');
+
+            if (this.props.onSkillApproved !== undefined)
+                this.props.onSkillApproved(self.state.data.id);
         }).catch(err => {
             console.log("Error approving skill knowledge", err);
         });

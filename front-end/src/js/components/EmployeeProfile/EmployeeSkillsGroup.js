@@ -24,6 +24,11 @@ export default class EmployeeSkillsGroup extends React.Component {
     	});
     }
 
+    onSkillApproved(id) {
+        if (this.props.onSkillApproved !== undefined)
+            this.props.onSkillApproved(id);
+    }
+
     render() {
     	let self = this;
     	return(
@@ -38,7 +43,7 @@ export default class EmployeeSkillsGroup extends React.Component {
 		            	{
 		            		this.state.data.children.map(function(obj, key) {
 		            			return (
-		            				<EmployeeSkillSubGroup subGroupData={obj} key={key} approverMode={self.state.approverMode} />
+		            				<EmployeeSkillSubGroup subGroupData={obj} key={key} approverMode={self.state.approverMode} onSkillApproved={self.onSkillApproved.bind(self)} />
 		            			);
 		            		})
 						
