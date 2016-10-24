@@ -27,4 +27,12 @@ export default class UserServices extends ServicesBase {
 	GetMyTeam() {
 		return super.callGetServices('approver/my-team', {'onlyPendingApprove': false, 'includeWantSkills': true});
 	}
+
+	GetOffice() {
+		return super.callGetServices('office', null);
+	}
+
+	ApproveKnowledge(knowledgeId) {
+		return super.callPutServices('approver/approve', {'knowledgeId': knowledgeId});
+	}
 }

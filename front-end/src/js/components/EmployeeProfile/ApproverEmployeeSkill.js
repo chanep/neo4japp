@@ -4,7 +4,10 @@
 
 // Dependencies
 import React from 'react';
-import { Link } from 'react-router'
+import { Link } from 'react-router';
+import UserServices from '../../services/UserServices';
+import AlertContainer from 'react-alert';
+import update from 'react-addons-update';
 
 export default class ApproverEmployeeSkill extends React.Component {
     constructor(props) {
@@ -13,6 +16,8 @@ export default class ApproverEmployeeSkill extends React.Component {
         this.state = {
             data: props.skill
         };
+
+        this.userServices = new UserServices();
     }
 
     componentWillReceiveProps(nextProps) {
@@ -26,12 +31,45 @@ export default class ApproverEmployeeSkill extends React.Component {
         return result[0];
     }
 
+    showAlert(messg){
+        msg.show(messg, {
+            time: 3500,
+            type: 'success',
+            icon: <img src="/img/success-ico.png" />
+        });
+    }
+
+    approve() {
+        let self = this;
+
+        if (this.state.data.knowledge === null)
+            return;
+        
+        this.userServices.ApproveKnowledge(this.state.data.knowledge.id).then(data => {
+            console.log("data confirmacion", data);
+            self.setState({
+                data: update(
+                    self.state.skill, {knowledge: {$set: data}}
+                )
+            });
+
+            showAlert('Skill knowledge approve');
+        }).catch(err => {
+            console.log("Error approving skill knowledge", err);
+        });
+    }
+
     render() {
         let verified = false;
         let approver = "";
         if (this.state.data.knowledge !== null && this.getChild(this.state.data.knowledge, "approved") !== undefined) {
             verified = true;
             approver = this.getChild(this.state.data.knowledge, "approverFullname");
+        }
+
+        var opts = {};
+        if (verified) {
+            opts['readOnly'] = 'readOnly';
         }
 
         return (
@@ -41,7 +79,7 @@ export default class ApproverEmployeeSkill extends React.Component {
                 </div>
                 <div className="col -col-1 skill-level-want-wrapper">
                     <span className="skill-title">
-                        <input type="checkbox" label="skill-want" readOnly checked={this.state.data.knowledge.want} />
+                        <input className={!verified?"selectable":"readOnly"} type="checkbox" label="skill-want" checked={verified} onChange={this.approve.bind(this)} {...opts} />
                     </span>
                 </div>
                 <div title={verified?"Approved by " + approver: "Verification pending"} className={"col -col-2 " + (this.state.data.knowledge.level >= 1? "skill-level-box " + (verified? "level-verified": "level-non-verified"): "")}>

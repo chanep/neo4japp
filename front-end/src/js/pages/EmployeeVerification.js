@@ -16,7 +16,6 @@ export default class EmployeeVerification extends BasePage {
     constructor(props) {
         super(props);
 
-        console.log("props", props);
         this.state = {
         	employeeId: 0,
             data: []

@@ -27,7 +27,7 @@ let config = {
     pl: {
         apiBase: process.env.PL_API_BASE
     },
-    isProduction : (process.env.NODE_ENV == 'prod'),
+    isProduction : (process.env.NODE_ENV == 'production'),
     nodeEnv: process.env.NODE_ENV
 };
 
