@@ -92,9 +92,22 @@ header {
 
                 .header-menu {
                     opacity: 1;
-                    min-height: 330px;
-                    transition: all .35s .5s ease-in-out; 
+                    //min-height: 330px;
+                    transition: all .35s .5s ease-in-out;
                 }
+
+                .resource-manager-menu {
+                    min-height: 165px;
+                }
+
+                .approver-menu {
+                    min-height: 285px;   
+                }
+
+                .employee-menu {
+                    min-height: 245px;
+                }
+
             }
 
             img {
