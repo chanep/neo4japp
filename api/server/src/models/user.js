@@ -74,7 +74,8 @@ let user = new Model(
         roles: Joi.array().default([]).items(Joi.string()),
         phone: Joi.string().allow(null),
         image: Joi.string().allow(null),
-        disabled: Joi.boolean().default(false)
+        disabled: Joi.boolean().default(false),
+        lastUpdate: Joi.date(),
     }
 );
 

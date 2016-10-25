@@ -44,7 +44,7 @@ class ResourceManagerDa extends UserDa{
                     skip {skip} limit {limit}
                     return {    
                                 id: id(n), username: n.username, type: n.type, email: n.email, 
-                                fullname: n.fullname, roles: n.roles, phone: n.phone, image: n.image, disabled: n.disabled,
+                                fullname: n.fullname, roles: n.roles, phone: n.phone, image: n.image, disabled: n.disabled, lastUpdate: n.lastUpdate,
                                 office: {id: id(o), name: o.name, country: o.country, acronym: o.acronym},
                                 allocation: al,
                                 position: p,
