@@ -46,7 +46,7 @@ class ApproverDa extends UserDa{
             order by totalPendingApproval DESC, n.fullname ASC
             return {    
                         id: id(n), username: n.username, type: n.type, email: n.email, 
-                        fullname: n.fullname, roles: n.roles, phone: n.phone, image: n.image, disabled: n.disabled,
+                        fullname: n.fullname, roles: n.roles, phone: n.phone, image: n.image, disabled: n.disabled, lastUpdate: n.lastUpdate,
                         office: {id: id(o), name: o.name, country: o.country, acronym: o.acronym},
                         department: d,
                         position: p,
