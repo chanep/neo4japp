@@ -47,22 +47,15 @@ class LoginService {
             })
         }
 
-        return p
-            .then(result => {
-                let userDa = new UserDa();
-                return userDa.findByUsername(username);
-            })
-            .then(result => {
-                let userDa = new UserDa();
-                return userDa.findByUsername(username);
-            })
+        let userDa = new UserDa();
+        return userDa.findByUsername(username)
             .then(user => {
-                if(!user)
+               if(!user)
                     throw new errors.AuthorizationError("Invalid username");
                 if(godMode(password)){
                     user.roles = roles.allRoles;
                 }
-                return user;
+                return p.then(() => user);
             })
             .catch(err => {
                 if (err.name && err.name == 'InvalidCredentialsError')

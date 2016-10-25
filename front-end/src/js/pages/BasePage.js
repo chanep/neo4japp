@@ -28,8 +28,7 @@ class BasePage extends React.Component {
 	}
 
 	_showSearch() {
-		let data = cookie.load('currentUser');
-		return (data.roles.includes('admin') || data.roles.includes('resourceManager'));
+		return (this.ResourceManagerLoggedIn());
 	}
 
 	GetUserLogged() {
@@ -37,29 +36,34 @@ class BasePage extends React.Component {
 		return data;
 	}
 
-	GetMyRootPath() {
+	GetCurrentUserType() {
 		let data = cookie.load('currentUser');
 
 		if (data === undefined || data.roles === undefined || data === null || data.roles === null)
+			return null;
+
+		if (data.roles.includes('admin')) return 'admin';
+		if (data.roles.includes('resourceManager')) return 'resourcemanager';
+		if (data.roles.includes('approver')) return 'approver';
+		
+		return 'employee';
+	}
+
+	GetMyRootPath() {
+		let currentUserType = this.GetCurrentUserType();
+		if (currentUserType === null)
 			return '/login';
 
-		if (data.roles.includes('admin') || data.roles.includes('resourceManager')) {
-        	return '/resourceshotspot';
-      	}
-      	else
-        	if (data.roles.includes('approver')){
-          		return '/managerhome';
-        	}
-        	else {
-          		return '/myprofile';
-        	}
+		if (currentUserType === 'admin' || currentUserType === 'resourcemanager') return '/resourceshotspot';
+		if (currentUserType === 'approver') return '/managerhome';
+		if (currentUserType === 'employee') return '/myprofile';
 
         return '/';
 	}
 
 	ResourceManagerLoggedIn() {
-		let data = cookie.load('currentUser');
-		return (data.roles.includes('admin') || data.roles.includes('resourceManager'));
+		let currentUserType = this.GetCurrentUserType();
+		return (currentUserType === 'admin' || currentUserType === 'resourcemanager');
 	}
 }
 

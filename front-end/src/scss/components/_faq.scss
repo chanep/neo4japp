@@ -1,0 +1,32 @@
+/**
+ * Components: FAQ
+ */
+
+ .faq {
+    @include grid($max-width: em(960));
+    margin-top: 1.5rem;
+
+    .faq-entry {
+    	margin: 1rem 0;
+    }
+
+    .faq-entry-content {
+	    font-size: 14px;
+	    padding: 10px;
+	    word-break: normal;
+    }
+
+    .faq-entry-title {
+    	font-size: 18px;
+	    font-weight: 500;
+	    background: #ffffff;
+	    padding: 10px;
+	    margin: 0;
+    }
+
+    h3 {
+    	font-weight: 400;
+    	font-size: 23px;
+    	margin-bottom: 40px;
+    }
+ }

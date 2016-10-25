@@ -161,7 +161,7 @@ vows.describe('User api test')
             }
             let u = body.data;
 
-            console.log("user", JSON.stringify(u));
+            //console.log("user", JSON.stringify(u));
 
             assert.isObject(u);
             assert.equal(u.unapprovedSkillCount, 0);

@@ -30,6 +30,11 @@ class Header extends React.Component {
   render () {
     let base = new BasePage();
 
+    let currentUserType = base.GetCurrentUserType();
+    let menuClass = 'approver-menu';
+    if (currentUserType === 'resourcemanager') menuClass = 'resource-manager-menu';
+    if (currentUserType === 'employee') menuClass = 'employee-menu'
+
     return (
         <header>
           <div className="header-wrapper">
@@ -42,12 +47,12 @@ class Header extends React.Component {
                     <img src={this.state.userLogged.image}></img>
                     :<img src="/img/img_noPortrait.gif"></img>
                   )}
-                  <ul className="header-menu">
+                  <ul className={"header-menu " + menuClass}>
                     <li className="header-menu__item header-menu__item--title">{this.state.userLogged.fullname}</li>
-                    <li className="header-menu__item"><Link to="/myprofile">Your Skills</Link></li>
-                    <li className="header-menu__item"><a href={'http://square/people/' + this.state.userLogged.username + '/'} target="_blank">Your Work</a></li>
-                    <li className="header-menu__item"><a href="http://reporter/newallocations/EmployeeAllocation.aspx" target="_blank">Your Allocations</a></li>
-                    <li className="header-menu__item"><a href="#">Manage Skills</a></li>
+                    <li className="header-menu__item"><Link to="/myprofile">My skills</Link></li>
+                    {currentUserType === 'admin' || currentUserType === 'approver' || currentUserType === 'employee'? <li className="header-menu__item"><a href={'http://square/people/' + this.state.userLogged.username + '/'} target="_blank">My work</a></li> : null}
+                    {currentUserType === 'admin' || currentUserType === 'approver' || currentUserType === 'employee'? <li className="header-menu__item"><a href="http://reporter/newallocations/EmployeeAllocation.aspx" target="_blank">My allocations</a></li>: null}
+                    {currentUserType === 'admin' || currentUserType === 'approver'? <li className="header-menu__item"><a href="/managerhome">Manage skills</a></li>: null}
                     <li className="header-menu__item"><input type="button" onClick={this.logout.bind(this)} value="Logout" /></li>
                   </ul> 
 
