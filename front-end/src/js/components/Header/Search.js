@@ -3,19 +3,51 @@ import React from "react";
 import Results from "./Search/Results";
 import Pill from './Search/Pill';
 import SearchServices from '../../services/SearchServices';
+import SkillsServices from '../../services/SkillsServices';
 
 import { hashHistory, Link, browserHistory, withRouter } from "react-router";
 
 class Search extends React.Component {
-    constructor () {
-      super();
+    constructor (props) {
+      super(props);
+
+      var chosenItems = [],
+        skillsIds = [],
+          that = this,
+          limit = 1000,
+          key,
+          skillsServices = new SkillsServices();
+
+      if (this.props.skillsIds != undefined &&
+        this.props.skillsIds.length > 0) {
+
+        for (var k in this.props.skillsIds) {
+          if (this.props.skillsIds.hasOwnProperty(k)) {
+            skillsIds.push(this.props.skillsIds[k]);
+          }
+        }
+
+        skillsServices.GetSkill(limit).then(data =>{
+          data.forEach(function (v) {
+            if (skillsIds.indexOf(v.id.toString()) != -1) {
+              chosenItems.push({ 
+                "id": v.id, 
+                "name": v.name, 
+                "type": v.group.type 
+              });
+            }
+          });
+
+          this.forceUpdate();
+        });
+      }
 
       this.state = {
         hasResults: false,
         source:'',
         query:'',
         //skillArr: [],
-        chosenItems: [],
+        chosenItems: chosenItems,
         results:{},
         selection: 0,
         pointerDirty: false
@@ -338,7 +370,7 @@ class Search extends React.Component {
       }
 
       this.state.hasResults = false;
-      this.clearSearch();
+      this.hideResults();
     }
 
     render () {
