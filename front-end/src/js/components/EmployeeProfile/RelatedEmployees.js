@@ -15,7 +15,7 @@ export default class RelatedEmployees extends React.Component {
             relatedUsers: {
                 "areaCoordinator": {
                     id: 0,
-                    section: "",
+                    section: "Area Coordination",
                     name: "",
                     position: "",
                     department: "",
@@ -23,12 +23,12 @@ export default class RelatedEmployees extends React.Component {
                     email: ""
                 },
                 "resourceManager": {
-                    id: 1420,
+                    id: 0,
                     section: "Resource Management",
-                    name: "Agostina Gomez",
-                    position: "Associate Resource Manager",
-                    department: "Resource Management",
-                    image: "/img/img_noPortrait.gif",
+                    name: "",
+                    position: "",
+                    department: "",
+                    image: "",
                     email: ""
                 },
                 "similarSkilledUser": {
@@ -121,29 +121,40 @@ export default class RelatedEmployees extends React.Component {
 
         if (userId > 0) {
             userService.GetUserData(userId).then(data => {
-
                 if (data.approvers[0] != undefined) {
                     var approver = data.approvers[0];
 
-                    relatedUsers.areaCoordinator = {
-                        "id": approver.id,
-                        "section": "Area Coordination",
-                        "name": approver.fullname,
-                        "position": approver.position.name,
-                        "department": approver.department.name,
-                        "image": approver.image,
-                        "email": approver.email
-                    };
-                } else {
-                    relatedUsers.areaCoordinator = {
-                        "id": 0,
-                        "section": "0",
-                        "name": "",
-                        "position": "",
-                        "department": "",
-                        "image": "",
-                        "email": ""
-                    };
+                    try {
+                        relatedUsers.areaCoordinator = {
+                            "id": approver.id,
+                            "section": "Area Coordination",
+                            "name": approver.fullname,
+                            "position": approver.position.name,
+                            "department": approver.department.name,
+                            "image": approver.image,
+                            "email": approver.email
+                        };
+                    }
+                    catch (err) {
+                    }
+                }
+
+                if (data.resourceManagers[0] != undefined) {
+                    var resourceManager = data.resourceManagers[0];
+
+                    try {
+                        relatedUsers.resourceManager = {
+                            "id": resourceManager.id,
+                            "section": "Resource Management",
+                            "name": resourceManager.name,
+                            "position": resourceManager.position.name,
+                            "department": resourceManager.department.name,
+                            "image": resourceManager.image,
+                            "email": resourceManager.email
+                        }
+                    }
+                    catch (err) {
+                    }
                 }
 
                 this.setState({ relatedUsers: relatedUsers });
@@ -179,7 +190,9 @@ export default class RelatedEmployees extends React.Component {
                 {this.state.relatedUsers.areaCoordinator.id != 0 ?
                     <RelatedEmployee user={areaCoordinator} />
                 : false }
-                <RelatedEmployee user={resourceManager} />
+                {this.state.relatedUsers.resourceManager.id != 0 ?
+                    <RelatedEmployee user={resourceManager} />
+                : false }
                 {basePage.ResourceManagerLoggedIn() && this.state.similarSkilledUsers.length > 0 ?
                     <RelatedEmployee user={similarSkilledUser} similar="true" multiple={multiple} similarSkilledUsers={this.state.similarSkilledUsers} />
     		    : false}
