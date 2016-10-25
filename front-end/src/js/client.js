@@ -13,6 +13,7 @@ import ResultsProfile from "./pages/ResultsProfile";
 import SearchAllSkills from "./pages/SearchAllSkills";
 import MySkills from "./pages/MySkills";
 import EmployeeVerification from "./pages/EmployeeVerification";
+import FAQ from "./pages/FAQ";
 
 const app = document.getElementById('app');
 
@@ -34,6 +35,7 @@ ReactDOM.render(
                   <Route path="/managerhome" component={ManagerHome}></Route>
                   <Route path="/resultsprofile" component={ResultsProfile}></Route>
                   <Route path="/searchallskills" component={SearchAllSkills}></Route>
+                  <Route path="/faq" component={FAQ}></Route>
 		</Route>
 	</Router>,
 app);
