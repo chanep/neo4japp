@@ -304,6 +304,16 @@ function createBasicData(){
             return userDa.addResourceManager(data.employee.id, data.resourceManager.id);
         })
         .then(() => {
+            let allocation = {
+                startDate: ["01/01/2016"],
+                weekHours: [30,30,30,30],
+                workingWeekHours: [40,40,40,40],
+                totalHours: 160
+            }
+
+            return userDa.setAllocation(data.employee.id, allocation);
+        })
+        .then(() => {
             return createUser({roles: []}, 5);
         })
         .then(u => {

@@ -140,6 +140,7 @@ vows.describe('User api test')
 
             assert.equal(u.skillCount, 2);
             assert.equal(u.unapprovedSkillCount, 2);
+            assert.isNumber(Date.parse(u.lastUpdate));
 
         }
     }
