@@ -201,10 +201,9 @@ function simpleConditionToCypher(key, value, alias, params) {
 }
 
 function valueToCypher(value, key){
-    // if(key == 'id' && _.isInteger(value)){
-    //     return neo4j.int(value);
-    // } else 
-    if (_.isDate(value)){
+    if(key == 'id' && _.isInteger(value)){
+        return neo4j.int(value);
+    } else if (_.isDate(value)){
         return neo4j.int(value.getTime());
     } else if (_.isObject(value)){
         return JSON.stringify(value);
