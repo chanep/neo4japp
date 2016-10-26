@@ -88,6 +88,7 @@ HTTP/1.1 200 OK
         "image": "http://x.com/pic.jpg",
         "phone": null,
         "disabled": false, 
+        lastUpdate: "2016-10-24T17:21:22.633Z",
         "type": "UserEmployee", 
         "totalPendingApproval": 1, 
         "position": { "id": 4835, "name": "Developer" }, 

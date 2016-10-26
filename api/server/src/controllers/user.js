@@ -27,7 +27,7 @@ class UserController extends BaseController{
     */
     details(req, res, next){
         let loggedUser = req.session.user;
-        let userId = req.params.userId || loggedUser.id;
+        let userId = Number(req.params.userId || loggedUser.id);
         let promise = this._validateUserAccess(loggedUser, userId)
             .then(() => {
                 return userDa.findByIdFull(userId);
@@ -70,7 +70,7 @@ class UserController extends BaseController{
     */
     findUserSkills(req, res, next){
         let loggedUser = req.session.user;
-        let userId = req.params.userId;
+        let userId = Number(req.params.userId);
         let search = this._buildSearch(req);
         let allSkills = search.all;
         let promise = this._validateUserAccess(loggedUser, userId)
@@ -92,7 +92,7 @@ class UserController extends BaseController{
     @apiUse similarSkilledUserResponse
     */
     findUsersWithSimilarSkills(req, res, next){
-        let userId = req.params.userId;
+        let userId = Number(req.params.userId);
         let search = this._buildSearch(req);
         let limit = search.limit;
 
@@ -128,7 +128,11 @@ class UserController extends BaseController{
         let level = req.body.level;
         let want = req.body.want;
 
-        let promise = userDa.setKnowledge(userId, skillId, level, want);
+        let promise = userDa.setKnowledge(userId, skillId, level, want)
+                        .then(result => {
+                            this._updateUserLastUpdate(userId);
+                            return result;
+                        });
 
         this._respondPromise(req, res, promise);
     }
@@ -151,7 +155,11 @@ class UserController extends BaseController{
         let userId = req.session.user.id;
         let skillId = req.body.skillId;
 
-        let promise = userDa.deleteKnowledge(userId, skillId);
+        let promise = userDa.deleteKnowledge(userId, skillId)
+                        .then(result => {
+                            this._updateUserLastUpdate(userId);
+                            return result;
+                        });
 
         this._respondPromiseDelete(req, res, promise);
     }
@@ -177,7 +185,11 @@ class UserController extends BaseController{
         let userId = req.session.user.id;
         let interestName = req.body.interestName;
 
-        let promise = userDa.addInterest(userId, interestName);
+        let promise = userDa.addInterest(userId, interestName)
+                        .then(result => {
+                            this._updateUserLastUpdate(userId);
+                            return result;
+                        });
 
         this._respondPromise(req, res, promise);
     }
@@ -200,7 +212,11 @@ class UserController extends BaseController{
         let userId = req.session.user.id;
         let interestId = req.body.interestId;
 
-        let promise = userDa.removeInterest(userId, interestId);
+        let promise = userDa.removeInterest(userId, interestId)
+                        .then(result => {
+                            this._updateUserLastUpdate(userId);
+                            return result;
+                        });
 
         this._respondPromiseDelete(req, res, promise);
     }
@@ -216,6 +232,14 @@ class UserController extends BaseController{
                     return true;
                 return new errors.ForbiddenError("You don't have access to this user details")
             });
+    }
+
+    _updateUserLastUpdate(userId){
+        let user = {
+            id: userId,
+            lastUpdate: new Date()
+        };
+        return userDa.update(user, true);
     }
 
 } 
@@ -238,6 +262,7 @@ HTTP/1.1 200 OK
         image: "http://x.com/pic.jpg",
         phone: null,
         disabled: false, 
+        lastUpdate: "2016-10-24T17:21:22.633Z",
         type: "UserEmployee",  
         skillCount: 5,
         unapprovedSkillCount: 3,

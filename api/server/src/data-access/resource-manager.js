@@ -1,6 +1,5 @@
 'use strict'
 const P = require('bluebird');
-const neo4j = require('neo4j-driver').v1;
 const roles = require('../models/roles');
 const UserDa = require('./user');
 const errors = require('../shared/errors');
@@ -18,13 +17,12 @@ class ResourceManagerDa extends UserDa{
         let skillL = skillModel.labelsStr;
         let kRelL = this.model.getRelationByKey("knowledges").label;
 
-        skillIds = skillIds.map(id => neo4j.int(id));
-        let params = {skillIds: skillIds, skip: neo4j.int(skip), limit: neo4j.int(limit)};
+        let params = {skillIds: skillIds, skip: skip, limit: limit};
 
         let whereOffices = '';
         filters = filters || {};
         if(filters.offices){
-            params.offices = filters.offices.map(id => neo4j.int(id));;
+            params.offices = filters.offices;
             whereOffices = `where id(o) in {offices}`;
         }
 
@@ -44,7 +42,7 @@ class ResourceManagerDa extends UserDa{
                     skip {skip} limit {limit}
                     return {    
                                 id: id(n), username: n.username, type: n.type, email: n.email, 
-                                fullname: n.fullname, roles: n.roles, phone: n.phone, image: n.image, disabled: n.disabled,
+                                fullname: n.fullname, roles: n.roles, phone: n.phone, image: n.image, disabled: n.disabled, lastUpdate: n.lastUpdate,
                                 office: {id: id(o), name: o.name, country: o.country, acronym: o.acronym},
                                 allocation: al,
                                 position: p,
@@ -82,12 +80,6 @@ class ResourceManagerDa extends UserDa{
         `order by searches desc \n limit {limit} \n` +
         `return {_:s, group: {_:sg, parent: psg}, searches: searches}`;
 
-        limit = neo4j.int(limit);
-        if(fromDate)
-            fromDate = neo4j.int(fromDate);
-        if(toDate)
-            toDate = neo4j.int(toDate);
-
         let params = {limit: limit, fromDate: fromDate, toDate: toDate};
 
         return this.query(cmd, params);
@@ -103,7 +95,7 @@ class ResourceManagerDa extends UserDa{
         `where id(s) = {skillId} and not(u.disabled)\n` +
         `return {_:o, skilledUserCount: count(u)}`;
 
-        let params = {skillId: neo4j.int(skillId)};
+        let params = {skillId: skillId};
 
         return this.query(cmd, params);
     }

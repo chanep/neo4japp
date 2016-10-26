@@ -1,5 +1,4 @@
 'use strict'
-const neo4j = require('neo4j-driver').v1;
 const BaseDa = require('./base-da');
 const model = require('../models/models').user;
 const roles = require('../models/roles');
@@ -52,7 +51,7 @@ class UserDa extends BaseDa{
                         collect(distinct ind) as industries, count(distinct s) as skillCount, count(distinct su) as unapprovedSkillCount
                     return {    
                                 id: id(n), username: n.username, type: n.type, email: n.email, 
-                                fullname: n.fullname, roles: n.roles, phone: n.phone, image: n.image, disabled: n.disabled,
+                                fullname: n.fullname, roles: n.roles, phone: n.phone, image: n.image, disabled: n.disabled, lastUpdate: n.lastUpdate,
                                 office: {id: id(o), name: o.name, country: o.country, acronym: o.acronym},
                                 department: {id: id(d), name: d.name},
                                 position: {id: id(p), name: p.name},
@@ -64,7 +63,7 @@ class UserDa extends BaseDa{
                                 skillCount: skillCount,
                                 unapprovedSkillCount: unapprovedSkillCount
                     }`
-        let params = {id: neo4j.int(id)};
+        let params = {id: id};
         return this._run(cmd, params)
             .then(r => this._cypher.parseResultRaw(r))
 
@@ -97,7 +96,7 @@ class UserDa extends BaseDa{
                 similitudeScore: score
         }`
 
-        let params = {userId: neo4j.int(userId), limit: neo4j.int(limit)};
+        let params = {userId: userId, limit: limit};
         return this.query(cmd, params);
     }
 	/**
@@ -126,7 +125,7 @@ class UserDa extends BaseDa{
 			return {_:g, children: collect({_:cg, skills: skills})} as result
             order by result._.name
             `;
-        let params = {userId: neo4j.int(userId)};
+        let params = {userId: userId};
 		return this.query(cmd, params, null);
 	}
     findByUsername(username){
