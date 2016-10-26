@@ -41,6 +41,10 @@ export default class TopSearchedSkills extends React.Component {
         window.clearTimeout(this.timer);
     }
 
+    componentWillUnmount() {
+      this.clear();
+    }
+
     render () {
         let self = this;
 
@@ -50,11 +54,13 @@ export default class TopSearchedSkills extends React.Component {
               <ul className="top-searched-skills">
                 {
                   this.state.data.map(function (x, i, props) {
-                    return <li className={(this.state.hoveredSkillId == x.id ? 'highlighted' : '')} onMouseOver={() => self.highlightSkill(props, x.id)} onMouseOut={() => self.clear()} key={i}><Link to={'searchresults/' + x.id}>{x.name}</Link></li>
+                    return <li className={(this.state.hoveredSkillId === x.id ? 'highlighted' : '')} onMouseOver={() => self.highlightSkill(props, x.id)} onMouseOut={() => self.clear()} key={i}><Link to={'/searchresults/' + x.id}>{x.name}</Link></li>
                   }, this)
                 }
               </ul>
-              <a href="#" className="arrow-btn">Show all skills<span className="icon-right-arrow"></span></a>
+              <div className="all-skills-link">
+                <Link to="/searchallskills">SHOW ALL SKILLS &nbsp;&nbsp;&nbsp;&nbsp; ><span className="icon-right-arrow"></span></Link>
+              </div>
             </div>
         );
     }
