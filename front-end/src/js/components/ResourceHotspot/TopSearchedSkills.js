@@ -54,7 +54,9 @@ export default class TopSearchedSkills extends React.Component {
                   }, this)
                 }
               </ul>
-              <Link to="/searchallskills">Show all skills<span className="icon-right-arrow"></span></Link>
+              <div className="all-skills-link">
+                <Link to="/searchallskills">SHOW ALL SKILLS &nbsp;&nbsp;&nbsp;&nbsp; ><span className="icon-right-arrow"></span></Link>
+              </div>
             </div>
         );
     }
