@@ -155,7 +155,11 @@ function parseFieldRaw(f, schema){
 }
 
 function convertFromNativeValue(value, type){
-    if(!value || !type)
+    if(!value)
+        return value;
+    if(neo4j.isInt(value))
+        return getInt(value);
+    if(!type)
         return value;
     switch(type){
         case "date":

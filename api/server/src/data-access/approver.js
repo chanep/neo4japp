@@ -1,6 +1,5 @@
 'use strict'
 const P = require('bluebird');
-const neo4j = require('neo4j-driver').v1;
 const roles = require('../models/roles');
 const UserDa = require('./user');
 const errors = require('../shared/errors');
@@ -53,7 +52,7 @@ class ApproverDa extends UserDa{
                         skillGroups: skillGroups,
                         totalPendingApproval: totalPendingApproval
             }`
-        let params = {id: neo4j.int(approverId)};
+        let params = {id: approverId};
         return this.query(cmd, params);
 
     }
@@ -83,7 +82,7 @@ class ApproverDa extends UserDa{
         let cmd = `match (n:${label})<-[:${approverRelL}]-(:${label})-[k:${knowledgeRelL}]->()
             where id(n) = {userId} and id(k) = {knowledgeId}
             return (count(n) <> 0)`;
-        let params = {userId: neo4j.int(userId), knowledgeId: neo4j.int(knowledgeId)};
+        let params = {userId: userId, knowledgeId: knowledgeId};
         return this.query(cmd, params);
     }
     /**
