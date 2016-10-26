@@ -39,6 +39,10 @@ export default class SearchResult extends React.Component {
     }
 
 	render() {
+		if (this.state.obj === null || this.state.obj === undefined)
+			return null;
+		
+
 		let self = this;
         return (
 			<li className="-expanded">
@@ -69,12 +73,8 @@ export default class SearchResult extends React.Component {
 				        	}
 				        </div>
 			        </div>
-			        <div className="btnExpandContract col -col-1" onClick={this.expandContract.bind(this, this.state.obj.id)}>
-			            {this.state.showDetails ?
-			            	<i className="ss-icon-down-arrow"></i>
-			            :
-			            	<i className="ss-icon-up-arrow"></i>
-			            }
+			        <div className={"col -col-1 results-arrow-open-close " + (this.state.showDetails?"skill-opened":"")} onClick={this.expandContract.bind(this, this.state.obj.id)}>
+			            <i className="ss-icon-down-arrow"></i>
 			        </div>
 			    </div>
 			    {this.state.showDetails ? 

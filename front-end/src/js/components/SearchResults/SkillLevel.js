@@ -15,6 +15,9 @@ export default class SkillLevel extends React.Component {
 	}
 
 	render() {
+		if (this.state.level === null || this.state.level === undefined)
+			return null;
+		
 		return (
 			<div className="skill-bar">
                 <div className="bar"></div>
