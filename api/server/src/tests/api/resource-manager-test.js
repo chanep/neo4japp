@@ -231,7 +231,7 @@ vows.describe('Resource Manager api test')
 })
 
 .addBatch({
-    '6. Find similar skilled users': {
+    '8. Find similar skilled users': {
         topic: function () {
             var search = {
                 limit: 10

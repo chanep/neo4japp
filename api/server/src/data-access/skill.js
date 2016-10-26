@@ -1,7 +1,6 @@
 'use strict'
 const BaseDa = require('./base-da');
 const model = require('../models/models').skill;
-const neo4j = require('neo4j-driver').v1;
 
 class SkillDa extends BaseDa{
     constructor(tx){
@@ -46,7 +45,7 @@ class SkillDa extends BaseDa{
         let relatedModelName = this.model.getRelationByKey("group").model.labelsStr;
         var queryStmt = `MATCH (skill:${modelName})-[:${relationName}]->(group:${relatedModelName}) WHERE ID(group) = {groupID} AND skill.name = {skillName} RETURN skill`;
         var params = {
-            'groupID': neo4j.int(skill.groupId),
+            'groupID': skill.groupId,
             'skillName': skill.name
         };
 
