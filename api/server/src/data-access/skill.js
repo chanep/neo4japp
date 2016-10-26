@@ -1,6 +1,8 @@
 'use strict'
 const BaseDa = require('./base-da');
 const model = require('../models/models').skill;
+const P = require('bluebird');
+const errors = require('../shared/errors');
 
 class SkillDa extends BaseDa{
     constructor(tx){

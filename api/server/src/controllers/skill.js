@@ -84,7 +84,7 @@ class SkillController extends BaseController{
           }
     */
     findByType(req, res, next){
-        let type = Number(req.params.type);
+        let type = req.params.type;
         let promise = skillDa.findByType(type);
 
         this._respondPromise(req, res, promise);
