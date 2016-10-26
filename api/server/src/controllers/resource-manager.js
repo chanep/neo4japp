@@ -124,7 +124,7 @@ class ResourceManagerController extends BaseController{
     }
     */
     skilledUsersByOffice(req, res, next){
-        let skillId = req.params.skillId;
+        let skillId = Number(req.params.skillId);
 
         let promise = resourceManagerDa.skilledUsersByOffice(skillId);
 

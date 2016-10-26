@@ -204,7 +204,7 @@ function valueToCypher(value, key){
     if(key == 'id' && _.isInteger(value)){
         return neo4j.int(value);
     } else if (_.isDate(value)){
-        return value.getTime();
+        return neo4j.int(value.getTime());
     } else if (_.isObject(value)){
         return JSON.stringify(value);
     } else{

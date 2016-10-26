@@ -27,7 +27,7 @@ class UserController extends BaseController{
     */
     details(req, res, next){
         let loggedUser = req.session.user;
-        let userId = req.params.userId || loggedUser.id;
+        let userId = Number(req.params.userId || loggedUser.id);
         let promise = this._validateUserAccess(loggedUser, userId)
             .then(() => {
                 return userDa.findByIdFull(userId);
@@ -70,7 +70,7 @@ class UserController extends BaseController{
     */
     findUserSkills(req, res, next){
         let loggedUser = req.session.user;
-        let userId = req.params.userId;
+        let userId = Number(req.params.userId);
         let search = this._buildSearch(req);
         let allSkills = search.all;
         let promise = this._validateUserAccess(loggedUser, userId)
@@ -92,7 +92,7 @@ class UserController extends BaseController{
     @apiUse similarSkilledUserResponse
     */
     findUsersWithSimilarSkills(req, res, next){
-        let userId = req.params.userId;
+        let userId = Number(req.params.userId);
         let search = this._buildSearch(req);
         let limit = search.limit;
 

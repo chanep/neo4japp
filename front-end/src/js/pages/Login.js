@@ -13,8 +13,10 @@ class Login extends React.Component {
 		super();
 
 	    this.state = {
-	      username: '',
-	      password: ''
+	      "username": '',
+	      "password": '',
+        "attempting": false,
+        "failedAttempt": false
 	    }
 	}
 
@@ -30,14 +32,18 @@ class Login extends React.Component {
     let self = this;
 		e.preventDefault();
 
+    this.setState({ "attempting": true });
+
     let session = new SessionServices();
     session.Login(self.state.username, self.state.password).then(data => {
       cookie.save('currentUser', data);
       let basePage = new BasePage();
       this.context.router.push({pathname: basePage.GetMyRootPath()});
+      this.setState({ "attempting": false });
 
     }).catch(data => {
-      console.log("Errorrrrr", data);
+      this.setState({ "failedAttempt": true });
+      this.setState({ "attempting": false });
     });
   }
 
@@ -51,8 +57,11 @@ class Login extends React.Component {
               <form onSubmit={this.loginSubmit.bind(this)}>
 			         <span className="ss-icon-user"></span><input id="username" type="text" placeholder="User Name" className="inputTextBox" onChange={this.handleUsernameChange.bind(this)} />
 			         <span className="ss-icon-password"></span><input id="userPass" type="password" placeholder="Password" className="inputTextBox" onChange={this.handlePasswordChange.bind(this)}/>
-			         <input type="submit" value="LOG IN" />
+               <input type="submit" value="LOG IN" disabled={this.state.attempting} />
               </form>
+              {this.state.failedAttempt ?
+              <span className="failed-attempt">Invalid username/password. Please, try again.</span>
+              : false }
 			      </div>
 		      </div>
 	      </div>

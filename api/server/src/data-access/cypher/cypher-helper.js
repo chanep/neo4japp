@@ -1,7 +1,6 @@
 'use strict'
 const _ = require('lodash');
 const errors = require('../../shared/errors');
-const neo4j = require('neo4j-driver').v1;
 const whereHelper = require('./where-helper');
 const resultParser = require('./result-parser');
 
@@ -27,7 +26,7 @@ class CypherHelper {
         let with_ = this.getWith(query.includes);
         let ret = this.getReturn(query.includes);
         let orderBy = this.getOrderBy(query);
-        let skipLimit = this.getSkipLimit(query);
+        let skipLimit = this.getSkipLimit(query, params);
         let cmd = `${match}\n${with_}\n${orderBy}\n${skipLimit}\n${ret}`;
         cmd = cmd.replace(/\n+/g, '\n');
         return {cmd:cmd, params:params};
@@ -52,7 +51,7 @@ class CypherHelper {
                       SET n ${operator} {data}
                         RETURN n`;
         let dataAux = _.omit(data, ["id"]);
-        let params = {id: neo4j.int(data.id), data: this.convertToNative(dataAux, this.model.schema)};
+        let params = {id: data.id, data: this.convertToNative(dataAux, this.model.schema)};
         return  {cmd:cmd, params:params};
     }
     deleteCmd(id, force){
@@ -104,7 +103,7 @@ class CypherHelper {
              RETURN r`;
         }
         
-        let params = {id: neo4j.int(id), otherId: neo4j.int(otherId), relData: relData};
+        let params = {id: id, otherId: otherId, relData: relData};
 
         return  {cmd:cmd, params:params};;
     }
@@ -116,7 +115,7 @@ class CypherHelper {
              DELETE r
              RETURN count(r)`;
 
-        let params = {id: neo4j.int(id), otherId: neo4j.int(otherId)};
+        let params = {id: id, otherId: otherId};
 
         return  {cmd:cmd, params:params};;
     }
@@ -130,7 +129,7 @@ class CypherHelper {
              SET r ${operator} {relData}
              RETURN r`;
 
-        let params = {relId: neo4j.int(relId), relData: relData};
+        let params = {relId: relId, relData: relData};
 
         return  {cmd:cmd, params:params};;
     }
@@ -139,10 +138,10 @@ class CypherHelper {
         let label = this.model.labelsStr;
         let relCypher = this._getRelationshipCypher(relKey, 'r');
 
-        let params = {id: neo4j.int(selfId)};
+        let params = {id: selfId};
         let condition = ''
         if(otherId){
-            params.otherId = neo4j.int(otherId)
+            params.otherId = otherId;
             condition = 'and id(m) = {otherId}'
         }
 
@@ -160,7 +159,7 @@ class CypherHelper {
             MATCH (m:${r.model.labelsStr}) WHERE ID(m) = {otherId}
             CREATE (n:${this.model.labelsStr} {data})${relCypher}(m)
             RETURN n`
-        let params = {otherId: neo4j.int(otherId), data: this.convertToNative(data, this.model.schema), relData: this.convertToNative(relData, r.schema)};
+        let params = {otherId: otherId, data: this.convertToNative(data, this.model.schema), relData: this.convertToNative(relData, r.schema)};
         return  {cmd:cmd, params:params};;
     }
     deleteAllRelationshipsCmd(id, relKey){
@@ -169,7 +168,7 @@ class CypherHelper {
                 MATCH (n:${this.model.labelsStr})${relCypher}() WHERE ID(n) = {id}
                 DELETE r
                 RETURN count(n) as affected`;
-        let params = {id: neo4j.int(id)};
+        let params = {id: id};
         return  {cmd:cmd, params:params};;
     }
     setChildCmd(selfId, relKey, childData){
@@ -181,7 +180,7 @@ class CypherHelper {
             MERGE (n)${relCypher}(m:${r.model.labelsStr})
             SET m = {childData} 
             RETURN m`
-        let params = {selfId: neo4j.int(selfId), childData: this.convertToNative(childData, r.model.schema)};
+        let params = {selfId: selfId, childData: this.convertToNative(childData, r.model.schema)};
         return  {cmd:cmd, params:params};;
     }
     addChildCmd(selfId, relKey, childData){
@@ -192,7 +191,7 @@ class CypherHelper {
             MATCH (n:${this.model.labelsStr}) WHERE ID(n) = {selfId}
             CREATE (n)${relCypher}(m:${r.model.labelsStr} {childData})
             RETURN m`
-        let params = {selfId: neo4j.int(selfId), childData: this.convertToNative(childData, r.model.schema)};
+        let params = {selfId: selfId, childData: this.convertToNative(childData, r.model.schema)};
         return  {cmd:cmd, params:params};;
     }
     updateChild(slefId, relKey, childData){
@@ -204,7 +203,7 @@ class CypherHelper {
             MATCH (n:${this.model.labelsStr})${relCypher}(m:${r.model.labelsStr}) WHERE ID(n) = {selfId} AND ID(m) = {childId}
             SET m = {childDataAux} 
             RETURN m`
-        let params = {selfId: neo4j.int(selfId), childId: neo4j.int(childId), childDataAux: this.convertToNative(childDataAux, r.model.schema)};
+        let params = {selfId: selfId, childId: childId, childDataAux: this.convertToNative(childDataAux, r.model.schema)};
         return  {cmd:cmd, params:params};;
     }
     _getRelationshipCypher(relKey, relAlias, relData){
@@ -376,10 +375,12 @@ class CypherHelper {
         }
         return 'ORDER BY ' + orders.join(', ');
     }
-    getSkipLimit(query){
+    getSkipLimit(query, params){
         if(!query || !query.paged)
             return '';
-        return `SKIP ${query.paged.skip} LIMIT ${query.paged.limit}`;
+        params.skip = query.paged.skip;
+        params.limit = query.paged.limit;
+        return `SKIP {skip} LIMIT {limit}`;
     }
     parseQuery(query){
         if(!query)

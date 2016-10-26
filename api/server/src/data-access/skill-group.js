@@ -2,7 +2,6 @@
 const BaseDa = require('./base-da');
 const model = require('../models/models').skillGroup;
 const skillModel = require('../models/models').skill;
-const neo4j = require('neo4j-driver').v1;
 
 class SkillGroupDa extends BaseDa{
     constructor(tx){
@@ -57,7 +56,7 @@ class SkillGroupDa extends BaseDa{
         let relationName = this.model.getRelationByKey("parent").label;
         var queryStmt = `MATCH (child:${modelName})-[${relationName}]->(parent:${modelName}) WHERE ID(parent) = {parentID} AND child.name = {childName} AND child.type = {childType} RETURN child`;
     	var params = {
-    		'parentID': neo4j.int(levelsData.level1Id),
+    		'parentID': levelsData.level1Id,
     		'childName': levelsData.name,
     		'childType': levelsData.type
     	};

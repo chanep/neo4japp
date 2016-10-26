@@ -74,9 +74,10 @@ class BaseDa {
         }
     }
     _run(cmd, params) {
+        let parsedParams = this._parseParams(params);
         let session = this._session();
         this._logCmd(cmd, params);
-        var p = session.run(cmd, params)
+        var p = session.run(cmd, parsedParams)
             .then(result => {
                 this._disposeSession(session);
                 return result;
@@ -216,7 +217,6 @@ class BaseDa {
     _findPaged(query){
         try{
             query = query || {};
-            let includes = query.includes || [];
             let cypher = this._cypher.findCmd(query);
             let totalCount;
             return this.count(query)
@@ -278,7 +278,7 @@ class BaseDa {
         return this._run(countCmd, countParams)
                 .then(r => {
                     paged.totalCount = this._cypher.parseIntResult(r);
-                    return this._run(cmd, params)
+                    return this._run(cmd, params);
                 })
                 .then(r => {
                     let result = {};
@@ -555,6 +555,22 @@ class BaseDa {
     }
     delistTx(){
         this._tx = null;
+    }
+
+    _parseParams(params){
+        if(!params)
+            return params;
+        let parsedParams = _.cloneDeep(params);
+        for(let k in parsedParams){
+            let val = parsedParams[k];
+            if(_.isInteger(val))
+                parsedParams[k] = neo4j.int(val);
+            else if(Array.isArray(val) && val.length > 0 && _.isInteger(val[0]))
+                parsedParams[k] = val.map(v => neo4j.int(v));
+            else if(_.isObject(val))
+                parsedParams[k] = this._parseParams(val);
+        }
+        return parsedParams;
     }
     
 }
