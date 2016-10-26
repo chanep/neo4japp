@@ -5,11 +5,11 @@
 .resource-manager-map {
     .left-col {
         h2 {
-            font-size: 12px;
+            font-size: em(12);
             color: #666767;
-            border-bottom: 1px solid #e7e7e8;
+            border-bottom: em(1) solid #e7e7e8;
             margin: 0;
-            padding: 4px 0 11px 20px;
+            padding: em(4) 0 em(11) em(20);
         }
 
         .top-searched-skills {
@@ -32,12 +32,27 @@
             }
         }
 
+        .all-skills-link {
+            padding-left: 20px;
+            margin-top: em(50);
+            font-size: em(12);
+
+            a {
+                color: black;
+            }
+
+            a:hover {
+                color: red;
+            }
+        }
+
         ul {
             padding-left: 20px;
-            margin: 16px 0;
+            margin: em(16) 0;
+            font-size: em(16);
 
             li {
-                margin-bottom: 6px;
+                margin-bottom: em(6);
                 &:last-child {
                     margin-bottom: 0;
                 }
@@ -52,22 +67,22 @@
 
         .arrow-btn {
             display: block;
-            padding-left: 20px;
+            padding-left: em(20);
         }
     }
     .right-col {
         h2 {
-            font-size: 16px;
+            font-size: em(16);
             color: #000;
-            border-bottom: 1px solid #e7e7e8;
+            border-bottom: em(1) solid #e7e7e8;
             margin: 0;
-            padding: 0 0 11px 10px;
+            padding: 0 0 em(11) em(10);
         }
 
         .map-wrapper {
             position: relative;
             background: url('../img/map.png') no-repeat;
-            height: 440px;
+            height: em(440);
 
             li {
                 position: absolute;
@@ -78,7 +93,7 @@
                     height: 65px;
                     width: 65px;
                     display: block;
-                    border-radius: 100px;
+                    border-radius: em(100);
                     padding: 5px 0;
 
                     &:hover {
@@ -87,7 +102,7 @@
                     }
 
                     span {
-                        border-bottom: 1px solid #c9c9ca;
+                        border-bottom: em(1) solid #c9c9ca;
                         color: #000;
                         text-align: center;
                         display: block;
@@ -95,12 +110,12 @@
                         width: 28px;
 
                         &.location {
-                            font-size: 10px;
+                            font-size: em(10);
                             font-weight: bold;
                         }
 
                         &.amount {
-                            font-size: 20px;
+                            font-size: em(20);
                             font-weight: bold;
                         }
                     }

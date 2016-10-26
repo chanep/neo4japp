@@ -5,29 +5,51 @@
 // Dependencies
 import React from 'react';
 import Search from './Header/Search';
-import FiltersSideBar from '../components/FiltersSideBar';
-import SkillsLevelTable from "../components/SkillsLevelTable";
+import AddSkillsFilter from "../components/EmployeeProfile/AddSkillsFilter";
+import SkillsServices from "../services/SkillsServices";
+import AllSkillsList from "../components/AllSkillsList/AllSkillsList";
 
 // Class: SearchAllSkillsTable
 export default class SearchAllSkillsTable extends React.Component {
-    constructor(search, loggedIn) {
-        super();
+    constructor(props) {
+        super(props);
+
         this.state = {
-            'search': search,
-            'loggedIn': loggedIn,
-            showLevels: false 
+            data: [],
+            selectedGroup: 0
         };
+
+        this.skillsServices = new SkillsServices();
     }
 
-    showHideLevels() {
-        if(this.state.showLevels) {
-            this.setState({ showLevels: false });
-        } else {
-            this.setState({ showLevels: true });
-        }
+    handleFilter(selectedValue) {
+        this.setState({selectedGroup: selectedValue});
+    }
+
+    getData() {
+        this.skillsServices.GetAllSkills().then(data => {
+            this.setState({
+                data: data
+            });
+        }).catch(data => {
+          
+            console.log("skills data error", data);
+          
+        });
+    }
+
+    componentDidMount() {
+        this.getData();
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.getData();
     }
 
     render() {
+        if (this.state.data === null || this.state.data.length === 0)
+            return <div />
+
         return (
             <div className="search-results-table">
                 <div className="header-bar">
@@ -47,263 +69,10 @@ export default class SearchAllSkillsTable extends React.Component {
                 <div className="results-section">
 
                     {/*FILTERS SIDE BAR*/}
-                    <FiltersSideBar /> 
+                    <AddSkillsFilter data={this.state.data} onSelectedGroup={this.handleFilter.bind(this)} />
 
                     <div className="results-profile results results--right col -col-9 -col-no-gutter">
-                        <div className="grid">
-                            <div className="col -col-5">
-                                <p className="table-row-heading">PHP</p>
-                            </div>
-                            <div className="col -col-4">
-                                <p className="table-row">Technology</p>
-                            </div>
-                            <div className="col -col-2">
-                                <span className="table-row">5</span>
-                            </div>
-                            <div className={this.state.showLevels ? "col -col-1 results-arrow-open-close skill-opened" : "col -col-1 results-arrow-open-close"} onClick={this.showHideLevels.bind(this)}>
-                                <i className="ss-icon-down-arrow"></i>
-                            </div>
-                        </div>
-                        { this.state.showLevels ? <SkillsLevelTable /> : null }
-
-                        <div className="grid">
-                            <div className="col -col-5">
-                                <p className="table-row-heading">PHP</p>
-                            </div>
-                            <div className="col -col-4">
-                                <p className="table-row">Technology</p>
-                            </div>
-                            <div className="col -col-2">
-                                <span className="table-row">5</span>
-                            </div>
-                            <div className="col -col-1 results-arrow-open-close">
-                                <i className="ss-icon-down-arrow"></i>
-                            </div>
-                        </div>
-                        <div className="grid">
-                            <div className="col -col-5">
-                                <p className="table-row-heading">PHP</p>
-                            </div>
-                            <div className="col -col-4">
-                                <p className="table-row">Technology</p>
-                            </div>
-                            <div className="col -col-2">
-                                <span className="table-row">5</span>
-                            </div>
-                            <div className="col -col-1 results-arrow-open-close">
-                                <i className="ss-icon-down-arrow"></i>
-                            </div>
-                        </div>
-                        <div className="grid">
-                            <div className="col -col-5">
-                                <p className="table-row-heading">PHP</p>
-                            </div>
-                            <div className="col -col-4">
-                                <p className="table-row">Technology</p>
-                            </div>
-                            <div className="col -col-2">
-                                <span className="table-row">5</span>
-                            </div>
-                            <div className="col -col-1 results-arrow-open-close">
-                                <i className="ss-icon-down-arrow"></i>
-                            </div>
-                        </div>
-                        <div className="grid">
-                            <div className="col -col-5">
-                                <p className="table-row-heading">PHP</p>
-                            </div>
-                            <div className="col -col-4">
-                                <p className="table-row">Technology</p>
-                            </div>
-                            <div className="col -col-2">
-                                <span className="table-row">5</span>
-                            </div>
-                            <div className="col -col-1 results-arrow-open-close">
-                                <i className="ss-icon-down-arrow"></i>
-                            </div>
-                        </div>
-                        <div className="grid">
-                            <div className="col -col-5">
-                                <p className="table-row-heading">PHP</p>
-                            </div>
-                            <div className="col -col-4">
-                                <p className="table-row">Technology</p>
-                            </div>
-                            <div className="col -col-2">
-                                <span className="table-row">5</span>
-                            </div>
-                            <div className="col -col-1 results-arrow-open-close">
-                                <i className="ss-icon-down-arrow"></i>
-                            </div>
-                        </div>
-                        <div className="grid">
-                            <div className="col -col-5">
-                                <p className="table-row-heading">PHP</p>
-                            </div>
-                            <div className="col -col-4">
-                                <p className="table-row">Technology</p>
-                            </div>
-                            <div className="col -col-2">
-                                <span className="table-row">5</span>
-                            </div>
-                            <div className="col -col-1 results-arrow-open-close">
-                                <i className="ss-icon-down-arrow"></i>
-                            </div>
-                        </div>
-                        <div className="grid">
-                            <div className="col -col-5">
-                                <p className="table-row-heading">PHP</p>
-                            </div>
-                            <div className="col -col-4">
-                                <p className="table-row">Technology</p>
-                            </div>
-                            <div className="col -col-2">
-                                <span className="table-row">5</span>
-                            </div>
-                            <div className="col -col-1 results-arrow-open-close">
-                                <i className="ss-icon-down-arrow"></i>
-                            </div>
-                        </div>
-                        <div className="grid">
-                            <div className="col -col-5">
-                                <p className="table-row-heading">PHP</p>
-                            </div>
-                            <div className="col -col-4">
-                                <p className="table-row">Technology</p>
-                            </div>
-                            <div className="col -col-2">
-                                <span className="table-row">5</span>
-                            </div>
-                            <div className="col -col-1 results-arrow-open-close">
-                                <i className="ss-icon-down-arrow"></i>
-                            </div>
-                        </div>
-                        <div className="grid">
-                            <div className="col -col-5">
-                                <p className="table-row-heading">PHP</p>
-                            </div>
-                            <div className="col -col-4">
-                                <p className="table-row">Technology</p>
-                            </div>
-                            <div className="col -col-2">
-                                <span className="table-row">5</span>
-                            </div>
-                            <div className="col -col-1 results-arrow-open-close">
-                                <i className="ss-icon-down-arrow"></i>
-                            </div>
-                        </div>
-                        <div className="grid">
-                            <div className="col -col-5">
-                                <p className="table-row-heading">PHP</p>
-                            </div>
-                            <div className="col -col-4">
-                                <p className="table-row">Technology</p>
-                            </div>
-                            <div className="col -col-2">
-                                <span className="table-row">5</span>
-                            </div>
-                            <div className="col -col-1 results-arrow-open-close">
-                                <i className="ss-icon-down-arrow"></i>
-                            </div>
-                        </div>
-                        <div className="grid">
-                            <div className="col -col-5">
-                                <p className="table-row-heading">PHP</p>
-                            </div>
-                            <div className="col -col-4">
-                                <p className="table-row">Technology</p>
-                            </div>
-                            <div className="col -col-2">
-                                <span className="table-row">5</span>
-                            </div>
-                            <div className="col -col-1 results-arrow-open-close">
-                                <i className="ss-icon-down-arrow"></i>
-                            </div>
-                        </div>
-                        <div className="grid">
-                            <div className="col -col-5">
-                                <p className="table-row-heading">PHP</p>
-                            </div>
-                            <div className="col -col-4">
-                                <p className="table-row">Technology</p>
-                            </div>
-                            <div className="col -col-2">
-                                <span className="table-row">5</span>
-                            </div>
-                            <div className="col -col-1 results-arrow-open-close">
-                                <i className="ss-icon-down-arrow"></i>
-                            </div>
-                        </div>
-                        <div className="grid">
-                            <div className="col -col-5">
-                                <p className="table-row-heading">PHP</p>
-                            </div>
-                            <div className="col -col-4">
-                                <p className="table-row">Technology</p>
-                            </div>
-                            <div className="col -col-2">
-                                <span className="table-row">5</span>
-                            </div>
-                            <div className="col -col-1 results-arrow-open-close">
-                                <i className="ss-icon-down-arrow"></i>
-                            </div>
-                        </div>
-                        <div className="grid">
-                            <div className="col -col-5">
-                                <p className="table-row-heading">PHP</p>
-                            </div>
-                            <div className="col -col-4">
-                                <p className="table-row">Technology</p>
-                            </div>
-                            <div className="col -col-2">
-                                <span className="table-row">5</span>
-                            </div>
-                            <div className="col -col-1 results-arrow-open-close">
-                                <i className="ss-icon-down-arrow"></i>
-                            </div>
-                        </div>
-                        <div className="grid">
-                            <div className="col -col-5">
-                                <p className="table-row-heading">PHP</p>
-                            </div>
-                            <div className="col -col-4">
-                                <p className="table-row">Technology</p>
-                            </div>
-                            <div className="col -col-2">
-                                <span className="table-row">5</span>
-                            </div>
-                            <div className="col -col-1 results-arrow-open-close">
-                                <i className="ss-icon-down-arrow"></i>
-                            </div>
-                        </div>
-                        <div className="grid">
-                            <div className="col -col-5">
-                                <p className="table-row-heading">PHP</p>
-                            </div>
-                            <div className="col -col-4">
-                                <p className="table-row">Technology</p>
-                            </div>
-                            <div className="col -col-2">
-                                <span className="table-row">5</span>
-                            </div>
-                            <div className="col -col-1 results-arrow-open-close">
-                                <i className="ss-icon-down-arrow"></i>
-                            </div>
-                        </div>
-                        <div className="grid">
-                            <div className="col -col-5">
-                                <p className="table-row-heading">PHP</p>
-                            </div>
-                            <div className="col -col-4">
-                                <p className="table-row">Technology</p>
-                            </div>
-                            <div className="col -col-2">
-                                <span className="table-row">5</span>
-                            </div>
-                            <div className="col -col-1 results-arrow-open-close">
-                                <i className="ss-icon-down-arrow"></i>
-                            </div>
-                        </div>
+                        <AllSkillsList selectedGroup={this.state.selectedGroup} data={this.state.data} />
                     </div>
                 </div>
             </div>

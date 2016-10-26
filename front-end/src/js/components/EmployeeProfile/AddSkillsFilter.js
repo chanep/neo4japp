@@ -16,22 +16,19 @@ export default class AddSkillsFilter extends React.Component {
     }
 
     componentDidMount() {
-    	
+    	this.setState({data: this.props.data});
     }
 
 	componentWillReceiveProps(nextProps) {
 		this.setState({data: nextProps.data});
 	}
 
-	handleChange() {
-
-  	}
-
   	onValueChanged(refVal, e) {
 		this.props.onSelectedGroup(refVal);
   	}
 
     render() {
+    	console.log("this.state.data", this.state.data);
     	let skills = [];
     	let tools = [];
 

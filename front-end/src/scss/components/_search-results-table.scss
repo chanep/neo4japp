@@ -446,17 +446,26 @@
                 overflow: hidden;
             }
         }
-
-        .selectCategory {
-            text-align: center;
-            padding: em(15);
-            font-size: em(14);
-            font-weight: bold;
-            color: $GREY;
-            display: block;
-        }
     }
 }
 
+.selectCategory {
+    text-align: center;
+    padding: em(15);
+    font-size: em(14);
+    font-weight: bold;
+    color: $GREY;
+    display: block;
+}
 
+.skill-level-grid {
+    a:link {
+        text-decoration: inherit;
+        color: inherit;
+    }
 
+    a:visited {
+        text-decoration: inherit;
+        color: inherit;
+    }
+}
