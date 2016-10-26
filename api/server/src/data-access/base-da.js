@@ -560,11 +560,15 @@ class BaseDa {
     _parseParams(params){
         if(!params)
             return params;
-        let parsedParams = _.clone(params);
+        let parsedParams = _.cloneDeep(params);
         for(let k in parsedParams){
             let val = parsedParams[k];
             if(_.isInteger(val))
                 parsedParams[k] = neo4j.int(val);
+            else if(Array.isArray(val) && val.length > 0 && _.isInteger(val[0]))
+                parsedParams[k] = val.map(v => neo4j.int(v));
+            else if(_.isObject(val))
+                parsedParams[k] = this._parseParams(val);
         }
         return parsedParams;
     }
