@@ -65,7 +65,7 @@ class UserDa extends BaseDa{
                     }`
         let params = {id: id};
         return this._run(cmd, params)
-            .then(r => this._cypher.parseResultRaw(r))
+            .then(r => this._cypher.parseResultRaw(r, this.model.schema))
 
     }
 
