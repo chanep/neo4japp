@@ -21,6 +21,9 @@ export default class SkillResult extends React.Component {
 	}
 
 	render() {
+		if (this.state.obj === null || this.state.obj === undefined)
+			return null;
+		
 		return (
             <li className="col -col-4">
                 <div className="title">
