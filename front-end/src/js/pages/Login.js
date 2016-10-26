@@ -13,8 +13,9 @@ class Login extends React.Component {
 		super();
 
 	    this.state = {
-	      username: '',
-	      password: ''
+	      "username": '',
+	      "password": '',
+        "failedAttempt": false
 	    }
 	}
 
@@ -37,7 +38,7 @@ class Login extends React.Component {
       this.context.router.push({pathname: basePage.GetMyRootPath()});
 
     }).catch(data => {
-      console.log("Errorrrrr", data);
+      this.setState({ "failedAttempt": true });
     });
   }
 
@@ -51,8 +52,11 @@ class Login extends React.Component {
               <form onSubmit={this.loginSubmit.bind(this)}>
 			         <span className="ss-icon-user"></span><input id="username" type="text" placeholder="User Name" className="inputTextBox" onChange={this.handleUsernameChange.bind(this)} />
 			         <span className="ss-icon-password"></span><input id="userPass" type="password" placeholder="Password" className="inputTextBox" onChange={this.handlePasswordChange.bind(this)}/>
-			         <input type="submit" value="LOG IN" />
+               <input type="submit" value="LOG IN" />
               </form>
+              {this.state.failedAttempt ?
+              <span className="failed-attempt">Invalid username/password. Please, try again.</span>
+              : false }
 			      </div>
 		      </div>
 	      </div>

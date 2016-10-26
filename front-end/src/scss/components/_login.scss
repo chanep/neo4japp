@@ -42,5 +42,14 @@
         padding: em(18) em(19);
         vertical-align: top;
         display: inline-block;
+
+        &.failed-attempt {
+            background-color: white;
+            padding: 0;
+            margin: em(24) 0;
+            color: red;
+            font-weight: bold;
+            width: 250px;
+        }
     }
 }
