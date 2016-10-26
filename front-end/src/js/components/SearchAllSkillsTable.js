@@ -5,29 +5,51 @@
 // Dependencies
 import React from 'react';
 import Search from './Header/Search';
-import FiltersSideBar from '../components/FiltersSideBar';
 import SkillsLevelTable from "../components/SkillsLevelTable";
+import AddSkillsFilter from "../components/EmployeeProfile/AddSkillsFilter";
+import SkillsServices from "../services/SkillsServices";
 
 // Class: SearchAllSkillsTable
 export default class SearchAllSkillsTable extends React.Component {
-    constructor(search, loggedIn) {
-        super();
+    constructor(props) {
+        super(props);
+
         this.state = {
-            'search': search,
-            'loggedIn': loggedIn,
-            showLevels: false 
+            data: [],
+            selectedGroup: 0
         };
+
+        this.skillsServices = new SkillsServices();
     }
 
-    showHideLevels() {
-        if(this.state.showLevels) {
-            this.setState({ showLevels: false });
-        } else {
-            this.setState({ showLevels: true });
-        }
+    handleFilter(selectedValue) {
+        this.setState({selectedGroup: selectedValue});
+    }
+
+    getData() {
+        this.skillsServices.GetAllSkills().then(data => {
+            this.setState({
+                data: data
+            });
+        }).catch(data => {
+          
+            console.log("skills data error", data);
+          
+        });
+    }
+
+    componentDidMount() {
+        this.getData();
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.getData();
     }
 
     render() {
+        if (this.state.data === null || this.state.data.length === 0)
+            return <div />
+
         return (
             <div className="search-results-table">
                 <div className="header-bar">
@@ -47,7 +69,7 @@ export default class SearchAllSkillsTable extends React.Component {
                 <div className="results-section">
 
                     {/*FILTERS SIDE BAR*/}
-                    <FiltersSideBar /> 
+                    <AddSkillsFilter data={this.state.data} onSelectedGroup={this.handleFilter.bind(this)} />
 
                     <div className="results-profile results results--right col -col-9 -col-no-gutter">
                         <div className="grid">

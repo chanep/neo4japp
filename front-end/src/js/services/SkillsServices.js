@@ -8,4 +8,8 @@ export default class SkillsServices extends ServicesBase {
 	GetSkilledUsersByOffice(skillId, limit) {
 		return super.callGetServices('resource-manager/skilled-users-by-office/' + skillId, {limit: limit});
 	}
+
+	GetAllSkills() {
+		return super.callGetServices('skill/all-groups', null);
+	}
 }
