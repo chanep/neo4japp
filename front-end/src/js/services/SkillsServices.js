@@ -12,4 +12,8 @@ export default class SkillsServices extends ServicesBase {
 	GetAllSkills() {
 		return super.callGetServices('skill/all-groups', null);
 	}
+
+	GetSkill(limit) {
+		return super.callGetServices('skill', {limit: limit});
+	}
 }

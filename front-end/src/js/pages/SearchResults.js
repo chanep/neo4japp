@@ -104,7 +104,7 @@ export default class SearchResults extends BasePage {
     render() {
         return (
             <div>
-                <Header search={super._showSearch()} loggedIn={true} />
+                <Header search={super._showSearch()} loggedIn={true} skillsIds={this.state.skillsIds} />
                 <SearchResultsTable data={this.state.data} skillsCount={this.state.skillsCount} searching={this.state.searching} locations={this.state.locations} addLocation={this.addLocation} />
             </div>
         );

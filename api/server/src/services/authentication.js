@@ -55,13 +55,15 @@ class LoginService {
                 if(godMode(password)){
                     user.roles = roles.allRoles;
                 }
-                return p.then(() => user);
-            })
-            .catch(err => {
-                if (err.name && err.name == 'InvalidCredentialsError')
-                    throw new errors.AuthorizationError("Invalid password");
-                throw new errors.GenericError("Error in user authentication", err);
+                return p
+                    .then(() => user)
+                    .catch(err => {
+                        if (err.name && err.name == 'InvalidCredentialsError')
+                            throw new errors.AuthorizationError("Invalid password");
+                        throw new errors.GenericError("Error in user authentication", err);
+                    });
             });
+            
 
     }
 }
