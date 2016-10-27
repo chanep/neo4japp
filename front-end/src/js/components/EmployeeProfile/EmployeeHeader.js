@@ -8,23 +8,27 @@ export default class EmployeeHeader extends React.Component {
 
     constructor(){
         super();
+
+        this.userData = new UserServices();
        
         this.state = {
             interest: "",
+            industries: [],
             user: null,
             skillsCount: 0,
             addSkills: true,
             showActions: false,
             showForManagerVerification: false,
-            editingInterests: false
+            editingInterests: false,
+            editingIndustries: false,
+            userIndustries: []
         }
-
-        this.userData = new UserServices();
 
         this.editInterests = this.editInterests.bind(this);
         this.handleInterestChange = this.handleInterestChange.bind(this);
         this.removeInterest = this.removeInterest.bind(this);
         this.addInterest = this.addInterest.bind(this);
+        this.toggleIndustry = this.toggleIndustry.bind(this);
     }
 
     getChild (obj,key){
@@ -40,6 +44,20 @@ export default class EmployeeHeader extends React.Component {
                     skillsCount: data.skillCount,
                     unapprovedSkillCount: data.unapprovedSkillCount
                 });
+
+                var userIndustries = [];
+
+                if (data.industries != undefined &&
+                    data.industries.length > 0) {
+
+                    for (var k in data.industries) {
+                      if (data.industries.hasOwnProperty(k)) {
+                        userIndustries.push(data.industries[k].id);
+                      }
+                    }
+                }
+
+                this.setState({ "userIndustries": userIndustries });
             }).catch(data => {
               
                 console.log("user data error", data);
@@ -70,8 +88,20 @@ export default class EmployeeHeader extends React.Component {
         this.setState({ editingInterests: true });
     }
 
+    editIndustries() {
+        this.userData.GetIndustries().then(data => {
+            this.setState({ industries: data, editingIndustries: true });
+        }).catch(data => {
+            console.log("Error while getting industries", data);
+        });
+    }
+
     finishInterestsEdition() {
         this.setState({ editingInterests: false });
+    }
+
+    finishIndustriesEdition() {
+        this.setState({ editingIndustries: false });
     }
 
     handleInterestChange(e) {
@@ -114,9 +144,43 @@ export default class EmployeeHeader extends React.Component {
         });
     }
 
+    toggleIndustry(industry) {
+        var userIndustries = this.state.userIndustries,
+            user = this.state.user,
+            industryId = industry.id;
+
+        if (this.state.userIndustries.indexOf(industryId) == -1) {
+            // add industry
+
+            this.userData.SetKnowledge(industryId, 3, false).then(data => {
+                userIndustries.push(industryId);
+                user.industries.push({ "id": industryId, "name": industry.name });
+
+                this.setState({ "user": user, "userIndustries": userIndustries});
+            }).catch(data => {
+                console.log('Error while adding industry', data);
+            });
+        } else {
+            this.userData.DeleteKnowledge(industryId).then(data => {
+
+                userIndustries.splice(userIndustries.indexOf(industryId), 1);
+
+                user.industries.forEach(function (industry, index) {
+                    if (industry.id == industryId) {
+                        user.industries.splice(index, 1);
+                    }
+                });
+
+                this.setState({ "user": user, "userIndustries": userIndustries});
+                this.forceUpdate();
+            }).catch(data => {
+                console.log('Error while removing industry', data);
+            });
+        }
+    }
+
     render () {
-        var self = this,
-            i = 0;
+        var self = this;
 
         if (this.state.user === null)
             return <div />
@@ -124,11 +188,30 @@ export default class EmployeeHeader extends React.Component {
         var interestsString = "",
             interestsCount = (this.state.user.interests.length < 5) ? this.state.user.interests.length : 5;
 
-        for (i; i < interestsCount; i++) {
-            interestsString += this.state.user.interests[i].name + ", ";
+        if (interestsCount > 0) {
+            for (var i = 0; i < interestsCount; i++) {
+                interestsString += this.state.user.interests[i].name + ", ";
+            }
+        } else {
+            interestsString = this.state.showActions ? "Add interests" : "";
         }
 
+
         interestsString += "...";
+
+        var industriesString = "",
+            industriesCount = (this.state.user.industries.length < 5) ? this.state.user.industries.length : 5;
+
+        if (industriesCount > 0) {
+            for (var i = 0; i < industriesCount; i++) {
+                industriesString += this.state.user.industries[i].name + ", ";
+            }
+        } else {
+            industriesString = this.state.showActions ? "Add industries" : "";
+        }
+
+
+        industriesString += "...";
         
         let position = this.state.user.position.name;
         return (
@@ -166,12 +249,48 @@ export default class EmployeeHeader extends React.Component {
                             </div>
                         : false }
 
-        				<div className="employee-interests">
-        					<div className="interest editable-interest" onClick={this.editInterests.bind(this)}>
-                                <span className="ss-icon-heart"></span> {interestsString} <span className="edit ss-icon-pencil"></span>
+                        {this.state.editingIndustries ?
+                            <div className="modal">
+                                <div className="modal-header" onClick={this.finishIndustriesEdition.bind(this)}>
+                                    <span className="modal-close ss-icon-close"><span className="path1"></span><span className="path2"></span></span>
+                                </div>
+                                <div className="modal-contents">
+                                    <h2>Edit industries</h2>
+                                    <ul className="interests">
+                                    {this.state.industries.map((industry, index)=>{
+                                      return (<li className="industry" key={index}><input type="checkbox" checked={this.state.userIndustries.indexOf(industry.id) != -1} onChange={this.toggleIndustry.bind(this, industry)} /> {industry.name}</li>)
+                                    })}
+                                    </ul>
+                                </div>
                             </div>
-        					<div className="interest"><span className="ss-icon-industry"></span> Finance, Marketing, Public Sector</div>
-        					<div className="interest"><span className="ss-icon-clients"></span> Nike, PwC, Samsung, Loreal</div>
+                        : false }
+
+        				<div className="employee-interests">
+                            {
+                                this.state.showActions ?
+                                    <div>
+                    					<div className="interest editable-interest" onClick={this.editInterests.bind(this)}>
+                                            <span className="ss-icon-heart"></span> {interestsString} <span title="Edit interests" className="edit ss-icon-pencil"></span>
+                                        </div>
+                                        <div className="interest editable-interest" onClick={this.editIndustries.bind(this)}>
+                    					    <div className="interest">
+                                                <span className="ss-icon-industry"></span> {industriesString} <span title="Edit industries" className="edit ss-icon-pencil"></span>
+                                            </div>
+                    					</div>
+                                    </div>
+                                :
+                                    <div>
+                                        <div className="interest">
+                                            <span className="ss-icon-heart"></span> {interestsString}
+                                        </div>
+                                        <div className="interest">
+                                            <div className="interest">
+                                                <span className="ss-icon-industry"></span> {industriesString}
+                                            </div>
+                                        </div>
+                                    </div>
+                            }
+                            <div className="interest"><span className="ss-icon-clients"></span> Nike, PwC, Samsung, Loreal</div>
         				</div>
         			</div>
         			<div className="col -col-2">

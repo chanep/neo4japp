@@ -124,12 +124,22 @@
     }
 
     .interests {
+        margin-top: 1rem;
+
         .interest {
             .remove-interest {
                 cursor: pointer;
                 vertical-align: -15%;
             }
 
+            margin: .7rem 0;
+
+            input[type="checkbox"] {
+                margin-right: .5rem;
+            }
+        }
+
+        .industry {
             margin: .7rem 0;
         }
     }
