@@ -10,6 +10,7 @@ export default class EmployeeHeader extends React.Component {
         super();
        
         this.state = {
+            interest: "",
             user: null,
             skillsCount: 0,
             addSkills: true,
@@ -23,6 +24,7 @@ export default class EmployeeHeader extends React.Component {
         this.editInterests = this.editInterests.bind(this);
         this.handleInterestChange = this.handleInterestChange.bind(this);
         this.removeInterest = this.removeInterest.bind(this);
+        this.addInterest = this.addInterest.bind(this);
     }
 
     getChild (obj,key){
@@ -72,24 +74,60 @@ export default class EmployeeHeader extends React.Component {
         this.setState({ editingInterests: false });
     }
 
-    handleInterestChange() {
-        console.log('test');
+    handleInterestChange(e) {
+        this.setState({ "interest": e.target.value});
     }
 
     removeInterest(interestId) {
+        var user = this.state.user;
+
         this.userData.RemoveInterest(interestId).then(data => {
             console.log('Interest removed successfully');
+
+            user.interests.forEach(function (interest, index) {
+                if (interest.id == interestId) {
+                    user.interests.splice(index, 1);
+                }
+            });
+
+            this.setState({ "user": user });
         }).catch(data => {
             console.log('Error while removing interest', data);
         });
     }
 
+    addInterest(e) {
+        let self = this,
+            user = this.state.user;
+
+        e.preventDefault();
+
+        this.userData.AddInterest(this.state.interest).then(data => {
+
+          user.interests.push({ "id": data.id, "name": data.name });
+          self.setState({ "interest": "", "user": user });
+
+          // after adding interest, clear textbox
+          document.getElementById("interest").value = "";
+        }).catch(data => {
+            console.log('Error while adding interest', data);
+        });
+    }
+
     render () {
-        var self = this;
+        var self = this,
+            i = 0;
 
         if (this.state.user === null)
             return <div />
 
+        var interestsString = "";
+        for (i; i < 5; i++) {
+            interestsString += this.state.user.interests[i].name + ", ";
+        }
+
+        interestsString += "...";
+        
         let position = this.state.user.position.name;
         return (
         	<div className="employee-header-container">
@@ -113,13 +151,13 @@ export default class EmployeeHeader extends React.Component {
                                 </div>
                                 <div className="modal-contents">
                                     <h2>Edit interests</h2>
-                                    <form>
+                                    <form onSubmit={this.addInterest.bind(this)}>
                                         <input id="interest" type="text" placeholder="Interest" className="inputTextBox" onChange={this.handleInterestChange.bind(this)} />
                                         <input type="submit" className="add-interest" value="Add interest" />
                                     </form>
                                     <ul className="interests">
                                     {this.state.user.interests.map((interest, index)=>{
-                                      return (<li className="interest" key={index}><span className="remove-interest ss-icon-remove" data-interest-id={interest.id} onClick={self.removeInterest.bind(interest.id)}></span> {interest.name}</li>)
+                                      return (<li className="interest" key={index}><span className="remove-interest ss-icon-remove" data-interest-id={interest.id} onClick={self.removeInterest.bind(this, interest.id)}></span> {interest.name}</li>)
                                     })}
                                     </ul>
                                 </div>
@@ -127,7 +165,9 @@ export default class EmployeeHeader extends React.Component {
                         : false }
 
         				<div className="employee-interests">
-        					<div className="interest editable-interest" onClick={this.editInterests.bind(this)}><span className="ss-icon-heart"></span> Photography, Drones, Airplanes, Football <span className="edit ss-icon-pencil"></span></div>
+        					<div className="interest editable-interest" onClick={this.editInterests.bind(this)}>
+                                <span className="ss-icon-heart"></span> {interestsString} <span className="edit ss-icon-pencil"></span>
+                            </div>
         					<div className="interest"><span className="ss-icon-industry"></span> Finance, Marketing, Public Sector</div>
         					<div className="interest"><span className="ss-icon-clients"></span> Nike, PwC, Samsung, Loreal</div>
         				</div>

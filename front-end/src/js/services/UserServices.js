@@ -36,6 +36,10 @@ export default class UserServices extends ServicesBase {
 		return super.callPutServices('approver/approve', {'knowledgeId': knowledgeId});
 	}
 
+	AddInterest(interestName) {
+		return super.callPutServices('user/interest', {'interestName': interestName});
+	}
+
 	RemoveInterest(interestId) {
 		return super.callDeleteServices('user/interest', {'interestId': interestId});
 	}
