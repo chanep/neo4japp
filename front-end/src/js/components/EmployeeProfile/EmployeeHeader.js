@@ -120,8 +120,10 @@ export default class EmployeeHeader extends React.Component {
         if (this.state.user === null)
             return <div />
 
-        var interestsString = "";
-        for (i; i < 5; i++) {
+        var interestsString = "",
+            interestsCount = (this.state.user.interests.length < 5) ? this.state.user.interests.length : 5;
+
+        for (i; i < interestsCount; i++) {
             interestsString += this.state.user.interests[i].name + ", ";
         }
 
