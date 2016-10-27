@@ -2,6 +2,7 @@ import React from "react";
 
 import { Link } from "react-router";
 import UserServices from '../../services/UserServices';
+import moment from "moment";
 
 export default class EmployeeHeader extends React.Component {
 
@@ -88,7 +89,7 @@ export default class EmployeeHeader extends React.Component {
 
         if (this.state.user === null)
             return <div />
-        
+
         let position = this.state.user.position.name;
         return (
         	<div className="employee-header-container">
@@ -156,7 +157,10 @@ export default class EmployeeHeader extends React.Component {
                             </div>
                         : null}
         				<div className="employee-skills-last-update">
-        					Last Updated <span>05/04/2016</span>
+                            {this.state.user.lastUpdate !== null?
+                                <div>Updated: <span title={moment(this.state.user.lastUpdate).format("MM/DD/YYYY hh:mm")}>{moment(this.state.user.lastUpdate).fromNow()}</span></div>:
+                                <div>Updated: <span>-</span></div>
+                            }
         				</div>
         			</div>
         		</div>
