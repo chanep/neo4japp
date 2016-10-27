@@ -48,7 +48,7 @@ export default class SearchResult extends React.Component {
 			<li className="-expanded">
 			    <div className="header grid">
 			        <div className="col -col-4">
-			            <p className="table-row-heading">{this.state.obj.fullname}</p>
+			            <p className="table-row-heading"><Link to={"/employee/" + this.state.obj.id}>{this.state.obj.fullname}</Link></p>
 			            <p className="table-row-small">{this.getChild(this.state.obj.position, 'name')}</p>
 			        </div>
 			        <div className="col -col-1">
@@ -80,7 +80,7 @@ export default class SearchResult extends React.Component {
 			    {this.state.showDetails ? 
 				    <div className="content grid" ref="employeeData">
 				        <div className="col -col-9 manager">
-				            <span>Manager: <strong>{self.state.obj.approvers.length > 0? self.state.obj.approvers[0].fullname: "----"}</strong></span>
+				            <span>Manager: <strong>{self.state.obj.approvers.length > 0? <Link to={"/employee/" + self.state.obj.approvers[0].id}>{self.state.obj.approvers[0].fullname}</Link>: "----"}</strong></span>
 				        </div>
 				        <ul className="skills grid">
 				        	{

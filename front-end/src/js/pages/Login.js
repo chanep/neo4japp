@@ -38,8 +38,8 @@ class Login extends React.Component {
     session.Login(self.state.username, self.state.password).then(data => {
       cookie.save('currentUser', data);
       let basePage = new BasePage();
-      this.context.router.push({pathname: basePage.GetMyRootPath()});
       this.setState({ "attempting": false });
+      this.context.router.push({pathname: basePage.GetMyRootPath()});
 
     }).catch(data => {
       this.setState({ "failedAttempt": true });

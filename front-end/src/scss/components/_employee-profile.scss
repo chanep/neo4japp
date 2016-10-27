@@ -30,6 +30,10 @@
 
     	.interest {
     		line-height: 150%;
+
+            &.editable-interest {
+                cursor: pointer;
+            }
     	}
     }
 
@@ -90,6 +94,44 @@
     	span {
     		font-weight: bold;
     	}
+    }
+
+    form {
+        margin: 1rem 0;
+
+        .inputTextBox {
+            border: .0625em solid #e7e7e8;
+            font-size: .875em;
+            font-weight: bold;
+            color: #868686;
+            margin-bottom: .75em;
+            padding: 1em 1.3125em;
+            height: 3.125em;
+            vertical-align: top;
+            width: 60%;
+        }
+
+        .add-interest {
+            font-size: .75em;
+            color: $WHITE;
+            border: 0;
+            background-color: $BLACK;
+            padding: 1.125em 0;
+            width: 35%;
+            cursor: pointer;
+            margin-left: 1rem;
+        }
+    }
+
+    .interests {
+        .interest {
+            .remove-interest {
+                cursor: pointer;
+                vertical-align: -15%;
+            }
+
+            margin: .7rem 0;
+        }
     }
 }
 
