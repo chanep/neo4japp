@@ -76,8 +76,18 @@ export default class EmployeeHeader extends React.Component {
     }
 
     removeInterest(interestId) {
+        var user = this.state.user;
+
         this.userData.RemoveInterest(interestId).then(data => {
             console.log('Interest removed successfully');
+
+            user.interests.forEach(function (interest, index) {
+                if (interest.id == interestId) {
+                    user.interests.splice(index, 1);
+                }
+            });
+
+            this.setState({ "user": user });
         }).catch(data => {
             console.log('Error while removing interest', data);
         });
@@ -118,7 +128,7 @@ export default class EmployeeHeader extends React.Component {
                                     </form>
                                     <ul className="interests">
                                     {this.state.user.interests.map((interest, index)=>{
-                                      return (<li className="interest" key={index}><span className="remove-interest ss-icon-remove" data-interest-id={interest.id} onClick={self.removeInterest.bind(interest.id)}></span> {interest.name}</li>)
+                                      return (<li className="interest" key={index}><span className="remove-interest ss-icon-remove" data-interest-id={interest.id} onClick={self.removeInterest.bind(this, interest.id)}></span> {interest.name}</li>)
                                     })}
                                     </ul>
                                 </div>
