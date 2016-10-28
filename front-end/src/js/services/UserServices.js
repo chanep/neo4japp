@@ -43,4 +43,8 @@ export default class UserServices extends ServicesBase {
 	RemoveInterest(interestId) {
 		return super.callDeleteServices('user/interest', {'interestId': interestId});
 	}
+
+	GetIndustries() {
+		return super.callGetServices('skill/by-group-type/industry');
+	}
 }
