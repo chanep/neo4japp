@@ -26,7 +26,8 @@ ReactDOM.render(
                   <Route path="/resourceshotspot" component={ResourceHotspot}></Route>
                   <Route path="/allocations" component={Layout}></Route>
                   <Route path="/searchresults" component={SearchResults}>
-            	     <Route path="/searchresults/:skillIds" component={SearchResults}/>
+                       <Route path="/searchresults/:skillIds" component={SearchResults}/>
+            	     <Route path="/searchresults/:skillIds/:locationsId" component={SearchResults}/>
                   </Route>
                   <Route path="/myprofile" component={EmployeeProfile}></Route>
                   <Route path="/myprofile/myskills" component={MySkills}></Route>

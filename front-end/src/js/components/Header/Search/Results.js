@@ -42,7 +42,6 @@ class Results extends React.Component {
       if (subcategoryResults.length > 0) {
         for (let i in subcategoryResults) {         
           let result = subcategoryResults[i];
-          console.log(result.innerHTML)
           //debugger;
         }
       }
