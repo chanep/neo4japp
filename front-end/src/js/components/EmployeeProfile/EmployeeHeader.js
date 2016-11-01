@@ -13,6 +13,7 @@ export default class EmployeeHeader extends React.Component {
        
         this.state = {
             interest: "",
+            suggestedInterest: "",
             industries: [],
             user: null,
             skillsCount: 0,
@@ -28,6 +29,8 @@ export default class EmployeeHeader extends React.Component {
         this.handleInterestChange = this.handleInterestChange.bind(this);
         this.removeInterest = this.removeInterest.bind(this);
         this.addInterest = this.addInterest.bind(this);
+        this.addInterestQuery = this.addInterestQuery.bind(this);
+        this.addSuggestedInterest = this.addSuggestedInterest.bind(this);
         this.toggleIndustry = this.toggleIndustry.bind(this);
     }
 
@@ -107,10 +110,15 @@ export default class EmployeeHeader extends React.Component {
     handleInterestChange(e) {
         this.setState({ "interest": e.target.value});
 
-        this.userData.GetInterests(this.state.interest, 5).then(data => {
-            console.log('interests');
-            console.log('///');
-            console.log(data);
+        if (e.target.value == "") {
+            this.setState({ "suggestedInterest": null });
+        }
+
+        this.userData.GetInterests(this.state.interest, 1).then(data => {
+            if (data[0] != undefined) {
+                this.setState({ "suggestedInterest": data[0] });
+                console.log(this.state.suggestedInterest);
+            }
         });
     }
 
@@ -133,23 +141,33 @@ export default class EmployeeHeader extends React.Component {
     }
 
     addInterest(e) {
-        let self = this,
-            user = this.state.user;
-
         e.preventDefault();
 
         if (this.state.interest != "") {
-            this.userData.AddInterest(this.state.interest).then(data => {
-
-              user.interests.push({ "id": data.id, "name": data.name });
-              self.setState({ "interest": "", "user": user });
-
-              // after adding interest, clear textbox
-              document.getElementById("interest").value = "";
-            }).catch(data => {
-                console.log('Error while adding interest', data);
-            });
+            this.addInterestQuery(this.state.interest);
+            this.setState({ "suggestedInterest": null });
         }
+    }
+
+    addInterestQuery(interest) {
+        let self = this,
+            user = this.state.user;
+
+        this.userData.AddInterest(interest).then(data => {
+
+          user.interests.push({ "id": data.id, "name": data.name });
+          self.setState({ "interest": "", "user": user });
+
+          // after adding interest, clear textbox
+          document.getElementById("interest").value = "";
+        }).catch(data => {
+            console.log('Error while adding interest', data);
+        });
+    }
+
+    addSuggestedInterest() {
+        this.addInterestQuery(this.state.suggestedInterest.name);
+        this.setState({ "suggestedInterest": null });
     }
 
     toggleIndustry(industry) {
@@ -245,8 +263,11 @@ export default class EmployeeHeader extends React.Component {
                                 <div className="modal-contents">
                                     <h2>Edit interests</h2>
                                     <form onSubmit={this.addInterest.bind(this)}>
-                                        <input id="interest" type="text" placeholder="Interest" className="inputTextBox" onChange={this.handleInterestChange.bind(this)} />
+                                        <input id="interest" type="text" placeholder="Interest" className="inputTextBox" onChange={this.handleInterestChange.bind(this)} autoComplete="off" />
                                         <input type="submit" className="add-interest" value="Add Interest" />
+                                        { this.state.suggestedInterest ?
+                                            <span className="interest-suggested" onClick={this.addSuggestedInterest.bind(this)}>{this.state.suggestedInterest.name}</span>
+                                        : false }
                                     </form>
                                     <ul className="interests">
                                     {this.state.user.interests.map((interest, index)=>{

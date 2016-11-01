@@ -104,7 +104,6 @@
             font-size: .95em;
             font-weight: 100;
             color: #868686;
-            margin-bottom: .75em;
             padding: 1em 1.3125em;
             height: 50px;
             vertical-align: top;
@@ -121,6 +120,14 @@
             width: 35%;
             cursor: pointer;
             height: 50px;
+        }
+
+        .interest-suggested {
+            width: 60%;
+            background: $LIGHT-GREY;
+            padding: .5rem;
+            display: inline-block;
+            cursor: pointer;
         }
     }
 
