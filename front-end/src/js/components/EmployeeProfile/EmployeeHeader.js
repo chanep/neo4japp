@@ -3,6 +3,7 @@ import React from "react";
 import { Link } from "react-router";
 import UserServices from '../../services/UserServices';
 import moment from "moment";
+import ENV from "../../../config.js";
 
 export default class EmployeeHeader extends React.Component {
 
@@ -108,18 +109,29 @@ export default class EmployeeHeader extends React.Component {
     }
 
     handleInterestChange(e) {
+        let that = this;
+
         this.setState({ "interest": e.target.value});
 
-        if (e.target.value == "") {
+        if (e.target.value.length < ENV().interests.minimumLenghtLookup) {
             this.setState({ "suggestedInterest": null });
-        }
+        } else {
+            this.userData.GetInterests(this.state.interest, 1).then(data => {
+                if (data[0] != undefined) {
+                    var used = false;
 
-        this.userData.GetInterests(this.state.interest, 1).then(data => {
-            if (data[0] != undefined) {
-                this.setState({ "suggestedInterest": data[0] });
-                console.log(this.state.suggestedInterest);
-            }
-        });
+                    that.state.user.interests.forEach(function (v) {
+                        if (v.id == data[0].id ) {
+                            used = true;
+                        }
+                    });
+
+                    if (!used) {
+                        this.setState({ "suggestedInterest": data[0] });
+                    }
+                }
+            });
+        }
     }
 
     removeInterest(interestId) {
