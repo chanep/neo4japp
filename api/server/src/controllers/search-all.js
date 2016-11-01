@@ -49,7 +49,7 @@ class SearchAllController extends BaseController{
             })
             .then(data => {
                 tools = data.data;
-                let userQuery = {fullname: {$ilike: `%${term}%`}, paged: {skip:0, limit: limit}};
+                let userQuery = {fullname: {$ilike: `%${term}%`}, disabled: false, paged: {skip:0, limit: limit}};
                 return userDa.find(userQuery);
             })
             .then(data => {
