@@ -11,7 +11,7 @@ class OfficeController extends BaseController{
     @api {get} /api/office 1 Find Offices
     @apiGroup Offices
     
-    @apiUse findResponse
+    @apiUse findOfficeResponse
     */
     find(req, res, next){
         let promise = officeDa.find();
@@ -23,7 +23,7 @@ class OfficeController extends BaseController{
 module.exports = OfficeController;
 
     /**
-    @apiDefine findResponse
+    @apiDefine findOfficeResponse
         @apiSuccessExample {json} Success-Response:
           HTTP/1.1 200 OK
           {

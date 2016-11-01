@@ -17,7 +17,7 @@ class InterestController extends BaseController{
     @apiExample {curl} Example usage:
         /api/interest?name=Footb&limit=20
     
-    @apiUse findResponse
+    @apiUse findInterestResponse
     */
     find(req, res, next){
         let search = this._buildSearch(req);
@@ -36,7 +36,7 @@ module.exports = InterestController;
 
 
     /**
-    @apiDefine findResponse
+    @apiDefine findInterestResponse
         @apiSuccessExample {json} Success-Response:
           HTTP/1.1 200 OK
           {
