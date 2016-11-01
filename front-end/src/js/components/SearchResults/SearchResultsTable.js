@@ -17,7 +17,8 @@ export default class SearchResultsTable extends React.Component {
         this.state = {
         	data: data.data,
             skillsCount: data.skillsCount,
-            searching: data.searching
+            searching: data.searching,
+            locationsIds: data.locations
         };
     }
 
@@ -25,12 +26,17 @@ export default class SearchResultsTable extends React.Component {
         this.setState({
             data: nextProps.data,
             skillsCount: nextProps.skillsCount,
-            searching: nextProps.searching
+            searching: nextProps.searching,
+            locationsIds: nextProps.locations
         });
     }
 
     onLocationsChanged(locationId, e) {
         this.props.onLocationsChanged(locationId);
+    }
+
+    allSelected() {
+        this.props.allSelected();
     }
 
     render() {
@@ -57,7 +63,7 @@ export default class SearchResultsTable extends React.Component {
                 <div className="results-section">
 
                     {/*FILTERS SIDE BAR*/}
-                    <FiltersSideBar locations={this.props.locations} onLocationsChanged={this.onLocationsChanged.bind(this)} /> 
+                    <FiltersSideBar locations={this.state.locationsIds} onLocationsChanged={this.onLocationsChanged.bind(this)} allSelected={this.allSelected.bind(this)} /> 
 
                     <ul className="results col -col-9 -col-no-gutter">
                     	{
