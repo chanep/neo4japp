@@ -15,8 +15,6 @@ export default class FiltersSideBar extends React.Component {
         this.state = {
             "offices": []
         };
-
-        this.handleChange = this.handleChange.bind(this);
     }
 
     componentDidMount() {
@@ -29,11 +27,10 @@ export default class FiltersSideBar extends React.Component {
         });
     }
 
-    handleChange(event) {
-        let offices = this.state.offices,
-            locationId = event.target.value;
+    handleChange(refVal, e) {
+        let locationId = refVal;
 
-        this.props.addLocation(locationId);
+        this.props.onLocationsChanged(locationId);
     }
 
     render() {
@@ -48,7 +45,7 @@ export default class FiltersSideBar extends React.Component {
                             this.state.offices.map((office) => {
                                 return <li key={office.id} className="filter-option">
                                     <label>
-                                        <input type="checkbox" id={office.id} value={office.id} checked={this.props.locations.indexOf(office.id.toString()) != -1} data-test={this.props.locations[0]} onChange={this.handleChange} /> {office.name}
+                                        <input type="checkbox" id={office.id} value={office.id} defaultChecked={self.props.locations.indexOf(office.id.toString()) != -1} onChange={self.handleChange.bind(self, office.id.toString())} /> {office.name}
                                     </label>
                                 </li>
                             })

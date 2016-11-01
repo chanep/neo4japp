@@ -17,11 +17,8 @@ export default class SearchResults extends BasePage {
 		super(props);
 
         let locations = [];
-        if (this.props.location.search !== undefined) {
-            var locationsString = this.props.location.search.split("=")[1];
-
-            if (locationsString !== undefined)
-                locations = locationsString.split(",");
+        if (this.props.params.locationsId !== undefined) {
+            locations = this.props.params.locationsId.split(',');
         }
 
         let ids = [];
@@ -37,75 +34,80 @@ export default class SearchResults extends BasePage {
             "skillsIds": ids,
             "locations": locations
         };
-
-        this.addLocation = this.addLocation.bind(this);
 	}
 
-    addLocation(locationId) {
+    onLocationsChanged(locationId, e) {
         var locations = this.state.locations,
             index = locations.indexOf(locationId);
 
-        if (index == -1) {
+        if (index === -1) {
             locations.push(locationId);
         } else {
             locations.splice(index, 1);
         }
-
-        this.setState({ "locations": locations });
-
-        this.getData(this.state.skillsIds);
 
         var skillsConcat = this.state.skillsIds.join(),
             locationsConcat = this.state.locations.join(),
             path = '/searchresults/' + skillsConcat;
 
         if (locationsConcat != '')
-            path = '/searchresults/' + skillsConcat + '?location=' + locationsConcat;
+            path = '/searchresults/' + skillsConcat + '/' + locationsConcat;
 
         this.context.router.push({ pathname: path });
     }
 
-    getData(ids) {
-        this.setState({data: [], skillsCount: 0, searching: true});
-
-        this.searchServices.GetSearchBySkills(ids, 20, this.state.locations).then(data => {
-            this.setState({
-                data: data,
-                skillsCount:ids.length,
-                searching: false
+    getData(ids, locations) {
+        this.setState({data: [], skillsIds: ids, locations: locations, skillsCount: 0, searching: true});
+        if (ids.length > 0) {
+            this.searchServices.GetSearchBySkills(ids, 20, locations).then(data => {
+                this.setState({
+                    data: data,
+                    skillsCount:ids.length,
+                    searching: false
+                });
+            }).catch(data => {
+                console.log("Error performing search", data);
             });
-        }).catch(data => {
-          
-            console.log("Error performing search", data);
-          
-        });
+        } else {
+            this.setState({data: [], skillsIds: ids, locations: locations, skillsCount: 0, searching: false});
+        }
     }
 
     componentDidMount() {
-        if (this.props.params.skillIds !== undefined) {
-            let ids = this.props.params.skillIds.split(',');
-            this.setState({ "skillsIds": ids });
+        let ids = [];
+        let locations = [];
 
-            this.getData(ids);
+        if (this.props.params.skillIds !== undefined) {
+            ids = this.props.params.skillIds.split(',');
         }
+
+        if (this.props.params.locationsId !== undefined) {
+            locations = this.props.params.locationsId.split(',');
+        }
+
+        this.getData(ids, locations);
     }
 
     componentWillReceiveProps(newProps) {
-        if (newProps.params.skillIds !== undefined) {
-            let ids = newProps.params.skillIds;
-            ids = ids.split('?')[0];
-            ids = ids.split(',');
-            this.setState({ "skillsIds": ids });
+        let ids = [];
+        let locations = [];
 
-            this.getData(ids);
+        if (newProps.params.skillIds !== undefined) {
+            ids = newProps.params.skillIds.split(',');
         }
+
+        if (newProps.params.locationsId !== undefined) {
+            locations = newProps.params.locationsId.split(',');
+        }
+
+        this.getData(ids, locations);
     }
 
     render() {
         return (
             <div>
                 <Header search={super._showSearch()} loggedIn={true} skillsIds={this.state.skillsIds} />
-                <SearchResultsTable data={this.state.data} skillsCount={this.state.skillsCount} searching={this.state.searching} locations={this.state.locations} addLocation={this.addLocation} />
+                <SearchResultsTable data={this.state.data} skillsCount={this.state.skillsCount} searching={this.state.searching} locations={this.state.locations} onLocationsChanged={this.onLocationsChanged.bind(this)} />
             </div>
         );
     }

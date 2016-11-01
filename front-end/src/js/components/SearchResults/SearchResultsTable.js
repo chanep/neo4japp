@@ -19,8 +19,6 @@ export default class SearchResultsTable extends React.Component {
             skillsCount: data.skillsCount,
             searching: data.searching
         };
-
-        this.addLocation = this.addLocation.bind(this);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -31,8 +29,8 @@ export default class SearchResultsTable extends React.Component {
         });
     }
 
-    addLocation(locationId) {
-        this.props.addLocation(locationId);
+    onLocationsChanged(locationId, e) {
+        this.props.onLocationsChanged(locationId);
     }
 
     render() {
@@ -59,7 +57,7 @@ export default class SearchResultsTable extends React.Component {
                 <div className="results-section">
 
                     {/*FILTERS SIDE BAR*/}
-                    <FiltersSideBar locations={this.props.locations} addLocation={this.addLocation} /> 
+                    <FiltersSideBar locations={this.props.locations} onLocationsChanged={this.onLocationsChanged.bind(this)} /> 
 
                     <ul className="results col -col-9 -col-no-gutter">
                     	{
