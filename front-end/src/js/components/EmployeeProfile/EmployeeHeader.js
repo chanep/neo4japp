@@ -3,6 +3,7 @@ import React from "react";
 import { Link } from "react-router";
 import UserServices from '../../services/UserServices';
 import moment from "moment";
+import ENV from "../../../config.js";
 
 export default class EmployeeHeader extends React.Component {
 
@@ -13,6 +14,7 @@ export default class EmployeeHeader extends React.Component {
        
         this.state = {
             interest: "",
+            suggestedInterest: "",
             industries: [],
             user: null,
             skillsCount: 0,
@@ -28,6 +30,8 @@ export default class EmployeeHeader extends React.Component {
         this.handleInterestChange = this.handleInterestChange.bind(this);
         this.removeInterest = this.removeInterest.bind(this);
         this.addInterest = this.addInterest.bind(this);
+        this.addInterestQuery = this.addInterestQuery.bind(this);
+        this.addSuggestedInterest = this.addSuggestedInterest.bind(this);
         this.toggleIndustry = this.toggleIndustry.bind(this);
     }
 
@@ -105,7 +109,29 @@ export default class EmployeeHeader extends React.Component {
     }
 
     handleInterestChange(e) {
+        let that = this;
+
         this.setState({ "interest": e.target.value});
+
+        if (e.target.value.length < ENV().interests.minimumLenghtLookup) {
+            this.setState({ "suggestedInterest": null });
+        } else {
+            this.userData.GetInterests(this.state.interest, 1).then(data => {
+                if (data[0] != undefined) {
+                    var used = false;
+
+                    that.state.user.interests.forEach(function (v) {
+                        if (v.id == data[0].id ) {
+                            used = true;
+                        }
+                    });
+
+                    if (!used) {
+                        this.setState({ "suggestedInterest": data[0] });
+                    }
+                }
+            });
+        }
     }
 
     removeInterest(interestId) {
@@ -127,12 +153,19 @@ export default class EmployeeHeader extends React.Component {
     }
 
     addInterest(e) {
+        e.preventDefault();
+
+        if (this.state.interest != "") {
+            this.addInterestQuery(this.state.interest);
+            this.setState({ "suggestedInterest": null });
+        }
+    }
+
+    addInterestQuery(interest) {
         let self = this,
             user = this.state.user;
 
-        e.preventDefault();
-
-        this.userData.AddInterest(this.state.interest).then(data => {
+        this.userData.AddInterest(interest).then(data => {
 
           user.interests.push({ "id": data.id, "name": data.name });
           self.setState({ "interest": "", "user": user });
@@ -142,6 +175,11 @@ export default class EmployeeHeader extends React.Component {
         }).catch(data => {
             console.log('Error while adding interest', data);
         });
+    }
+
+    addSuggestedInterest() {
+        this.addInterestQuery(this.state.suggestedInterest.name);
+        this.setState({ "suggestedInterest": null });
     }
 
     toggleIndustry(industry) {
@@ -237,8 +275,11 @@ export default class EmployeeHeader extends React.Component {
                                 <div className="modal-contents">
                                     <h2>Edit interests</h2>
                                     <form onSubmit={this.addInterest.bind(this)}>
-                                        <input id="interest" type="text" placeholder="Interest" className="inputTextBox" onChange={this.handleInterestChange.bind(this)} />
-                                        <input type="submit" className="add-interest" value="Add interest" />
+                                        <input id="interest" type="text" placeholder="Interest" className="inputTextBox" onChange={this.handleInterestChange.bind(this)} autoComplete="off" />
+                                        <input type="submit" className="add-interest" value="Add Interest" />
+                                        { this.state.suggestedInterest ?
+                                            <span className="interest-suggested" onClick={this.addSuggestedInterest.bind(this)}>{this.state.suggestedInterest.name}</span>
+                                        : false }
                                     </form>
                                     <ul className="interests">
                                     {this.state.user.interests.map((interest, index)=>{
@@ -256,7 +297,7 @@ export default class EmployeeHeader extends React.Component {
                                 </div>
                                 <div className="modal-contents">
                                     <h2>Edit industries</h2>
-                                    <ul className="interests">
+                                    <ul className="industries">
                                     {this.state.industries.map((industry, index)=>{
                                       return (<li className="industry" key={index}><input type="checkbox" checked={this.state.userIndustries.indexOf(industry.id) != -1} onChange={this.toggleIndustry.bind(this, industry)} /> {industry.name}</li>)
                                     })}
