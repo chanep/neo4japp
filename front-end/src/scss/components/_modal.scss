@@ -4,8 +4,7 @@
     width: 30rem;
     height: 20rem;
 
-    background-color: $WHITE;
-    border: 2px solid $GREY;
+    background-color: #f3f3f4;
 
     display: block;
     position: fixed;
@@ -24,7 +23,9 @@
             cursor: pointer;
             position: absolute;
             z-index: 100;
-            right: 1%;
+            top: 37px;
+            right: 35px;
+            font-size: 18px;
         }
     }
 
@@ -34,8 +35,13 @@
         left: 0;
         width: 100%;
         height: 100%;
-        padding: 1rem;
+        padding: 3rem;
         overflow: auto;
+
+        h2 {
+            font-size: 1rem;
+            font-weight: 400;
+        }
     }
 
     &.closed {

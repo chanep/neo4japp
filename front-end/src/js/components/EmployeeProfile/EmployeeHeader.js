@@ -132,16 +132,18 @@ export default class EmployeeHeader extends React.Component {
 
         e.preventDefault();
 
-        this.userData.AddInterest(this.state.interest).then(data => {
+        if (this.state.interest != "") {
+            this.userData.AddInterest(this.state.interest).then(data => {
 
-          user.interests.push({ "id": data.id, "name": data.name });
-          self.setState({ "interest": "", "user": user });
+              user.interests.push({ "id": data.id, "name": data.name });
+              self.setState({ "interest": "", "user": user });
 
-          // after adding interest, clear textbox
-          document.getElementById("interest").value = "";
-        }).catch(data => {
-            console.log('Error while adding interest', data);
-        });
+              // after adding interest, clear textbox
+              document.getElementById("interest").value = "";
+            }).catch(data => {
+                console.log('Error while adding interest', data);
+            });
+        }
     }
 
     toggleIndustry(industry) {
@@ -238,7 +240,7 @@ export default class EmployeeHeader extends React.Component {
                                     <h2>Edit interests</h2>
                                     <form onSubmit={this.addInterest.bind(this)}>
                                         <input id="interest" type="text" placeholder="Interest" className="inputTextBox" onChange={this.handleInterestChange.bind(this)} />
-                                        <input type="submit" className="add-interest" value="Add interest" />
+                                        <input type="submit" className="add-interest" value="Add Interest" />
                                     </form>
                                     <ul className="interests">
                                     {this.state.user.interests.map((interest, index)=>{
