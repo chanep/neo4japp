@@ -56,12 +56,23 @@ export default class SearchResults extends BasePage {
         this.context.router.push({ pathname: path });
     }
 
+    allSelected() {
+        var skillsConcat = this.state.skillsIds.join(),
+            path = '/searchresults/' + skillsConcat;
+
+        this.context.router.push({ pathname: path });
+    }
+
     getData(ids, locations) {
-        this.setState({data: [], skillsIds: ids, locations: locations, skillsCount: 0, searching: true});
+        let self = this;
+
+        this.setState({data: [], skillsIds: [], locations: [], skillsCount: 0, searching: true});
         if (ids.length > 0) {
             this.searchServices.GetSearchBySkills(ids, 20, locations).then(data => {
-                this.setState({
+                self.setState({
                     data: data,
+                    skillsIds: ids,
+                    locations: locations,
                     skillsCount:ids.length,
                     searching: false
                 });
@@ -107,7 +118,7 @@ export default class SearchResults extends BasePage {
         return (
             <div>
                 <Header search={super._showSearch()} loggedIn={true} skillsIds={this.state.skillsIds} />
-                <SearchResultsTable data={this.state.data} skillsCount={this.state.skillsCount} searching={this.state.searching} locations={this.state.locations} onLocationsChanged={this.onLocationsChanged.bind(this)} />
+                <SearchResultsTable data={this.state.data} skillsCount={this.state.skillsCount} searching={this.state.searching} locations={this.state.locations} onLocationsChanged={this.onLocationsChanged.bind(this)} allSelected={this.allSelected.bind(this)} />
             </div>
         );
     }
