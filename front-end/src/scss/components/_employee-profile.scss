@@ -125,8 +125,6 @@
     }
 
     .interests {
-        margin-top: 1rem;
-
         .interest {
             .remove-interest {
                 cursor: pointer;
@@ -136,18 +134,29 @@
                 color: #e71d39;
             }
 
+            margin: .4rem 0;
+            color: #868686;
+            font-size: .95rem;
+            font-weight: 100;
+
+            input[type="checkbox"] {
+                margin-right: .2rem;
+            }
+        }
+    }
+
+    .industries {
+        margin: 1.7rem 0 0 0;
+
+        .industry {
             margin: .7rem 0;
             color: #868686;
             font-size: .95rem;
             font-weight: 100;
 
             input[type="checkbox"] {
-                margin-right: .5rem;
+                margin-right: .2rem;
             }
-        }
-
-        .industry {
-            margin: .7rem 0;
         }
     }
 }

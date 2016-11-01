@@ -258,7 +258,7 @@ export default class EmployeeHeader extends React.Component {
                                 </div>
                                 <div className="modal-contents">
                                     <h2>Edit industries</h2>
-                                    <ul className="interests">
+                                    <ul className="industries">
                                     {this.state.industries.map((industry, index)=>{
                                       return (<li className="industry" key={index}><input type="checkbox" checked={this.state.userIndustries.indexOf(industry.id) != -1} onChange={this.toggleIndustry.bind(this, industry)} /> {industry.name}</li>)
                                     })}
