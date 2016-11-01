@@ -6,12 +6,23 @@ export default class SkillLevel extends React.Component {
 		super();
 
 		this.state = {
-			level: level.level
+			level: level.level,
+			approved: level.appoved
 		}
 	}
 
+	componentDidMount() {
+		this.setState({
+			level: this.props.level,
+			approved: this.props.approved
+		});
+	}
+
 	componentWillReceiveProps(nextProps) {
-		this.setState({level: nextProps.level});
+		this.setState({
+			level: nextProps.level,
+			approved: nextProps.approved
+		});
 	}
 
 	render() {
@@ -20,10 +31,10 @@ export default class SkillLevel extends React.Component {
 		
 		return (
 			<div className="skill-bar">
-                <div className="bar"></div>
-                {this.state.level >= 2 ? <div className="bar"></div>:""}
-                {this.state.level >= 3 ? <div className="bar"></div>:""}
-                {this.state.level >= 4 ? <div className="bar"></div>:""}
+                <div className={"bar " + (this.state.approved? "": "notApproved")}></div>
+                {this.state.level >= 2 ? <div className={"bar " + (this.state.approved? "": "notApproved")}></div>:""}
+                {this.state.level >= 3 ? <div className={"bar " + (this.state.approved? "": "notApproved")}></div>:""}
+                {this.state.level >= 4 ? <div className={"bar " + (this.state.approved? "": "notApproved")}></div>:""}
             </div>
 		);
 	}

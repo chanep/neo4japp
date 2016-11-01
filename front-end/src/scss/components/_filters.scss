@@ -1,6 +1,10 @@
 .filters {
-    //background-color: $LIGHT-GREY;
-    height: 100vh;
+    &__backgrounded {
+        background-color: $LIGHT-GREY;
+        border-right: em(1) solid $LIGHTEST-GREY;
+    }
+
+    min-height: 100vh;
     position: relative;
     padding: {
         bottom: 0;
@@ -18,6 +22,10 @@
 
     .filter-title-group {
         color: $GREY;
+    }
+
+    .all-bottom {
+        cursor: pointer;
     }
 
     .filter-option {

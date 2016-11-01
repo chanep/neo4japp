@@ -24,6 +24,8 @@ export default class SkillResult extends React.Component {
 		if (this.state.obj === null || this.state.obj === undefined)
 			return null;
 		
+		let approved = this.state.obj.obj.approved !== null && this.state.obj.obj.approved;
+
 		return (
             <li className="col -col-4">
                 <div className="title">
@@ -32,7 +34,7 @@ export default class SkillResult extends React.Component {
                 <div className="proficiency">
                     <span>{this.state.obj.obj.level}. {ENV().knowledgeLevels[this.state.obj.obj.level-1].desc}</span>
                 </div>
-                <SkillLevel level={this.state.obj.obj.level} />
+                <SkillLevel level={this.state.obj.obj.level} approved={approved} />
             </li>
 		);
 	}
