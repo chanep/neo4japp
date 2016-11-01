@@ -106,6 +106,12 @@ export default class EmployeeHeader extends React.Component {
 
     handleInterestChange(e) {
         this.setState({ "interest": e.target.value});
+
+        this.userData.GetInterests(this.state.interest, 5).then(data => {
+            console.log('interests');
+            console.log('///');
+            console.log(data);
+        });
     }
 
     removeInterest(interestId) {

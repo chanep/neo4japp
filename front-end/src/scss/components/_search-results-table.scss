@@ -193,6 +193,10 @@
                             background-color: $RED;
                             margin-right: 4px;
                         }
+
+                        & > div.notApproved {
+                            background-color: $GREY;
+                        }
                     }
 
                     .samples {

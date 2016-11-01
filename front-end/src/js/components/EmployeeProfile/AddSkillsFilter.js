@@ -40,7 +40,7 @@ export default class AddSkillsFilter extends React.Component {
     	let self = this;
 
     	return(
-    		<div className="addSkillsFilter filters col -col-3">
+    		<div className="addSkillsFilter filters col -col-3 filters__backgrounded">
     			<div className="filterType">
 					<span className="filter-title">Skills</span>
 					<ul>
