@@ -62,13 +62,15 @@ export default class SearchResult extends React.Component {
 				        	{
 				        		[0,1,2,3].map(function(index) {
 				        			let allocHours = 0;
-				        			let totalWekHour = 0 ;
+				        			let totalWekHour = 0;
+				        			let startingDate = null;
 				        			if (index+1 <= self.getChild(self.state.obj.allocation, 'weekHours').length) {
 				        				allocHours = self.getChild(self.state.obj.allocation, 'weekHours')[index];
 				        				totalWekHour = self.getChild(self.state.obj.allocation, 'workingWeekHours')[index];
+				        				startingDate = self.getChild(self.state.obj.allocation, 'startDate')[index];
 				        			}
 
-				        			return (<AllocPie allocatedHour={allocHours} totalWeekHour={totalWekHour} key={index} />);
+				        			return (<AllocPie currentEmployee={self.state.obj.username} startWeek={startingDate} allocatedHour={allocHours} totalWeekHour={totalWekHour} key={index} />);
 				        		})
 				        	}
 				        </div>
