@@ -1,12 +1,7 @@
 .modal {
     z-index: 10;
-
     width: 30rem;
-    height: 20rem;
-
-    background-color: $WHITE;
-    border: 2px solid $GREY;
-
+    height: 30rem;
     display: block;
     position: fixed;
     top: 50%;
@@ -24,18 +19,27 @@
             cursor: pointer;
             position: absolute;
             z-index: 100;
-            right: 1%;
+            top: 33px;
+            right: 35px;
+            font-size: 18px;
         }
     }
 
     .modal-contents {
+        background-color: #f3f3f4;
         position: absolute;
         top: 0;
         left: 0;
         width: 100%;
-        height: 100%;
-        padding: 1rem;
+        height: auto;
+        max-height: 30rem;
+        padding: 2.75rem;
         overflow: auto;
+
+        h2 {
+            font-size: 1rem;
+            font-weight: 400;
+        }
     }
 
     &.closed {
