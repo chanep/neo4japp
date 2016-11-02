@@ -112,7 +112,7 @@
     form {
         margin: 1.2rem 0 1rem 0;
 
-        .inputTextBox {
+        .inputTextBox, .react-autosuggest__input {
             border: .0625em solid #e7e7e8;
             font-size: .95em;
             font-weight: 100;
@@ -120,7 +120,7 @@
             padding: 1em 1.3125em;
             height: 50px;
             vertical-align: top;
-            width: 60%;
+            width: 65%;
         }
 
         .add-interest {
@@ -133,14 +133,19 @@
             width: 35%;
             cursor: pointer;
             height: 50px;
+            float: right;
         }
 
-        .interest-suggested {
-            width: 60%;
+        .interest-suggested, .react-autosuggest__suggestion {
+            width: 65%;
             background: $LIGHT-GREY;
-            padding: .5rem;
+            padding: .3rem;
             display: inline-block;
             cursor: pointer;
+        }
+
+        .react-autosuggest__suggestion--focused {
+            background: $LIGHTEST-GREY;
         }
     }
 
