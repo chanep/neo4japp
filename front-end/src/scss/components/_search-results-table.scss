@@ -129,6 +129,13 @@
 
                         .allocations {
                             justify-content: flex-start !important;
+
+                            .no-data {
+                                line-height: em(26);
+                                font-size: em(12);
+                                color: $GREY;
+                                text-align: center;
+                            }
                         }
                     }
 
