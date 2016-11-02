@@ -1,5 +1,7 @@
 import React from 'react';
 import { Router, Route, Link } from 'react-router'
+import ReactTooltip from 'react-tooltip'
+import moment from "moment";
 
 // Class: SearchResult
 export default class AllocPie extends React.Component {
@@ -7,29 +9,49 @@ export default class AllocPie extends React.Component {
 		super(obj);
 
 		this.state = {
+			startWeek: null,
 			allocatedHour: 0,
-			totalWeekHour: 0
+			totalWeekHour: 0,
+			currentEmployee: null
 		}
 	}
 
 	componentDidMount() {
     	this.setState({
+    		startWeek: this.props.startWeek,
     		allocatedHour: this.props.allocatedHour,
-    		totalWeekHour: this.props.totalWeekHour
+    		totalWeekHour: this.props.totalWeekHour,
+    		currentEmployee: this.props.currentEmployee
     	});
     }
 
 	componentWillReceiveProps(nextProps) {
 		this.setState({
+			startWeek: nextProps.startWeek,
 			allocatedHour: nextProps.allocatedHour,
-			totalWeekHour: nextProps.totalWeekHour
+			totalWeekHour: nextProps.totalWeekHour,
+			currentEmployee: nextProps.currentEmployee
 		});
 	}
 
+	makeid()
+	{
+    	var text = "";
+    	var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    	for( var i=0; i < 15; i++ )
+        	text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+    	return text;
+	}
+
 	render() {
-		let percent = 0;
-		if (this.state.totalWeekHour > 0)
+		let percent = 360;
+		let totalPercent = 0;
+		if (this.state.totalWeekHour > 0) {
 			percent = this.state.allocatedHour * 360 / this.state.totalWeekHour;
+			totalPercent = parseInt((this.state.allocatedHour / this.state.totalWeekHour) * 100.00, 10);
+		}
 
 		if (percent > 360) percent = 360;
 		let percent2 = 0;
@@ -58,13 +80,20 @@ export default class AllocPie extends React.Component {
             transform: propVale2
 		}
 
+		let newId = "tooltip_" + this.makeid();
+
 		return(
-        	<div className="pieAllocation" title={this.state.allocatedHour + '/' + this.state.totalWeekHour}>
+        	<div className="pieAllocation" data-tip data-for={newId}>
         		<div className="pieBackground"></div>
         		<div className="pieSlice hold"><div className="pie" style={style}></div></div>
         		{percent2 > 0 ?
         			<div className="pieSlice2 hold"><div className="pie" style={style2}></div></div>
         		: null}
+        		<ReactTooltip id={newId} delayHide={500} effect='solid' class="tooltipFormat">
+        			{this.state.startWeek !== null? <div>Week {moment(this.state.startWeek).format("MM/DD/YYYY")}</div> : null}
+        			<div>{totalPercent}% Allocated ({this.state.allocatedHour + '/' + this.state.totalWeekHour})</div>
+        			{this.state.currentEmployee !== null?<div className="viewLink"><a href={"http://reporter/newallocations/EmployeeAllocation.aspx?EmpId=" + this.state.currentEmployee} target="_blank">VIEW ALLOCATIONS</a></div>:null}
+        		</ReactTooltip>
         	</div>
 		);
 	}

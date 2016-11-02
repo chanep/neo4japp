@@ -423,6 +423,31 @@
             -o-transform:rotate(180deg);
             transform:rotate(180deg);
         }
+
+        .tooltipFormat {
+
+            text-align: left;
+            color: white;
+            font-size: em(12);
+            pointer-events: auto !important;
+
+            &:hover {
+                visibility: visible !important;
+                opacity: 1 !important;
+            }
+
+            .viewLink {
+                padding-top: em(10);
+
+                a {
+                    cursor: pointer;
+                }
+
+                a:hover {
+                    text-decoration: underline;
+                }
+            }
+        }
     }
 
     .addSkillsFilter {
