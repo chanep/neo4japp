@@ -224,33 +224,29 @@ export default class EmployeeHeader extends React.Component {
             return <div />
 
         var interestsString = "",
-            interestsCount = (this.state.user.interests.length < 5) ? this.state.user.interests.length : 5;
+            interestsCount = (this.state.user.interests.length < ENV().interests.maximumListLength) ? this.state.user.interests.length : ENV().interests.maximumListLength;
 
         if (interestsCount > 0) {
             for (var i = 0; i < interestsCount; i++) {
                 interestsString += this.state.user.interests[i].name + ", ";
             }
-        } else {
-            interestsString = this.state.showActions ? "Add interests" : "";
+
+            interestsString = interestsString.slice(0, -2);
         }
 
-
-        interestsString += "...";
-
         var industriesString = "",
-            industriesCount = (this.state.user.industries.length < 5) ? this.state.user.industries.length : 5;
+            industriesCount = (this.state.user.industries.length < ENV().interests.maximumListLength) ? this.state.user.industries.length : ENV().interests.maximumListLength;
 
         if (industriesCount > 0) {
             for (var i = 0; i < industriesCount; i++) {
                 industriesString += this.state.user.industries[i].name + ", ";
             }
-        } else {
-            industriesString = this.state.showActions ? "Add industries" : "";
+
+            industriesString = industriesString.slice(0, -2);
         }
 
-
         industriesString += "...";
-        console.log("User", this.state.user);
+
         let position = this.state.user.position.name;
         return (
         	<div className="employee-header-container">
@@ -311,22 +307,38 @@ export default class EmployeeHeader extends React.Component {
                                 this.state.showActions ?
                                     <div>
                     					<div className="interest editable-interest" onClick={this.editInterests.bind(this)}>
-                                            <span className="ss-icon-heart"></span> {interestsString} <span title="Edit interests" className="edit ss-icon-pencil"></span>
+                                            <span className="ss-icon-heart"></span>
+                                                {interestsString != ''
+                                                    ? <span> {interestsString}</span>
+                                                    : <span className="no-items"> No interests</span>
+                                                } <span className="edit">Edit</span>
                                         </div>
                                         <div className="interest editable-interest" onClick={this.editIndustries.bind(this)}>
                     					    <div className="interest">
-                                                <span className="ss-icon-industry"></span> {industriesString} <span title="Edit industries" className="edit ss-icon-pencil"></span>
+                                                <span className="ss-icon-industry"></span>
+                                                    {industriesString != ''
+                                                        ? <span> {industriesString}</span>
+                                                        : <span className="no-items"> No industries</span>
+                                                    } <span className="edit">Edit</span>
                                             </div>
                     					</div>
                                     </div>
                                 :
                                     <div>
                                         <div className="interest">
-                                            <span className="ss-icon-heart"></span> {interestsString}
+                                            <span className="ss-icon-heart"></span> 
+                                            {interestsString != ''
+                                                ? <span> {interestsString}</span>
+                                                : <span className="none-available"> No interests available</span>
+                                            }
                                         </div>
                                         <div className="interest">
                                             <div className="interest">
-                                                <span className="ss-icon-industry"></span> {industriesString}
+                                                <span className="ss-icon-industry"></span>
+                                                {industriesString != ''
+                                                    ? <span> {industriesString}</span>
+                                                    : <span className="none-available"> No industries available</span>
+                                                }
                                             </div>
                                         </div>
                                     </div>
