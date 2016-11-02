@@ -11,7 +11,8 @@ module.exports = function() {
             topSearchedSkillsCount: 10
         },
         interests: {
-            minimumLenghtLookup: 2
+            minimumLenghtLookup: 2,
+            maximumListLength: 5
         }
     }
 

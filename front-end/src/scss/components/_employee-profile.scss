@@ -35,6 +35,19 @@
                 cursor: pointer;
             }
     	}
+
+        .edit {
+            color: #e71d39;
+            font-weight: bold;
+        }
+
+        .no-items {
+            color: #e71d39;
+        }
+
+        .none-available {
+            color: #d0d0d0;
+        }
     }
 
     .employee-skills-counter {
