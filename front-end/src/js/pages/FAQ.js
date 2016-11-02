@@ -8,7 +8,7 @@ import BasePage from './BasePage';
 import Header from '../components/Header';
 
 // Class: FAQ
-export default class FAQ extends BasePage {
+export default class FAQ extends React.Component {
     render() {
         return (
             <div>

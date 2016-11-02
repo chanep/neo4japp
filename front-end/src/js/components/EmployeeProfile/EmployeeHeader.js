@@ -304,6 +304,8 @@ export default class EmployeeHeader extends React.Component {
             industriesString = industriesString.slice(0, -2);
         }
 
+        industriesString += "...";
+
         let position = this.state.user.position.name;
         return (
         	<div className="employee-header-container">
