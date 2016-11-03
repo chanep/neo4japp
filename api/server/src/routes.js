@@ -56,5 +56,6 @@ router.get('/resource-manager/search-all', searchAllController.searchAll.bind(se
 router.get('/resource-manager/users-by-skill', resourceManagerController.findUsersBySkill.bind(resourceManagerController));
 router.get('/resource-manager/top-skill-searches', resourceManagerController.topSkillSearches.bind(resourceManagerController));
 router.get('/resource-manager/skilled-users-by-office/:skillId', resourceManagerController.skilledUsersByOffice.bind(resourceManagerController));
+router.put('/resource-manager/approval-request/:employeeId', resourceManagerController.requestApproval.bind(resourceManagerController));
 
 module.exports = router;

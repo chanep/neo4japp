@@ -50,7 +50,7 @@ class UserDa extends BaseDa{
                     with n, o, d, p, collect(distinct {_:a, department: ad, position: ap}) as approvers, collect(distinct {_:rm, department: rmd, position: rmp}) as resourceManagers, collect(distinct c) as clients, collect(distinct i) as interests,
                         collect(distinct ind) as industries, count(distinct s) as skillCount, count(distinct su) as unapprovedSkillCount
                     return {    
-                                id: id(n), username: n.username, type: n.type, email: n.email, 
+                                id: id(n), username: n.username, type: n.type, email: n.email, phonelistId: n.phonelistId,
                                 fullname: n.fullname, roles: n.roles, phone: n.phone, image: n.image, disabled: n.disabled, lastUpdate: n.lastUpdate,
                                 office: {id: id(o), name: o.name, country: o.country, acronym: o.acronym},
                                 department: {id: id(d), name: d.name},

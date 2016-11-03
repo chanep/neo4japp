@@ -26,23 +26,27 @@ class OfficesImportTask extends CwBaseTask{
         let eachSeries = P.promisify(async.eachSeries);
         return eachSeries(offices, function (o, callback) {
             let office = _this._transformOffice(o);
-            const mergeKeys = true;
-            officeDa.upsert(office, ["sourceId"], mergeKeys)
-                .then(r => {
-                    if (r.created) {
-                        info.created++;
-                    } else {
-                        info.updated++;
-                    }
-                    //console.log("office upserted", r.data)
-                    callback();
-                })
-                .catch(err => {
-                    info.errors++;
-                    let e = new errors.GenericError("Error importing office:" + office, err);
-                    console.log(e);
-                    callback();
-                })
+            if(office.timezone){ //don't import offices without timezone
+                const mergeKeys = true;
+                officeDa.upsert(office, ["sourceId"], mergeKeys)
+                    .then(r => {
+                        if (r.created) {
+                            info.created++;
+                        } else {
+                            info.updated++;
+                        }
+                        //console.log("office upserted", r.data)
+                        callback();
+                    })
+                    .catch(err => {
+                        info.errors++;
+                        let e = new errors.GenericError("Error importing office:" + office, err);
+                        console.log(e);
+                        callback();
+                    });
+            } else{
+                callback();
+            }
         })
         .then(() => {
             return info;
@@ -56,6 +60,8 @@ class OfficesImportTask extends CwBaseTask{
         let office = _.pick(source, ["name", "description", "acronym", "country", "latitude", 
                                     "longitude", "address", "phone", "zip", "uri"]);
         office.sourceId = source._id;
+        if(source.timezone && source.timezone.utc_offset)
+            office.timezone = source.timezone.utc_offset;
         return office;
     }
     _doRun(){

@@ -20,7 +20,8 @@ let office = new Model(
         address: Joi.string().allow(null),
         phone: Joi.string().allow(null),
         zip: Joi.string().allow(null),
-        uri: Joi.string().allow(null)
+        uri: Joi.string().allow(null),
+        timezone: Joi.number().allow(null)
     }
 );
 

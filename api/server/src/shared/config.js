@@ -2,6 +2,7 @@
 let config = {
     session_secret: process.env.SESSION_SECRET,
     apiBaseUrl: 'http://localhost:5005/api/',
+    webBaseUrl: process.env.WEB_URL,
     ldap: {
         url: "ldap://aang.ny.rga.com",
         bindDn: "CN=LDAP SkillsCloud,OU=Utility Accounts,DC=ny,DC=rga,DC=com",
@@ -27,8 +28,20 @@ let config = {
     pl: {
         apiBase: process.env.PL_API_BASE
     },
+    mail: {
+        smtpHost: process.env.MAIL_SMTP_HOST || localhost,
+        provider: process.env.MAIL_PROVIDER  || 'dummy',
+        fromAddress: process.env.MAIL_FROM_ADDRESS,
+        overrideAddresses: process.env.MAIL_OVERRIDE_ADDRESSES 
+    },
     isProduction : (process.env.NODE_ENV == 'production'),
     nodeEnv: process.env.NODE_ENV
 };
+
+if(config.mail.overrideAddresses && config.mail.overrideAddresses.trim() != ''){
+    config.mail.overrideAddresses = config.mail.overrideAddresses.split(',');
+} else {
+    config.mail.overrideAddresses = [];
+}
 
 module.exports = config;
