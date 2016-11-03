@@ -9,6 +9,10 @@ module.exports = function() {
     	],
         resourceManagerHome: {
             topSearchedSkillsCount: 10
+        },
+        interests: {
+            minimumLenghtLookup: 2,
+            maximumListLength: 5
         }
     }
 

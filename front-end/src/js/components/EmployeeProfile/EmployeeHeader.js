@@ -3,8 +3,12 @@ import React from "react";
 import { Link } from "react-router";
 import UserServices from '../../services/UserServices';
 import moment from "moment";
+import ENV from "../../../config.js";
+import Autosuggest from 'react-autosuggest';
+
 
 export default class EmployeeHeader extends React.Component {
+
 
     constructor(){
         super();
@@ -12,7 +16,9 @@ export default class EmployeeHeader extends React.Component {
         this.userData = new UserServices();
        
         this.state = {
-            interest: "",
+            interest: "test",
+            suggestions: [],
+            suggestedInterest: "",
             industries: [],
             user: null,
             skillsCount: 0,
@@ -28,8 +34,18 @@ export default class EmployeeHeader extends React.Component {
         this.handleInterestChange = this.handleInterestChange.bind(this);
         this.removeInterest = this.removeInterest.bind(this);
         this.addInterest = this.addInterest.bind(this);
+        this.addInterestQuery = this.addInterestQuery.bind(this);
+        this.addSuggestedInterest = this.addSuggestedInterest.bind(this);
         this.toggleIndustry = this.toggleIndustry.bind(this);
+
+        this.getSuggestionValue = this.getSuggestionValue.bind(this);
+        this.getSuggestions = this.getSuggestions.bind(this);
+        this.onSuggestionsFetchRequested = this.onSuggestionsFetchRequested.bind(this);
+        this.onSuggestionsClearRequested = this.onSuggestionsClearRequested.bind(this);
+        this.renderSuggestion = this.renderSuggestion.bind(this);
+        this.onAutocompleteChange = this.onAutocompleteChange.bind(this);
     }
+
 
     getChild (obj,key){
         let result = Object.keys(obj).map(function(k) { return obj[key]});
@@ -105,7 +121,29 @@ export default class EmployeeHeader extends React.Component {
     }
 
     handleInterestChange(e) {
+        let that = this;
+
         this.setState({ "interest": e.target.value});
+
+        if (e.target.value.length < ENV().interests.minimumLenghtLookup) {
+            this.setState({ "suggestedInterest": null });
+        } else {
+            this.userData.GetInterests(this.state.interest, 1).then(data => {
+                if (data[0] != undefined) {
+                    var used = false;
+
+                    that.state.user.interests.forEach(function (v) {
+                        if (v.id == data[0].id ) {
+                            used = true;
+                        }
+                    });
+
+                    if (!used) {
+                        this.setState({ "suggestedInterest": data[0] });
+                    }
+                }
+            });
+        }
     }
 
     removeInterest(interestId) {
@@ -127,12 +165,19 @@ export default class EmployeeHeader extends React.Component {
     }
 
     addInterest(e) {
+        e.preventDefault();
+
+        if (this.state.interest != "") {
+            this.addInterestQuery(this.state.interest);
+            this.setState({ "suggestedInterest": null });
+        }
+    }
+
+    addInterestQuery(interest) {
         let self = this,
             user = this.state.user;
 
-        e.preventDefault();
-
-        this.userData.AddInterest(this.state.interest).then(data => {
+        this.userData.AddInterest(interest).then(data => {
 
           user.interests.push({ "id": data.id, "name": data.name });
           self.setState({ "interest": "", "user": user });
@@ -142,6 +187,11 @@ export default class EmployeeHeader extends React.Component {
         }).catch(data => {
             console.log('Error while adding interest', data);
         });
+    }
+
+    addSuggestedInterest() {
+        this.addInterestQuery(this.state.suggestedInterest.name);
+        this.setState({ "suggestedInterest": null });
     }
 
     toggleIndustry(industry) {
@@ -179,40 +229,83 @@ export default class EmployeeHeader extends React.Component {
         }
     }
 
+    /*
+    Autocomplete functions
+    */
+
+    getSuggestions(value) {
+        this.userData.GetInterests(value, 5).then(data => {
+            console.log(data);
+            this.setState({ "suggestions": data });
+
+            console.log('getSuggestions: ');
+            console.log(this.state.suggestions);
+        });
+    }
+
+    getSuggestionValue(suggestion) {
+      return suggestion.name;
+    }
+
+    onSuggestionsFetchRequested(value) {
+        this.getSuggestions(value);
+    };
+
+    onSuggestionsClearRequested() {
+        this.setState({
+            suggestions: []
+        });
+    };
+
+    onAutocompleteChange(event, newValue, method) {
+        this.setState({
+          interest: newValue.newValue
+        });
+    }
+
+    renderSuggestion(suggestion) {
+      return (
+        <span>{suggestion.name}</span>
+      );
+    }
+
     render () {
         var self = this;
+
+        const { interest, suggestions } = this.state;
+        const inputProps = {
+          placeholder: "Interest",
+          value: interest,
+          onChange: this.onAutocompleteChange
+        };
 
         if (this.state.user === null)
             return <div />
 
         var interestsString = "",
-            interestsCount = (this.state.user.interests.length < 5) ? this.state.user.interests.length : 5;
+            interestsCount = (this.state.user.interests.length < ENV().interests.maximumListLength) ? this.state.user.interests.length : ENV().interests.maximumListLength;
 
         if (interestsCount > 0) {
             for (var i = 0; i < interestsCount; i++) {
                 interestsString += this.state.user.interests[i].name + ", ";
             }
-        } else {
-            interestsString = this.state.showActions ? "Add interests" : "";
+
+            interestsString = interestsString.slice(0, -2);
         }
 
-
-        interestsString += "...";
-
         var industriesString = "",
-            industriesCount = (this.state.user.industries.length < 5) ? this.state.user.industries.length : 5;
+            industriesCount = (this.state.user.industries.length < ENV().interests.maximumListLength) ? this.state.user.industries.length : ENV().interests.maximumListLength;
 
         if (industriesCount > 0) {
             for (var i = 0; i < industriesCount; i++) {
                 industriesString += this.state.user.industries[i].name + ", ";
             }
-        } else {
-            industriesString = this.state.showActions ? "Add industries" : "";
+
+            industriesString = industriesString.slice(0, -2);
         }
 
-
         industriesString += "...";
-        
+
         let position = this.state.user.position.name;
         return (
         	<div className="employee-header-container">
@@ -237,8 +330,15 @@ export default class EmployeeHeader extends React.Component {
                                 <div className="modal-contents">
                                     <h2>Edit interests</h2>
                                     <form onSubmit={this.addInterest.bind(this)}>
-                                        <input id="interest" type="text" placeholder="Interest" className="inputTextBox" onChange={this.handleInterestChange.bind(this)} />
-                                        <input type="submit" className="add-interest" value="Add interest" />
+                                      <input type="submit" className="add-interest" value="Add Interest" />
+                                      <Autosuggest
+                                        suggestions={suggestions}
+                                        onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+                                        onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+                                        getSuggestionValue={this.getSuggestionValue}
+                                        renderSuggestion={this.renderSuggestion}
+                                        inputProps={inputProps}
+                                      />
                                     </form>
                                     <ul className="interests">
                                     {this.state.user.interests.map((interest, index)=>{
@@ -256,7 +356,7 @@ export default class EmployeeHeader extends React.Component {
                                 </div>
                                 <div className="modal-contents">
                                     <h2>Edit industries</h2>
-                                    <ul className="interests">
+                                    <ul className="industries">
                                     {this.state.industries.map((industry, index)=>{
                                       return (<li className="industry" key={index}><input type="checkbox" checked={this.state.userIndustries.indexOf(industry.id) != -1} onChange={this.toggleIndustry.bind(this, industry)} /> {industry.name}</li>)
                                     })}
@@ -270,22 +370,38 @@ export default class EmployeeHeader extends React.Component {
                                 this.state.showActions ?
                                     <div>
                     					<div className="interest editable-interest" onClick={this.editInterests.bind(this)}>
-                                            <span className="ss-icon-heart"></span> {interestsString} <span title="Edit interests" className="edit ss-icon-pencil"></span>
+                                            <span className="ss-icon-heart"></span>
+                                                {interestsString != ''
+                                                    ? <span> {interestsString}</span>
+                                                    : <span className="no-items"> No interests</span>
+                                                } <span className="edit">Edit</span>
                                         </div>
                                         <div className="interest editable-interest" onClick={this.editIndustries.bind(this)}>
                     					    <div className="interest">
-                                                <span className="ss-icon-industry"></span> {industriesString} <span title="Edit industries" className="edit ss-icon-pencil"></span>
+                                                <span className="ss-icon-industry"></span>
+                                                    {industriesString != ''
+                                                        ? <span> {industriesString}</span>
+                                                        : <span className="no-items"> No industries</span>
+                                                    } <span className="edit">Edit</span>
                                             </div>
                     					</div>
                                     </div>
                                 :
                                     <div>
                                         <div className="interest">
-                                            <span className="ss-icon-heart"></span> {interestsString}
+                                            <span className="ss-icon-heart"></span> 
+                                            {interestsString != ''
+                                                ? <span> {interestsString}</span>
+                                                : <span className="none-available"> No interests available</span>
+                                            }
                                         </div>
                                         <div className="interest">
                                             <div className="interest">
-                                                <span className="ss-icon-industry"></span> {industriesString}
+                                                <span className="ss-icon-industry"></span>
+                                                {industriesString != ''
+                                                    ? <span> {industriesString}</span>
+                                                    : <span className="none-available"> No industries available</span>
+                                                }
                                             </div>
                                         </div>
                                     </div>
