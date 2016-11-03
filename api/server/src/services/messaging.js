@@ -29,7 +29,7 @@ function sendPendingApprovalsEmail(){
                 const toAddress = buildAddress(approver);
                 
                 const data = {
-                    first: aprrover.first,
+                    first: approver.first,
                     employees: approver.pendingApprovalEmployees,
                     link: emailLink
                 };
@@ -71,9 +71,9 @@ function sendApprovalRequestEmail(resourceManager, employeeId){
 
                 const mailData = {
                     from: config.mail.fromAddress,
-                    to: buildAddress(approver.email),
-                    cc: buildAddress(resourceManager.email),
-                    replyTo: buildAddress(resourceManager.email)
+                    to: buildAddress(approver),
+                    cc: buildAddress(resourceManager),
+                    replyTo: buildAddress(resourceManager)
                 };
 
                 promises.push(emailSender.send(mailData, approvalRequestTemplate, data))
@@ -100,7 +100,7 @@ function buildAddress(user){
     
     let addressesStr = [];
     for(let address of overrides){
-        addressesStr.push(`"${address.name}" <${address.email}>`);
+        addressesStr.push(`"${original.name}" <${address.email}>`);
     }
     return addressesStr.join(', ');
 }

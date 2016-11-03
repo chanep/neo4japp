@@ -12,10 +12,15 @@ require('dotenv').config({path: envFile});
 const neo4j = require('neo4j-driver').v1;
 
 
-let models = require('../models/models');
-let schema = models.allocation.schema;
-console.log("work", schema.weekHours);
-console.log("inner", schema.weekHours._inner);
+const messaging = require('../services/messaging');
+messaging.sendPendingApprovalsEmail()
+    .then(result => console.log("result", result));
+
+
+// let models = require('../models/models');
+// let schema = models.allocation.schema;
+// console.log("work", schema.weekHours);
+// console.log("inner", schema.weekHours._inner);
 
 
 
