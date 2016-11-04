@@ -319,8 +319,6 @@ export default class EmployeeHeader extends React.Component {
                 clients += (clients !== ""? ", ": "") + client.name;
             });
         }
-
-        console.log("this.state.user", this.state.user);
         return (
         	<div className="employee-header-container">
         		<div className="grid">

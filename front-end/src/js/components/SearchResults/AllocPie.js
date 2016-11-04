@@ -92,7 +92,7 @@ export default class AllocPie extends React.Component {
         		<ReactTooltip id={newId} delayHide={500} effect='solid' class="tooltipFormat">
         			{this.state.startWeek !== null? <div>Week {moment(this.state.startWeek).format("MM/DD/YYYY")}</div> : null}
         			<div>{totalPercent}% Allocated ({this.state.allocatedHour + '/' + this.state.totalWeekHour})</div>
-        			{this.state.currentEmployee !== null?<div className="viewLink"><a href={"http://reporter/newallocations/EmployeeAllocation.aspx?EmpId=" + this.state.currentEmployee} target="_blank">VIEW ALLOCATIONS</a></div>:null}
+        			{this.state.currentEmployee !== null && this.state.currentEmployee !== undefined?<div className="viewLink"><a href={"http://reporter/newallocations/EmployeeAllocation.aspx?EmpId=" + this.state.currentEmployee} target="_blank">VIEW ALLOCATIONS</a></div>:null}
         		</ReactTooltip>
         	</div>
 		);

@@ -8,14 +8,14 @@ export default class AllocationData extends React.Component {
 		super();
 
 		this.state = {
-			employeeId: null,
+			employeeId: obj.employeeId,
 			allocations: obj.allocations
 		};
 	}
 
 	componentWillReceiveProps(nextProps) {
 		this.setState({
-			employeeId: null,
+			employeeId: nextProps.employeeId,
 			allocations: nextProps.allocations
 		});
 	}

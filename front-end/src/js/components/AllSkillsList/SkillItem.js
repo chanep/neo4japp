@@ -26,7 +26,6 @@ export default class SkillItem extends React.Component {
     }
 
 	componentWillReceiveProps(nextProps) {
-		console.log("nextProps", nextProps);
 		this.setState({
 			data: nextProps.data,
 			parent: nextProps.parent,

@@ -41,7 +41,6 @@ export default class SearchResult extends React.Component {
 	render() {
 		if (this.state.obj === null || this.state.obj === undefined)
 			return null;
-		
 
 		let self = this;
         return (
@@ -58,7 +57,7 @@ export default class SearchResult extends React.Component {
 			            <span className="table-row">{this.state.obj.skills.length}/{this.state.skillsCount}</span>
 			        </div>
 			        <div className="col -col-2">
-			        	<AllocationData allocations={self.state.obj.allocation} employeeId={self.state.obj.phonelistId} />
+			        	<AllocationData allocations={this.state.obj.allocation} employeeId={this.state.obj.phonelistId} />
 			        </div>
 			        <div className={"col -col-1 results-arrow-open-close " + (this.state.showDetails?"skill-opened":"")} onClick={this.expandContract.bind(this, this.state.obj.id)}>
 			            <i className="ss-icon-down-arrow"></i>
