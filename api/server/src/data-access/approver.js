@@ -105,6 +105,34 @@ class ApproverDa extends UserDa{
                 return this.updateRelationship(knowledgeId, "knowledges", kData, true);
             })
     }
+
+
+    /**
+     * Find all approvers with their employees pending of approval
+     * @memberOf ApproverDa
+     */
+    findApproversWithPendingApprovals(){
+        const userL = this.labelsStr;
+        const skillL = skillModel.labelsStr;
+        const groupL = skillModel.getRelationByKey("group").label;
+        const sgL = skillGroupModel.labelsStr;
+        const knowledgesL = this.model.getRelationByKey("knowledges").label;
+        const approversL = this.model.getRelationByKey("approvers").label;
+
+        const cmd = `
+            match (a:${userL})<-[:${approversL}]-(e:${userL}),
+            (e)-[k:${knowledgesL}]->(s:${skillL})-[:${groupL}]-(sg:${sgL}) 
+            where not(a.disabled) and not(e.disabled) and (sg.type = 'tool' or sg.type = 'skill') and (k.approved is null or k.approved = false)
+            with a, e
+            order by e.fullname
+            with a, collect({id: id(e), fullname: e.fullname, email: e.email}) as pendingApprovalEmployees    
+            return {    
+                id: id(a), username: a.username, first: a.first, email: a.email, fullname: a.fullname,
+                pendingApprovalEmployees: pendingApprovalEmployees
+            }`
+        const params = {};
+        return this.query(cmd, params);
+    }
 }
 
 module.exports = ApproverDa;
