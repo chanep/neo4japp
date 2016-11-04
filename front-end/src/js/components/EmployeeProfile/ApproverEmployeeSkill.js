@@ -21,8 +21,6 @@ export default class ApproverEmployeeSkill extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log("nextProps data", nextProps);
-
         this.setState({
             data: nextProps.skill
         });
