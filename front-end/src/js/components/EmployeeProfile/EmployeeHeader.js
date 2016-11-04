@@ -307,6 +307,9 @@ export default class EmployeeHeader extends React.Component {
         industriesString += "...";
 
         let position = this.state.user.position.name;
+        let department = this.state.user.department.name;
+        let officeLoc = this.state.user.office.name + ', ' + this.state.user.office.country;
+        console.log("this.state.user", this.state.user);
         return (
         	<div className="employee-header-container">
         		<div className="grid">
@@ -318,7 +321,8 @@ export default class EmployeeHeader extends React.Component {
         			</div>
         			<div className="col -col-9">
         				<div className="employee-name">{this.state.user.fullname}</div>
-        				<div className="employee-subtitle">{position}</div>
+        				<div className="employee-subtitle">{position} - {department}</div>
+                        <div className="employee-subtitle"><span className="subtitle-annotation">Office: </span>{officeLoc}</div>
                        
                         <div className="employee-subtitle"><span className="subtitle-annotation">Manager: </span>{this.getChild(this.state.user, "approvers").length > 0?this.getChild(this.state.user, "approvers")[0].fullname:"----"}</div>
 
