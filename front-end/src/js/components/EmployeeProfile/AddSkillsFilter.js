@@ -28,7 +28,6 @@ export default class AddSkillsFilter extends React.Component {
   	}
 
     render() {
-    	console.log("this.state.data", this.state.data);
     	let skills = [];
     	let tools = [];
 

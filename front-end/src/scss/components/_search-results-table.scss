@@ -381,82 +381,6 @@
         }
     }
 
-    .pieAllocation {
-        width: 26px;
-        height: 26px;
-        display: inline-block;
-        margin-right: 5px;
-
-        .pie {
-            position: absolute;
-            width: 26px;
-            height: 26px;
-            -moz-border-radius: 13px;
-            -webkit-border-radius: 13px;
-            -o-border-radius: 13px;
-            border-radius: 13px;
-            clip: rect(0px, 13px, 26px, 0px);
-        }
-
-        .pieBackground {
-            position: absolute;
-            width: 26px;
-            height: 26px;
-            -moz-border-radius: 13px;
-            -webkit-border-radius: 13px;
-            -o-border-radius: 13px;
-            border-radius: 13px;
-            border: 1px solid $GREY;
-        }
-
-         .hold {
-              position: absolute;
-              width: 26px;
-              height: 26px;
-              -moz-border-radius: 13px;
-              -webkit-border-radius: 13px;
-              -o-border-radius: 13px;
-              border-radius: 13px;
-              clip: rect(0px, 26px, 26px, 13px);
-         }
-
-         .pieSlice .pie, .pieSlice2 .pie {
-              background-color: $GREY;
-         }
-
-        .pieSlice2 {
-            -webkit-transform:rotate(180deg);
-            -moz-transform:rotate(180deg);
-            -o-transform:rotate(180deg);
-            transform:rotate(180deg);
-        }
-
-        .tooltipFormat {
-
-            text-align: left;
-            color: white;
-            font-size: em(12);
-            pointer-events: auto !important;
-
-            &:hover {
-                visibility: visible !important;
-                opacity: 1 !important;
-            }
-
-            .viewLink {
-                padding-top: em(10);
-
-                a {
-                    cursor: pointer;
-                }
-
-                a:hover {
-                    text-decoration: underline;
-                }
-            }
-        }
-    }
-
     .addSkillsFilter {
         .filterType {
             margin-bottom: em(50);
@@ -503,5 +427,81 @@
     a:visited {
         text-decoration: inherit;
         color: inherit;
+    }
+}
+
+.pieAllocation {
+    width: 26px;
+    height: 26px;
+    display: inline-block;
+    margin-right: 5px;
+
+    .pie {
+        position: absolute;
+        width: 26px;
+        height: 26px;
+        -moz-border-radius: 13px;
+        -webkit-border-radius: 13px;
+        -o-border-radius: 13px;
+        border-radius: 13px;
+        clip: rect(0px, 13px, 26px, 0px);
+    }
+
+    .pieBackground {
+        position: absolute;
+        width: 26px;
+        height: 26px;
+        -moz-border-radius: 13px;
+        -webkit-border-radius: 13px;
+        -o-border-radius: 13px;
+        border-radius: 13px;
+        border: 1px solid $GREY;
+    }
+
+     .hold {
+          position: absolute;
+          width: 26px;
+          height: 26px;
+          -moz-border-radius: 13px;
+          -webkit-border-radius: 13px;
+          -o-border-radius: 13px;
+          border-radius: 13px;
+          clip: rect(0px, 26px, 26px, 13px);
+     }
+
+     .pieSlice .pie, .pieSlice2 .pie {
+          background-color: $GREY;
+     }
+
+    .pieSlice2 {
+        -webkit-transform:rotate(180deg);
+        -moz-transform:rotate(180deg);
+        -o-transform:rotate(180deg);
+        transform:rotate(180deg);
+    }
+
+    .tooltipFormat {
+
+        text-align: left;
+        color: white;
+        font-size: em(12);
+        pointer-events: auto !important;
+
+        &:hover {
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+
+        .viewLink {
+            padding-top: em(10);
+
+            a {
+                cursor: pointer;
+            }
+
+            a:hover {
+                text-decoration: underline;
+            }
+        }
     }
 }

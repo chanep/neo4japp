@@ -5,11 +5,11 @@ import UserServices from '../../services/UserServices';
 import moment from "moment";
 import ENV from "../../../config.js";
 import Autosuggest from 'react-autosuggest';
+import BasePage from "../../pages/BasePage";
+import AllocationData from '../SearchResults/AllocationData';
 
 
 export default class EmployeeHeader extends React.Component {
-
-
     constructor(){
         super();
 
@@ -44,6 +44,8 @@ export default class EmployeeHeader extends React.Component {
         this.onSuggestionsClearRequested = this.onSuggestionsClearRequested.bind(this);
         this.renderSuggestion = this.renderSuggestion.bind(this);
         this.onAutocompleteChange = this.onAutocompleteChange.bind(this);
+
+        this.basePage = new BasePage();
     }
 
 
@@ -304,9 +306,19 @@ export default class EmployeeHeader extends React.Component {
             industriesString = industriesString.slice(0, -2);
         }
 
-        industriesString += "...";
+        //industriesString += "...";
 
         let position = this.state.user.position.name;
+        let department = this.state.user.department.name;
+        let officeLoc = this.state.user.office.name + ', ' + this.state.user.office.country;
+
+        let clients = "No clients data available";
+        if (this.state.user.clients.length > 0) {
+            clients = "";
+            this.state.user.clients.forEach(function(client) {
+                clients += (clients !== ""? ", ": "") + client.name;
+            });
+        }
         return (
         	<div className="employee-header-container">
         		<div className="grid">
@@ -318,7 +330,8 @@ export default class EmployeeHeader extends React.Component {
         			</div>
         			<div className="col -col-9">
         				<div className="employee-name">{this.state.user.fullname}</div>
-        				<div className="employee-subtitle">{position}</div>
+        				<div className="employee-subtitle">{position} - {department}</div>
+                        <div className="employee-subtitle"><span className="subtitle-annotation">Office: </span>{officeLoc}</div>
                        
                         <div className="employee-subtitle"><span className="subtitle-annotation">Manager: </span>{this.getChild(this.state.user, "approvers").length > 0?this.getChild(this.state.user, "approvers")[0].fullname:"----"}</div>
 
@@ -406,7 +419,7 @@ export default class EmployeeHeader extends React.Component {
                                         </div>
                                     </div>
                             }
-                            <div className="interest"><span className="ss-icon-clients"></span> Nike, PwC, Samsung, Loreal</div>
+                            <div className="interest"><span className="ss-icon-clients"></span> {clients}</div>
         				</div>
         			</div>
         			<div className="col -col-2">
@@ -433,6 +446,12 @@ export default class EmployeeHeader extends React.Component {
                                 <span className="label">VERIFY {this.state.unapprovedSkillCount} SKILLS IN TOTAL</span>
                             </div>
                         : null}
+
+                        {
+                            this.basePage.ResourceManagerLoggedIn()?
+                                <AllocationData allocations={this.state.user.allocation} employeeId={this.state.user.phonelistId} />
+                            : null
+                        }
         				<div className="employee-skills-last-update">
                             {this.state.user.lastUpdate !== null?
                                 <div>Updated: <span title={moment(this.state.user.lastUpdate).format("MM/DD/YYYY hh:mm")}>{moment(this.state.user.lastUpdate).fromNow()}</span></div>:
