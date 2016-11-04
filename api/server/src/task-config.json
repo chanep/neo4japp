@@ -28,6 +28,13 @@
 		}
 	},
 	{
+		"name" : "send-pending-approval-emails",
+		"path" : "./tasks/send-pending-approval-emails",
+		"cronPattern" : "0 11 * * 1",
+		"args" : {
+		}
+	},
+	{
 		"name" : "import-all",
 		"path" : "./tasks/import-all",
 		"cronPattern" : null,

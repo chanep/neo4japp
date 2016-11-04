@@ -28,6 +28,7 @@ class UserDa extends BaseDa{
         let sgRelL = skillModel.getRelationByKey("group").label;
         let kRelL = this.model.getRelationByKey("knowledges").label;
         let interestRelL = this.model.getRelationByKey("interests").label;
+        let allocationRelL = this.model.getRelationByKey("allocation").label;
 
         let cmd = `match (n:${label}) where id(n) = {id}
                     match (n)-[:${officeRelL}]->(o),
@@ -42,12 +43,13 @@ class UserDa extends BaseDa{
                     optional match (rm)-[:${departmentRelL}]->(rmd)
                     optional match (rm)-[:${positionRelL}]->(rmp)
 
+                    optional match (n)-[:${allocationRelL}]->(al)
                     optional match (n)-[:${clientRelL}]->(c)
                     optional match (n)-[:${interestRelL}]->(i)
                     optional match (n)-[:${kRelL}]->(ind)-[:${sgRelL}]->(sg) where sg.type = 'industry' 
                     optional match (n)-[:${kRelL}]->(s)-[:${sgRelL}]->(sg2) where sg2.type in ['tool', 'skill']
                     optional match (n)-[ku:${kRelL}]->(su)-[:${sgRelL}]->(sg3) where (sg3.type in ['tool', 'skill'] and (ku.approved is null or ku.approved = false))
-                    with n, o, d, p, collect(distinct {_:a, department: ad, position: ap}) as approvers, collect(distinct {_:rm, department: rmd, position: rmp}) as resourceManagers, collect(distinct c) as clients, collect(distinct i) as interests,
+                    with n, o, d, p, al, collect(distinct {_:a, department: ad, position: ap}) as approvers, collect(distinct {_:rm, department: rmd, position: rmp}) as resourceManagers, collect(distinct c) as clients, collect(distinct i) as interests,
                         collect(distinct ind) as industries, count(distinct s) as skillCount, count(distinct su) as unapprovedSkillCount
                     return {    
                                 id: id(n), username: n.username, type: n.type, email: n.email, phonelistId: n.phonelistId,
@@ -57,6 +59,7 @@ class UserDa extends BaseDa{
                                 position: {id: id(p), name: p.name},
                                 approvers: approvers,
                                 resourceManagers: resourceManagers,
+                                allocation: al,
                                 clients: clients,
                                 interests: interests,
                                 industries: industries,
