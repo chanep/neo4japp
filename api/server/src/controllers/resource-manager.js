@@ -6,6 +6,7 @@ const BaseController = require('./base-controller');
 const resourceManagerDa = new (require('../data-access/resource-manager'));
 const skillDa = new (require('../data-access/skill'));
 const postal = require('postal');
+const messaging = require('../services/messaging');
 
 const skillChannel = postal.channel('skill');
 
@@ -129,6 +130,35 @@ class ResourceManagerController extends BaseController{
         let promise = resourceManagerDa.skilledUsersByOffice(skillId);
 
         this._respondPromise(req, res, promise);   
+    }
+
+    /**
+    @api {put} /api/resource-manager/approval-request/:employeeId 5 Request Approval
+    @apiDescription Send an email to the approver requesting an employee's skill approval
+    @apiGroup Resource Managers
+
+    @apiParam {number} employeeId
+    
+    @apiSuccessExample {json} Success-Response:
+    HTTP/1.1 200 OK
+    {
+        status: "success",
+        data: "Email sent"
+    }
+    */
+    requestApproval(req, res, next){
+        const userId = req.session.user.id;
+        const employeeId = Number(req.params.employeeId);
+
+        let promise = resourceManagerDa.isResourceManagerOf(userId, employeeId)
+            .then(granted => {
+                if(!granted)
+                    throw new errors.ForbiddenError(`User ${req.session.user.username} is forbidden to request for user of id ${userId}`);
+                return messaging.sendApprovalRequestEmail(req.session.user, employeeId);
+            })
+            .then(() => "Email sent");
+
+        this._respondPromise(req, res, promise);
     }
 } 
 

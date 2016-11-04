@@ -4,8 +4,11 @@ import { Link } from "react-router";
 import UserServices from '../../services/UserServices';
 import moment from "moment";
 import ENV from "../../../config.js";
+import Autosuggest from 'react-autosuggest';
+
 
 export default class EmployeeHeader extends React.Component {
+
 
     constructor(){
         super();
@@ -13,7 +16,8 @@ export default class EmployeeHeader extends React.Component {
         this.userData = new UserServices();
        
         this.state = {
-            interest: "",
+            interest: "test",
+            suggestions: [],
             suggestedInterest: "",
             industries: [],
             user: null,
@@ -33,7 +37,15 @@ export default class EmployeeHeader extends React.Component {
         this.addInterestQuery = this.addInterestQuery.bind(this);
         this.addSuggestedInterest = this.addSuggestedInterest.bind(this);
         this.toggleIndustry = this.toggleIndustry.bind(this);
+
+        this.getSuggestionValue = this.getSuggestionValue.bind(this);
+        this.getSuggestions = this.getSuggestions.bind(this);
+        this.onSuggestionsFetchRequested = this.onSuggestionsFetchRequested.bind(this);
+        this.onSuggestionsClearRequested = this.onSuggestionsClearRequested.bind(this);
+        this.renderSuggestion = this.renderSuggestion.bind(this);
+        this.onAutocompleteChange = this.onAutocompleteChange.bind(this);
     }
+
 
     getChild (obj,key){
         let result = Object.keys(obj).map(function(k) { return obj[key]});
@@ -217,8 +229,55 @@ export default class EmployeeHeader extends React.Component {
         }
     }
 
+    /*
+    Autocomplete functions
+    */
+
+    getSuggestions(value) {
+        this.userData.GetInterests(value, 5).then(data => {
+            console.log(data);
+            this.setState({ "suggestions": data });
+
+            console.log('getSuggestions: ');
+            console.log(this.state.suggestions);
+        });
+    }
+
+    getSuggestionValue(suggestion) {
+      return suggestion.name;
+    }
+
+    onSuggestionsFetchRequested(value) {
+        this.getSuggestions(value);
+    };
+
+    onSuggestionsClearRequested() {
+        this.setState({
+            suggestions: []
+        });
+    };
+
+    onAutocompleteChange(event, newValue, method) {
+        this.setState({
+          interest: newValue.newValue
+        });
+    }
+
+    renderSuggestion(suggestion) {
+      return (
+        <span>{suggestion.name}</span>
+      );
+    }
+
     render () {
         var self = this;
+
+        const { interest, suggestions } = this.state;
+        const inputProps = {
+          placeholder: "Interest",
+          value: interest,
+          onChange: this.onAutocompleteChange
+        };
 
         if (this.state.user === null)
             return <div />
@@ -271,11 +330,15 @@ export default class EmployeeHeader extends React.Component {
                                 <div className="modal-contents">
                                     <h2>Edit interests</h2>
                                     <form onSubmit={this.addInterest.bind(this)}>
-                                        <input id="interest" type="text" placeholder="Interest" className="inputTextBox" onChange={this.handleInterestChange.bind(this)} autoComplete="off" />
-                                        <input type="submit" className="add-interest" value="Add Interest" />
-                                        { this.state.suggestedInterest ?
-                                            <span className="interest-suggested" onClick={this.addSuggestedInterest.bind(this)}>{this.state.suggestedInterest.name}</span>
-                                        : false }
+                                      <input type="submit" className="add-interest" value="Add Interest" />
+                                      <Autosuggest
+                                        suggestions={suggestions}
+                                        onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+                                        onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+                                        getSuggestionValue={this.getSuggestionValue}
+                                        renderSuggestion={this.renderSuggestion}
+                                        inputProps={inputProps}
+                                      />
                                     </form>
                                     <ul className="interests">
                                     {this.state.user.interests.map((interest, index)=>{
