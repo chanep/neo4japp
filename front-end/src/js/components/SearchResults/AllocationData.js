@@ -22,7 +22,7 @@ export default class AllocationData extends React.Component {
 
 	render() {
 		if (this.state.allocations === null || this.state.allocations === undefined)
-			return <div className="no-data">No allocation data available</div>
+			return <div className="allocations"><div className="no-data">No allocation data available</div></div>
 
 		let self = this;
 		return (
