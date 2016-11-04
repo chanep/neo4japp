@@ -1,8 +1,8 @@
 import React from 'react';
 import { Router, Route, Link } from 'react-router'
 import SkillResult from '../../components/SearchResults/SkillResult';
-import AllocPie from './AllocPie'
 import update from 'react-addons-update';
+import AllocationData from './AllocationData';
 
 // Class: SearchResult
 export default class SearchResult extends React.Component {
@@ -58,24 +58,7 @@ export default class SearchResult extends React.Component {
 			            <span className="table-row">{this.state.obj.skills.length}/{this.state.skillsCount}</span>
 			        </div>
 			        <div className="col -col-2">
-			        	<div className="allocations">
-				        	{
-				        		self.state.obj.allocation !== null && self.state.obj.allocation !== undefined?
-					        		[0,1,2,3].map(function(index) {
-					        			let allocHours = 0;
-					        			let totalWekHour = 0;
-					        			let startingDate = null;
-					        			if (index+1 <= self.getChild(self.state.obj.allocation, 'weekHours').length) {
-					        				allocHours = self.getChild(self.state.obj.allocation, 'weekHours')[index];
-					        				totalWekHour = self.getChild(self.state.obj.allocation, 'workingWeekHours')[index];
-					        				startingDate = self.getChild(self.state.obj.allocation, 'startDate')[index];
-					        			}
-
-					        			return (<AllocPie currentEmployee={self.state.obj.username} startWeek={startingDate} allocatedHour={allocHours} totalWeekHour={totalWekHour} key={index} />);
-					        		}) :
-					        	<div className="no-data">No allocation data available</div>
-				        	}
-				        </div>
+			        	<AllocationData allocations={self.state.obj.allocation} employeeId={self.state.obj.phonelistId} />
 			        </div>
 			        <div className={"col -col-1 results-arrow-open-close " + (this.state.showDetails?"skill-opened":"")} onClick={this.expandContract.bind(this, this.state.obj.id)}>
 			            <i className="ss-icon-down-arrow"></i>

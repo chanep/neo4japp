@@ -4,7 +4,7 @@
     line-height: normal;
 
     .profilePic {
-        @include userProfilePicture(45px, 45px);
+        @include userProfilePicture(50px, 50px);
     }
 
     .employee-name {
@@ -107,6 +107,10 @@
     	span {
     		font-weight: bold;
     	}
+    }
+
+    .allocations {
+        padding: 0 0 em(15) 0;
     }
 
     form {
