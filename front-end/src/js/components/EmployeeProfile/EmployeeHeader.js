@@ -351,18 +351,18 @@ export default class EmployeeHeader extends React.Component {
                     					<div className="interest editable-interest" onClick={this.editInterests.bind(this)}>
                                             <span className="ss-icon-heart"></span>
                                                 {interestsString != ''
-                                                    ? <span> {interestsString}</span>
-                                                    : <span className="no-items"> No interests</span>
-                                                } <span className="edit">Edit</span>
+                                                    ? <span> {interestsString} <span className="edit"></span></span>
+                                                    : <span className="no-items"> No interests <span className="edit"></span></span>
+                                                }
                                         </div>
                                         <br />
                                         <div className="interest editable-interest" onClick={this.editIndustries.bind(this)}>
                     					    <div className="interest">
                                                 <span className="ss-icon-industry"></span>
                                                     {industriesString != ''
-                                                        ? <span> {industriesString}</span>
-                                                        : <span className="no-items"> No industries</span>
-                                                    } <span className="edit">Edit</span>
+                                                        ? <span> {industriesString} <span className="edit"></span></span>
+                                                        : <span className="no-items"> No industries <span className="edit"></span></span>
+                                                    }
                                             </div>
                     					</div>
                                     </div>

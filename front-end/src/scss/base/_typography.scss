@@ -5,5 +5,8 @@
 // Skill Search
 @include generateFont('Skill Search', 'Skill Search');
 
+// Fontello
+@include generateFont('Fontello', 'Fontello');
+
 // Generate type-scale elements
 @include generateTypeScaleStyles();
