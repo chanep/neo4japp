@@ -52,9 +52,9 @@ export default class EmployeeAddSkillsTable extends React.Component {
     		<div className="my-profile-add-skills-table">
     			<div className="header-bar col -col-12 -col-no-gutter">
     				<div className="col -col-3"><span className="table-header">Filter</span></div>
-    				<div className="col -col-3"><span className="table-header">Name</span></div>
+    				<div className="col -col-4"><span className="table-header">Name</span></div>
     				<div className="col -col-3"><span className="table-header">Category</span></div>
-    				<div className="col -col-3"><span className="table-header">Skills</span></div>
+    				<div className="col -col-2"><span className="table-header">Skills</span></div>
     			</div>
     			<AddSkillsFilter data={this.state.data} onSelectedGroup={this.handleFilter.bind(this)} />
     			<AddSkillsList data={this.state.data} selectedGroup={this.state.selectedGroup} />
