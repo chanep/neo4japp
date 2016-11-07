@@ -125,7 +125,7 @@ class ApproverDa extends UserDa{
             where not(a.disabled) and not(e.disabled) and (sg.type = 'tool' or sg.type = 'skill') and (k.approved is null or k.approved = false)
             with a, e
             order by e.fullname
-            with a, collect({id: id(e), fullname: e.fullname, email: e.email}) as pendingApprovalEmployees    
+            with a, collect(distinct {id: id(e), fullname: e.fullname, email: e.email}) as pendingApprovalEmployees    
             return {    
                 id: id(a), username: a.username, first: a.first, email: a.email, fullname: a.fullname,
                 pendingApprovalEmployees: pendingApprovalEmployees

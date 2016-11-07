@@ -12,7 +12,8 @@ module.exports = function() {
         },
         interests: {
             minimumLenghtLookup: 2,
-            maximumListLength: 5
+            maximumListLength: 5,
+            suggestionsNumber: 5
         }
     }
 
