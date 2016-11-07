@@ -15,14 +15,14 @@
     }
 
     .inputTextBox {
-        border: em(1) solid #e7e7e8;
+        border: 1px solid #e7e7e8;
         font-size: em(14);
         font-weight: bold;
         color: #868686;
         margin-bottom: em(12);
         padding: em(16) em(21);
-        width: 255px;
-        height: 45px;
+        width: 250px;
+        height: 50px;
         vertical-align: top;
     }
 
@@ -43,9 +43,9 @@
     span {
         background-color: #e7e7e8;
         font-size: em(14);
-        padding: em(18) em(19);
-        height: 45px;
-        width: 45px;
+        padding: 1.2em 1.4em;
+        height: 50px;
+        width: 50px;
         vertical-align: top;
         display: inline-block;
 
