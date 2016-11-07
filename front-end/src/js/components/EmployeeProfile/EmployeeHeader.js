@@ -307,7 +307,7 @@ export default class EmployeeHeader extends React.Component {
                                     <span className="modal-close ss-icon-close"><span className="path1"></span><span className="path2"></span></span>
                                 </div>
                                 <div className="modal-contents">
-                                    <h2>Edit interests</h2>
+                                    <h2>Add interests</h2>
                                     <form onSubmit={this.addInterest.bind(this)}>
                                       <input type="submit" className="add-interest" value="Add Interest" />
                                       <Autosuggest
@@ -334,7 +334,7 @@ export default class EmployeeHeader extends React.Component {
                                     <span className="modal-close ss-icon-close"><span className="path1"></span><span className="path2"></span></span>
                                 </div>
                                 <div className="modal-contents">
-                                    <h2>Edit industries</h2>
+                                    <h2>Add industries</h2>
                                     <ul className="industries">
                                     {this.state.industries.map((industry, index)=>{
                                       return (<li className="industry" key={index}><input type="checkbox" checked={this.state.userIndustries.indexOf(industry.id) != -1} onChange={this.toggleIndustry.bind(this, industry)} /> {industry.name}</li>)
@@ -387,7 +387,12 @@ export default class EmployeeHeader extends React.Component {
                                         </div>
                                     </div>
                             }
-                            <div className="interest"><span className="ss-icon-clients"></span> {clients}</div>
+                            <div className="interest"><span className="ss-icon-clients"></span>
+                                {clients != ''
+                                    ? <span> {clients}</span>
+                                    : <span className="none-available"> No clients available</span>
+                                }
+                            </div>
         				</div>
         			</div>
         			<div className="col -col-2">
