@@ -389,6 +389,7 @@ export default class EmployeeHeader extends React.Component {
                                                     : <span className="no-items"> No interests</span>
                                                 } <span className="edit">Edit</span>
                                         </div>
+                                        <br />
                                         <div className="interest editable-interest" onClick={this.editIndustries.bind(this)}>
                     					    <div className="interest">
                                                 <span className="ss-icon-industry"></span>
@@ -408,6 +409,7 @@ export default class EmployeeHeader extends React.Component {
                                                 : <span className="none-available"> No interests available</span>
                                             }
                                         </div>
+                                        <br />
                                         <div className="interest">
                                             <div className="interest">
                                                 <span className="ss-icon-industry"></span>
