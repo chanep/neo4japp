@@ -56,7 +56,7 @@ class RelatedEmployee extends React.Component {
             user = this.state.data.similarSkilledUsers[this.state.index];
         }
 
-        if (user.image == null)
+        if (user.image == undefined || user.image == null)
             user.image = "/img/img_noPortrait.gif";
 
         var emailSnippet = 'mailto:' + user.email;
