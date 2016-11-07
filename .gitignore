@@ -10,6 +10,7 @@ css/styles.css.map
 api/server/src/tmp/*.json
 api/server/apidoc
 api/server/logs/**/*.log
+api/server/src/typings
 .vagrant
 vagrant-machine/.vagrant
 /dist
