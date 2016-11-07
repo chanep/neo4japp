@@ -16,7 +16,7 @@ export default class EmployeeHeader extends React.Component {
         this.userData = new UserServices();
        
         this.state = {
-            interest: "test",
+            interest: "",
             suggestions: [],
             suggestedInterest: "",
             industries: [],
@@ -31,7 +31,6 @@ export default class EmployeeHeader extends React.Component {
         }
 
         this.editInterests = this.editInterests.bind(this);
-        this.handleInterestChange = this.handleInterestChange.bind(this);
         this.removeInterest = this.removeInterest.bind(this);
         this.addInterest = this.addInterest.bind(this);
         this.addInterestQuery = this.addInterestQuery.bind(this);
@@ -122,32 +121,6 @@ export default class EmployeeHeader extends React.Component {
         this.setState({ editingIndustries: false });
     }
 
-    handleInterestChange(e) {
-        let that = this;
-
-        this.setState({ "interest": e.target.value});
-
-        if (e.target.value.length < ENV().interests.minimumLenghtLookup) {
-            this.setState({ "suggestedInterest": null });
-        } else {
-            this.userData.GetInterests(this.state.interest, 1).then(data => {
-                if (data[0] != undefined) {
-                    var used = false;
-
-                    that.state.user.interests.forEach(function (v) {
-                        if (v.id == data[0].id ) {
-                            used = true;
-                        }
-                    });
-
-                    if (!used) {
-                        this.setState({ "suggestedInterest": data[0] });
-                    }
-                }
-            });
-        }
-    }
-
     removeInterest(interestId) {
         var user = this.state.user;
 
@@ -183,9 +156,6 @@ export default class EmployeeHeader extends React.Component {
 
           user.interests.push({ "id": data.id, "name": data.name });
           self.setState({ "interest": "", "user": user });
-
-          // after adding interest, clear textbox
-          document.getElementById("interest").value = "";
         }).catch(data => {
             console.log('Error while adding interest', data);
         });
@@ -236,12 +206,8 @@ export default class EmployeeHeader extends React.Component {
     */
 
     getSuggestions(value) {
-        this.userData.GetInterests(value, 5).then(data => {
-            console.log(data);
+        this.userData.GetInterests(value.value, ENV().interests.suggestionsNumber).then(data => {
             this.setState({ "suggestions": data });
-
-            console.log('getSuggestions: ');
-            console.log(this.state.suggestions);
         });
     }
 
@@ -341,7 +307,7 @@ export default class EmployeeHeader extends React.Component {
                                     <span className="modal-close ss-icon-close"><span className="path1"></span><span className="path2"></span></span>
                                 </div>
                                 <div className="modal-contents">
-                                    <h2>Edit interests</h2>
+                                    <h2>Add interests</h2>
                                     <form onSubmit={this.addInterest.bind(this)}>
                                       <input type="submit" className="add-interest" value="Add Interest" />
                                       <Autosuggest
@@ -368,7 +334,7 @@ export default class EmployeeHeader extends React.Component {
                                     <span className="modal-close ss-icon-close"><span className="path1"></span><span className="path2"></span></span>
                                 </div>
                                 <div className="modal-contents">
-                                    <h2>Edit industries</h2>
+                                    <h2>Add industries</h2>
                                     <ul className="industries">
                                     {this.state.industries.map((industry, index)=>{
                                       return (<li className="industry" key={index}><input type="checkbox" checked={this.state.userIndustries.indexOf(industry.id) != -1} onChange={this.toggleIndustry.bind(this, industry)} /> {industry.name}</li>)
@@ -385,18 +351,18 @@ export default class EmployeeHeader extends React.Component {
                     					<div className="interest editable-interest" onClick={this.editInterests.bind(this)}>
                                             <span className="ss-icon-heart"></span>
                                                 {interestsString != ''
-                                                    ? <span> {interestsString}</span>
-                                                    : <span className="no-items"> No interests</span>
-                                                } <span className="edit">Edit</span>
+                                                    ? <span> {interestsString} <span className="edit"></span></span>
+                                                    : <span className="no-items"> No interests <span className="edit"></span></span>
+                                                }
                                         </div>
                                         <br />
                                         <div className="interest editable-interest" onClick={this.editIndustries.bind(this)}>
                     					    <div className="interest">
                                                 <span className="ss-icon-industry"></span>
                                                     {industriesString != ''
-                                                        ? <span> {industriesString}</span>
-                                                        : <span className="no-items"> No industries</span>
-                                                    } <span className="edit">Edit</span>
+                                                        ? <span> {industriesString} <span className="edit"></span></span>
+                                                        : <span className="no-items"> No industries <span className="edit"></span></span>
+                                                    }
                                             </div>
                     					</div>
                                     </div>
@@ -421,7 +387,12 @@ export default class EmployeeHeader extends React.Component {
                                         </div>
                                     </div>
                             }
-                            <div className="interest"><span className="ss-icon-clients"></span> {clients}</div>
+                            <div className="interest"><span className="ss-icon-clients"></span>
+                                {clients != ''
+                                    ? <span> {clients}</span>
+                                    : <span className="none-available"> No clients available</span>
+                                }
+                            </div>
         				</div>
         			</div>
         			<div className="col -col-2">
