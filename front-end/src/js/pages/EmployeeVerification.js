@@ -33,11 +33,13 @@ export default class EmployeeVerification extends BasePage {
     }
 
     getEmployeeSkills(employeeId) {
+        this.setState({loading: true});
         if (employeeId !== undefined) {
             this.userServices.GetEmployeeSkills(employeeId, false).then(data => {
                 this.setState({
                     employeeId: employeeId,
-                    data: data
+                    data: data,
+                    loading: false
                 });
             }).catch(err => {
                 console.log("Error getting employee skills", err);
@@ -51,12 +53,14 @@ export default class EmployeeVerification extends BasePage {
                 <Header search={false} loggedIn={true} />
                 <EmployeeHeader userId={this.state.employeeId} showActions={false} showForManagerVerification={true} />
                 <div className="search-results-table">
-                    {
-                    this.state.data.length > 0?
-                        this.state.data.map(function(obj, key) {
-                            return (<EmployeeSkillsGroup groupData={obj} key={key} approverMode={true} />);
-                        })
-                    : null
+                    {this.state.loading ?
+                        <div className="loading-data-note"><span>loading data...</span></div>
+                        :
+                        this.state.data.length > 0?
+                            this.state.data.map(function(obj, key) {
+                                return (<EmployeeSkillsGroup groupData={obj} key={key} approverMode={true} />);
+                            })
+                        : null
                     }
                 </div>
             </div>

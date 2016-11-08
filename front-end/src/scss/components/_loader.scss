@@ -1,0 +1,200 @@
+.loading-data-note {
+	-webkit-border-radius: em(3);
+	-moz-border-radius: em(3);
+	border-radius: em(3);
+	background-color: $LIGHTEST-GREY;
+	font-size: em(13);
+	color: $GREY;
+	font-weight: bold;
+	text-align: center;
+	padding: em(10);
+	margin: em(10);
+	cursor: default;
+
+	span {
+		animation-duration: 500ms;
+		animation-name: blink;
+		animation-iteration-count: infinite;
+		animation-direction: alternate;
+	}
+}
+
+@keyframes blink {
+	from {
+		opacity: 1;
+	}
+	to {
+		opacity: 0.5;
+	}
+}
+
+
+.item-loader {
+    background: #fff;
+    margin: 0 auto;
+}
+
+@keyframes placeHolderShimmer{
+    0%{
+        background-position: -468px 0
+    }
+    100%{
+        background-position: 468px 0
+    }
+}
+
+.animated-background {
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite;
+    animation-name: placeHolderShimmer;
+    animation-timing-function: linear;
+    background: #f6f7f8;
+    background: linear-gradient(to right, #eeeeee 8%, #dddddd 18%, #eeeeee 33%);
+    background-size: 1000px 104px;
+    position: relative;
+}
+
+.background-masker {
+    background: #fff;
+    position: absolute;
+}
+
+.employee-loader {
+	.item-loader {
+		max-width: 100%;
+    	min-height: em(135);
+    	height: em(135);
+	}
+
+	.animated-background {
+		height: em(135);
+	}
+
+	.background-masker.photoend-space {
+	    top: 0;
+	    left: em(50);
+	    right: 0;
+	    height: em(145);
+	    width: em(20);
+	}
+
+	.background-masker.photoend-bottom {
+		top: em(50);
+		left: 0;
+		width: em(50);
+		height: em(120);
+	}
+
+	.background-masker.name-top {
+	    top: 0;
+	    left: em(50);
+	    right: 0;
+	    height: em(5);
+	    width: auto;
+	}
+
+	.background-masker.name-end {
+	    top: em(5);
+	    left: em(550);
+	    right: 0;
+	    height: em(40);
+	    width: auto;
+	}
+
+	.background-masker.name-bottom {
+	    top: em(45);
+	    left: em(50);
+	    right: 0;
+	    height: em(5);
+	    width: auto;
+	}
+
+	.background-masker.position-end {
+	    top: em(50);
+	    left: em(350);
+	    right: 0;
+	    height: em(10);
+	    width: auto;
+	}
+
+	.background-masker.position-bottom {
+	    top: em(60);
+	    left: em(50);
+	    right: 0;
+	    height: em(3);
+	    width: auto;
+	}
+
+	.background-masker.office-end {
+	    top: em(63);
+	    left: em(320);
+	    right: 0;
+	    height: em(10);
+	    width: auto;
+	}
+
+	.background-masker.office-bottom {
+	    top: em(73);
+	    left: em(50);
+	    right: 0;
+	    height: em(3);
+	    width: auto;
+	}
+
+	.background-masker.manager-end {
+	    top: em(76);
+	    left: em(280);
+	    right: 0;
+	    height: em(10);
+	    width: auto;
+	}
+
+	.background-masker.manager-bottom {
+	    top: em(86);
+	    left: em(50);
+	    right: 0;
+	    height: em(14);
+	    width: auto;
+	}
+
+	.background-masker.interests-end {
+	    top: em(100);
+	    left: em(300);
+	    right: 0;
+	    height: em(11);
+	    width: auto;
+	}
+
+	.background-masker.interests-bottom {
+	    top: em(110);
+	    left: em(50);
+	    right: 0;
+	    height: em(2);
+	    width: auto;
+	}
+
+	.background-masker.industries-end {
+	    top: em(112);
+	    left: em(455);
+	    right: 0;
+	    height: em(11);
+	    width: auto;
+	}
+
+	.background-masker.industries-bottom {
+	    top: em(122);
+	    left: em(50);
+	    right: 0;
+	    height: em(3);
+	    width: auto;
+	}
+
+	.background-masker.clients-end {
+	    top: em(125);
+	    left: em(600);
+	    right: 0;
+	    height: em(11);
+	    width: auto;
+	}
+}
