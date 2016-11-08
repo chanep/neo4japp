@@ -7,6 +7,8 @@ import SkillsServices from '../../services/SkillsServices';
 
 import { hashHistory, Link, browserHistory, withRouter } from "react-router";
 
+import ReactDOM from "react-dom";
+
 class Search extends React.Component {
     constructor (props) {
       super(props);
@@ -61,6 +63,10 @@ class Search extends React.Component {
       this.makeQuery = this.makeQuery.bind(this);
       this.addPill = this.addPill.bind(this);
       this.clearSearchField = this.clearSearchField.bind(this);
+    }
+
+    componentDidUpdate(){
+      ReactDOM.findDOMNode(this.refs.querySearch).focus(); 
     }
 
     updateQuery(e) {
@@ -232,6 +238,8 @@ class Search extends React.Component {
           var path = '/employee/' + id;
           this.context.router.push({ pathname: path });
           this.clearSearch();
+
+          return false;
         } else {
           if (valid) {
             chosenItems.forEach(function (v) {
@@ -254,6 +262,8 @@ class Search extends React.Component {
             }
           }
         }
+
+        return true;
     }
 
     move(e) {
@@ -330,9 +340,9 @@ class Search extends React.Component {
       }
 
       if (e.keyCode == ENTER_KEYCODE) {
-        this.addPill(chosenItems);
-
-        this.makeQuery();
+        if (this.addPill(chosenItems)) {
+          this.makeQuery();
+        }
       }
 
       if (e.keyCode == TAB_KEYCODE) {
@@ -396,7 +406,7 @@ class Search extends React.Component {
                     {pills.map((pillName, index)=>{
                       return (<Pill name={pillName} key={index} removeSkill={this.removeSkill} index={index} />)
                     })}
-                    <input type="text" name="query" id="querySearch" onChange={this.updateQuery} onKeyDown={this.move} placeholder="enter search..."/>
+                    <input type="text" name="query" ref="querySearch" id="querySearch" onChange={this.updateQuery} onKeyDown={this.move} placeholder="enter search..."/>
                   </div> 
                   <span className="search-button-wrapper">
                     <span className="ss-icon-close"><span className="path1"></span><span className="path2" onClick={this.clearSearch.bind(this)}></span></span>
