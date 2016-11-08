@@ -142,7 +142,7 @@ export default class EmployeeHeader extends React.Component {
     addInterest(e) {
         e.preventDefault();
 
-        if (this.state.interest != "") {
+        if (this.state.interest.trim().length >= ENV().interests.minimumInterestLength) {
             this.addInterestQuery(this.state.interest);
             this.setState({ "suggestedInterest": null });
         }

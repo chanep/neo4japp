@@ -12,7 +12,8 @@ module.exports = function() {
         },
         interests: {
             minimumLenghtLookup: 2,
-            suggestionsNumber: 5
+            suggestionsNumber: 5,
+            minimumInterestLength: 3
         }
     }
 
