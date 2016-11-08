@@ -251,7 +251,7 @@ export default class EmployeeHeader extends React.Component {
             return <div />
 
         var interestsString = "",
-            interestsCount = (this.state.user.interests.length < ENV().interests.maximumListLength) ? this.state.user.interests.length : ENV().interests.maximumListLength;
+            interestsCount = this.state.user.interests.length;
 
         if (interestsCount > 0) {
             for (var i = 0; i < interestsCount; i++) {
@@ -262,7 +262,7 @@ export default class EmployeeHeader extends React.Component {
         }
 
         var industriesString = "",
-            industriesCount = (this.state.user.industries.length < ENV().interests.maximumListLength) ? this.state.user.industries.length : ENV().interests.maximumListLength;
+            industriesCount = this.state.user.industries.length;
 
         if (industriesCount > 0) {
             for (var i = 0; i < industriesCount; i++) {
