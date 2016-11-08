@@ -37,8 +37,9 @@ class ResourceManagerDa extends UserDa{
                     optional match (n)-[:${allocationRelL}]->(al)
                     with n, o, p, al, collect(a) as approvers, collect({_:s, level: k.level, approved: k.approved}) as skills
                     with n, o, p, al, approvers, skills, 
+                    (reduce(acc = 0, wwh IN al.workingWeekHours | acc + wwh) - reduce(acc = 0, wh IN al.weekHours | acc + wh)) as freeHours,
                     reduce(acc = 0, s IN skills | acc + s.level) as score
-                    order by score desc, al.totalHours asc, n.fullname asc
+                    order by score desc, freeHours desc, n.fullname asc
                     skip {skip} limit {limit}
                     return {    
                                 id: id(n), username: n.username, type: n.type, email: n.email, phonelistId: n.phonelistId,
