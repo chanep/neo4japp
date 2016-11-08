@@ -256,7 +256,8 @@ class Search extends React.Component {
 
               this.setState({ pointerDirty: false });
               this.setState({ chosenItems: chosenItems });
-              this.setState({ results: results });
+              this.setState({ results: [] });
+              this.hideResults();
 
               this.clearSearchField();
             }
