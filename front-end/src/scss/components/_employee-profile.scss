@@ -38,8 +38,17 @@
     	}
 
         .edit {
-            color: #e71d39;
-            font-weight: bold;
+            font-family: "fontello";
+
+            &:before {
+                content: '\e9c0';
+                font-size: 24px;
+                -webkit-font-smoothing: antialiased;
+            }
+
+            &:hover {
+                color: $BLACK;
+            }
         }
 
         .no-items {
@@ -258,10 +267,9 @@
                 display: block;
 
                 .related-email {
-                    transform: scale(.5);
                     color: white;
-                    margin-top: 7px;
-                    margin-left: 2px;
+                    margin-top: 5px;
+                    margin-left: 7px;
                 }
             }
 

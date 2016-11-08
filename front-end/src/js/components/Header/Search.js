@@ -228,31 +228,30 @@ class Search extends React.Component {
           }
         }
 
-        if (valid) {
-          chosenItems.forEach(function (v) {
-            if (v.id == id || v.name == name) {
-              repeated = true;
+        if (type == 'user') {
+          var path = '/employee/' + id;
+          this.context.router.push({ pathname: path });
+          this.clearSearch();
+        } else {
+          if (valid) {
+            chosenItems.forEach(function (v) {
+              if (v.id == id || v.name == name) {
+                repeated = true;
+              }
+            });
+
+            if (!repeated) {
+              // Add pill only if its a valid item and it has not been added already
+              chosenItems.push({ "id": id, "name": name, "type": type });
+
+              results.forEach(function (v) { delete v.suggested });
+
+              this.setState({ pointerDirty: false });
+              this.setState({ chosenItems: chosenItems });
+              this.setState({ results: results });
+
+              this.clearSearchField();
             }
-
-            if (v.type == 'user') {
-              path = '/employee/' + v.id;
-              this.context.router.push({ pathname: path });
-              this.state.hasResults = false;
-              this.clearSearch();
-            }
-          });
-
-          if (!repeated) {
-            // Add pill only if its a valid item and it has not been added already
-            chosenItems.push({ "id": id, "name": name, "type": type });
-
-            results.forEach(function (v) { delete v.suggested });
-
-            this.setState({ pointerDirty: false });
-            this.setState({ chosenItems: chosenItems });
-            this.setState({ results: results });
-
-            this.clearSearchField();
           }
         }
     }
@@ -263,6 +262,7 @@ class Search extends React.Component {
       const DOWN_KEYCODE = 40;
       const TAB_KEYCODE = 9;
       const ENTER_KEYCODE = 13;
+      const ESC_KEYCODE = 27;
 
       let chosenItems = this.state.chosenItems;
       let results = this.state.results;
@@ -340,6 +340,10 @@ class Search extends React.Component {
         document.getElementById('querySearch').focus();
 
         this.addPill(chosenItems);
+      }
+
+      if (e.keyCode == ESC_KEYCODE) {
+        this.clearSearch();
       }
     }
 
