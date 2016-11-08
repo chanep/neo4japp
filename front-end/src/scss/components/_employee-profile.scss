@@ -262,12 +262,13 @@
                 float: right;
                 width: em(30);
                 height: em(30);
-                background-color: black;
+                background-color: $WHITE;
                 margin-top: em(12);
                 display: block;
+                border: 1px solid $LIGHTEST-GREY;
 
                 .related-email {
-                    color: white;
+                    color: $BLACK;
                     margin-top: 5px;
                     margin-left: 7px;
                 }
