@@ -7,6 +7,7 @@ import ENV from "../../../config.js";
 import Autosuggest from 'react-autosuggest';
 import BasePage from "../../pages/BasePage";
 import AllocationData from '../SearchResults/AllocationData';
+import EmployeeHeaderLoader from './EmployeeHeaderLoader';
 
 
 export default class EmployeeHeader extends React.Component {
@@ -53,10 +54,12 @@ export default class EmployeeHeader extends React.Component {
         return result[0];
     }
 
-    getUser(userId) {        
+    getUser(userId) {
+        this.setState({loading: true});
         if (userId > 0) {
             this.userData.GetUserData(userId).then(data => {
                 this.setState({
+                    loading: false,
                     user: data,
                     skillsCount: data.skillCount,
                     unapprovedSkillCount: data.unapprovedSkillCount
@@ -142,7 +145,7 @@ export default class EmployeeHeader extends React.Component {
     addInterest(e) {
         e.preventDefault();
 
-        if (this.state.interest != "") {
+        if (this.state.interest.trim().length >= ENV().interests.minimumInterestLength) {
             this.addInterestQuery(this.state.interest);
             this.setState({ "suggestedInterest": null });
         }
@@ -238,6 +241,10 @@ export default class EmployeeHeader extends React.Component {
     }
 
     render () {
+        if (this.state.loading) {
+            return <EmployeeHeaderLoader />
+        }
+
         var self = this;
 
         const { interest, suggestions } = this.state;
@@ -251,7 +258,7 @@ export default class EmployeeHeader extends React.Component {
             return <div />
 
         var interestsString = "",
-            interestsCount = (this.state.user.interests.length < ENV().interests.maximumListLength) ? this.state.user.interests.length : ENV().interests.maximumListLength;
+            interestsCount = this.state.user.interests.length;
 
         if (interestsCount > 0) {
             for (var i = 0; i < interestsCount; i++) {
@@ -262,7 +269,7 @@ export default class EmployeeHeader extends React.Component {
         }
 
         var industriesString = "",
-            industriesCount = (this.state.user.industries.length < ENV().interests.maximumListLength) ? this.state.user.industries.length : ENV().interests.maximumListLength;
+            industriesCount = this.state.user.industries.length;
 
         if (industriesCount > 0) {
             for (var i = 0; i < industriesCount; i++) {
