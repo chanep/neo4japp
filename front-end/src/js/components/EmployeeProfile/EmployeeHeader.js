@@ -145,7 +145,7 @@ export default class EmployeeHeader extends React.Component {
     addInterest(e) {
         e.preventDefault();
 
-        if (this.state.interest != "") {
+        if (this.state.interest.trim().length >= ENV().interests.minimumInterestLength) {
             this.addInterestQuery(this.state.interest);
             this.setState({ "suggestedInterest": null });
         }
@@ -258,7 +258,7 @@ export default class EmployeeHeader extends React.Component {
             return <div />
 
         var interestsString = "",
-            interestsCount = (this.state.user.interests.length < ENV().interests.maximumListLength) ? this.state.user.interests.length : ENV().interests.maximumListLength;
+            interestsCount = this.state.user.interests.length;
 
         if (interestsCount > 0) {
             for (var i = 0; i < interestsCount; i++) {
@@ -269,7 +269,7 @@ export default class EmployeeHeader extends React.Component {
         }
 
         var industriesString = "",
-            industriesCount = (this.state.user.industries.length < ENV().interests.maximumListLength) ? this.state.user.industries.length : ENV().interests.maximumListLength;
+            industriesCount = this.state.user.industries.length;
 
         if (industriesCount > 0) {
             for (var i = 0; i < industriesCount; i++) {
@@ -314,7 +314,7 @@ export default class EmployeeHeader extends React.Component {
                                     <span className="modal-close ss-icon-close"><span className="path1"></span><span className="path2"></span></span>
                                 </div>
                                 <div className="modal-contents">
-                                    <h2>Add interests</h2>
+                                    <h2>Add Interests</h2>
                                     <form onSubmit={this.addInterest.bind(this)}>
                                       <input type="submit" className="add-interest" value="Add Interest" />
                                       <Autosuggest
@@ -341,7 +341,7 @@ export default class EmployeeHeader extends React.Component {
                                     <span className="modal-close ss-icon-close"><span className="path1"></span><span className="path2"></span></span>
                                 </div>
                                 <div className="modal-contents">
-                                    <h2>Add industries</h2>
+                                    <h2>Add Industries</h2>
                                     <ul className="industries">
                                     {this.state.industries.map((industry, index)=>{
                                       return (<li className="industry" key={index}><input type="checkbox" checked={this.state.userIndustries.indexOf(industry.id) != -1} onChange={this.toggleIndustry.bind(this, industry)} /> {industry.name}</li>)
