@@ -175,10 +175,9 @@ header {
                 padding: 16px 24px;
 
                 span {
-                    /*position: relative;
+                    position: relative;
                     top: 50%;
-                    transform: translateY(-50%);*/
-                    %vertical-align;
+                    transform: translateY(-50%);
                     color: #000;
                     &.ss-icon-search {
                         cursor: pointer;
