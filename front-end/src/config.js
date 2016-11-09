@@ -15,6 +15,12 @@ module.exports = function() {
             minimumLenghtLookup: 2,
             suggestionsNumber: 5,
             minimumInterestLength: 3
+        },
+        preselectedFilter: {
+            "Quality Assurance": "Technology",
+            "Prototype Studio": "Technology",
+            "Technology": "Technology",
+            "Visual Design": "Design"
         }
     }
 
