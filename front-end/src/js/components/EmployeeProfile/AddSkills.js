@@ -8,6 +8,7 @@ import { Link } from 'react-router';
 import AddSkillsFilter from './AddSkillsFilter';
 import UserServices from '../../services/UserServices';
 import AddSkillsList from './AddSkillsList';
+import BasePage from '../../pages/BasePage';
 
 export default class EmployeeAddSkillsTable extends React.Component {
     constructor(props) {
@@ -26,6 +27,8 @@ export default class EmployeeAddSkillsTable extends React.Component {
     }
 
     getData(employeeId) {
+        let basePage = new BasePage();
+        console.log("GetUserLogged()", basePage.GetUserLogged());
         this.userData.GetEmployeeSkills(employeeId, true).then(data => {
             this.setState({
                 data: data

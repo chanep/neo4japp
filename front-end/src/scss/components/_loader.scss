@@ -62,6 +62,7 @@
 
 .employee-loader {
 	.item-loader {
+		overflow: hidden;
 		max-width: 100%;
     	min-height: em(135);
     	height: em(135);
