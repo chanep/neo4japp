@@ -361,7 +361,10 @@ class Search extends React.Component {
       }
 
       if (e.keyCode == ESC_KEYCODE) {
-        this.clearSearch();
+        this.setState({ results: [] });
+        this.hideResults();
+
+        this.clearSearchField();
       }
     }
 
