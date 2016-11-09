@@ -108,6 +108,8 @@ class Search extends React.Component {
 
       this.clearSearchField();
       this.setState({ chosenItems: currentChosenItems });
+      this.setState({ results: [] });
+      this.hideResults();
     }
 
     removeSkill(skill, index) {
@@ -329,14 +331,19 @@ class Search extends React.Component {
           pointerDirty: pointerDirty
         });
 
-        var item = results[selection]['name'].trim().toLowerCase();
+        var item = "";
+        if (results.length > 0) {
+          item = results[selection]['name'].trim().toLowerCase();
 
-        results.forEach(function (v) {
-          delete v.suggested
-        });
+          results.forEach(function (v) {
+            delete v.suggested
+          });
 
-        results[selection]['suggested'] = 'suggested';
-        this.setState({ results: results });
+          results[selection]['suggested'] = 'suggested';
+
+          this.setState({ results: results });
+        }
+        
         document.getElementById('querySearch').value = item;
       }
 
