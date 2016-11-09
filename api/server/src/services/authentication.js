@@ -48,7 +48,8 @@ class LoginService {
         }
 
         let userDa = new UserDa();
-        return userDa.findByUsername(username)
+        const query = {username: username, includes:["department"]};
+        return userDa.findOne(query)
             .then(user => {
                if(!user)
                     throw new errors.AuthorizationError("Invalid username");
