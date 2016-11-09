@@ -78,6 +78,7 @@ class Results extends React.Component {
 
           {this.props.hasResults ?
             (<div className="search__results">
+              <span className="close-suggestion">Press <kbd>ESC</kbd> to close</span>
               <ul>
                 <li className="category-list">Skills</li>
                 <li className="subcategory-list">
