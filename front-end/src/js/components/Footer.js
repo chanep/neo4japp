@@ -12,7 +12,7 @@ export default class Footer extends React.Component {
               <div className="footer-wrapper">
                 <Copyright />
                 <ContactUs />
-                <Link to={"/faq"}><span className="icon-envelope">FAQ</span></Link>
+                <Link to={"/faq"} className="faq-link"><span className="icon-envelope">FAQ</span></Link>
               </div>
             </footer>
         );

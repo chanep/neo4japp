@@ -8,12 +8,13 @@ module.exports = function() {
     		{level: 4, desc: 'Can teach / manage others'},
     	],
         resourceManagerHome: {
-            topSearchedSkillsCount: 10
+            topSearchedSkillsCount: 10,
+            topSkillsWeeksPeriod: 2
         },
         interests: {
             minimumLenghtLookup: 2,
-            maximumListLength: 5,
-            suggestionsNumber: 5
+            suggestionsNumber: 5,
+            minimumInterestLength: 3
         }
     }
 

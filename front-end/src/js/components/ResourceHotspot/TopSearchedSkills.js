@@ -18,7 +18,12 @@ export default class TopSearchedSkills extends React.Component {
     }
 
     componentDidMount() {
-      this.skillsServices.GetTopSkillSearchs(ENV().resourceManagerHome.topSearchedSkillsCount).then(data =>{
+      var today = new Date(),
+          twoWeeksAgo = new Date();
+
+      twoWeeksAgo.setDate(twoWeeksAgo.getDate() - (ENV().resourceManagerHome.topSkillsWeeksPeriod * 7));
+
+      this.skillsServices.GetTopSkillSearchs(ENV().resourceManagerHome.topSearchedSkillsCount, twoWeeksAgo.getTime(), today.getTime()).then(data =>{
         this.setState({data: data});
         this.setState({ hoveredSkillId: data[0].id });
         this.highlightSkill(this.props, data[0].id);

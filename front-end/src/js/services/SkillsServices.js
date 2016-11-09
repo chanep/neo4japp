@@ -1,8 +1,8 @@
 import ServicesBase from './ServicesBase';
 
 export default class SkillsServices extends ServicesBase {
-	GetTopSkillSearchs(limit) {
-		return super.callGetServices('resource-manager/top-skill-searches', {limit: limit});
+	GetTopSkillSearchs(limit, fromDate, toDate) {
+		return super.callGetServices('resource-manager/top-skill-searches', { "limit": limit, "fromDate": fromDate, "toDate": toDate });
 	}
 
 	GetSkilledUsersByOffice(skillId, limit) {
