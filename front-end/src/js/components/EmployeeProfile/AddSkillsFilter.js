@@ -16,15 +16,23 @@ export default class AddSkillsFilter extends React.Component {
     }
 
     componentDidMount() {
-    	this.setState({data: this.props.data});
+    	let propSelected = this.props.selected !== undefined?this.props.selected:null;
+    	this.setState({
+    		data: this.props.data,
+    		preselectedFilter: propSelected
+    	});
     }
 
 	componentWillReceiveProps(nextProps) {
-		this.setState({data: nextProps.data});
+		let propSelected = nextProps.selected !== undefined?nextProps.selected:null;
+		this.setState({
+			data: nextProps.data,
+			preselectedFilter: propSelected
+		});
 	}
 
-  	onValueChanged(refVal, e) {
-		this.props.onSelectedGroup(refVal);
+  	onValueChanged(refVal, newText, e) {
+		this.props.onSelectedGroup(refVal, newText);
   	}
 
     render() {
@@ -69,9 +77,10 @@ export default class AddSkillsFilter extends React.Component {
 									countPerSkill += child.skills.length;
 								});
 
+								let checked = self.state.preselectedFilter === obj.name;
 								return (
 									<li className="filter-option" key={key}>
-										<label><input type="radio" name="skillstools" onChange={self.onValueChanged.bind(self, obj.id)} /> {obj.name} ({countPerSkill})</label>
+										<label><input type="radio" name="skillstools" checked={checked} onChange={self.onValueChanged.bind(self, obj.id, obj.name)} /> {obj.name} ({countPerSkill})</label>
 									</li>
 								)
 							})
