@@ -9,7 +9,10 @@ class RelatedEmployee extends React.Component {
 
         this.state = {
             data: [],
-            index: 0
+            index: 0,
+            currentUser: null,
+            similar: false,
+            multiple: false
         };
 
         this.goToPrev = this.goToPrev.bind(this);
@@ -17,7 +20,21 @@ class RelatedEmployee extends React.Component {
     }
 
     componentWillReceiveProps(newProps) {
-        this.setState({ data: newProps });
+        this.setState({
+            currentUser: newProps.user,
+            data: (newProps.similarSkilledUsers !== undefined ? newProps.similarSkilledUsers : null),
+            similar: (newProps.similar !== undefined ? newProps.similar : null),
+            multiple: (newProps.multiple !== undefined ? newProps.multiple : null)
+        });
+    }
+
+    componentDidMount() {
+        this.setState({
+            currentUser: this.props.user,
+            data: (this.props.similarSkilledUsers !== undefined ? this.props.similarSkilledUsers : null),
+            similar: (this.props.similar !== undefined ? this.props.similar : false),
+            multiple: (this.props.multiple !== undefined ? this.props.multiple : false)
+        });
     }
 
     goToPrev() {
@@ -26,7 +43,7 @@ class RelatedEmployee extends React.Component {
         if (index - 1 >= 0)
             index--;
         else
-            index = this.state.data['similarSkilledUsers'].length - 1;
+            index = this.state.data.length - 1;
 
         this.setState({ index: index });
     }
@@ -34,7 +51,7 @@ class RelatedEmployee extends React.Component {
     goToNext() {
         var index = this.state.index;
 
-        if (index + 1 < this.state.data['similarSkilledUsers'].length)
+        if (index + 1 < this.state.data.length)
             index++;
         else
             index = 0;
@@ -48,15 +65,18 @@ class RelatedEmployee extends React.Component {
     }
 
     render() {
+        if (this.state.currentUser === undefined || this.state.currentUser === null)
+            return null;
+
         let self = this;
 
-        var user = this.props.user;
+        var user = this.state.currentUser;
 
-        if (this.state.data.similarSkilledUsers != undefined) {
-            user = this.state.data.similarSkilledUsers[this.state.index];
-        }
+        //if (this.state.data != undefined) {
+        //    user = this.state.data[this.state.index];
+        //}
 
-        if (user.image == undefined || user.image == null)
+        if (user.image === undefined || user.image === null)
             user.image = "/img/img_noPortrait.gif";
 
         var emailSnippet = 'mailto:' + user.email;
@@ -71,10 +91,10 @@ class RelatedEmployee extends React.Component {
     					<div className="position">{user.position}</div>
     					<div className="area">{user.department}</div>
     				</div>
-                    {this.props.similar && this.props.multiple ?
+                    {this.state.similar && this.state.multiple ?
     				    <div className="arrows"><span className="ss-icon-right-arrow arrow-prev" title="Go to previous" onClick={this.goToPrev}></span> <span className="ss-icon-right-arrow arrow-next" title="Go to next" onClick={this.goToNext}></span></div>
                     : false}
-                    {!this.props.similar ?
+                    {!this.state.similar ?
                         <a className="mail" href={emailSnippet}><span className="ss-icon-envelope related-email"></span></a>
                     : false}
     			</div>
