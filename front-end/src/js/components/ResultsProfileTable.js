@@ -42,7 +42,6 @@ export default class ResultsProfileTable extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log("nextProps", nextProps);
         this.getData(nextProps.employeeId);
     }
 
