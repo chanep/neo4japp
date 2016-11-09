@@ -8,6 +8,8 @@ import { Link } from 'react-router';
 import AddSkillsFilter from './AddSkillsFilter';
 import UserServices from '../../services/UserServices';
 import AddSkillsList from './AddSkillsList';
+import BasePage from '../../pages/BasePage';
+import ENV from "../../../config.js";
 
 export default class EmployeeAddSkillsTable extends React.Component {
     constructor(props) {
@@ -21,14 +23,33 @@ export default class EmployeeAddSkillsTable extends React.Component {
         this.userData = new UserServices();
     }
 
-    handleFilter(selectedValue) {
-    	this.setState({selectedGroup: selectedValue});
+    handleFilter(selectedValue, newText) {
+    	this.setState({
+            selectedGroup: selectedValue,
+            preselectedFilter: newText
+        });
     }
 
     getData(employeeId) {
+        let basePage = new BasePage();
+        let employee = basePage.GetUserLogged();
+        let preselectedFilter = "Other";
+        if (employee.department !== undefined && employee.department !== null) {
+            if (ENV().preselectedFilter[employee.department.name] !== undefined && ENV().preselectedFilter[employee.department.name] !== null) {
+                preselectedFilter = ENV().preselectedFilter[employee.department.name];
+            }
+        }
+
         this.userData.GetEmployeeSkills(employeeId, true).then(data => {
+            let preselectedId = null;
+            data.forEach(function(val) {
+                if (val.type === "tool" && val.name === preselectedFilter) preselectedId = val.id;
+            });
+
             this.setState({
-                data: data
+                data: data,
+                preselectedFilter: preselectedFilter,
+                selectedGroup: preselectedId
             });
         }).catch(data => {
           
@@ -52,11 +73,11 @@ export default class EmployeeAddSkillsTable extends React.Component {
     		<div className="my-profile-add-skills-table">
     			<div className="header-bar col -col-12 -col-no-gutter">
     				<div className="col -col-3"><span className="table-header">Filter</span></div>
-    				<div className="col -col-3"><span className="table-header">Name</span></div>
+    				<div className="col -col-4 col-name"><span className="table-header">Name</span></div>
     				<div className="col -col-3"><span className="table-header">Category</span></div>
-    				<div className="col -col-3"><span className="table-header">Skills</span></div>
+    				<div className="col -col-2"><span className="table-header">Skills</span></div>
     			</div>
-    			<AddSkillsFilter data={this.state.data} onSelectedGroup={this.handleFilter.bind(this)} />
+    			<AddSkillsFilter data={this.state.data} onSelectedGroup={this.handleFilter.bind(this)} selected={this.state.preselectedFilter} />
     			<AddSkillsList data={this.state.data} selectedGroup={this.state.selectedGroup} />
     		</div>
     	);
