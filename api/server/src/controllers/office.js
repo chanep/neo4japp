@@ -14,7 +14,7 @@ class OfficeController extends BaseController{
     @apiUse findOfficeResponse
     */
     find(req, res, next){
-        let promise = officeDa.find();
+        let promise = officeDa.find({orderBy: "name ASC"});
         this._respondPromise(req, res, promise);
     }
 
