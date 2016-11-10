@@ -52,7 +52,7 @@ class Header extends React.Component {
                     <li className="header-menu__item"><Link to="/myprofile">My skills</Link></li>
                     {currentUserType === 'admin' || currentUserType === 'approver' || currentUserType === 'employee'? <li className="header-menu__item"><a href={'http://square/people/' + this.state.userLogged.username + '/'} target="_blank">My work</a></li> : null}
                     {currentUserType === 'admin' || currentUserType === 'approver' || currentUserType === 'employee'? <li className="header-menu__item"><a href="http://reporter/newallocations/EmployeeAllocation.aspx" target="_blank">My allocations</a></li>: null}
-                    {currentUserType === 'admin' || currentUserType === 'approver'? <li className="header-menu__item"><a href="/managerhome">Manage skills</a></li>: null}
+                    {currentUserType === 'admin' || currentUserType === 'approver'? <li className="header-menu__item"><Link to="/managerhome">Manage skills</Link></li>: null}
                     <li className="header-menu__item"><input type="button" onClick={this.logout.bind(this)} value="Logout" /></li>
                   </ul> 
 

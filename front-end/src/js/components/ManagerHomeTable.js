@@ -20,6 +20,8 @@ export default class ManagerHomeTable extends React.Component {
     }
 
     componentDidMount() {
+        this.setState({loading: true});
+
         this.userServices.GetMyTeam().then(data => {
             let skillsValidations = 0;
             let userToValidate = 0;
@@ -42,7 +44,8 @@ export default class ManagerHomeTable extends React.Component {
             this.setState({
                 data: data,
                 skillsValidations: skillsValidations,
-                userToValidate: userToValidate
+                userToValidate: userToValidate,
+                loading: false
             });
         }).catch(err => {
             console.log("Error retrieving my team", err);
@@ -50,6 +53,9 @@ export default class ManagerHomeTable extends React.Component {
     }
 
     render() {
+        if (this.state.loading)
+            return <div className="search-results-table"><div className="loading-data-note"><span>loading data...</span></div></div>
+
         if (this.state.data === null)
             return <div />
 

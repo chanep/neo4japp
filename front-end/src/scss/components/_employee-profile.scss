@@ -42,6 +42,7 @@
 
             &:before {
                 content: '\e9c0';
+                vertical-align: sub;
                 font-size: 24px;
                 -webkit-font-smoothing: antialiased;
             }
@@ -137,6 +138,10 @@
             width: 65%;
         }
 
+        .react-autosuggest__suggestions-list {
+            position: absolute;
+        }
+
         .add-interest {
             font-size: .95em;
             font-weight: 100;
@@ -151,11 +156,12 @@
         }
 
         .interest-suggested, .react-autosuggest__suggestion {
-            width: 65%;
+            width: 254px;
             background: $LIGHT-GREY;
-            padding: .3rem;
+            padding: .45rem;
             display: inline-block;
             cursor: pointer;
+            margin-top: -1px;
         }
 
         .react-autosuggest__suggestion--focused {
