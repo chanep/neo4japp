@@ -138,8 +138,8 @@ vows.describe('User api test')
             assert.isArray(u.industries);
             assert.equal(u.industries[0].name, data.industries[0].name);
 
-            assert.equal(u.skillCount, 2);
-            assert.equal(u.unapprovedSkillCount, 2);
+            assert.equal(u.skillCount, 1);
+            assert.equal(u.unapprovedSkillCount, 1);
             assert.isNumber(Date.parse(u.lastUpdate));
 
         }

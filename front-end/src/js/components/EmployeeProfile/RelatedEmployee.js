@@ -45,7 +45,10 @@ class RelatedEmployee extends React.Component {
         else
             index = this.state.data.length - 1;
 
-        this.setState({ index: index });
+        this.setState({
+            index: index,
+            currentUser: this.state.data[index]
+        });
     }
 
     goToNext() {
@@ -56,7 +59,10 @@ class RelatedEmployee extends React.Component {
         else
             index = 0;
 
-        this.setState({ index: index });
+        this.setState({
+            index: index,
+            currentUser: this.state.data[index]
+        });
     }
 
     goTo(self, userId) {
@@ -71,10 +77,6 @@ class RelatedEmployee extends React.Component {
         let self = this;
 
         var user = this.state.currentUser;
-
-        //if (this.state.data != undefined) {
-        //    user = this.state.data[this.state.index];
-        //}
 
         if (user.image === undefined || user.image === null)
             user.image = "/img/img_noPortrait.gif";
@@ -92,7 +94,10 @@ class RelatedEmployee extends React.Component {
     					<div className="area">{user.department}</div>
     				</div>
                     {this.state.similar && this.state.multiple ?
-    				    <div className="arrows"><span className="ss-icon-right-arrow arrow-prev" title="Go to previous" onClick={this.goToPrev}></span> <span className="ss-icon-right-arrow arrow-next" title="Go to next" onClick={this.goToNext}></span></div>
+    				    <div className="arrows">
+                            <span className="ss-icon-right-arrow arrow-prev" title="Go to previous" onClick={this.goToPrev}></span>
+                            <span className="ss-icon-right-arrow arrow-next" title="Go to next" onClick={this.goToNext}></span>
+                        </div>
                     : false}
                     {!this.state.similar ?
                         <a className="mail" href={emailSnippet}><span className="ss-icon-envelope related-email"></span></a>
