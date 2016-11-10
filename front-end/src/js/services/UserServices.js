@@ -51,4 +51,8 @@ export default class UserServices extends ServicesBase {
 	GetInterests(name, limit) {
 		return super.callGetServices('interest', { "name": name, "limit": limit });
 	}
+
+	RequestManagerApproval(employeeId) {
+		return super.callPutServices("resource-manager/approval-request/" + employeeId, null);
+	}
 }
