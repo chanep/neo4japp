@@ -9,6 +9,8 @@ import BasePage from "../../pages/BasePage";
 import AllocationData from '../SearchResults/AllocationData';
 import EmployeeHeaderLoader from './EmployeeHeaderLoader';
 
+import ReactDOM from "react-dom";
+
 export default class EmployeeHeader extends React.Component {
     constructor(){
         super();
@@ -44,7 +46,27 @@ export default class EmployeeHeader extends React.Component {
         this.renderSuggestion = this.renderSuggestion.bind(this);
         this.onAutocompleteChange = this.onAutocompleteChange.bind(this);
 
+        this.handleIndustriesKeyDown = this.handleIndustriesKeyDown.bind(this);
+
         this.basePage = new BasePage();
+    }
+
+    componentDidUpdate(){
+        if (this.state.editingInterests) {
+            document.getElementsByClassName('react-autosuggest__input')[0].focus();
+        }
+
+        if (this.state.editingIndustries) {
+            ReactDOM.findDOMNode(this.refs.industries).focus();
+        }
+    }
+
+    handleIndustriesKeyDown(e) {
+        const ESC_KEYCODE = 27;
+
+        if (e.keyCode == ESC_KEYCODE) {
+            this.finishIndustriesEdition();
+        }
     }
 
     getChild (obj,key){
@@ -103,7 +125,7 @@ export default class EmployeeHeader extends React.Component {
     }
 
     editInterests() {
-        this.setState({ editingInterests: true });
+        this.setState({ editingInterests: true }); 
     }
 
     editIndustries() {
@@ -345,7 +367,7 @@ export default class EmployeeHeader extends React.Component {
                         : false }
 
                         {this.state.editingIndustries ?
-                            <div className="modal">
+                            <div className="modal" tabIndex="0" ref="industries" onKeyDown={this.handleIndustriesKeyDown}>
                                 <div className="modal-header" onClick={this.finishIndustriesEdition.bind(this)}>
                                     <span className="modal-close ss-icon-close"><span className="path1"></span><span className="path2"></span></span>
                                 </div>
