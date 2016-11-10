@@ -114,10 +114,23 @@
     .employee-skills-last-update {
     	font-size: em(12);
     	color: $GREY-FONT;
+        margin-bottom: em(15);
 
     	span {
     		font-weight: bold;
     	}
+    }
+
+    .approver-reminder {
+        font-size: em(12);
+        cursor: pointer;
+        color: $GREY;
+    }
+
+    .approver-reminder-sent {
+        font-size: em(12);
+        color: #d0d0d0;
+        cursor: default;
     }
 
     .allocations {
