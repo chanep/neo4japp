@@ -12,154 +12,80 @@ export default class RelatedEmployees extends React.Component {
 
         this.state = {
             similarSkilledUsers: [],
-            relatedUsers: {
-                "areaCoordinator": {
-                    id: 0,
-                    section: "Area Coordination",
-                    name: "",
-                    position: "",
-                    department: "",
-                    image: "",
-                    email: ""
-                },
-                "resourceManager": {
-                    id: 0,
-                    section: "Resource Management",
-                    name: "",
-                    position: "",
-                    department: "",
-                    image: "",
-                    email: ""
-                },
-                "similarSkilledUser": {
-                    id: 0,
-                    section: "",
-                    name: "",
-                    position: "",
-                    department: "",
-                    image: "",
-                    email: ""
-                }  
-            }
+            currentSimilarSkilledUser: null,  
+            areaCoordinator: null,
+            resourceManager: null
         };
-
-        this.getRelatedUsers = this.getRelatedUsers.bind(this);
-        this.getUser = this.getUser.bind(this);
     }
 
     getRelatedUsers(userId) {
         var userService = new UserServices();
 
         userService.GetSimilarSkilledUsers(userId).then(users =>{
-
-
-
-
-            // Mock data
-            // TO REMOVE WHEN USERS HAVE SKILLS POPULATED
-            // -------------------------------------------
-            /*users = [{
-                id: 4839, 
-                fullname: "Test 1", 
-                email: "test.1@rga.com", 
-                username: "test1", 
-                image: "http://x.com/pic.jpg",
-                position: { id: 4835, name: "Software Engineer" }, 
-                office: { id: 4832, name: "Buenos Aires", country: "Argentina", acronym: "BA" }, 
-                department: { id: 4834, name: "Technology" }, 
-                similitudeScore: 38
-            }, {
-                id: 5000, 
-                fullname: "Test 2", 
-                email: "test.2@rga.com", 
-                username: "test2", 
-                image: "http://x.com/pic.jpg",
-                position: { id: 4835, name: "Visual Designer" }, 
-                office: { id: 4832, name: "Buenos Aires", country: "Argentina", acronym: "BA" }, 
-                department: { id: 4834, name: "Creative" }, 
-                similitudeScore: 38
-            }];*/
-            // ---------------------------------------------
-
-
-
-
-
-
-
             var similarSkilledUsers = [];
 
             users.forEach(function (user) {
-                similarSkilledUsers.push({
-                    "section": "People with similar skills",
-                    "id": user.id,
-                    "name": user.fullname,
-                    "position": user.position.name,
-                    "department": user.department.name,
-                    "image": user.image,
-                    "email": user.email
-                });
+                if (user !== null) {
+                    similarSkilledUsers.push({
+                        "section": "People with similar skills",
+                        "id": user.id,
+                        "name": user.fullname,
+                        "position": user.position !== null ? user.position.name : "",
+                        "department": user.department !== null ? user.department.name : "",
+                        "image": user.image,
+                        "email": user.email
+                    });
+                }
             });
 
-
-            this.setState({ "similarSkilledUsers": similarSkilledUsers });
-
-            // Populate the relatedUsers object with the first similar skilled user
-
-            var relatedUsers = this.state.relatedUsers;
-            relatedUsers.similarSkilledUser = similarSkilledUsers[0];
-
-            this.setState({ relatedUsers: relatedUsers });
+            this.setState({
+                "similarSkilledUsers": similarSkilledUsers,
+                "currentSimilarSkilledUser": (similarSkilledUsers.length > 0 ? similarSkilledUsers[0] : null)
+            });
         }).catch(data => {
             console.log("user data error", data);
         });
     }
 
     getUser(userId) {
-        var userService = new UserServices(),
-            relatedUsers = this.state.relatedUsers;
+        var userService = new UserServices();
+        let areaCoordinator = { };
+        let resourceManager = { };
 
         if (userId > 0) {
             userService.GetUserData(userId).then(data => {
-                if (data.approvers[0] != undefined) {
+                if (data.approvers.length > 0 && data.approvers[0].id !== undefined) {
                     var approver = data.approvers[0];
 
-                    try {
-                        relatedUsers.areaCoordinator = {
-                            "id": approver.id,
-                            "section": "Area Coordination",
-                            "name": approver.fullname,
-                            "position": approver.position.name,
-                            "department": approver.department.name,
-                            "image": approver.image,
-                            "email": approver.email
-                        };
-                    }
-                    catch (err) {
-                    }
+                    areaCoordinator = {
+                        "id": approver.id,
+                        "section": "Area Coordination",
+                        "name": approver.fullname,
+                        "position": approver.position !== null ? approver.position.name : "",
+                        "department": approver.department !== null ? approver.department.name : "",
+                        "image": approver.image,
+                        "email": approver.email
+                    };
                 }
 
-                if (data.resourceManagers[0] != undefined) {
+                if (data.resourceManagers.length > 0 && data.resourceManagers[0].id !== undefined) {
                     var resourceManager = data.resourceManagers[0];
 
-                    try {
-                        relatedUsers.resourceManager = {
-                            "id": resourceManager.id,
-                            "section": "Resource Management",
-                            "name": resourceManager.name,
-                            "position": resourceManager.position.name,
-                            "department": resourceManager.department.name,
-                            "image": resourceManager.image,
-                            "email": resourceManager.email
-                        }
-                    }
-                    catch (err) {
-                    }
+                    resourceManager = {
+                        "id": resourceManager.id,
+                        "section": "Resource Management",
+                        "name": resourceManager.fullname,
+                        "position": resourceManager.position !== null ? resourceManager.position.name : "",
+                        "department": resourceManager.department !== null ? resourceManager.department.name : "",
+                        "image": resourceManager.image,
+                        "email": resourceManager.email
+                    };
                 }
 
-                this.setState({ relatedUsers: relatedUsers });
-
-                console.log(data);
+                this.setState({
+                    areaCoordinator: areaCoordinator,
+                    resourceManager: resourceManager
+                });
             }).catch(data => {
               
                 console.log("user data error", data);
@@ -169,16 +95,22 @@ export default class RelatedEmployees extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        this.getRelatedUsers(nextProps.userId);
-        this.getUser(nextProps.userId);
+        if (nextProps.userId !== undefined && nextProps.userId !== null) {
+            this.getUser(nextProps.userId);
+            this.getRelatedUsers(nextProps.userId);
+        }
     }
+
+    componentDidMount() {
+        if (this.props.userId !== undefined && this.props.userId !== null) {
+            this.getUser(this.props.userId);
+            this.getRelatedUsers(this.props.userId);
+        }
+    }
+
 
     render() {
         let basePage = new BasePage();
-
-        let areaCoordinator = this.state.relatedUsers.areaCoordinator;
-        let resourceManager = this.state.relatedUsers.resourceManager;
-        let similarSkilledUser = this.state.relatedUsers.similarSkilledUser;
 
         var multiple = false;
 
@@ -187,15 +119,15 @@ export default class RelatedEmployees extends React.Component {
 
     	return (
     		<div className="employee-related-employees">
-                {this.state.relatedUsers.areaCoordinator.id != 0 ?
-                    <RelatedEmployee user={areaCoordinator} />
-                : false }
-                {this.state.relatedUsers.resourceManager.id != 0 ?
-                    <RelatedEmployee user={resourceManager} />
-                : false }
-                {basePage.ResourceManagerLoggedIn() && this.state.similarSkilledUsers.length > 0 ?
-                    <RelatedEmployee user={similarSkilledUser} similar="true" multiple={multiple} similarSkilledUsers={this.state.similarSkilledUsers} />
-    		    : false}
+                {this.state.areaCoordinator !== null?
+                    <RelatedEmployee user={this.state.areaCoordinator} />
+                : null }
+                {this.state.resourceManager !== null?
+                    <RelatedEmployee user={this.state.resourceManager} />
+                : null }
+                {basePage.ResourceManagerLoggedIn() && this.state.currentSimilarSkilledUser !== null?
+                    <RelatedEmployee user={this.state.currentSimilarSkilledUser} similar="true" multiple={multiple} similarSkilledUsers={this.state.similarSkilledUsers} />
+    		    : null}
             </div>
     	);
     }
