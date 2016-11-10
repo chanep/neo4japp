@@ -9,7 +9,6 @@ import BasePage from "../../pages/BasePage";
 import AllocationData from '../SearchResults/AllocationData';
 import EmployeeHeaderLoader from './EmployeeHeaderLoader';
 
-
 export default class EmployeeHeader extends React.Component {
     constructor(){
         super();
@@ -47,7 +46,6 @@ export default class EmployeeHeader extends React.Component {
 
         this.basePage = new BasePage();
     }
-
 
     getChild (obj,key){
         let result = Object.keys(obj).map(function(k) { return obj[key]});
@@ -145,9 +143,20 @@ export default class EmployeeHeader extends React.Component {
     addInterest(e) {
         e.preventDefault();
 
+        var alreadyAdded = false,
+            that = this;
+
         if (this.state.interest.trim().length >= ENV().interests.minimumInterestLength) {
-            this.addInterestQuery(this.state.interest);
-            this.setState({ "suggestedInterest": null });
+            this.state.user.interests.forEach(function (interest) {
+                if (interest.name == that.state.interest) {
+                    alreadyAdded = true;
+                }
+            });
+
+            if (!alreadyAdded) {
+                this.addInterestQuery(this.state.interest);
+                this.setState({ "suggestedInterest": null });
+            }
         }
     }
 
