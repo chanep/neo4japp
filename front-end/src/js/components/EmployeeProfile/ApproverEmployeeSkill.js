@@ -8,6 +8,7 @@ import { Link } from 'react-router';
 import UserServices from '../../services/UserServices';
 import AlertContainer from 'react-alert';
 import update from 'react-addons-update';
+import ReactTooltip from 'react-tooltip'
 
 export default class ApproverEmployeeSkill extends React.Component {
     constructor(props) {
@@ -39,12 +40,25 @@ export default class ApproverEmployeeSkill extends React.Component {
         });
     }
 
+    makeid()
+    {
+        var text = "";
+        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+        for( var i=0; i < 15; i++ )
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+        return text;
+    }
+
     approve() {
         let self = this;
 
         if (this.state.data.knowledge === null)
             return;
         if (this.state.data.knowledge !== null && this.getChild(this.state.data.knowledge, "approved") !== undefined)
+            return;
+        if (this.state.data.knowledge !== null && this.getChild(this.state.data.knowledge, "want"))
             return;
         
         this.userServices.ApproveKnowledge(this.state.data.knowledge.id).then(data => {
@@ -66,15 +80,16 @@ export default class ApproverEmployeeSkill extends React.Component {
     render() {
         let verified = false;
         let approver = "";
+        let want = (this.state.data.knowledge !== null && this.getChild(this.state.data.knowledge, "want"));
         if (this.state.data.knowledge !== null && this.getChild(this.state.data.knowledge, "approved") !== undefined) {
             verified = true;
             approver = this.getChild(this.state.data.knowledge, "approverFullname");
         }
 
         var opts = {};
-        if (verified) {
-            opts['readOnly'] = 'readOnly';
-        }
+        opts['readOnly'] = 'readOnly';
+
+        let newId = "tooltip_" + this.makeid();
 
         return (
             <div className="skill-level-grid__levels col -col-12 -col-no-gutter">
@@ -83,7 +98,7 @@ export default class ApproverEmployeeSkill extends React.Component {
                 </div>
                 <div className="col -col-1 skill-level-want-wrapper">
                     <span className="skill-title">
-                        <input className={!verified?"selectable":"readOnly"} type="checkbox" label="skill-want" checked={verified} onChange={this.approve.bind(this)} {...opts} />
+                        <input className="readOnly" type="checkbox" label="skill-want" checked={want} {...opts} />
                     </span>
                 </div>
                 <div title={verified?"Approved by " + approver: "Verification pending"} className={"col -col-2 " + (this.state.data.knowledge.level >= 1? "skill-level-box " + (verified? "level-verified": "level-non-verified"): "")}>
@@ -98,8 +113,14 @@ export default class ApproverEmployeeSkill extends React.Component {
                 <div title={verified?"Approved by " + approver: "Verification pending"} className={"col -col-2 " + (this.state.data.knowledge.level >= 4? "skill-level-box " + (verified? "level-verified": "level-non-verified"): "")}>
                     <span className="skill-title"></span>
                 </div>
-                <div className="col -col-1">
-                    <span className="skill-title"></span>
+                <div className="col -col-1 remove-skill">
+                    {!verified && !want?
+                        <div>
+                            <span className="ss-icon-check" onClick={this.approve.bind(this)} data-tip data-for={newId}></span>
+                            <ReactTooltip id={newId} class="tooltipFormat">Approve knowledge</ReactTooltip>
+                        </div>
+                        :null
+                    }
                 </div>
             </div>
         )

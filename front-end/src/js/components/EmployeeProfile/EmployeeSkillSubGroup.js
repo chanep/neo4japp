@@ -45,7 +45,7 @@ export default class EmployeeSkillSubGroup extends React.Component {
         let skillsCount = this.state.data.skills.length;
         let pendings = 0;
         this.state.data.skills.forEach(function(skill) {
-            if (skill.knowledge !== null && skill.knowledge.approved === undefined) pendings++;
+            if (skill.knowledge !== null && skill.knowledge.approved === undefined && !skill.knowledge.want) pendings++;
         });
 
         return (
@@ -68,7 +68,7 @@ export default class EmployeeSkillSubGroup extends React.Component {
                                 <span className="sub-table-header"></span>
                             </div>
                             <div className="col -col-1">
-                                <span className="sub-table-header">{this.state.approverMode?"Verified?":"Want?"}</span>
+                                <span className="sub-table-header">Want?</span>
                             </div>
                             <div className="col -col-2">
                                 <span className="sub-table-header">Heavy Supervision</span>
