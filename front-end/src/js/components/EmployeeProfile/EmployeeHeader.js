@@ -8,6 +8,8 @@ import Autosuggest from 'react-autosuggest';
 import BasePage from "../../pages/BasePage";
 import AllocationData from '../SearchResults/AllocationData';
 import EmployeeHeaderLoader from './EmployeeHeaderLoader';
+import AlertContainer from 'react-alert';
+import ReactTooltip from 'react-tooltip'
 
 
 export default class EmployeeHeader extends React.Component {
@@ -28,7 +30,8 @@ export default class EmployeeHeader extends React.Component {
             showForManagerVerification: false,
             editingInterests: false,
             editingIndustries: false,
-            userIndustries: []
+            userIndustries: [],
+            remainderSent: false
         }
 
         this.editInterests = this.editInterests.bind(this);
@@ -62,7 +65,8 @@ export default class EmployeeHeader extends React.Component {
                     loading: false,
                     user: data,
                     skillsCount: data.skillCount,
-                    unapprovedSkillCount: data.unapprovedSkillCount
+                    unapprovedSkillCount: data.unapprovedSkillCount,
+                    remainderSent: false
                 });
 
                 var userIndustries = [];
@@ -240,6 +244,33 @@ export default class EmployeeHeader extends React.Component {
       );
     }
 
+    showAlert(messg){
+        msg.show(messg, {
+            time: 3500,
+            type: 'success',
+            icon: <img src="/img/success-ico.png" />
+        });
+    }
+
+    makeid()
+    {
+        var text = "";
+        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+        for( var i=0; i < 15; i++ )
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+        return text;
+    }
+
+    sendReminder() {
+        let self = this;
+        this.userData.RequestManagerApproval(this.state.user.id).then(() => {
+            self.showAlert("Reminder sent");
+            self.setState({remainderSent: true});
+        });
+    }
+
     render () {
         if (this.state.loading) {
             return <EmployeeHeaderLoader />
@@ -292,6 +323,9 @@ export default class EmployeeHeader extends React.Component {
                 clients += (clients !== ""? ", ": "") + client.name;
             });
         }
+
+        let newId = "tooltip_" + this.makeid();
+
         return (
         	<div className="employee-header-container">
         		<div className="grid">
@@ -438,6 +472,21 @@ export default class EmployeeHeader extends React.Component {
                                 <div>Updated: <span>-</span></div>
                             }
         				</div>
+                        {
+                            this.basePage.ResourceManagerLoggedIn() && this.state.user.unapprovedSkillCount > 0?
+                                this.state.remainderSent?
+                                    <div className="approver-reminder-sent">
+                                        <span className="ss-icon-warning"></span> <span>Reminder sent</span>
+                                    </div>
+                                :
+                                    <div>
+                                        <div className="approver-reminder" data-tip data-for={newId} onClick={this.sendReminder.bind(this)}>
+                                            <span className="ss-icon-warning"></span> <span>Remind manager</span>
+                                        </div>
+                                        <ReactTooltip id={newId} class="tooltipFormat">Send reminder to manager to approve knowledge</ReactTooltip>
+                                    </div>
+                            :null
+                        }
         			</div>
         		</div>
         	</div>
