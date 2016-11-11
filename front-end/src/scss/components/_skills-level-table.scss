@@ -21,7 +21,7 @@
 		&.skill-level-empty { background-color: $LIGHTEST-GREY; }
 	}
 
-	.table-header {
+	.table-header, .sub-table-header {
 		display: block;
 		text-align: center;
 	}

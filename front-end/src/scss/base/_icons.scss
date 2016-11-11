@@ -57,6 +57,13 @@
     font-size: 15px;
     content: '\e9b5';
 }
+.ss-icon-check:before {
+    color: rgb(102, 103, 103);
+    font-size: 18px;
+    font-family: "Fontello";
+    content: "\e800";
+}
+
 .ss-icon-close .path1:before {
     color: rgb(102, 103, 103);
     content: "\e902";
@@ -91,4 +98,9 @@
 
 .ss-icon-remove:before {
     content: "\e903";
+}
+
+.ss-icon-warning:before {
+    font-family: "Fontello";
+    content: "\e802";
 }
