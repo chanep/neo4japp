@@ -119,13 +119,13 @@ export default class RelatedEmployees extends React.Component {
 
     	return (
     		<div className="employee-related-employees">
-                {this.state.areaCoordinator !== null?
+                {this.state.areaCoordinator !== null && this.state.areaCoordinator.hasOwnProperty('id') ?
                     <RelatedEmployee user={this.state.areaCoordinator} />
                 : null }
-                {this.state.resourceManager !== null?
+                {this.state.resourceManager !== null && this.state.resourceManager.hasOwnProperty('id') ?
                     <RelatedEmployee user={this.state.resourceManager} />
                 : null }
-                {basePage.ResourceManagerLoggedIn() && this.state.currentSimilarSkilledUser !== null?
+                {basePage.ResourceManagerLoggedIn() && this.state.currentSimilarSkilledUser !== null && this.state.currentSimilarSkilledUser.hasOwnProperty('id')?
                     <RelatedEmployee user={this.state.currentSimilarSkilledUser} similar="true" multiple={multiple} similarSkilledUsers={this.state.similarSkilledUsers} />
     		    : null}
             </div>
