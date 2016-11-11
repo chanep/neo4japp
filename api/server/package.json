@@ -28,7 +28,7 @@
     "express-session": "^1.14.2",
     "google-spreadsheet": "^2.0.3",
     "joi": "^9.2.0",
-    "ldapauth-fork": "^2.5.3",
+    "ldapauth-fork": "^2.5.4",
     "lodash": "^4.16.6",
     "moment": "^2.16.0",
     "morgan": "^1.7.0",
