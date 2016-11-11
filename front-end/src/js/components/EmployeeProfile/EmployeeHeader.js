@@ -8,7 +8,10 @@ import Autosuggest from 'react-autosuggest';
 import BasePage from "../../pages/BasePage";
 import AllocationData from '../SearchResults/AllocationData';
 import EmployeeHeaderLoader from './EmployeeHeaderLoader';
+import AlertContainer from 'react-alert';
+import ReactTooltip from 'react-tooltip'
 
+import ReactDOM from "react-dom";
 
 export default class EmployeeHeader extends React.Component {
     constructor(){
@@ -28,7 +31,8 @@ export default class EmployeeHeader extends React.Component {
             showForManagerVerification: false,
             editingInterests: false,
             editingIndustries: false,
-            userIndustries: []
+            userIndustries: [],
+            remainderSent: false
         }
 
         this.editInterests = this.editInterests.bind(this);
@@ -45,9 +49,28 @@ export default class EmployeeHeader extends React.Component {
         this.renderSuggestion = this.renderSuggestion.bind(this);
         this.onAutocompleteChange = this.onAutocompleteChange.bind(this);
 
+        this.handleIndustriesKeyDown = this.handleIndustriesKeyDown.bind(this);
+
         this.basePage = new BasePage();
     }
 
+    componentDidUpdate(){
+        if (this.state.editingInterests) {
+            document.getElementsByClassName('react-autosuggest__input')[0].focus();
+        }
+
+        if (this.state.editingIndustries) {
+            ReactDOM.findDOMNode(this.refs.industries).focus();
+        }
+    }
+
+    handleIndustriesKeyDown(e) {
+        const ESC_KEYCODE = 27;
+
+        if (e.keyCode == ESC_KEYCODE) {
+            this.finishIndustriesEdition();
+        }
+    }
 
     getChild (obj,key){
         let result = Object.keys(obj).map(function(k) { return obj[key]});
@@ -62,7 +85,8 @@ export default class EmployeeHeader extends React.Component {
                     loading: false,
                     user: data,
                     skillsCount: data.skillCount,
-                    unapprovedSkillCount: data.unapprovedSkillCount
+                    unapprovedSkillCount: data.unapprovedSkillCount,
+                    remainderSent: false
                 });
 
                 var userIndustries = [];
@@ -105,7 +129,7 @@ export default class EmployeeHeader extends React.Component {
     }
 
     editInterests() {
-        this.setState({ editingInterests: true });
+        this.setState({ editingInterests: true }); 
     }
 
     editIndustries() {
@@ -145,9 +169,20 @@ export default class EmployeeHeader extends React.Component {
     addInterest(e) {
         e.preventDefault();
 
+        var alreadyAdded = false,
+            that = this;
+
         if (this.state.interest.trim().length >= ENV().interests.minimumInterestLength) {
-            this.addInterestQuery(this.state.interest);
-            this.setState({ "suggestedInterest": null });
+            this.state.user.interests.forEach(function (interest) {
+                if (interest.name == that.state.interest) {
+                    alreadyAdded = true;
+                }
+            });
+
+            if (!alreadyAdded) {
+                this.addInterestQuery(this.state.interest);
+                this.setState({ "suggestedInterest": null });
+            }
         }
     }
 
@@ -240,6 +275,33 @@ export default class EmployeeHeader extends React.Component {
       );
     }
 
+    showAlert(messg){
+        msg.show(messg, {
+            time: 3500,
+            type: 'success',
+            icon: <img src="/img/success-ico.png" />
+        });
+    }
+
+    makeid()
+    {
+        var text = "";
+        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+        for( var i=0; i < 15; i++ )
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+        return text;
+    }
+
+    sendReminder() {
+        let self = this;
+        this.userData.RequestManagerApproval(this.state.user.id).then(() => {
+            self.showAlert("Reminder sent");
+            self.setState({remainderSent: true});
+        });
+    }
+
     render () {
         if (this.state.loading) {
             return <EmployeeHeaderLoader />
@@ -292,6 +354,9 @@ export default class EmployeeHeader extends React.Component {
                 clients += (clients !== ""? ", ": "") + client.name;
             });
         }
+
+        let newId = "tooltip_" + this.makeid();
+
         return (
         	<div className="employee-header-container">
         		<div className="grid">
@@ -336,7 +401,7 @@ export default class EmployeeHeader extends React.Component {
                         : false }
 
                         {this.state.editingIndustries ?
-                            <div className="modal">
+                            <div className="modal" tabIndex="0" ref="industries" onKeyDown={this.handleIndustriesKeyDown}>
                                 <div className="modal-header" onClick={this.finishIndustriesEdition.bind(this)}>
                                     <span className="modal-close ss-icon-close"><span className="path1"></span><span className="path2"></span></span>
                                 </div>
@@ -438,6 +503,21 @@ export default class EmployeeHeader extends React.Component {
                                 <div>Updated: <span>-</span></div>
                             }
         				</div>
+                        {
+                            this.basePage.ResourceManagerLoggedIn() && this.state.user.unapprovedSkillCount > 0?
+                                this.state.remainderSent?
+                                    <div className="approver-reminder-sent">
+                                        <span className="ss-icon-warning"></span> <span>Reminder sent</span>
+                                    </div>
+                                :
+                                    <div>
+                                        <div className="approver-reminder" data-tip data-for={newId} onClick={this.sendReminder.bind(this)}>
+                                            <span className="ss-icon-warning"></span> <span>Remind manager</span>
+                                        </div>
+                                        <ReactTooltip id={newId} class="tooltipFormat">Send reminder to manager to approve knowledge</ReactTooltip>
+                                    </div>
+                            :null
+                        }
         			</div>
         		</div>
         	</div>

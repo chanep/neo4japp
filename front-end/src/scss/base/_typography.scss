@@ -8,5 +8,8 @@
 // Fontello
 @include generateFont('Fontello', 'Fontello');
 
+// Custom Fontello
+@include generateFont('Fontello', 'custom-fontello');
+
 // Generate type-scale elements
 @include generateTypeScaleStyles();

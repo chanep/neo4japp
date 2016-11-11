@@ -30,7 +30,7 @@ export default class ManagerHomeTable extends React.Component {
                 let addedToValidation = false;
                 employee.skillGroups.forEach(function(skillsGroup) {
                     skillsGroup.skills.forEach(function(skill) {
-                        if (skill.knowledge.approved === undefined) {
+                        if (!skill.knowledge.want && skill.knowledge.approved === undefined) {
                             skillsValidations++;
                             if (!addedToValidation) {
                                 userToValidate++;

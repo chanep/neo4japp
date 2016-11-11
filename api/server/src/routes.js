@@ -11,7 +11,7 @@ const resourceManagerController = new (require('./controllers/resource-manager')
 const searchAllController = new (require('./controllers/search-all'));
 const interestController = new (require('./controllers/interest'));
 const officeController = new (require('./controllers/office'));
-
+const taskController = new (require('./controllers/task'));
 
 // ---------
 // All Users
@@ -57,5 +57,15 @@ router.get('/resource-manager/users-by-skill', resourceManagerController.findUse
 router.get('/resource-manager/top-skill-searches', resourceManagerController.topSkillSearches.bind(resourceManagerController));
 router.get('/resource-manager/skilled-users-by-office/:skillId', resourceManagerController.skilledUsersByOffice.bind(resourceManagerController));
 router.put('/resource-manager/approval-request/:employeeId', resourceManagerController.requestApproval.bind(resourceManagerController));
+
+// ------
+// Admins
+// ------
+router.use('/admin', security.checkRole(roles.admin).bind(security));
+router.get('/admin/task', taskController.status.bind(taskController));
+router.post('/admin/task/:taskName', taskController.run.bind(taskController));
+
+
+
 
 module.exports = router;

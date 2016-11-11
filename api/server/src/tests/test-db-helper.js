@@ -33,6 +33,8 @@ function resetDb(partitionSuffix){
             'User',
             'Client',
             'TaskStatus',
+            'Allocation',
+            'Interest'
         ];
         for(let i in labels){
             labels[i] += partitionSuffix;

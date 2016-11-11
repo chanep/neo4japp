@@ -15,3 +15,4 @@ api/server/src/typings
 vagrant-machine/.vagrant
 /dist
 front-end/dist/js/client.min.js
+front-end/dist/css/styles.css
