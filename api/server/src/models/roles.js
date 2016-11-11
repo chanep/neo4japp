@@ -2,7 +2,7 @@ module.exports = {
     admin: 'admin',
     resourceManager: 'resourceManager',
     approver: 'approver',
-    allRoles : ['admin', 'resourceManager', 'approver'],
+    allRoles : ['resourceManager', 'approver'],
     hasRole: function(rolesArray, role){
         return rolesArray.indexOf(role) > -1;
     },

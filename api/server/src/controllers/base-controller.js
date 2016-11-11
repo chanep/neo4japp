@@ -103,8 +103,10 @@ class BaseController {
                 code = 403;
             } else if (err instanceof errors.NotFoundError) {
                 code = 404;
-            } else if (err instanceof errors.BasGatewayError) {
+            } else if (err instanceof errors.BadGatewayError) {
                 code = 502;
+            } else if (err instanceof errors.BadRequestError) {
+                code = 400;
             }
 
             if (err instanceof errors.ValidationError) {
