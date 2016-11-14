@@ -41,6 +41,27 @@ header {
             cursor: default;
             z-index: 500;
 
+            &:hover {
+                .header-menu--opener {
+                    cursor: pointer;
+
+                    .ss-icon-down-arrow {
+                        transform: rotate(180deg);
+                    }
+                }
+            }
+
+            .header-menu--opener {
+                .ss-icon-down-arrow { transition: all .2s ease-in-out;  }
+                position: relative;
+
+                .ss-icon-down-arrow {
+                    position: absolute;
+                    top: 15px;
+                    z-index: 1;
+                }
+            }
+
             .header-menu {
                 opacity: 0;
                 height: 0;
