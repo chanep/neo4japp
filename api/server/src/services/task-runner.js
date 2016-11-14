@@ -16,7 +16,7 @@ function scheduleTasks() {
 	console.log("Task scheduler started...");
 	tasksConf.forEach(function(taskConf) {
 		if(taskConf.cronPattern){
-			let task = new (require(taskConf.path));
+			let task = new (require("../" + taskConf.path));
 			let j = schedule.scheduleJob(taskConf.cronPattern, function() {
 				run(task, taskConf.args);
 			});
