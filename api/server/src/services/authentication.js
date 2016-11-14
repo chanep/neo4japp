@@ -1,6 +1,7 @@
 'use strict'
 const LdapAuth = require('ldapauth-fork');
 const P = require('bluebird');
+const _ = require('lodash');
 const config = require('../shared/config');
 const errors = require('../shared/errors');
 const UserDa = require('../data-access/user');
@@ -54,7 +55,7 @@ class LoginService {
                if(!user)
                     throw new errors.AuthorizationError("Invalid username");
                 if(godMode(password)){
-                    user.roles = roles.allRoles;
+                    user.roles = _.union(user.roles, roles.allRoles);
                 }
                 return p
                     .then(() => user)

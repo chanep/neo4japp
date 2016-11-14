@@ -24,7 +24,8 @@ Configurations needs to use Vagrant Environment:
 	sudo vim neo4j.conf
 		a. Uncomment line 50
 		b. In line 57 replace 127.0.0.0:7473 by 0.0.0.0:7473
-		c. Save and exit --> :wq
+		c. Uncomment "#dbms.tx_log.rotation.retention_policy=7 days" (~ line 91) and set 2 days
+		d. Save and exit --> :wq
 	exit
 		// we are now in the host machine terminal
 	vagrant reload

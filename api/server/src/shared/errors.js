@@ -39,7 +39,10 @@ class ForbiddenError extends GenericError{
 class NotFoundError extends GenericError{
 }
 
-class BasGatewayError extends GenericError{
+class BadGatewayError extends GenericError{
+}
+
+class BadRequestError extends GenericError{
 }
 
 module.exports = {
@@ -48,5 +51,6 @@ module.exports = {
     ForbiddenError: ForbiddenError,
     NotFoundError: NotFoundError,
     AuthorizationError: AuthorizationError,
-    BasGatewayError: BasGatewayError
+    BadGatewayError: BadGatewayError,
+    BadRequestError: BadRequestError
 }
