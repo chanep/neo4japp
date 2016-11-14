@@ -10,5 +10,5 @@ if(taskName){
 			console.log(message);
 		});
 } else{
-	taskRunner.setupSchedule();
+	taskRunner.scheduleTasks();
 }
