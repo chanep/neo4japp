@@ -6,8 +6,11 @@ let taskName = process.argv[2];
 if(taskName){
 	const closeDb = true;
 	taskRunner.runTask(taskName, closeDb)
-		.finally(message => {
+		.then(message => {
 			console.log(message);
+		})
+		.catch(error => {
+			console.log(error);
 		});
 } else{
 	taskRunner.scheduleTasks();
