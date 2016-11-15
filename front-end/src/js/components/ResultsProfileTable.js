@@ -50,7 +50,7 @@ export default class ResultsProfileTable extends React.Component {
             <div className="search-results-table">
             {    
                 this.state.searching ?
-                    <div className="searching">Searching...</div>
+                    <div className="loading-data-note">Searching...</div>
                 :                    
                     this.state.skills.map(function(obj, key) {
                         return (<EmployeeSkillsGroup groupData={obj} key={key} />);

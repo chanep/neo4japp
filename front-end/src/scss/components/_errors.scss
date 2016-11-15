@@ -1,0 +1,33 @@
+/**
+ * Components: FAQ
+ */
+
+ .errorPage {
+    @include grid($max-width: em(960));
+    margin-top: 1.5rem;
+
+    h2 {
+        display: block;
+        text-align: center;
+    	font-weight: 400;
+    	font-size: 24pt;
+    	margin-bottom: 25px;
+    }
+
+    .errorNumber {
+        .number, .string {
+            text-align: center;
+            line-height: 1;
+        }
+
+        .number {
+            font-size: 100pt;
+            color: $GREY;
+            font-weight: bold;
+        }
+
+        .string {
+            font-size: 32pt;
+        }
+    }
+ }

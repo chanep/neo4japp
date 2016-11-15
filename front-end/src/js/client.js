@@ -14,6 +14,7 @@ import SearchAllSkills from "./pages/SearchAllSkills";
 import MySkills from "./pages/MySkills";
 import EmployeeVerification from "./pages/EmployeeVerification";
 import FAQ from "./pages/FAQ";
+import PageError from "./pages/PageError";
 
 const app = document.getElementById('app');
 
@@ -37,6 +38,8 @@ ReactDOM.render(
                   <Route path="/resultsprofile" component={ResultsProfile}></Route>
                   <Route path="/searchallskills" component={SearchAllSkills}></Route>
                   <Route path="/faq" component={FAQ}></Route>
+                  <Route path="/error" component={PageError}></Route>
+                  <Route path="*" component={PageError}/>
 		</Route>
 	</Router>,
 app);
