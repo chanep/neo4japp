@@ -44,11 +44,14 @@ class Header extends React.Component {
                 <div className="allocations-btn">
                   {/*<span className="ss-icon-view"></span>View Allocations*/}
                   {(this.state.userLogged && this.state.userLogged.image ?
-                    <div className="header-menu--opener expanded">
+                    <div className="header-menu--opener">
                       <i className="ss-icon-down-arrow"></i>
                       <img src={this.state.userLogged.image}></img>
                     </div>
-                    :<img src="/img/img_noPortrait.gif"></img>
+                    : <div className="header-menu--opener">
+                        <i className="ss-icon-down-arrow"></i>
+                        <img src="/img/img_noPortrait.gif"></img>
+                      </div>
                   )}
                   <ul className={"header-menu " + menuClass}>
                     <li className="header-menu__item header-menu__item--title">{this.state.userLogged.fullname}</li>
