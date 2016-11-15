@@ -32,7 +32,8 @@ export default class EmployeeHeader extends React.Component {
             editingInterests: false,
             editingIndustries: false,
             userIndustries: [],
-            remainderSent: false
+            remainderSent: false,
+            addingInterest: false
         }
 
         this.editInterests = this.editInterests.bind(this);
@@ -141,7 +142,10 @@ export default class EmployeeHeader extends React.Component {
     }
 
     finishInterestsEdition() {
-        this.setState({ editingInterests: false });
+        this.setState({
+            editingInterests: false,
+            interest: ""
+        });
     }
 
     finishIndustriesEdition() {
@@ -180,8 +184,11 @@ export default class EmployeeHeader extends React.Component {
             });
 
             if (!alreadyAdded) {
-                this.addInterestQuery(this.state.interest);
-                this.setState({ "suggestedInterest": null });
+                if (!this.state.addingInterest) {
+                    this.setState({ "addingInterest": true });
+                    this.addInterestQuery(this.state.interest);
+                    this.setState({ "suggestedInterest": null });
+                }
             }
         }
     }
@@ -193,7 +200,11 @@ export default class EmployeeHeader extends React.Component {
         this.userData.AddInterest(interest).then(data => {
 
           user.interests.push({ "id": data.id, "name": data.name });
-          self.setState({ "interest": "", "user": user });
+          self.setState({
+            "interest": "",
+            "user": user,
+            "addingInterest": false
+          });
         }).catch(data => {
             console.log('Error while adding interest', data);
         });
