@@ -8,11 +8,12 @@ const xml2js = require('xml2js');
 const moment = require('moment');
 const querystring = require('querystring');
 
-
+const charlo = 42778;
+const canepa = 45553;
 let data = querystring.stringify({
-    employeeId: JSON.stringify([[45553]]),  //ecanepa
-    startDate: "11-14-2016",
-    endDate: "11-20-2016"
+    employeeId: JSON.stringify([[charlo]]),  //ecanepa
+    startDate: "11-21-2016",
+    endDate: "11-27-2016"
 });
 
 callPostWebServices('gateway/json/empAllocations.asmx/getEmployeeAllocations', data)

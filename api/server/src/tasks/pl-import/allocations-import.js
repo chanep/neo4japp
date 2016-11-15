@@ -87,7 +87,7 @@ class AllocationsImportTask extends PlBaseTask{
 
         var weeks = [0, 1, 2, 3];
 
-        var dataAlloc = [];
+        var allocArray = [];
 
         async.eachSeries = P.promisify(async.eachSeries);
         return async.eachSeries(weeks, function iteratee(weekNumber, nextWeek) {
@@ -102,54 +102,55 @@ class AllocationsImportTask extends PlBaseTask{
               endDate: enDate
             });
 
-            return _this.callPostWebServices('gateway/json/empAllocations.asmx/getEmployeeAllocations', postData).then(allocationData => {
-                allocationData.forEach(function(item) {
-                    var userData = dataAlloc.filter(function(findItem) {
-                        return findItem.id == item['UserID'];
-                    });
-                    
-                    if (userData.length == 0){
-                        var newUser = {
-                            'id': item['UserID'],
-                            'startDate': [stDate],
-                            'weekHours': [item['AllocatedHrs']],
-                            'workingWeekHours': [item['AvailableHrs']],
-                            'totalHours': item['AllocatedHrs']
-                        };
+            if(weekNumber == 0){
+                for(let user of users){
+                    let alloc = {
+                        id: user.phonelistId,
+                        startDate: [],
+                        weekHours:[],
+                        workingWeekHours: [],
+                        totalHours: 0
+                    };
+                    allocArray.push(alloc);
+                }
+            }
 
-                        dataAlloc.push(newUser);
+            return _this.callPostWebServices('gateway/json/empAllocations.asmx/getEmployeeAllocations', postData).then(allocationResponse => {
+                for(let alloc of allocArray){
+                    let allocItem = _.find(allocationResponse, (item) => {
+                        return alloc.id == item.UserID;
+                    });
+
+                    alloc.startDate.push(stDate);
+
+                    if(allocItem){
+                        alloc.weekHours.push(allocItem.AllocatedHrs);
+                        alloc.workingWeekHours.push(allocItem.AvailableHrs);
+                        alloc.totalHours += allocItem.AllocatedHrs;
                     } else {
-                        var currentUser = userData[0];
-                        
-                        currentUser.startDate.push(stDate);
-                        currentUser.weekHours.push(item['AllocatedHrs']);
-                        currentUser.workingWeekHours.push(item['AvailableHrs']);
-                        currentUser.totalHours += item['AllocatedHrs'];
+                        alloc.weekHours.push(-1);
+                        alloc.workingWeekHours.push(-1);
                     }
-                });
+                }
 
                 nextWeek();
             });
         }).then(() => {
-            return asyncMap(dataAlloc, function (userData, callback) {
-                try{
-                    var userLocalID = usersID_Phonelist.filter(function(findItem) {
-                        return findItem.phonelistId == userData.id;
-                    });
+            return asyncMap(allocArray, function (allocData, callback) {
+                var userLocalID = usersID_Phonelist.filter(function(findItem) {
+                    return findItem.phonelistId == allocData.id;
+                });
 
-                    var newAllocs = {
-                        'startDate': userData.startDate,
-                        'weekHours': userData.weekHours,
-                        'workingWeekHours': userData.workingWeekHours,
-                        'totalHours': userData.totalHours
-                    };
+                var newAlloc = _.omit(allocData, ["id"]);
 
-                    _this._updateUser(userLocalID[0]['localId'], newAllocs).then(partialInfo => {
+                _this._updateUser(userLocalID[0]['localId'], newAlloc)
+                    .then(partialInfo => {
+                        callback(null, partialInfo);
+                    })
+                    .catch((partialInfo) => {
                         callback(null, partialInfo);
                     });
-                }catch(err){
-                    callback(err);
-                }
+
             })
             .then(infoArray => {
                 for(let i of infoArray){
@@ -164,18 +165,18 @@ class AllocationsImportTask extends PlBaseTask{
         });
     }
 
-    _updateUser(userId, userData){
+    _updateUser(userId, allocData){
         let info = {updated: 1, skipped: 0, notFound: 0, errors: 0};
+        let error = {updated: 1, skipped: 0, notFound: 0, errors: 0};
 
-        var userDa = new UserDa();
-        try{
-            return userDa.setAllocation(userId, userData)
-            .then(() => info);
-        } catch(err){
-            console.log("err", err)
-            return P.reject(err);
-        }
-        
+        let userDa = new UserDa();
+            return userDa.setAllocation(userId, allocData)
+            .then(() => info)
+            .catch(err => {
+                console.log("err", err)
+                console.log("allocData", allocData)
+                return error;
+            });
     }
 
     _doRun(){
