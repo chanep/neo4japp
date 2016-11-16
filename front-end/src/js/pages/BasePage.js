@@ -8,15 +8,33 @@ import { hashHistory, Link, browserHistory, withRouter } from 'react-router';
 class BasePage extends React.Component {
 	constructor(props) {
 		super(props);
+	}
 
+	componentDidMount() {
 		this._checkLoggedIn();
 	}
 
+	shouldComponentUpdate(nextProps, nextState) {
+		var result = this._checkLoggedIn().then(() => {
+			return resolve(true);
+		}).catch(() => {
+			return resolve(false);
+		});
+
+		console.log("result", result);
+		return result;
+	}
+
 	_checkLoggedIn() {
-		this._isUserLoggedIn().then(trueOrFalse => {
+		return this._isUserLoggedIn().then(trueOrFalse => {
 			if (!trueOrFalse) {
 				this.context.router.push({pathname: '/login'});
+				resolve();
 			}
+		}).catch(err => {
+			console.log("err", err);
+			this.context.router.push({pathname: '/error'});
+			reject();
 		});
 	}
 
