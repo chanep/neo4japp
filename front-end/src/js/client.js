@@ -39,7 +39,6 @@ ReactDOM.render(
                   <Route path="/searchallskills" component={SearchAllSkills}></Route>
                   <Route path="/faq" component={FAQ}></Route>
                   <Route path="/error" component={PageError}></Route>
-                  <Route path="*" component={PageError}/>
 		</Route>
 	</Router>,
 app);

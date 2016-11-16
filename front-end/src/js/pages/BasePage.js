@@ -20,7 +20,6 @@ class BasePage extends React.Component {
 		}).catch(() => {
 			return resolve(false);
 		});
-
 		console.log("result", result);
 		return result;
 	}
