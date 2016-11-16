@@ -18,7 +18,7 @@ export default class ServicesBase {
 					else {
 						let errorString = "Error";
 						if (dataR.hasOwnProperty('error'))
-							errorString = dataR.error;
+							errorString = dataR.error.message;
 
 						window.location.href = "/#/error?errNumber=" + response.statusCode + "&errString=" + errorString;
 						reject(error);
@@ -48,8 +48,9 @@ export default class ServicesBase {
 			return request.get(urlFinal).withCredentials().query(qs.stringify(queryData, { encode: false })).end((error, response) => {
 				let dataR = JSON.parse(response.text);
 				let errorString = "Error";
-				if (dataR.hasOwnProperty('error'))
-					errorString = dataR.error;
+				if (dataR.hasOwnProperty('error')) {
+					errorString = dataR.error.message;
+				}
 
 				if (error) {
 					window.location.href = "/#/error?errNumber=" + response.statusCode + "&errString=" + errorString;
