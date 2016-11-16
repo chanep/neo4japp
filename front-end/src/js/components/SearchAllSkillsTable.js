@@ -56,14 +56,14 @@ export default class SearchAllSkillsTable extends React.Component {
                     <div className="col -col-3">
                         <span className="table-header">Filter</span>
                     </div>
-                    <div className="col -col-4">
-                        <span className="table-header">Category</span> 
+                    <div className="col -col-5 col-name">
+                        <span className="table-header">Name</span> 
                     </div>
                     <div className="col -col-3">
-                        <span className="table-header">Group</span>
+                        <span className="table-header">Category</span>
                     </div>
-                    <div className="col -col-2">
-                        <span className="table-header">Skill</span>
+                    <div className="col -col-1">
+                        <span className="table-header">Skills</span>
                     </div>
                 </div>
                 <div className="results-section">
@@ -71,7 +71,7 @@ export default class SearchAllSkillsTable extends React.Component {
                     {/*FILTERS SIDE BAR*/}
                     <AddSkillsFilter data={this.state.data} onSelectedGroup={this.handleFilter.bind(this)} />
 
-                    <div className="results-profile results results--right col -col-9 -col-no-gutter">
+                    <div className="addSkillsList col -col-9 -col-no-gutter">
                         <AllSkillsList selectedGroup={this.state.selectedGroup} data={this.state.data} />
                     </div>
                 </div>

@@ -19,8 +19,8 @@ export default class AllocPie extends React.Component {
 	componentDidMount() {
     	this.setState({
     		startWeek: this.props.startWeek,
-    		allocatedHour: this.props.allocatedHour,
-    		totalWeekHour: this.props.totalWeekHour,
+    		allocatedHour: this.props.allocatedHour !== -1 && this.props.allocatedHour !== "-1" ? this.props.allocatedHour : 0,
+    		totalWeekHour: this.props.totalWeekHour !== -1 && this.props.totalWeekHour !== "-1" ? this.props.totalWeekHour : 0,
     		currentEmployee: this.props.currentEmployee
     	});
     }
@@ -28,8 +28,8 @@ export default class AllocPie extends React.Component {
 	componentWillReceiveProps(nextProps) {
 		this.setState({
 			startWeek: nextProps.startWeek,
-			allocatedHour: nextProps.allocatedHour,
-			totalWeekHour: nextProps.totalWeekHour,
+			allocatedHour: nextProps.allocatedHour !== -1 && nextProps.allocatedHour !== "-1" ? nextProps.allocatedHour : 0,
+			totalWeekHour: nextProps.totalWeekHour !== -1 && nextProps.totalWeekHour !== "-1" ? nextProps.totalWeekHour : 0,
 			currentEmployee: nextProps.currentEmployee
 		});
 	}

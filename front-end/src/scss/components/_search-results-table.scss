@@ -37,7 +37,7 @@
         }
 
         .col-name {
-            width: 31% !important;
+            width: 37% !important;
         }
     }
 
@@ -276,21 +276,6 @@
 
                 //&:hover { background-color: $LIGHTEST-GREY; }
             }
-
-            .col {
-               &:nth-of-type(2),
-               &:nth-of-type(3) {
-                    & > .table-row .validate-pending {
-                        background-color: #e71d39;
-                        border-radius: 50%;
-                        display: inline-block;
-                        height: 6px;
-                        margin-left: 15px;
-                        vertical-align: middle;
-                        width: 6px;
-                    }
-               }
-            }
         }
 
         .results-profile {
@@ -432,6 +417,24 @@
         text-decoration: inherit;
         color: inherit;
     }
+}
+
+.validate-pending, .employee-Has-Category {
+    border-radius: 50%;
+    display: inline-block;
+    height: 6px;
+    vertical-align: middle;
+    width: 6px;
+}
+
+.validate-pending {
+    background-color: #e71d39;
+    margin-left: 15px;
+}
+
+.employee-Has-Category {
+    background-color: $GREY;
+    margin-left: 5px;
 }
 
 .pieAllocation {

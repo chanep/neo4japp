@@ -46,18 +46,20 @@ export default class SkillItem extends React.Component {
 
         return (
             <div>
-                <div className="grid">
-                    <div className="col -col-5">
-                        <p className="table-row-heading">{this.state.data.name}</p>
-                    </div>
-                    <div className="col -col-4">
-                        <p className="table-row">{this.state.parent.name}</p>
-                    </div>
-                    <div className="col -col-2">
-                        <span className="table-row">{this.state.data.skills.length}</span>
-                    </div>
-                    <div className={this.state.showLevels ? "col -col-1 results-arrow-open-close skill-opened" : "col -col-1 results-arrow-open-close"} onClick={this.openClose.bind(this)}>
-                        <i className="ss-icon-down-arrow"></i>
+                <div className="row-add-skill">
+                    <div className="grid">
+                        <div className="col -col-6 -col-name overflowHidden">
+                            {this.state.data.name}
+                        </div>
+                        <div className="col -col-4 overflowHidden">
+                            {this.state.parent.name}
+                        </div>
+                        <div className="col -col-1">
+                            {this.state.data.skills.length}
+                        </div>
+                        <div className={this.state.showLevels ? "col -col-1 results-arrow-open-close skill-opened" : "col -col-1 results-arrow-open-close"} onClick={this.openClose.bind(this)}>
+                            <i className="ss-icon-down-arrow"></i>
+                        </div>
                     </div>
                 </div>
                 { this.state.showLevels ? 
