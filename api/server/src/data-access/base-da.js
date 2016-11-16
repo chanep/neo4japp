@@ -83,7 +83,7 @@ class BaseDa {
                 return result;
             })
             .catch(err =>{
-                throw new errors.GenericError("db command error: " + JSON.stringify(err), err);
+                throw new errors.GenericError(`db command error: \n${cmd} \nparams:\n ${JSON.stringify(parsedParams)}\n` + JSON.stringify(err), err);
             });
         return this._wrapPromise(p);
     }
@@ -566,7 +566,11 @@ class BaseDa {
             if(_.isInteger(val))
                 parsedParams[k] = neo4j.int(val);
             else if(Array.isArray(val) && val.length > 0)
-                parsedParams[k] = val.map(v => this._parseParams(v));
+                parsedParams[k] = val.map(v => {
+                    if(_.isInteger(v))
+                        return neo4j.int(v);
+                    return v;
+                });
             else if(_.isObject(val))
                 parsedParams[k] = this._parseParams(val);
         }
