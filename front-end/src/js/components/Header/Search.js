@@ -126,7 +126,9 @@ class Search extends React.Component {
 
     query(queryString) {
 
-      let searchService = new SearchServices();
+      let searchService = new SearchServices(),
+          that = this;
+
       searchService.GetSearchAll(queryString, 5).then(data =>{
          //console.log('Search new service')
          //this.setState({ results: data });
@@ -134,11 +136,29 @@ class Search extends React.Component {
          var results = [];
 
          data.skills.forEach(function (skill) {
-          results.push({ "id": skill.id, "name": skill.name, "type": 'skill'});
+          var repeated = false;
+
+          that.state.chosenItems.forEach(function (item) {
+            if (item.id == skill.id) {
+              repeated = true;
+            }
+          });
+
+          if (!repeated)
+            results.push({ "id": skill.id, "name": skill.name, "type": 'skill'});
          });
 
          data.tools.forEach(function (tool) {
-          results.push({ "id": tool.id, "name": tool.name, "type": 'tool'});
+          var repeated = false;
+
+          that.state.chosenItems.forEach(function (item) {
+            if (item.id == tool.id) {
+              repeated = true;
+            }
+          });
+
+          if (!repeated)
+            results.push({ "id": tool.id, "name": tool.name, "type": 'tool'});
          });
 
          data.users.forEach(function (user) {

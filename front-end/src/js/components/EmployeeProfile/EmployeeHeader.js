@@ -58,6 +58,7 @@ export default class EmployeeHeader extends React.Component {
     componentDidUpdate(){
         if (this.state.editingInterests) {
             document.getElementsByClassName('react-autosuggest__input')[0].focus();
+            document.getElementsByClassName('react-autosuggest__input')[0].setAttribute('maxlength', ENV().interests.maximumInterestLength);
         }
 
         if (this.state.editingIndustries) {
@@ -126,7 +127,7 @@ export default class EmployeeHeader extends React.Component {
             addSkills: this.props.addSkills,
             showActions: this.props.showActions,
             showForManagerVerification: this.props.showForManagerVerification
-        })
+        });
     }
 
     editInterests() {
@@ -198,7 +199,6 @@ export default class EmployeeHeader extends React.Component {
             user = this.state.user;
 
         this.userData.AddInterest(interest).then(data => {
-
           user.interests.push({ "id": data.id, "name": data.name });
           self.setState({
             "interest": "",

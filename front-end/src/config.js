@@ -14,7 +14,8 @@ module.exports = function() {
         interests: {
             minimumLenghtLookup: 2,
             suggestionsNumber: 5,
-            minimumInterestLength: 3
+            minimumInterestLength: 3,
+            maximumInterestLength: 25
         },
         preselectedFilter: {
             "Quality Assurance": "Technology",
