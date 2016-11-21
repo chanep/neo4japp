@@ -63,6 +63,22 @@ class Search extends React.Component {
       this.makeQuery = this.makeQuery.bind(this);
       this.addPill = this.addPill.bind(this);
       this.clearSearchField = this.clearSearchField.bind(this);
+      this.closeSearch = this.closeSearch.bind(this);
+    }
+
+    componentDidMount() {
+      window.addEventListener('keydown', this.closeSearch, false);
+    }
+
+    closeSearch(e) {
+      const ESC_KEYCODE = 27;
+
+      if (e.keyCode == ESC_KEYCODE) {
+        this.setState({ results: [] });
+        this.hideResults();
+
+        this.clearSearchField();
+      }
     }
 
     componentDidUpdate(){
@@ -378,13 +394,6 @@ class Search extends React.Component {
         document.getElementById('querySearch').focus();
 
         this.addPill(chosenItems);
-      }
-
-      if (e.keyCode == ESC_KEYCODE) {
-        this.setState({ results: [] });
-        this.hideResults();
-
-        this.clearSearchField();
       }
     }
 
