@@ -356,7 +356,10 @@ export default class EmployeeHeader extends React.Component {
 
         let position = this.state.user.position.name;
         let department = this.state.user.department.name;
-        let officeLoc = this.state.user.office.name + ', ' + this.state.user.office.country;
+
+        let officeName = this.state.user.office.name;
+        if (officeName === "Bucuresti") officeName = "Bucharest";
+        let officeLoc = officeName + ', ' + this.state.user.office.country;
 
         let clients = "No clients data available";
         if (this.state.user.clients.length > 0) {

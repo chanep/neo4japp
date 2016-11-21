@@ -59,9 +59,12 @@ export default class FiltersSideBar extends React.Component {
                     <ul>
                         {
                             this.state.offices.map((office) => {
+                                let officeName = office.name;
+                                if (officeName === "Bucuresti") officeName = "Bucharest";
+
                                 return <li key={office.id} className="filter-option">
                                     <label>
-                                        <input type="checkbox" id={office.id} value={office.id} checked={self.state.locationsIds.indexOf(office.id.toString()) !== -1} onChange={self.handleChange.bind(self, office.id.toString())} /> {office.name}
+                                        <input type="checkbox" id={office.id} value={office.id} checked={self.state.locationsIds.indexOf(office.id.toString()) !== -1} onChange={self.handleChange.bind(self, office.id.toString())} /> {officeName}
                                     </label>
                                 </li>
                             })

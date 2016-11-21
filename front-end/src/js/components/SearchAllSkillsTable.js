@@ -69,7 +69,7 @@ export default class SearchAllSkillsTable extends React.Component {
                 <div className="results-section">
 
                     {/*FILTERS SIDE BAR*/}
-                    <AddSkillsFilter data={this.state.data} onSelectedGroup={this.handleFilter.bind(this)} />
+                    <AddSkillsFilter data={this.state.data} onSelectedGroup={this.handleFilter.bind(this)} selected={this.state.selectedGroup} />
 
                     <div className="addSkillsList col -col-9 -col-no-gutter">
                         <AllSkillsList selectedGroup={this.state.selectedGroup} data={this.state.data} />
