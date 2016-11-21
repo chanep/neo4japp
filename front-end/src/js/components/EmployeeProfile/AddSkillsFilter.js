@@ -11,7 +11,8 @@ export default class AddSkillsFilter extends React.Component {
         super(props);
 
         this.state = {
-        	data: []
+        	data: [],
+        	idSelected: null
         };
     }
 
@@ -24,7 +25,7 @@ export default class AddSkillsFilter extends React.Component {
     }
 
 	componentWillReceiveProps(nextProps) {
-		let propSelected = nextProps.selected !== undefined?nextProps.selected:null;
+		let propSelected = nextProps.selected !== undefined ? nextProps.selected : null;
 		this.setState({
 			data: nextProps.data,
 			preselectedFilter: propSelected
@@ -32,6 +33,9 @@ export default class AddSkillsFilter extends React.Component {
 	}
 
   	onValueChanged(refVal, newText, e) {
+		this.setState({
+			idSelected: refVal
+		});
 		this.props.onSelectedGroup(refVal, newText);
   	}
 
@@ -58,9 +62,15 @@ export default class AddSkillsFilter extends React.Component {
 									countPerSkill += child.skills.length;
 								});
 
+								let checked = false;
+								if (self.state.idSelected !== null)
+									checked = (self.state.idSelected === obj.id);
+								else
+									checked = (self.state.preselectedFilter === obj.name);
+
 								return (
 									<li className="filter-option" key={key}>
-										<label><input type="radio" name="skillstools" onChange={self.onValueChanged.bind(self, obj.id)} /> {obj.name} ({countPerSkill})</label>
+										<label><input type="radio" name="skillstools" checked={checked} onChange={self.onValueChanged.bind(self, obj.id, obj.name)} /> {obj.name} ({countPerSkill})</label>
 									</li>
 								)
 							})
@@ -77,7 +87,12 @@ export default class AddSkillsFilter extends React.Component {
 									countPerSkill += child.skills.length;
 								});
 
-								let checked = self.state.preselectedFilter === obj.name;
+								let checked = false;
+								if (self.state.idSelected !== null)
+									checked = (self.state.idSelected === obj.id);
+								else
+									checked = (self.state.preselectedFilter === obj.name);
+
 								return (
 									<li className="filter-option" key={key}>
 										<label><input type="radio" name="skillstools" checked={checked} onChange={self.onValueChanged.bind(self, obj.id, obj.name)} /> {obj.name} ({countPerSkill})</label>
