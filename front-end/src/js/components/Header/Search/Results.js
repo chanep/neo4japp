@@ -76,9 +76,10 @@ class Results extends React.Component {
         return (
           <div className="search__results__wrapper">
 
-          {this.props.hasResults ?
+          {this.props.hasResults && (skills.length > 0 || tools.length > 0 || users.length > 0) ?
             (<div className="search__results">
               <span className="close-suggestion">Press <kbd>ESC</kbd> to close</span>
+              {skills.length > 0 ?
               <ul>
                 <li className="category-list">Skills</li>
                 <li className="subcategory-list">
@@ -93,6 +94,8 @@ class Results extends React.Component {
                   </ul>
                 </li>
               </ul>
+              : false}
+              {tools.length > 0 ?
               <ul>
                 <li className="category-list">Tools</li>
                 <li className="subcategory-list">
@@ -105,6 +108,8 @@ class Results extends React.Component {
                   </ul>
                 </li>
               </ul>
+              : false}
+              {users.length > 0 ?
               <ul>
                 <li className="category-list">People</li>
                 <li className="subcategory-list">
@@ -119,6 +124,7 @@ class Results extends React.Component {
                   </ul>
                 </li>
               </ul>
+              : false}
             </div>) : null}
             </div>
         );
