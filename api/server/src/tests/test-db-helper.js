@@ -10,6 +10,7 @@ const departmentDa = new (require('../data-access/department'));
 const positionDa = new (require('../data-access/position'));
 const skillDa = new (require('../data-access/skill'));
 const skillGroupDa = new (require('../data-access/skill-group'));
+const interestDa = new(require('../data-access/interest'));
 
 module.exports = {
     resetDb: resetDb,
@@ -169,6 +170,19 @@ function createIndustries(){
         .then(i => {
             ind[3].id = i.id;
             return ind;
+        });
+}
+
+function createInterests(){
+    let interests = [{name: 'Football'}, {name: 'Tennis'}];
+    return interestDa.create(interests[0])
+        .then(i => {
+            interests[0].id = i.id;
+            return interestDa.create(interests[1]);
+        })
+        .then(i => {
+            interests[1].id = i.id;
+            return interests
         });
 }
 
@@ -335,6 +349,10 @@ function createBasicData(){
         .then(sgData => {
             data.skillGroups = sgData.skillGroups;
             data.skills = sgData.skills;
+            return createInterests();
+        })
+        .then(interests => {
+            data.interests = interests;
             return data;
         });
 }

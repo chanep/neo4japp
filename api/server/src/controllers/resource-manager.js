@@ -16,7 +16,8 @@ class ResourceManagerController extends BaseController{
     @apiDescription List users who have at least one of the searched skills (sorted by skill match count and skill level, descending)
     @apiGroup Resource Managers
 
-    @apiParam (Filter) {Array} skills Array with skill ids
+    @apiParam (Filter) {Array} skills Array with skill ids (tools, skills and industries)
+    @apiParam (Filter) {Array} [interests] Array with interests ids
     @apiParam (Filter) {Array} [offices] Array with office ids
     @apiParam (Filter) {number} [skip] Skips n Users (for paged result)
     @apiParam (Filter) {number} [limit] Limits then number or results. Default is 20  (for paged result)
@@ -26,7 +27,7 @@ class ResourceManagerController extends BaseController{
     findUsersBySkill(req, res, next){
         let search = this._buildSearch(req);
 
-        let skillIds = search.skills;
+        let skillIds = search.skills || [];
 
         let searchData = {
             userId: req.session.user.id,
@@ -36,6 +37,7 @@ class ResourceManagerController extends BaseController{
 
         let filters = {};
         filters.offices = search.offices;
+        filters.interests = search.interests;
         
         let skip = search.skip || 0;
         let limit = search.limit || 20;
@@ -202,6 +204,8 @@ HTTP/1.1 200 OK
             name: "Php", 
             level: 3,
             approved: false}]
+        industries: [],
+        interests: [{id: 4354, name "Football"}]
     }, {
        ... 
     }]

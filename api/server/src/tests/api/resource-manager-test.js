@@ -56,6 +56,9 @@ vows.describe('Resource Manager api test')
                     return approverDa.approveKnowledge(data.approver.id, ks[3].id);
                 })
                 .then(() => {
+                    return approverDa.addInterest(e[0].id, data.interests[0].name);
+                })
+                .then(() => {
                     this.callback();
                 })
                 .catch(err => this.callback(err))
@@ -94,6 +97,59 @@ vows.describe('Resource Manager api test')
             assertUsers(users);
             assert.equal(users.length, 2);
             assert.equal(users[0].id, e[1].id);
+        }
+    }
+})
+
+.addBatch({
+    '2b. Find users by skills and interests': {
+        topic: function () {
+            let s = data.skills;
+            var search = {
+                interests: [data.interests[0].id]
+            };
+            var queryString = qs.stringify(search, { encode: false });
+
+            req.get('resource-manager/users-by-skill?'+ queryString, 
+                this.callback);
+        },
+        'response is 200': testHelper.assertSuccess(),
+        'should return user with searched skills': function (err, result, body) {
+            if (err) {
+                console.log("error", err);
+                throw err;
+            }
+            let users = body.data;
+            //console.log('body', JSON.stringify(body));
+            assertUsers(users);
+            assert.equal(users.length, 1);
+            assert.equal(users[0].id, e[0].id);
+        }
+    }
+ })
+
+.addBatch({
+    '2c. Find users by wrong interest': {
+        topic: function () {
+            let s = data.skills;
+            var search = {
+                interests: [data.interests[1].id]
+            };
+            var queryString = qs.stringify(search, { encode: false });
+
+            req.get('resource-manager/users-by-skill?'+ queryString, 
+                this.callback);
+        },
+        'response is 200': testHelper.assertSuccess(),
+        'should return user with searched skills': function (err, result, body) {
+            if (err) {
+                console.log("error", err);
+                throw err;
+            }
+            let users = body.data;
+            //console.log('body', JSON.stringify(body));
+            assertUsers(users);
+            assert.equal(users.length, 0);
         }
     }
 })
@@ -268,6 +324,8 @@ function assertUsers(users){
         assert.isObject(u.office);
         assert.isObject(u.position);
         assert.isArray(u.approvers);
+        assert.isArray(u.industries);
+        assert.isArray(u.interests);
         for(let s of u.skills){
             assert.isNumber(s.level);
             assert.isString(s.name);
