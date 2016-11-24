@@ -114,13 +114,13 @@ class Search extends React.Component {
     updateQuery(e) {
       e.preventDefault();
 
-      if (e.target.value.length > 0) {
+      if (e.target.value.length > 1) {
         this.setState({query: e.target.value});
         this.query(e.target.value);
          this.setState({ word: e.target.value });
         this.setState({ selection: 1 });
       
-      } else if (e.target.value.length == 0) {
+      } else if (e.target.value.length <= 1) {
         this.hideResults(0);
       }
 
