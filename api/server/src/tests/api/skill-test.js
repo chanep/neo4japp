@@ -10,7 +10,6 @@ let sgs = null;
 let skills = null;
 let industries = null;
 
-
 vows.describe('Skill api test')
 
 .addBatch(testHelper.resetTestDbBatch())
@@ -101,6 +100,28 @@ vows.describe('Skill api test')
             let ind = body.data;
             assert.isArray(ind);
             assert.equal(ind.length, industries.length);
+        }
+    }
+})
+
+.addBatch({
+    '4. Find Skills by ids': {
+        topic: function () {
+           var search = {
+                ids: [skills[1].id, skills[2].id]
+            };
+            var queryString = qs.stringify(search, { encode: false });
+            req.get('skill?' + queryString, this.callback);
+        },
+        'response is 200': testHelper.assertSuccess(),
+        'should return skill groups full hierarchy': function (err, result, body) {
+            if (err) {
+                console.log("error", err);
+                throw err;
+            }
+            let s = body.data;
+
+            assert.equal(s.length, 2);
         }
     }
 })
