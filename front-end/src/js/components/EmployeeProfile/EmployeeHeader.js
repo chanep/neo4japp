@@ -255,7 +255,8 @@ export default class EmployeeHeader extends React.Component {
     */
 
     getSuggestions(value) {
-        this.userData.GetInterests(value.value, ENV().interests.suggestionsNumber).then(data => {
+        var ids = [];
+        this.userData.GetInterests(value.value, ids, ENV().interests.suggestionsNumber).then(data => {
             this.setState({ "suggestions": data });
         });
     }

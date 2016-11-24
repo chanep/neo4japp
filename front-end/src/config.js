@@ -7,6 +7,10 @@ module.exports = function() {
     		{level: 3, desc: 'No Supervision'},
     		{level: 4, desc: 'Can teach / manage others'},
     	],
+        search: {
+            pillsLimit: 100,
+            resultsLimit: 20
+        },
         resourceManagerHome: {
             topSearchedSkillsCount: 10,
             topSkillsWeeksPeriod: 2

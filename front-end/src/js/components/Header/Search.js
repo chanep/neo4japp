@@ -5,6 +5,7 @@ import Pill from './Search/Pill';
 import SearchServices from '../../services/SearchServices';
 import SkillsServices from '../../services/SkillsServices';
 import UserServices from '../../services/UserServices';
+import ENV from '../../../config';
 
 import { hashHistory, Link, browserHistory, withRouter } from "react-router";
 
@@ -18,7 +19,7 @@ class Search extends React.Component {
           skillsIds = [],
           interestsIds = [],
           that = this,
-          limit = 1000,
+          pillsLimit = ENV().search.pillsLimit,
           key,
           skillsServices = new SkillsServices(),
           userServices = new UserServices();
@@ -32,7 +33,7 @@ class Search extends React.Component {
           }
         }
 
-        skillsServices.GetSkill(limit).then(data =>{
+        skillsServices.GetSkillsByIds(skillsIds, pillsLimit).then(data =>{
           data.forEach(function (v) {
             if (skillsIds.indexOf(v.id.toString()) != -1) {
               chosenItems.push({ 
@@ -56,7 +57,7 @@ class Search extends React.Component {
           }
         }
 
-        userServices.GetInterests('', interestsIds, limit).then(data =>{
+        userServices.GetInterests('', interestsIds, pillsLimit).then(data =>{
           data.forEach(function (v) {
             chosenItems.push({
               "id": v.id, 
