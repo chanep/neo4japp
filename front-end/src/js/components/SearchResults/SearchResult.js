@@ -75,6 +75,16 @@ export default class SearchResult extends React.Component {
 				        		)
 				       		}
 				        </ul>
+				        <ul className="interests grid">
+				        	{
+				        		this.getChild(this.state.obj, 'interests').map((obj, key) =>
+				        			<li className="col -col-4 interest-cell">
+				        				<span className="name">{obj.name}</span>
+				        				<span className="label">(Interest)</span>
+				        			</li>
+				        		)
+				       		}
+				        </ul>
 				        <div className="samples grid">
 				            <div className="col -col-8">
 				                <a href={'http://square/people/' + this.state.obj.username + '/'} target="_blank">View work samples &gt;</a>
