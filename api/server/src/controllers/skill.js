@@ -14,6 +14,7 @@ class SkillController extends BaseController{
 
     @apiParam (Filters) {string} [name] Skill name (find skills containing name parameter case insensitive) 
     @apiParam (Filters) {Array} [type] Skillgroup type (find skills of certain group type) 
+    @apiParam (Filters) {Array} [ids] Skill id's
     @apiParam (Filters) {number} [limit] Limits the result 
 
     @apiExample {curl} Example usage:
@@ -34,12 +35,15 @@ class SkillController extends BaseController{
 
         let name = search.name;
         let type = search.type;
+        let ids = search.ids;
         let limit = search.limit;
 
         if(name)
             query.name= {$ilike:'%' + name + '%'};
         if(type)
             query.includes[0].query.type = {$in: type};
+        if(ids)
+            query.id = {$in: ids};
         if(limit)
             query.paged.limit = limit;
 

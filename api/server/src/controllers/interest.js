@@ -12,6 +12,7 @@ class InterestController extends BaseController{
     @apiGroup Interests
 
     @apiParam (Filters) {string} [name] Interest name (find interests containing name parameter case insensitive) 
+    @apiParam (Filters) {Array} [ids] Interest id's
     @apiParam (Filters) {number} [limit] Limits the result 
 
     @apiExample {curl} Example usage:
@@ -23,9 +24,14 @@ class InterestController extends BaseController{
         let search = this._buildSearch(req);
 
         let name = search.name;
+        let ids = search.ids;
         let limit = search.limit || 10;
 
-        let promise = interestDa.findByTerm(name, limit)
+        let promise;
+        if(ids)
+            promise = interestDa.find({id: {$in: ids}});
+        else
+            promise = interestDa.findByTerm(name, limit);
 
         this._respondPromise(req, res, promise);
     }
