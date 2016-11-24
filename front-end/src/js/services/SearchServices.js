@@ -5,10 +5,13 @@ export default class SearchServices extends ServicesBase {
 		return super.callGetServices('resource-manager/search-all', {term: query, limit: limit});
 	}
 
-	GetSearchBySkills(skillsIds,limit, officesIds = []) {
+	GetSearchBySkills(skillsIds, interestsIds, limit, officesIds = []) {
+		if (interestsIds.length == 0)
+			interestsIds = [];
+
 		if (officesIds.length == 0)
-			return super.callGetServices('resource-manager/users-by-skill', {skills:skillsIds, limit:limit});
+			return super.callGetServices('resource-manager/users-by-skill', {skills:skillsIds, limit:limit, interests:interestsIds});
 		else
-			return super.callGetServices('resource-manager/users-by-skill', {skills:skillsIds, limit:limit, offices: officesIds});
+			return super.callGetServices('resource-manager/users-by-skill', {skills:skillsIds, limit:limit, interests:interestsIds, offices: officesIds});
 	}
 }

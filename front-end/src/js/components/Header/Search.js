@@ -20,6 +20,7 @@ class Search extends React.Component {
           key,
           skillsServices = new SkillsServices();
 
+
       if (this.props.skillsIds != undefined &&
         this.props.skillsIds.length > 0) {
 
@@ -175,7 +176,7 @@ class Search extends React.Component {
 
           if (!repeated)
             results.push({ "id": tool.id, "name": tool.name, "type": 'tool'});
-         });
+        });
 
          data.users.forEach(function (user) {
           results.push({
@@ -192,6 +193,32 @@ class Search extends React.Component {
             "type": user.type,
             "username": user.username,
             "type": "user"});
+         });
+
+         data.interests.forEach(function (interest) {
+          var repeated = false;
+
+          that.state.chosenItems.forEach(function (item) {
+            if (item.id == interest.id) {
+              repeated = true;
+            }
+          });
+
+          if (!repeated)
+            results.push({ "id": interest.id, "name": interest.name, "type": 'interest'});
+         });
+
+        data.industries.forEach(function (industry) {
+          var repeated = false;
+
+          that.state.chosenItems.forEach(function (item) {
+            if (item.id == industry.id) {
+              repeated = true;
+            }
+          });
+
+          if (!repeated)
+            results.push({ "id": industry.id, "name": industry.name, "type": 'industry'});
          });
 
          this.setState({ results: results });
@@ -403,11 +430,14 @@ class Search extends React.Component {
 
     makeQuery() {
       var chosenItems = this.state.chosenItems,
-          ids = [], idsConcat, path, i,
+          skillsIds = [], interestsIds = [], queryConcat = '', path, i,
           hasUsers = false;
 
       for (i = 0; i < chosenItems.length; i++) {
-          ids.push(chosenItems[i].id);
+          if (chosenItems[i].type == 'interest')
+            interestsIds.push(chosenItems[i].id);
+          else
+            skillsIds.push(chosenItems[i].id);
 
           if (chosenItems[i].type == 'user') {
             path = '/employee/' + chosenItems[i].id;
@@ -417,9 +447,13 @@ class Search extends React.Component {
       }
 
       if (!hasUsers) {
-        idsConcat = ids.join();
+        if (skillsIds.length > 0)
+          queryConcat += '/skills/' + skillsIds.join();
 
-        path = '/searchresults/' + idsConcat;
+        if (interestsIds.length > 0)
+          queryConcat += '/interests/' + interestsIds.join();
+
+        path = '/searchresults' + queryConcat;
         this.context.router.push({ pathname: path });
       }
 

@@ -16,14 +16,19 @@ export default class SearchResults extends BasePage {
 	constructor(props) {
 		super(props);
 
-        let locations = [];
-        if (this.props.params.locationsId !== undefined) {
-            locations = this.props.params.locationsId.split(',');
+        let locationsIds = [];
+        if (this.props.params.locationsIds !== undefined) {
+            locationsIds = this.props.params.locationsIds.split(',');
         }
 
-        let ids = [];
-        if (this.props.params.skillIds !== undefined) {
-            ids = this.props.params.skillIds.split(",");
+        let interestsIds = [];
+        if (this.props.params.interestsIds !== undefined) {
+            interestsIds = this.props.params.interestsIds.split(',');
+        }
+
+        let skillsIds = [];
+        if (this.props.params.skillsIds !== undefined) {
+            skillsIds = this.props.params.skillsIds.split(',');
         }
 
         this.searchServices = new SearchServices();
@@ -31,94 +36,120 @@ export default class SearchResults extends BasePage {
             "data": [],
             "skillsCount": 0,
             "searching": true,
-            "skillsIds": ids,
-            "locations": locations
+            "skillsIds": skillsIds,
+            "interestsIds": interestsIds,
+            "locationsIds": locationsIds
         };
 	}
 
     onLocationsChanged(locationId, e) {
-        var locations = this.state.locations,
-            index = locations.indexOf(locationId);
+        var locationsIds = this.state.locationsIds,
+            index = locationsIds.indexOf(locationId);
 
         if (index === -1) {
-            locations.push(locationId);
+            locationsIds.push(locationId);
         } else {
-            locations.splice(index, 1);
+            locationsIds.splice(index, 1);
         }
 
         var skillsConcat = this.state.skillsIds.join(),
-            locationsConcat = this.state.locations.join(),
-            path = '/searchresults/' + skillsConcat;
+            interestsConcat = this.state.interestsIds.join(),
+            locationsConcat = this.state.locationsIds.join(),
+            path = '/searchresults';
 
-        if (locationsConcat != '')
-            path = '/searchresults/' + skillsConcat + '/' + locationsConcat;
+        if (this.state.skillsIds.length > 0)
+            path += '/skills/' + skillsConcat;
+
+        if (this.state.interestsIds.length > 0)
+            path += '/interests/' + interestsConcat;
+
+        if (locationsIds.length > 0)
+            path += '/locations/' + locationsConcat;
 
         this.context.router.push({ pathname: path });
     }
 
     allSelected() {
         var skillsConcat = this.state.skillsIds.join(),
-            path = '/searchresults/' + skillsConcat;
+            interestsConcat = this.state.interestsIds.join(),
+            path = '/searchresults';
+
+        if (this.state.skillsIds.length > 0)
+            path += '/skills/' + skillsConcat;
+
+        if (this.state.interestsIds.length > 0)
+            path += '/interests/' + interestsConcat;
 
         this.context.router.push({ pathname: path });
     }
 
-    getData(ids, locations) {
+    getData(skillsIds, interestsIds, locationsIds) {
         let self = this;
 
-        this.setState({data: [], skillsIds: [], locations: [], skillsCount: 0, searching: true});
-        if (ids.length > 0) {
-            this.searchServices.GetSearchBySkills(ids, 20, locations).then(data => {
+        this.setState({data: [], skillsIds: [], interestsIds: [], locationsIds: [], skillsCount: 0, searching: true});
+        if (skillsIds.length > 0 || interestsIds.length > 0) {
+            this.searchServices.GetSearchBySkills(skillsIds, interestsIds, 20, locationsIds).then(data => {
                 self.setState({
                     data: data,
-                    skillsIds: ids,
-                    locations: locations,
-                    skillsCount:ids.length,
+                    skillsIds: skillsIds,
+                    interestsIds: interestsIds,
+                    locationsIds: locationsIds,
+                    skillsCount: skillsIds.length,
                     searching: false
                 });
             }).catch(data => {
                 console.log("Error performing search", data);
             });
         } else {
-            this.setState({data: [], skillsIds: ids, locations: locations, skillsCount: 0, searching: false});
+            this.setState({data: [], skillsIds: skillsIds, interestsIds: interestsIds, locationsIds: locationsIds, skillsCount: 0, searching: false});
         }
     }
 
     componentDidMount() {
-        let ids = [];
-        let locations = [];
+        let skillsIds = [];
+        let interestsIds = [];
+        let locationsIds = [];
 
-        if (this.props.params.skillIds !== undefined) {
-            ids = this.props.params.skillIds.split(',');
+        if (this.props.params.skillsIds !== undefined) {
+            skillsIds = this.props.params.skillsIds.split(',');
         }
 
-        if (this.props.params.locationsId !== undefined) {
-            locations = this.props.params.locationsId.split(',');
+        if (this.props.params.interestsIds !== undefined) {
+            interestsIds = this.props.params.interestsIds.split(',');
         }
 
-        this.getData(ids, locations);
+        if (this.props.params.locationsIds !== undefined) {
+            locationsIds = this.props.params.locationsIds.split(',');
+        }
+
+        this.getData(skillsIds, interestsIds, locationsIds);
     }
 
     componentWillReceiveProps(newProps) {
-        let ids = [];
-        let locations = [];
+        let skillsIds = [];
+        let interestsIds = [];
+        let locationsIds = [];
 
-        if (newProps.params.skillIds !== undefined) {
-            ids = newProps.params.skillIds.split(',');
+        if (newProps.params.skillsIds !== undefined) {
+            skillsIds = newProps.params.skillsIds.split(',');
         }
 
-        if (newProps.params.locationsId !== undefined) {
-            locations = newProps.params.locationsId.split(',');
+        if (newProps.params.interestsIds !== undefined) {
+            interestsIds = newProps.params.interestsIds.split(',');
         }
 
-        this.getData(ids, locations);
+        if (newProps.params.locationsIds !== undefined) {
+            locationsIds = newProps.params.locationsIds.split(',');
+        }
+
+        this.getData(skillsIds, interestsIds, locationsIds);
     }
 
     render() {
         return (
             <div>
                 <Header search={super._showSearch()} loggedIn={true} skillsIds={this.state.skillsIds} />
-                <SearchResultsTable data={this.state.data} skillsCount={this.state.skillsCount} searching={this.state.searching} locations={this.state.locations} onLocationsChanged={this.onLocationsChanged.bind(this)} allSelected={this.allSelected.bind(this)} />
+                <SearchResultsTable data={this.state.data} skillsCount={this.state.skillsCount} searching={this.state.searching} locations={this.state.locationsIds} onLocationsChanged={this.onLocationsChanged.bind(this)} allSelected={this.allSelected.bind(this)} />
             </div>
         );
     }

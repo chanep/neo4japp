@@ -52,7 +52,7 @@ class Results extends React.Component {
       let self = this;
       let results = this.props.results || [];
 
-      var skills = [], tools = [], users = [], i = 0;
+      var skills = [], tools = [], users = [], interests = [], industries = [], i = 0;
 
       for (i; i < results.length; i++) {
         if (results[i].type == 'skill') {
@@ -66,6 +66,14 @@ class Results extends React.Component {
         if (results[i].type == 'user') {
           users.push(results[i]);
         }
+
+        if (results[i].type == 'interest') {
+          interests.push(results[i]);
+        }
+
+        if (results[i].type == 'industry') {
+          industries.push(results[i]);
+        }
       };
 
       //console.log("SKILLS", skills);
@@ -76,7 +84,8 @@ class Results extends React.Component {
         return (
           <div className="search__results__wrapper">
 
-          {this.props.hasResults && (skills.length > 0 || tools.length > 0 || users.length > 0) ?
+          {this.props.hasResults &&
+            (skills.length > 0 || tools.length > 0 || users.length > 0 || interests.length > 0 || industries.length > 0) ?
             (<div className="search__results">
               <span className="close-suggestion">Press <kbd>ESC</kbd> to close</span>
               {skills.length > 0 ?
@@ -125,6 +134,39 @@ class Results extends React.Component {
                 </li>
               </ul>
               : false}
+              {interests.length > 0 ?
+              <ul>
+                <li className="category-list">Interests</li>
+                <li className="subcategory-list">
+                  <ul>
+                    {
+                     
+                        interests.map(function (interest, props){
+                          return <li key={interest.id} className="subcategory-result" data-suggested={interest.suggested} data-id={interest.id} onClick={self.clickingState.bind(self, props, interest)}>{interest.name}</li>;
+                        })
+
+                    }
+                  </ul>
+                </li>
+              </ul>
+              : false}
+              {industries.length > 0 ?
+              <ul>
+                <li className="category-list">Industries</li>
+                <li className="subcategory-list">
+                  <ul>
+                    {
+                     
+                        industries.map(function (industry, props){
+                          return <li key={industry.id} className="subcategory-result" data-suggested={industry.suggested} data-id={industry.id} onClick={self.clickingState.bind(self, props, industry)}>{industry.name}</li>;
+                        })
+
+                    }
+                  </ul>
+                </li>
+              </ul>
+              : false}
+
             </div>) : null}
             </div>
         );
