@@ -66,7 +66,7 @@ export default class SkillItem extends React.Component {
                     <div className="skill-level-grid">
                         {this.state.data.skills.map((skill, key) =>
                             <div className="skill-level-grid__levels col -col-12 -col-no-gutter" key={key}>
-                                <Link to={"/searchresults/" + skill.id}>
+                                <Link to={"/searchresults/skills/" + skill.id}>
                                     <div className="col -col-12">
                                         <span className="table-header">{skill.name}</span>
                                     </div>

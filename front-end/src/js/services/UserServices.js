@@ -48,8 +48,8 @@ export default class UserServices extends ServicesBase {
 		return super.callGetServices('skill/by-group-type/industry');
 	}
 
-	GetInterests(name, limit) {
-		return super.callGetServices('interest', { "name": name, "limit": limit });
+	GetInterests(name, ids, limit) {
+		return super.callGetServices('interest', { "name": name, "ids": ids, "limit": limit });
 	}
 
 	RequestManagerApproval(employeeId) {
