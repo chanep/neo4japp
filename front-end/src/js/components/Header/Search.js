@@ -4,6 +4,7 @@ import Results from "./Search/Results";
 import Pill from './Search/Pill';
 import SearchServices from '../../services/SearchServices';
 import SkillsServices from '../../services/SkillsServices';
+import UserServices from '../../services/UserServices';
 
 import { hashHistory, Link, browserHistory, withRouter } from "react-router";
 
@@ -14,12 +15,13 @@ class Search extends React.Component {
       super(props);
 
       var chosenItems = [],
-        skillsIds = [],
+          skillsIds = [],
+          interestsIds = [],
           that = this,
           limit = 1000,
           key,
-          skillsServices = new SkillsServices();
-
+          skillsServices = new SkillsServices(),
+          userServices = new UserServices();
 
       if (this.props.skillsIds != undefined &&
         this.props.skillsIds.length > 0) {
@@ -39,6 +41,28 @@ class Search extends React.Component {
                 "type": v.group.type 
               });
             }
+          });
+
+          this.forceUpdate();
+        });
+      }
+
+      if (this.props.interestsIds != undefined &&
+        this.props.interestsIds.length > 0) {
+
+        for (var k in this.props.interestsIds) {
+          if (this.props.interestsIds.hasOwnProperty(k)) {
+            interestsIds.push(this.props.interestsIds[k]);
+          }
+        }
+
+        userServices.GetInterests('', interestsIds, limit).then(data =>{
+          data.forEach(function (v) {
+            chosenItems.push({
+              "id": v.id, 
+              "name": v.name, 
+              "type": 'interest' 
+            });
           });
 
           this.forceUpdate();
