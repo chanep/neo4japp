@@ -8,6 +8,7 @@ import BasePage from './BasePage';
 import Header from '../components/Header';
 import SearchServices from '../services/SearchServices';
 import SearchResultsTable from '../components/SearchResults/SearchResultsTable';
+import ENV from '../../config';
 
 import { hashHistory, Link, browserHistory, withRouter } from "react-router";
 
@@ -88,7 +89,7 @@ export default class SearchResults extends BasePage {
 
         this.setState({data: [], skillsIds: [], interestsIds: [], locationsIds: [], skillsCount: 0, searching: true});
         if (skillsIds.length > 0 || interestsIds.length > 0) {
-            this.searchServices.GetSearchBySkills(skillsIds, interestsIds, 20, locationsIds).then(data => {
+            this.searchServices.GetSearchBySkills(skillsIds, interestsIds, ENV().search.resultsLimit, locationsIds).then(data => {
                 self.setState({
                     data: data,
                     skillsIds: skillsIds,
