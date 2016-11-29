@@ -8,6 +8,7 @@ import { Link } from 'react-router';
 import Modal from 'react-modal';
 import AddSkillItem from './AddSkillItem';
 import SkillsServices from '../../services/SkillsServices';
+import BasePage from '../../pages/BasePage';
 
 export default class AddSkillsList extends React.Component {
     constructor(props) {
@@ -23,6 +24,7 @@ export default class AddSkillsList extends React.Component {
         };
 
         this.skillsServices = new SkillsServices();
+        this.basePage = new BasePage();
     }
 
     componentDidMount() {
@@ -47,13 +49,15 @@ export default class AddSkillsList extends React.Component {
         var name = document.getElementById('suggestion-name').value.trim(),
             description = document.getElementById('suggestion-description').value.trim();
 
-        this.skillsServices.SuggestSkill(name, description).then(data => {
-            this.setState({open: false});
-        }).catch(data => {
-          
-            console.log("skills error", data);
-          
-        });
+        if (name != '') {
+            this.skillsServices.SuggestSkill(name, description).then(data => {
+                this.setState({open: false});
+            }).catch(data => {
+              
+                console.log("skills error", data);
+              
+            });
+        }
     }
 
     render() {
@@ -73,7 +77,9 @@ export default class AddSkillsList extends React.Component {
                     :
                         <div className="selectCategory">Please, select a category</div>
                     }
-                    <div onClick={this.openModal} className="suggest"><span>Suggest skill/tool</span></div>
+                    {this.basePage.GetCurrentUserType() == 'employee' ?
+                        <div onClick={this.openModal} className="suggest"><span>Suggest skill/tool</span></div>
+                    : false}
                 </div>
                 <Modal
                     isOpen={this.state.open}
