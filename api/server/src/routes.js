@@ -38,6 +38,7 @@ router.put('/user/knowledge', userController.setKnowledge.bind(userController));
 router.delete('/user/knowledge', userController.deleteKnowledge.bind(userController));
 router.put('/user/interest', userController.addInterest.bind(userController));
 router.delete('/user/interest', userController.removeInterest.bind(userController));
+router.put('/user/skill-suggestion', userController.suggestSkill.bind(userController));
 
 // ---------
 // Approvers
