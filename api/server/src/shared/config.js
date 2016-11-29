@@ -32,7 +32,8 @@ let config = {
         smtpHost: process.env.MAIL_SMTP_HOST || localhost,
         provider: process.env.MAIL_PROVIDER  || 'dummy',
         fromAddress: process.env.MAIL_FROM,
-        overrideAddresses: process.env.MAIL_OVERRIDE_ADDRESSES 
+        overrideAddresses: process.env.MAIL_OVERRIDE_ADDRESSES,
+        adminAddress: process.env.MAIL_ADMIN
     },
     isProduction : (process.env.NODE_ENV == 'production'),
     nodeEnv: process.env.NODE_ENV
