@@ -192,6 +192,20 @@
                         }
                     }
 
+                    .interest-cell,
+                    .industry-cell {
+                        .name {
+                            @include setTypeScale('.skill-title');
+                            font-weight: bold;
+                            display: block;
+                        }
+
+                        .label {
+                            color: $GREY-FONT;
+                            @include setTypeScale('.filter-title');
+                        }
+                    }
+
                     .skill-bar {
                         height: em(7);
                         display: flex;
