@@ -1,1 +1,1 @@
-Skillsearch skill suggestion
+Skill suggestion
