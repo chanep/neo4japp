@@ -10,11 +10,13 @@ const asyncEachLimit = P.promisify(async.eachLimit);
 
 const pendingApprovalsTemplate = "pending-approvals";
 const approvalRequestTemplate = "approval-request";
+const skillSuggestionTemplate = "skill-suggestion";
 const emailLink = config.webBaseUrl + '/#/managerhome';
 
 module.exports = {
     sendPendingApprovalsEmail: sendPendingApprovalsEmail,
-    sendApprovalRequestEmail: sendApprovalRequestEmail
+    sendApprovalRequestEmail: sendApprovalRequestEmail,
+    sendSkillSuggestionEmail: sendSkillSuggestionEmail
 };
 
 function sendPendingApprovalsEmail(){
@@ -28,7 +30,7 @@ function sendPendingApprovalsEmail(){
             return asyncEachLimit(approvers, 20, (approver, callback) => {
                 const toAddress = buildAddress(approver);
                 
-                const data = {
+                const bodyData = {
                     first: approver.first,
                     employees: approver.pendingApprovalEmployees,
                     link: emailLink
@@ -39,7 +41,7 @@ function sendPendingApprovalsEmail(){
                     to: toAddress
                 };
 
-                emailSender.send(mailData, pendingApprovalsTemplate, data)
+                emailSender.send(mailData, pendingApprovalsTemplate, bodyData)
                     .then(() => {
                         info.sent++;
                         callback();
@@ -62,7 +64,7 @@ function sendApprovalRequestEmail(resourceManager, employeeId){
             const approvers = employee.approvers;
             let promises = [];
             for(let approver of approvers){
-                const data = {
+                const bodyData = {
                     approverFirst: approver.first,
                     rmFullname: resourceManager.fullname,
                     employeeFullname: employee.fullname,
@@ -76,11 +78,30 @@ function sendApprovalRequestEmail(resourceManager, employeeId){
                     replyTo: buildAddress(resourceManager)
                 };
 
-                promises.push(emailSender.send(mailData, approvalRequestTemplate, data))
+                promises.push(emailSender.send(mailData, approvalRequestTemplate, bodyData))
             }
 
             return P.all(promises);
         });
+}
+
+function sendSkillSuggestionEmail(user, skillName, skillType, decription){
+    const bodyData = {
+        userName: user.fullname,
+        skillName: skillName,
+        skillType: skillType,
+        decription: decription
+    };
+
+    const userAddress = `"${user.fullname}" <${user.email}>`;
+    const mailData = {
+        from: config.mail.fromAddress,
+        to: config.mail.adminAddress,
+        cc: userAddress,
+        replyTo: userAddress
+    };
+
+    return emailSender.send(mailData, skillSuggestionTemplate, bodyData);
 }
 
 

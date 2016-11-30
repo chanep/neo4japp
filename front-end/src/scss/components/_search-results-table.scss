@@ -421,6 +421,89 @@
     display: block;
 }
 
+.suggest {
+    text-align: center;
+    padding: em(15);
+    font-weight: bold;
+    text-transform: uppercase;
+
+    span {
+        font-size: em(12);
+        cursor: pointer;
+    }
+}
+
+.OverlayClass {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: transparent;
+}
+
+.ModalClass {
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%);
+    width: 30rem;
+
+    .modal-header {
+        text-align: right;
+        margin: .6rem;
+        position: relative;
+
+        .modal-close {
+            cursor: pointer;
+            position: absolute;
+            z-index: 100;
+            top: 33px;
+            right: 13px;
+            font-size: 18px;
+        }
+    }
+
+    .modal-contents {
+        background-color: #f3f3f4;
+        max-height: 30rem;
+        padding: 2.75rem;
+
+        h2 {
+            font-size: 1rem;
+            font-weight: 400;
+        }
+
+        div {
+            padding: 1rem 0;
+            color: $GREY-FONT;
+            input, textarea {
+                width: 100%;
+            }
+
+            textarea {
+                resize: none;
+                height: 6rem;
+            }
+
+            input {
+                height: 2rem;
+            }
+        }
+
+        button {
+            font-size: .95em;
+            font-weight: 100;
+            color: $GREY-FONT;
+            border: 0;
+            background-color: #e7e7e8;
+            padding: .75em 0;
+            cursor: pointer;
+            width: 100%;
+        }
+    }
+}
+
 .skill-level-grid {
     a:link {
         text-decoration: inherit;

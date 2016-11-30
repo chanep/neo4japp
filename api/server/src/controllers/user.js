@@ -7,6 +7,7 @@ const roles = require('../models/roles');
 const userDa = new (require('../data-access/user'));
 const approverDa = new (require('../data-access/approver'));
 const rManagerDa = new (require('../data-access/resource-manager'));
+const messagingService = require('../services/messaging');
 
 class UserController extends BaseController{
 
@@ -169,7 +170,7 @@ class UserController extends BaseController{
     @apiDescription User add an interest for himself
     @apiGroup Users
 
-    @apiParam {String} interestName 
+    @apiParam {string} interestName 
     
     @apiSuccessExample {json} Success-Response:
     HTTP/1.1 200 OK
@@ -219,6 +220,36 @@ class UserController extends BaseController{
                         });
 
         this._respondPromiseDelete(req, res, promise);
+    }
+
+    /**
+    @api {put} /api/user/skill-suggestion 9 Suggest skill
+    @apiDescription Send an email to Skillsearch admin to suggest a skill addition
+    @apiGroup Users
+
+    @apiParam {string} skillName
+    @apiParam {string} skillType skill, tool or industry
+    @apiParam {string} description
+    
+    @apiSuccessExample {json} Success-Response:
+    HTTP/1.1 200 OK
+    {
+        status: "success",
+        data: "email sent"
+    }
+    */
+    suggestSkill(req, res, next){
+        const user = req.session.user;
+        const skillName = req.body.skillName;
+        const skillType = req.body.skillType;
+        const description = req.body.description;
+
+        let promise = messagingService.sendSkillSuggestionEmail(user, skillName, skillType, description)
+            .then(() => {
+                return "email sent";
+            });
+
+        this._respondPromise(req, res, promise);
     }
 
 
