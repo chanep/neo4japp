@@ -90,10 +90,16 @@ class Search extends React.Component {
       this.addPill = this.addPill.bind(this);
       this.clearSearchField = this.clearSearchField.bind(this);
       this.closeSearch = this.closeSearch.bind(this);
+      this.externalAddPill = this.externalAddPill.bind(this);
     }
 
     componentDidMount() {
+      let that = this;
+
       window.addEventListener('keydown', this.closeSearch, false);
+      window.addEventListener('add-pill', function (e) {
+        that.externalAddPill(e.detail.id, e.detail.name, e.detail.type);
+      }, false);
     }
 
     closeSearch(e) {
@@ -300,6 +306,25 @@ class Search extends React.Component {
       this.hideResults();
       this.clearSearchField();
       this.setState({ chosenItems: []});
+    }
+
+    externalAddPill(id, name, type) {
+      var chosenItems = this.state.chosenItems,
+          repeated = false;
+
+      chosenItems.forEach(function (v) {
+        if (v.id == id || v.name == name) {
+          repeated = true;
+        }
+      });
+
+      if (!repeated) {
+        // Add pill only if its a valid item and it has not been added already
+        chosenItems.push({ "id": id, "name": name, "type": type });
+        this.clearSearchField();
+      }
+
+      this.forceUpdate();
     }
 
     addPill(chosenItems) {
