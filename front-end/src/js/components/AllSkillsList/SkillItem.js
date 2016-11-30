@@ -15,6 +15,22 @@ export default class SkillItem extends React.Component {
         	parent: null,
         	open: false
         };
+
+        this.addSkillPill = this.addSkillPill.bind(this);
+    }
+
+    addSkillPill(id, name, type) {
+        document.getElementById('querySearch').value = name;
+
+        var event = new CustomEvent('add-pill', {
+            detail: {
+                'id': id,
+                'name': name,
+                'type': type
+            }
+        });
+
+        window.dispatchEvent(event);
     }
 
     componentDidMount() {
@@ -66,11 +82,9 @@ export default class SkillItem extends React.Component {
                     <div className="skill-level-grid">
                         {this.state.data.skills.map((skill, key) =>
                             <div className="skill-level-grid__levels col -col-12 -col-no-gutter" key={key}>
-                                <Link to={"/searchresults/skills/" + skill.id}>
-                                    <div className="col -col-12">
-                                        <span className="table-header">{skill.name}</span>
-                                    </div>
-                                </Link>
+                                <div onClick={this.addSkillPill.bind(this, skill.id, skill.name, this.state.data.type)} className="skill-item col -col-12">
+                                    <span className="table-header">{skill.name}</span>
+                                </div>
                             </div>
                         )}
                     </div>
