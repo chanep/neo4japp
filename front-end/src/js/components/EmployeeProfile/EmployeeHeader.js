@@ -179,7 +179,7 @@ export default class EmployeeHeader extends React.Component {
 
         if (this.state.interest.trim().length >= ENV().interests.minimumInterestLength) {
             this.state.user.interests.forEach(function (interest) {
-                if (interest.name == that.state.interest) {
+                if (interest.name == that.state.interest.toLowerCase()) {
                     alreadyAdded = true;
                 }
             });
@@ -187,7 +187,7 @@ export default class EmployeeHeader extends React.Component {
             if (!alreadyAdded) {
                 if (!this.state.addingInterest) {
                     this.setState({ "addingInterest": true });
-                    this.addInterestQuery(this.state.interest);
+                    this.addInterestQuery(this.state.interest.toLowerCase());
                     this.setState({ "suggestedInterest": null });
                 }
             }
