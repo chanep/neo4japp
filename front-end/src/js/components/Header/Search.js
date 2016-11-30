@@ -314,7 +314,7 @@ class Search extends React.Component {
         for (var i = 0; i < results.length; i++) {
           var element = results[i];
 
-          if (element.name.trim().toLowerCase() == query.trim().toLowerCase()) {
+          if (element.name.trim() == query.trim()) {
             name = element.name; // Copy to mantain letter case
             id = element.id;
             type = element.type;
@@ -421,7 +421,7 @@ class Search extends React.Component {
 
         var item = "";
         if (results.length > 0) {
-          item = results[selection]['name'].trim().toLowerCase();
+          item = results[selection]['name'].trim();
 
           results.forEach(function (v) {
             delete v.suggested
