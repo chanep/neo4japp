@@ -422,7 +422,7 @@
 }
 
 .suggest {
-    text-align: center;
+    text-align: right;
     padding: em(15);
     font-weight: bold;
     text-transform: uppercase;
@@ -492,6 +492,7 @@
         }
 
         button {
+            margin-top: 1rem;
             font-size: .95em;
             font-weight: 100;
             color: $GREY-FONT;
@@ -500,6 +501,11 @@
             padding: .75em 0;
             cursor: pointer;
             width: 100%;
+        }
+
+        .failed-attempt {
+            color: red;
+            font-weight: bold;
         }
     }
 }
