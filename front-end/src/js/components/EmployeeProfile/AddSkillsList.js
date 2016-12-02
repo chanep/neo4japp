@@ -9,6 +9,7 @@ import Modal from 'react-modal';
 import AddSkillItem from './AddSkillItem';
 import SkillsServices from '../../services/SkillsServices';
 import BasePage from '../../pages/BasePage';
+import AlertContainer from 'react-alert';
 
 export default class AddSkillsList extends React.Component {
     constructor(props) {
@@ -20,7 +21,8 @@ export default class AddSkillsList extends React.Component {
 
         this.state = {
             selectedGroup: 0,
-        	data: []
+        	data: [],
+            failedAttempt: false
         };
 
         this.skillsServices = new SkillsServices();
@@ -43,7 +45,7 @@ export default class AddSkillsList extends React.Component {
 
     openModal () { this.setState({open: true}); }
 
-    closeModal () { this.setState({open: false}); }
+    closeModal () { this.setState({ 'open': false, 'failedAttempt': false }); }
 
     submitSuggestion () {
         var name = document.getElementById('suggestion-name').value.trim(),
@@ -51,12 +53,19 @@ export default class AddSkillsList extends React.Component {
 
         if (name != '') {
             this.skillsServices.SuggestSkill(name, description).then(data => {
-                this.setState({open: false});
+                this.setState({'open': false, 'failedAttempt': false });
+
+                // clean up fields and show success message
+                msg.show('Suggestion sent', {
+                    time: 3500,
+                    type: 'success',
+                    icon: <img src="/img/success-ico.png" />
+                });
             }).catch(data => {
-              
                 console.log("skills error", data);
-              
             });
+        } else {
+            this.setState({ 'failedAttempt': true });
         }
     }
 
@@ -78,7 +87,7 @@ export default class AddSkillsList extends React.Component {
                         <div className="selectCategory">Please, select a category</div>
                     }
                     {this.basePage.GetCurrentUserType() == 'employee' ?
-                        <div onClick={this.openModal} className="suggest"><span>Suggest skill/tool</span></div>
+                        <div onClick={this.openModal} className="suggest"><span>Suggest skill/tool &#43;</span></div>
                     : false}
                 </div>
                 <Modal
@@ -99,6 +108,9 @@ export default class AddSkillsList extends React.Component {
                             Description: <br/>
                             <textarea id="suggestion-description" />
                         </div>
+                        {this.state.failedAttempt ?
+                            <span className="failed-attempt">Skill/name cannot be empty.</span>
+                        : false}
                         <button onClick={this.submitSuggestion} value="Submit">Submit</button>
                     </div>
                 </Modal>
