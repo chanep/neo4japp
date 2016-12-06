@@ -93,7 +93,7 @@ vows.describe('Resource Manager api test')
                 throw err;
             }
             let users = body.data;
-            //console.log('body', JSON.stringify(body));
+            console.log('body', JSON.stringify(body));
             assertUsers(users);
             assert.equal(users.length, 2);
             assert.equal(users[0].id, e[1].id);
@@ -327,7 +327,10 @@ function assertUsers(users){
         assert.isArray(u.industries);
         assert.isArray(u.interests);
         for(let s of u.skills){
-            assert.isNumber(s.level);
+            if(!s.want)
+                assert.isNumber(s.level);
+            else
+                assert.isTrue(!s.level);
             assert.isString(s.name);
         }
     }

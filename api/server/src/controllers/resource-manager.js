@@ -198,12 +198,14 @@ HTTP/1.1 200 OK
             id: 4844, 
             name: "Angular", 
             level: 4,
-            approved: true
+            approved: true,
+            want: false
         },{ 
             id: 4844, 
             name: "Php", 
             level: 3,
-            approved: false}]
+            approved: false,
+            want: false}]
         industries: [],
         interests: [{id: 4354, name "Football"}]
     }, {
