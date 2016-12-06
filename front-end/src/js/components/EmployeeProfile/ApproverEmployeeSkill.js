@@ -101,16 +101,16 @@ export default class ApproverEmployeeSkill extends React.Component {
                         <input className="readOnly" type="checkbox" label="skill-want" checked={want} {...opts} />
                     </span>
                 </div>
-                <div title={verified?"Approved by " + approver: "Verification pending"} className={"col -col-2 " + (this.state.data.knowledge.level >= 1? "skill-level-box " + (verified? "level-verified": "level-non-verified"): "")}>
+                <div title={verified?"Approved by " + approver: "Verification pending"} className={"col -col-2 " + (this.state.data.knowledge.level === 1? "skill-level-box " + (verified? "level-verified": "level-non-verified"): "")}>
                     <span className="skill-title"></span>
                 </div>
-                <div title={verified?"Approved by " + approver: "Verification pending"} className={"col -col-2 " + (this.state.data.knowledge.level >= 2? "skill-level-box " + (verified? "level-verified": "level-non-verified"): "")}>
+                <div title={verified?"Approved by " + approver: "Verification pending"} className={"col -col-2 " + (this.state.data.knowledge.level === 2? "skill-level-box " + (verified? "level-verified": "level-non-verified"): "")}>
                     <span className="skill-title"></span>
                 </div>
-                <div title={verified?"Approved by " + approver: "Verification pending"} className={"col -col-2 " + (this.state.data.knowledge.level >= 3? "skill-level-box " + (verified? "level-verified": "level-non-verified"): "")}>
+                <div title={verified?"Approved by " + approver: "Verification pending"} className={"col -col-2 " + (this.state.data.knowledge.level === 3? "skill-level-box " + (verified? "level-verified": "level-non-verified"): "")}>
                     <span className="skill-title"></span>
                 </div>
-                <div title={verified?"Approved by " + approver: "Verification pending"} className={"col -col-2 " + (this.state.data.knowledge.level >= 4? "skill-level-box " + (verified? "level-verified": "level-non-verified"): "")}>
+                <div title={verified?"Approved by " + approver: "Verification pending"} className={"col -col-2 " + (this.state.data.knowledge.level === 4? "skill-level-box " + (verified? "level-verified": "level-non-verified"): "")}>
                     <span className="skill-title"></span>
                 </div>
                 <div className="col -col-1 remove-skill">

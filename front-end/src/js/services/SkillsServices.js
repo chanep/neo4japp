@@ -20,4 +20,8 @@ export default class SkillsServices extends ServicesBase {
 	GetSkillsByIds(ids, limit) {
 		return super.callGetServices('skill', {ids: ids, limit: limit});
 	}
+
+	SuggestSkill(skillName, skillDescription) {
+		return super.callPutServices('user/skill-suggestion', { skillName: skillName, skillType: 'skill', description: skillDescription });
+	}
 }

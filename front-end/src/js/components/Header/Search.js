@@ -90,10 +90,16 @@ class Search extends React.Component {
       this.addPill = this.addPill.bind(this);
       this.clearSearchField = this.clearSearchField.bind(this);
       this.closeSearch = this.closeSearch.bind(this);
+      this.externalAddPill = this.externalAddPill.bind(this);
     }
 
     componentDidMount() {
+      let that = this;
+
       window.addEventListener('keydown', this.closeSearch, false);
+      window.addEventListener('add-pill', function (e) {
+        that.externalAddPill(e.detail.id, e.detail.name, e.detail.type);
+      }, false);
     }
 
     closeSearch(e) {
@@ -302,6 +308,25 @@ class Search extends React.Component {
       this.setState({ chosenItems: []});
     }
 
+    externalAddPill(id, name, type) {
+      var chosenItems = this.state.chosenItems,
+          repeated = false;
+
+      chosenItems.forEach(function (v) {
+        if (v.id == id || v.name == name) {
+          repeated = true;
+        }
+      });
+
+      if (!repeated) {
+        // Add pill only if its a valid item and it has not been added already
+        chosenItems.push({ "id": id, "name": name, "type": type });
+        this.clearSearchField();
+      }
+
+      this.forceUpdate();
+    }
+
     addPill(chosenItems) {
         // Choose item
         let query = document.getElementById('querySearch').value.trim();
@@ -314,7 +339,7 @@ class Search extends React.Component {
         for (var i = 0; i < results.length; i++) {
           var element = results[i];
 
-          if (element.name.trim().toLowerCase() == query.trim().toLowerCase()) {
+          if (element.name.trim() == query.trim()) {
             name = element.name; // Copy to mantain letter case
             id = element.id;
             type = element.type;
@@ -421,7 +446,7 @@ class Search extends React.Component {
 
         var item = "";
         if (results.length > 0) {
-          item = results[selection]['name'].trim().toLowerCase();
+          item = results[selection]['name'].trim();
 
           results.forEach(function (v) {
             delete v.suggested
