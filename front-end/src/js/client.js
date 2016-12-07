@@ -24,26 +24,26 @@ ReactDOM.render(
 	<Router history={hashHistory}>
 		<Route path="/" component={Layout}>
 			<IndexRoute component={Login}></IndexRoute>
-                  <Route path="/login" component={Login}></Route>
-                  <Route path="/resourceshotspot" component={ResourceHotspot}></Route>
-                  <Route path="/allocations" component={Layout}></Route>
-                  <Route path="/searchresults" component={SearchResults}>
-                       <Route path="/searchresults/skills/:skillsIds" component={SearchResults}/>
-                       <Route path="/searchresults/interests/:interestsIds" component={SearchResults}/>
-                       <Route path="/searchresults/skills/:skillsIds/locations/:locationsIds" component={SearchResults}/>
-                       <Route path="/searchresults/interests/:interestsIds/locations/:locationsIds" component={SearchResults}/>
-                       <Route path="/searchresults/skills/:skillsIds/interests/:interestsIds" component={SearchResults}/>
-                       <Route path="/searchresults/skills/:skillsIds/interests/:interestsIds/locations/:locationsIds" component={SearchResults}/>
-                  </Route>
-                  <Route path="/myprofile" component={EmployeeProfile}></Route>
-                  <Route path="/myprofile/myskills" component={MySkills}></Route>
-                  <Route path="/employee/:employeeID" component={EmployeeProfile}/>
-                  <Route path="/employee/:employeeID/verification" component={EmployeeVerification}/>
-                  <Route path="/managerhome" component={ManagerHome}></Route>
-                  <Route path="/resultsprofile" component={ResultsProfile}></Route>
-                  <Route path="/searchallskills" component={SearchAllSkills}></Route>
-                  <Route path="/faq" component={FAQ}></Route>
-                  <Route path="/error" component={PageError}></Route>
-		</Route>
+        <Route path="/login" component={Login}></Route>
+        <Route path="/resourceshotspot" component={ResourceHotspot}></Route>
+        <Route path="/allocations" component={Layout}></Route>
+        <Route path="/searchresults" component={SearchResults}>
+             <Route path="/searchresults/skills/:skillsIds" component={SearchResults}/>
+             <Route path="/searchresults/interests/:interestsIds" component={SearchResults}/>
+             <Route path="/searchresults/skills/:skillsIds/locations/:locationsIds" component={SearchResults}/>
+             <Route path="/searchresults/interests/:interestsIds/locations/:locationsIds" component={SearchResults}/>
+             <Route path="/searchresults/skills/:skillsIds/interests/:interestsIds" component={SearchResults}/>
+             <Route path="/searchresults/skills/:skillsIds/interests/:interestsIds/locations/:locationsIds" component={SearchResults}/>
+        </Route>
+        <Route path="/myprofile" component={EmployeeProfile}></Route>
+        <Route path="/myprofile/myskills" component={MySkills}></Route>
+        <Route path="/employee/:employeeID" component={EmployeeProfile}/>
+        <Route path="/employee/:employeeID/verification" component={EmployeeVerification}/>
+        <Route path="/managerhome" component={ManagerHome}></Route>
+        <Route path="/resultsprofile" component={ResultsProfile}></Route>
+        <Route path="/searchallskills" component={SearchAllSkills}></Route>
+        <Route path="/faq" component={FAQ}></Route>
+        <Route path="/error" component={PageError}></Route>
+		  </Route>
 	</Router>,
 app);
