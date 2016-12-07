@@ -53,8 +53,8 @@ export default class FiltersSideBar extends React.Component {
         var self = this;
 
         return (
-            <div className="filters col -col-3 -col-no-gutter filters__backgrounded">          	
-                <div className="filterContent">
+            <div className="addSkillsFilter filters col -col-3 filters__backgrounded">
+                <div className="filterType">
                     <span className="filter-title">Locations</span> <span className="filter-title-group all-bottom" onClick={self.allSelected.bind(self)}>(All)</span>
                     <ul>
                         {
@@ -69,6 +69,23 @@ export default class FiltersSideBar extends React.Component {
                                 </li>
                             })
                         }
+                    </ul>
+                </div>
+                <div className="filterType">
+                    <span className="filter-title">Levels</span> <span className="filter-title-group all-bottom">(All)</span>
+                    <ul>
+                        <li className="filter-option">
+                            <label><input type="radio" name="skillstools" /> Exec</label>
+                        </li>
+                        <li className="filter-option">
+                            <label><input type="radio" name="skillstools" /> Senior</label>
+                        </li>
+                        <li className="filter-option">
+                            <label><input type="radio" name="skillstools" /> Mid</label>
+                        </li>
+                        <li className="filter-option">
+                            <label><input type="radio" name="skillstools" /> Low</label>
+                        </li>
                     </ul>
                 </div>
             </div>
