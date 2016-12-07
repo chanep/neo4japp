@@ -34,23 +34,43 @@ class UserDa extends BaseDa{
                     match (n)-[:${officeRelL}]->(o),
                     (n)-[:${departmentRelL}]->(d),
                     (n)-[:${positionRelL}]->(p)
-
+                    optional match (n)-[:${allocationRelL}]->(al)
                     optional match (n)-[:${approverRelL}]->(a)
                     optional match (a)-[:${departmentRelL}]->(ad)
                     optional match (a)-[:${positionRelL}]->(ap)
-
                     optional match (n)-[:${rmRelL}]->(rm)
                     optional match (rm)-[:${departmentRelL}]->(rmd)
                     optional match (rm)-[:${positionRelL}]->(rmp)
 
-                    optional match (n)-[:${allocationRelL}]->(al)
+                    with n, o, d, p, al, 
+                    collect(distinct {_:a, department: ad, position: ap}) as approvers, 
+                    collect(distinct {_:rm, department: rmd, position: rmp}) as resourceManagers
+
                     optional match (n)-[:${clientRelL}]->(c)
+
+                    with n, o, d, p, al, approvers, resourceManagers,
+                    collect(distinct c) as clients
+                    
                     optional match (n)-[:${interestRelL}]->(i)
-                    optional match (n)-[:${kRelL}]->(ind)-[:${sgRelL}]->(sg) where sg.type = 'industry' 
+
+                    with n, o, d, p, al, approvers, resourceManagers, clients,
+                    collect(distinct i) as interests
+
+                    optional match (n)-[:${kRelL}]->(ind)-[:${sgRelL}]->(sg) where sg.type = 'industry'
+                    
+                    with n, o, d, p, al, approvers, resourceManagers, clients, interests,
+                    collect(distinct ind) as industries
+
                     optional match (n)-[kt:${kRelL}]->(s)-[:${sgRelL}]->(sg2) where sg2.type in ['tool', 'skill'] and kt.want = false
+
+                    with n, o, d, p, al, approvers, resourceManagers, clients, interests, industries,
+                    count(distinct s) as skillCount
+
                     optional match (n)-[ku:${kRelL}]->(su)-[:${sgRelL}]->(sg3) where sg3.type in ['tool', 'skill'] and (ku.approved is null or ku.approved = false) and ku.want = false
-                    with n, o, d, p, al, collect(distinct {_:a, department: ad, position: ap}) as approvers, collect(distinct {_:rm, department: rmd, position: rmp}) as resourceManagers, collect(distinct c) as clients, collect(distinct i) as interests,
-                        collect(distinct ind) as industries, count(distinct s) as skillCount, count(distinct su) as unapprovedSkillCount
+
+                    with n, o, d, p, al, approvers, resourceManagers, clients, interests, industries, skillCount, 
+                    count(distinct su) as unapprovedSkillCount
+
                     return {    
                                 id: id(n), username: n.username, type: n.type, email: n.email, phonelistId: n.phonelistId,
                                 fullname: n.fullname, roles: n.roles, phone: n.phone, image: n.image, disabled: n.disabled, lastUpdate: n.lastUpdate,
