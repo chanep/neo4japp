@@ -475,10 +475,16 @@
         }
 
         div {
-            padding: 1rem 0;
+            padding: 1rem 0 0 0;
             color: $GREY-FONT;
             input, textarea {
                 width: 100%;
+                border: .0625em solid #e7e7e8;
+                font-size: .95em;
+                font-weight: 100;
+                color: #868686;
+                padding: 1em 1.3125em;
+                vertical-align: top;
             }
 
             textarea {
@@ -487,7 +493,7 @@
             }
 
             input {
-                height: 2rem;
+                height: 50px;
             }
         }
 
