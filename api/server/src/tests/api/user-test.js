@@ -242,6 +242,29 @@ vows.describe('User api test')
     }
 })
 
+.addBatch({
+    '7. Get all employee levels': {
+        topic: function () {
+            let userId = data.employee.id;
+            req.get('user/level', 
+                this.callback);
+        },
+        'response is 200': testHelper.assertSuccess(),
+        'should return user details including knowledges ': function (err, result, body) {
+            if (err) {
+                console.log("error", err);
+                throw err;
+            }
+            let levels = body.data;
+
+            //console.log('levels', JSON.stringify(levels));
+
+            assert.isArray(levels);
+            assert.isTrue(levels.indexOf("Mid-level") >= 0);
+        }
+    }
+})
+
 
 .export(module);
 

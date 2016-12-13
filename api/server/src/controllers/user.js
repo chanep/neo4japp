@@ -102,9 +102,27 @@ class UserController extends BaseController{
         this._respondPromise(req, res, promise);
     }
 
+    /**
+    @api {get} /api/user/level 5 Employee levels
+    @apiDescription Return all employee levels
+    @apiGroup Users
+
+    @apiSuccessExample {json} Success-Response:
+    HTTP/1.1 200 OK
+    {
+        status: "success",
+        data: ["Junior", "Mid-Level", "Senior", "Excecutive"]
+    }
+    */
+    findAllEmployeeLevels(req, res, next){
+        let promise = userDa.findAllEmployeeLevels();
+            
+        this._respondPromise(req, res, promise);
+    }
+
 
     /**
-    @api {put} /api/user/knowledge 5 Set Knowledge
+    @api {put} /api/user/knowledge 6 Set Knowledge
     @apiDescription User sets his knowledge level in one skill
     @apiGroup Users
 
@@ -139,7 +157,7 @@ class UserController extends BaseController{
     }
 
     /**
-    @api {delete} /api/user/knowledge 6 Delete Knowledge
+    @api {delete} /api/user/knowledge 7 Delete Knowledge
     @apiDescription User deletes his knowledge in one skill
     @apiGroup Users
 
@@ -166,7 +184,7 @@ class UserController extends BaseController{
     }
 
     /**
-    @api {put} /api/user/interest 7 Add Interest
+    @api {put} /api/user/interest 8 Add Interest
     @apiDescription User add an interest for himself
     @apiGroup Users
 
@@ -196,7 +214,7 @@ class UserController extends BaseController{
     }
 
     /**
-    @api {delete} /api/user/interest 8 Remove Interest
+    @api {delete} /api/user/interest 9 Remove Interest
     @apiDescription User removes one of his interests
     @apiGroup Users
 
@@ -223,7 +241,7 @@ class UserController extends BaseController{
     }
 
     /**
-    @api {put} /api/user/skill-suggestion 9 Suggest skill
+    @api {put} /api/user/skill-suggestion 10 Suggest skill
     @apiDescription Send an email to Skillsearch admin to suggest a skill addition
     @apiGroup Users
 

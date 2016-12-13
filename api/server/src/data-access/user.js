@@ -155,6 +155,16 @@ class UserDa extends BaseDa{
         return this.findOne({username: username});
     }
 
+    findAllEmployeeLevels(){
+        let label = this.labelsStr;
+
+		let cmd = `match (n:${label})
+            return distinct n.level
+            `;
+        let params = {};
+		return this.query(cmd, params, null);
+    }
+
     setOffice(userId, officeId){
         return this.relate(userId, officeId, 'office');
     }
