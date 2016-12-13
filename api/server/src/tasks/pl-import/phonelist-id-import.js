@@ -48,11 +48,10 @@ class PhonelistIdImportTask extends BaseTask{
     _getUsernameIdMap(plEmployees){
         console.log("employees count", plEmployees.length)
         let usernameIdmap = {};
-        let usernameIdmapLower = {};
         plEmployees.forEach(e => {
             let username = e.ADkey.toLowerCase();
             if(!usernameIdmap[username])
-                usernameIdmap[username] = e.ID;
+                usernameIdmap[username] = {phonelistId: e.ID, level: e.level};
         });
         return usernameIdmap;
     }
@@ -120,10 +119,10 @@ class PhonelistIdImportTask extends BaseTask{
     }
     _updateUser(user){
         let info = {updated: 0, skipped: 0, errors: 0};
-        let phonelistId = this.usernameIdmap[user.username];
-        let existsInPhonelist = !!phonelistId;
+        let phonelistUser = this.usernameIdmap[user.username];
+        let existsInPhonelist = !!phonelistUser;
         
-        if(phonelistId){
+        if(phonelistUser){
             delete this.usernameIdmap[user.username];
         }
 
@@ -133,9 +132,10 @@ class PhonelistIdImportTask extends BaseTask{
             mustUpdate = true;
             updateData.disabled = true;
         }
-        if(existsInPhonelist && (phonelistId != user.phonelistId || user.disabled)){
+        if(existsInPhonelist && (phonelistUser.phonelistId != user.phonelistId || phonelistUser.level != user.level || user.disabled)){
             mustUpdate = true;
-            updateData.phonelistId = phonelistId;
+            updateData.phonelistId = phonelistUser.phonelistId;
+            updateData.level = phonelistUser.level;
             updateData.disabled = false;
         }
             

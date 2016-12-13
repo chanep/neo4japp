@@ -72,6 +72,7 @@ let user = new Model(
         fullname: Joi.string().required(),
         first: Joi.string().allow(null),
         last: Joi.string().allow(null),
+        level: Joi.string().allow(null),
         roles: Joi.array().default([]).items(Joi.string()),
         phone: Joi.string().allow(null),
         image: Joi.string().allow(null),

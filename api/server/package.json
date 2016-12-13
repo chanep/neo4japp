@@ -34,7 +34,7 @@
     "morgan": "^1.7.0",
     "neo4j-driver": "^1.1.0-M02",
     "node-schedule": "^1.2.0",
-    "nodemailer": "^2.6.4",
+    "nodemailer": "^2.7.0",
     "postal": "^2.0.5",
     "qs": "^6.3.0",
     "request": "^2.79.0",

@@ -37,7 +37,7 @@ function runTask(taskName, closeDb){
 				if(closeDb)
 					db.close();
 			});
-		return P.resolve(`Task ${taskName} started...`);
+		return P.resolve();
 	} catch(error) {
 		const e = new errors.BadRequestError(`Task ${taskName} not found`, error);
 		return P.reject(e);
