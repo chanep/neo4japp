@@ -96,7 +96,7 @@ class Search extends React.Component {
     componentDidMount() {
       let that = this;
 
-      window.addEventListener('keydown', this.closeSearch, false);
+      window.addEventListener('keyup', this.closeSearch, false);
       window.addEventListener('add-pill', function (e) {
         that.externalAddPill(e.detail.id, e.detail.name, e.detail.type);
       }, false);
