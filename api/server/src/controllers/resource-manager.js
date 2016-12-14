@@ -17,10 +17,13 @@ class ResourceManagerController extends BaseController{
     @apiGroup Resource Managers
 
     @apiParam (Filter) {Array} skills Array with skill ids (tools, skills and industries)
+    @apiParam (Filter) {Array} [levels] Array with employee levels
     @apiParam (Filter) {Array} [interests] Array with interests ids
+    @apiParam (Filter) {Array} [clients] Array with clients ids
     @apiParam (Filter) {Array} [offices] Array with office ids
     @apiParam (Filter) {number} [skip] Skips n Users (for paged result)
     @apiParam (Filter) {number} [limit] Limits then number or results. Default is 20  (for paged result)
+    @apiParam (Filter) {String="relevance", "matchedItems", "allocation", "fullname_asc", "fullname_desc", "office_asc", "office_desc"} [orderBy] Orders result
     
     @apiUse usersResponse
     */
@@ -38,11 +41,12 @@ class ResourceManagerController extends BaseController{
         let filters = {};
         filters.offices = search.offices;
         filters.interests = search.interests;
+        filters.clients = search.clients;
         
         let skip = search.skip || 0;
         let limit = search.limit || 20;
 
-        let promise = resourceManagerDa.findUsersBySkill(skillIds, filters, skip, limit);
+        let promise = resourceManagerDa.findUsersBySkill(skillIds, filters, skip, limit, search.orderBy);
 
         this._respondPromise(req, res, promise);   
     }
@@ -193,6 +197,8 @@ HTTP/1.1 200 OK
             weekHours:[30,30,30,30], 
             workingWeekHours:[40,40,40,40], 
             startDate: ["09-05-2016","09-12-2016","09-19-2016","09-26-2016"]},
+        matchedItems: 3,
+        searchedItems: 4,
         score: 15,
         skills: [{ 
             id: 4844, 
@@ -207,7 +213,8 @@ HTTP/1.1 200 OK
             approved: false,
             want: false}]
         industries: [],
-        interests: [{id: 4354, name "Football"}]
+        interests: [{id: 4354, name "Football"}],
+        clients: [{id: 2354, name "Manaos"}]
     }, {
        ... 
     }]

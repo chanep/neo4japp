@@ -50,12 +50,8 @@ let client = new Model(
     ['Client'],
     {
         id: Joi.number(),
-        phonelistId: Joi.number().required(),
-        name: Joi.string().required(),
-        short: Joi.string().required(),
-        office: Joi.string(),
-        familyID: Joi.string(),
-        family: Joi.string()
+        phonelistId: Joi.number().allow(null),
+        name: Joi.string().required()
     }
 );
 

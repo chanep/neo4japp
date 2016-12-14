@@ -93,7 +93,7 @@ vows.describe('Resource Manager api test')
                 throw err;
             }
             let users = body.data;
-            console.log('body', JSON.stringify(body));
+            //console.log('body', JSON.stringify(body));
             assertUsers(users);
             assert.equal(users.length, 2);
             assert.equal(users[0].id, e[1].id);
@@ -234,6 +234,34 @@ vows.describe('Resource Manager api test')
 })
 
 .addBatch({
+    '5b. Find users by skills orderby fullname desc': {
+        topic: function () {
+            let s = data.skills;
+            var search = {
+                skills: [s[0].id, s[2].id],
+                orderBy: "fullname_desc"
+            };
+            var queryString = qs.stringify(search, { encode: false });
+
+            req.get('resource-manager/users-by-skill?'+ queryString, 
+                this.callback);
+        },
+        'response is 200': testHelper.assertSuccess(),
+        'should return user with searched skills order by fullname desc': function (err, result, body) {
+            if (err) {
+                console.log("error", err);
+                throw err;
+            }
+            let users = body.data;
+            //console.log('body', JSON.stringify(body));
+            assertUsers(users);
+            assert.equal(users.length, 2);
+            assert.equal(users[1].id, e[0].id);
+        }
+    }
+})
+
+.addBatch({
     '6. Find top skill search': {
         topic: function () {
             var search = {
@@ -253,7 +281,6 @@ vows.describe('Resource Manager api test')
             let skills = body.data;
             //console.log('skills', JSON.stringify(skills));
             assert.isArray(skills);
-            assert.equal(skills.length, 3);
             for(let s of skills){
                 assert.isNumber(s.searches);
             }
@@ -326,6 +353,7 @@ function assertUsers(users){
         assert.isArray(u.approvers);
         assert.isArray(u.industries);
         assert.isArray(u.interests);
+        assert.isArray(u.clients);
         for(let s of u.skills){
             if(!s.want)
                 assert.isNumber(s.level);
