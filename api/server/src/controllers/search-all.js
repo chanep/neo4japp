@@ -6,6 +6,7 @@ const BaseController = require('./base-controller');
 const userDa = new (require('../data-access/user'));
 const skillDa = new (require('../data-access/skill'));
 const interestDa = new(require('../data-access/interest'));
+const clientDa = new(require('../data-access/client'));
 
 class SearchAllController extends BaseController{
 
@@ -36,7 +37,7 @@ class SearchAllController extends BaseController{
         let term = search.term;
         let limit = search.limit || 3;
         
-        let skills, tools, industries, interests, users;
+        let skills, tools, industries, interests, users, clients;
 
         if(term){
             term = term.replace('.', '\\.').replace('*', '\\*').replace('^', '\\^');
@@ -59,6 +60,10 @@ class SearchAllController extends BaseController{
             })
             .then(data => {
                 users = data.data;
+                return clientDa.findByTerm(term, limit);
+            })
+            .then(data => {
+                clients = data.data;
                 return interestDa.findByTerm(term, limit);
             })
             .then(data => {
@@ -68,6 +73,7 @@ class SearchAllController extends BaseController{
                     tools: tools, 
                     industries: industries, 
                     interests: interests, 
+                    clients: clients,
                     users: users
                 };
             })

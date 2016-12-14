@@ -1,4 +1,5 @@
 'use strict'
+const _ = require('lodash');
 const P = require('bluebird');
 const roles = require('../models/roles');
 const UserDa = require('./user');
@@ -8,7 +9,7 @@ const skillGroupModel = require('../models/models').skillGroup;
 
 class ResourceManagerDa extends UserDa{
 
-    findUsersBySkill(skillIds, filters, skip, limit){
+    findUsersBySkill(skillIds, filters, skip, limit, orderBy){
         let label = this.labelsStr;
         let officeRelL = this.model.getRelationByKey("office").label;
         let positionRelL = this.model.getRelationByKey("position").label;
@@ -18,29 +19,55 @@ class ResourceManagerDa extends UserDa{
         let groupLbl = skillModel.getRelationByKey("group").label;
         let kRelL = this.model.getRelationByKey("knowledges").label;
         let interestedIn = this.model.getRelationByKey("interests").label;
+        let workedFor = this.model.getRelationByKey("clients").label;
 
-        let params = {skillIds: skillIds, skip: skip, limit: limit};
+        let params = {skillIds: skillIds, skip: skip, limit: limit};        
 
-        let whereOffices = '';
-        
-        filters = filters || {};
-        if(filters.offices){
-            params.offices = filters.offices;
-            whereOffices = `and id(o) in {offices}`;
+        let defaultFilters = {
+            offices: null,
+            levels: null,
+            interests: [],
+            clients: []
+        };
+
+        params = _.merge(params, defaultFilters, filters);
+
+        orderBy = orderBy || "relevance";
+        let order = "order by score desc, freeHours desc, n.fullname asc";
+        switch (orderBy) {
+            case "relevance":
+                break;
+            case "fullname_asc":
+                order = "order by n.fullname asc, score desc, freeHours desc";
+                break;
+            case "fullname_desc":
+                order = "order by n.fullname desc, score desc, freeHours desc";
+                break;
+            case "office_asc":
+                order = "order by o.acronym asc, score desc, freeHours desc, n.fullname asc";
+                break;
+            case "office_desc":
+                order = "order by o.acronym desc, score desc, freeHours desc, n.fullname asc";
+                break;
+            case "matchedItems":
+                order = "order by matchedItems desc, score desc, freeHours desc, n.fullname asc";
+                break;
+            case "allocation":
+                order = "order by freeHours desc, score desc, n.fullname asc";
+                break;
+            default:
+                break;
         }
 
-        params.interests = [];
-        if(filters.interests){
-            params.interests = filters.interests;
-        }
-
-        let match = `match (n:${label})-[:${officeRelL}]->(o) where not(n.disabled) ${whereOffices}
+        let match = `match (n:${label})-[:${officeRelL}]->(o) where not(n.disabled) 
+                         and ({levels} is null or n.level in {levels}) and ({offices} is null or id(o) in {offices})
                      match (n)-[:${positionRelL}]->(p)
                      optional match (n)-[k:${kRelL}]->(s:${skillL})-[:${groupLbl}]->(sg) where sg.type in ["tool", "skill"] and id(s) in {skillIds}
                      optional match (n)-[:${kRelL}]->(ind:${skillL})-[:${groupLbl}]->(sg2) where sg2.type in ["industry"] and id(ind) in {skillIds}
                      optional match (n)-[:${interestedIn}]->(interest) where id(interest) in {interests}
-                     with n, o, p, k, s, ind, interest
-                     where ((s is not null) or (ind is not null) or (interest is not null))
+                     optional match (n)-[:${workedFor}]->(client) where id(client) in {clients}
+                     with n, o, p, k, s, ind, interest, client
+                     where ((s is not null) or (ind is not null) or (interest is not null) or (client is not null))
                      `;
 
         let countCmd = `${match} return count(distinct n) as count`;
@@ -49,13 +76,16 @@ class ResourceManagerDa extends UserDa{
                     optional match (n)-[:${approverRelL}]->(a)
                     optional match (n)-[:${allocationRelL}]->(al)
                     with n, o, p, al, collect(distinct a) as approvers, 
-                        filter(x IN collect(distinct {_:s, level: k.level, approved: k.approved, want: k.want}) where x._ is not null) as skills,
+                        filter(x IN collect(distinct {id: id(s), name: s.name, level: k.level, approved: k.approved, want: k.want}) where x.id is not null) as skills,
                         collect(distinct ind) as industries,
-                        collect(distinct interest) as interests
-                    with n, o, p, al, approvers, skills, industries, interests,
-                    (reduce(acc = 0, wwh IN al.workingWeekHours | acc + wwh) - reduce(acc = 0, wh IN al.weekHours | acc + wh)) as freeHours,
-                    ( reduce(acc = 0, s IN skills | acc + coalesce(s.level, 0)) + size(industries)*2 + size(interests) ) as score
-                    order by score desc, freeHours desc, n.fullname asc
+                        collect(distinct interest) as interests,
+                        collect(distinct client) as clients
+                    with n, o, p, al, approvers, skills, industries, interests, clients,
+                    ( reduce(acc = 0, wwh IN al.workingWeekHours | acc + wwh) - reduce(acc = 0, wh IN al.weekHours | acc + wh)) as freeHours,
+                    ( reduce(acc = 0, s IN skills | acc + coalesce(s.level, 0)) + size(industries)*2 + size(interests) ) as score,
+                    ( size({skillIds}) + size({interests}) + size({clients}) ) as searchedItems,
+                    ( size(skills) + size(industries) + size(interests) + size(clients) ) as matchedItems
+                    ${order}
                     skip {skip} limit {limit}
                     return {    
                             id: id(n), username: n.username, type: n.type, email: n.email, phonelistId: n.phonelistId,
@@ -67,6 +97,9 @@ class ResourceManagerDa extends UserDa{
                             skills: skills,
                             industries: industries,
                             interests: interests,
+                            clients: clients,
+                            searchedItems: searchedItems,
+                            matchedItems: matchedItems,
                             score: score
                     }`;
 
