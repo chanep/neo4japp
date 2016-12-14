@@ -51,37 +51,42 @@ class SkillDa extends BaseDa{
             'skillName': skill.name
         };
 
-        var resultReturn = {
-            'action': '',
-            'id': 0
-        };
-
-        return super.query(queryStmt, params).then(r => {
-        	var skillDa = new SkillDa();
-
-            if (r.length == 0) {
-                var newSkill = new SkillDa();
-                let obj = {
-                    'name': skill.name
+        return this.query(queryStmt, params).then(skills => {
+            if (skills.length == 0) {
+                let data = {
+                    name: skill.name,
+                    description: skill.description
                 };
-
-                return skillDa.createAndRelate(obj, skill.groupId).then(result => {
-                    resultReturn.id = result.id;
-                    resultReturn.action = 'inserted';
-
-                    return resultReturn;
-                }).catch(err => {
-                    let e = new errors.GenericError("Error creating skill" + obj, err);
-                    console.log(e);
-
-                    resultReturn.action = 'error';
-                    return resultReturn;
-                });
+                return this.createAndRelate(data, skill.groupId)
+                    .then(result => {
+                        let resultReturn = {
+                            id: result.id,
+                            action: 'inserted'
+                        };
+                        return resultReturn;
+                    }).catch(err => {
+                        let e = new errors.GenericError("Error creating skill" + obj, err);
+                        let resultReturn = {
+                            action: 'error'
+                        };
+                        return resultReturn;
+                    });
             }
             else {
-                resultReturn.action = '';
-                resultReturn.id = r[0].id;
-                return resultReturn;
+                return this.update({id: skills[0].id, description: skill.description}, true)
+                    .then(result => {
+                        let resultReturn = {
+                            id: skills[0].id,
+                            action: 'updated'
+                        };
+                        return resultReturn;
+                    }).catch(err => {
+                        let e = new errors.GenericError("Error updating skill", err);
+                        let resultReturn = {
+                            action: 'error'
+                        };
+                        return resultReturn;
+                    });
             }
         });
     }
