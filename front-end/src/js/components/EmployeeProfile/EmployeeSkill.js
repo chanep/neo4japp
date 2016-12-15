@@ -11,13 +11,15 @@ export default class EmployeeSkill extends React.Component {
         super(props);
 
         this.state = {
-        	data: props.skill
+        	data: props.skill,
+            indent: props.indent
         };
     }
 
     componentWillReceiveProps(nextProps) {
     	this.setState({
-    		data: nextProps.skill
+    		data: nextProps.skill,
+            indent: nextProps.indent
     	});
     }
 
@@ -35,29 +37,26 @@ export default class EmployeeSkill extends React.Component {
         }
 
     	return (
-            <div className="skill-level-grid__levels col -col-12 -col-no-gutter">
-                <div className="col -col-2">
-                    <span className="sub-table-header">{this.state.data.name}</span>
+            <div className="skill-level-grid__levels">
+                <div className="col -col-3">
+                    <span className={"sub-table-header " + (this.state.indent?"with-indent": "")}>{this.state.data.name}</span>
                 </div>
                 <div className="col -col-1 skill-level-want-wrapper">
                     <span className="skill-title">
                         <input type="checkbox" label="skill-want" readOnly checked={this.state.data.knowledge.want} />
                     </span>
                 </div>
-                <div title={verified?"Approved by " + approver: "Verification pending"} className={"col -col-2 " + (this.state.data.knowledge.level === 1? "skill-level-box " + (verified? "level-verified": "level-non-verified"): "")}>
-                    <span className="skill-title"></span>
+                <div title={this.state.data.knowledge.level === 1? (verified?"Approved by " + approver: "Verification pending"): ""} className={"col -col-2 " + (this.state.data.knowledge.level === 1? "skill-level-box " + (verified? "level-verified": "level-non-verified"): "")}>
+                    <span className="skill-title">&nbsp;</span>
                 </div>
-                <div title={verified?"Approved by " + approver: "Verification pending"} className={"col -col-2 " + (this.state.data.knowledge.level === 2? "skill-level-box " + (verified? "level-verified": "level-non-verified"): "")}>
-                    <span className="skill-title"></span>
+                <div title={this.state.data.knowledge.level === 2? (verified?"Approved by " + approver: "Verification pending"): ""} className={"col -col-2 " + (this.state.data.knowledge.level === 2? "skill-level-box " + (verified? "level-verified": "level-non-verified"): "")}>
+                    <span className="skill-title">&nbsp;</span>
                 </div>
-                <div title={verified?"Approved by " + approver: "Verification pending"} className={"col -col-2 " + (this.state.data.knowledge.level === 3? "skill-level-box " + (verified? "level-verified": "level-non-verified"): "")}>
-                    <span className="skill-title"></span>
+                <div title={this.state.data.knowledge.level === 3? (verified?"Approved by " + approver: "Verification pending"): ""} className={"col -col-2 " + (this.state.data.knowledge.level === 3? "skill-level-box " + (verified? "level-verified": "level-non-verified"): "")}>
+                    <span className="skill-title">&nbsp;</span>
                 </div>
-                <div title={verified?"Approved by " + approver: "Verification pending"} className={"col -col-2 " + (this.state.data.knowledge.level === 4? "skill-level-box " + (verified? "level-verified": "level-non-verified"): "")}>
-                    <span className="skill-title"></span>
-                </div>
-                <div className="col -col-1">
-                    <span className="skill-title"></span>
+                <div title={this.state.data.knowledge.level === 4? (verified?"Approved by " + approver: "Verification pending"): ""} className={"col -col-2 " + (this.state.data.knowledge.level === 4? "skill-level-box " + (verified? "level-verified": "level-non-verified"): "")}>
+                    <span className="skill-title">&nbsp;</span>
                 </div>
             </div>
     	)

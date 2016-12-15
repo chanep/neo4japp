@@ -394,6 +394,14 @@
         .row-add-skill {
             border-bottom: em(1) solid $LIGHTEST-GREY;
 
+            .add-row-div {
+                cursor: pointer;
+
+                &:hover {
+                    background-color: #e8e8e8;
+                }
+            }
+
             .-col-name {
                 font-weight: bold;
             }

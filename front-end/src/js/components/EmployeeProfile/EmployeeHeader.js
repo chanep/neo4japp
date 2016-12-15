@@ -502,8 +502,16 @@ export default class EmployeeHeader extends React.Component {
                         }
                         {this.state.showForManagerVerification?
                             <div className="employee-skills-add employee-skills-verify">
-                                <span className="icon-alert">!</span>
-                                <span className="label">VERIFY {this.state.unapprovedSkillCount} SKILLS IN TOTAL</span>
+                                <div className="alert">
+                                    <span className="icon-alert">!</span>
+                                    <span className="label">Verify {this.state.unapprovedSkillCount} Skills</span>
+                                </div>
+                                <div className="notes-references">
+                                    <div className="note">
+                                        <span className="box non-verified"></span> Skills need verification
+                                        <span className="box verified"></span> Skills already <strong>verified</strong>
+                                    </div>
+                                </div>
                             </div>
                         : null}
 
