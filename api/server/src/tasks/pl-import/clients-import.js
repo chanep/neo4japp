@@ -57,16 +57,9 @@ class ClientsImportTask extends BaseTask{
     _transformClient(c){
         let client = {
             phonelistId: c.ID,
-            name: c.name,
-            short: c.short,
-            office: c.office,
-            familyID: c.familyID,
-            family: c.family
+            name: c.name
         }
-        if(!client.family)
-            delete client.family;
-        if(!client.short)
-            client.short = client.name;
+
         return client;
     }
     _doRun(){

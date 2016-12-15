@@ -12,7 +12,7 @@ const messagingService = require('../services/messaging');
 class UserController extends BaseController{
 
     /**
-    @api {get} /api/user/details 1 Details
+    @api {get} /api/user/details 01 Details
     @apiDescription Return logged user full data (include knowledges)
     @apiGroup Users
     
@@ -20,7 +20,7 @@ class UserController extends BaseController{
     */
 
     /**
-    @api {get} /api/user/:userId/details 2 Details by id
+    @api {get} /api/user/:userId/details 02 Details by id
     @apiDescription Return user full data (include knowledges)
     @apiGroup Users
     
@@ -38,7 +38,7 @@ class UserController extends BaseController{
     }
 
     /**
-    @api {get} /api/user/:userId/skills 3 Skills
+    @api {get} /api/user/:userId/skills 03 Skills
     @apiDescription Return the full skillgroup/skill tree. Skill is attached with the corresponding user knwoledge
     @apiGroup Users
 
@@ -83,7 +83,7 @@ class UserController extends BaseController{
     }
 
     /**
-    @api {get} /api/user/:userId/similar-skilled-users 4 Similar Users
+    @api {get} /api/user/:userId/similar-skilled-users 04 Similar Users
     @apiDescription Return users with similar skills
     @apiGroup Users
 
@@ -103,7 +103,7 @@ class UserController extends BaseController{
     }
 
     /**
-    @api {get} /api/user/level 5 Employee levels
+    @api {get} /api/user/level 05 Employee levels
     @apiDescription Return all employee levels
     @apiGroup Users
 
@@ -122,7 +122,7 @@ class UserController extends BaseController{
 
 
     /**
-    @api {put} /api/user/knowledge 6 Set Knowledge
+    @api {put} /api/user/knowledge 06 Set Knowledge
     @apiDescription User sets his knowledge level in one skill
     @apiGroup Users
 
@@ -157,7 +157,7 @@ class UserController extends BaseController{
     }
 
     /**
-    @api {delete} /api/user/knowledge 7 Delete Knowledge
+    @api {delete} /api/user/knowledge 07 Delete Knowledge
     @apiDescription User deletes his knowledge in one skill
     @apiGroup Users
 
@@ -184,7 +184,7 @@ class UserController extends BaseController{
     }
 
     /**
-    @api {put} /api/user/interest 8 Add Interest
+    @api {put} /api/user/interest 08 Add Interest
     @apiDescription User add an interest for himself
     @apiGroup Users
 
@@ -214,7 +214,7 @@ class UserController extends BaseController{
     }
 
     /**
-    @api {delete} /api/user/interest 9 Remove Interest
+    @api {delete} /api/user/interest 09 Remove Interest
     @apiDescription User removes one of his interests
     @apiGroup Users
 
@@ -241,7 +241,64 @@ class UserController extends BaseController{
     }
 
     /**
-    @api {put} /api/user/skill-suggestion 10 Suggest skill
+    @api {put} /api/user/client 10 Add Client
+    @apiDescription User add a previous client he worked for
+    @apiGroup Users
+
+    @apiParam {string} clientName 
+    
+    @apiSuccessExample {json} Success-Response:
+    HTTP/1.1 200 OK
+    {
+        status: "success",
+        data: {
+            id: 1134,
+            name: "CompuMundoHiperMegaRed"
+        }
+    }
+    */
+    addClient(req, res, next){
+        let userId = req.session.user.id;
+        let clientName = req.body.clientName;
+
+        let promise = userDa.addClientByClientName(userId, clientName)
+                        .then(result => {
+                            this._updateUserLastUpdate(userId);
+                            return result;
+                        });
+
+        this._respondPromise(req, res, promise);
+    }
+
+    /**
+    @api {delete} /api/user/client 11 Remove Client
+    @apiDescription User removes one of his previous client
+    @apiGroup Users
+
+    @apiParam {number} clientId
+    
+    @apiSuccessExample {json} Success-Response:
+    HTTP/1.1 200 OK
+    {
+        status: "success",
+        affected: 1
+    }
+    */
+    removeClient(req, res, next){
+        let userId = req.session.user.id;
+        let clientId = req.body.clientId;
+
+        let promise = userDa.removeClient(userId, clientId)
+                        .then(result => {
+                            this._updateUserLastUpdate(userId);
+                            return result;
+                        });
+
+        this._respondPromiseDelete(req, res, promise);
+    }
+
+    /**
+    @api {put} /api/user/skill-suggestion 12 Suggest skill
     @apiDescription Send an email to Skillsearch admin to suggest a skill addition
     @apiGroup Users
 

@@ -27,7 +27,7 @@
     "express-qs-parser": "0.0.1",
     "express-session": "^1.14.2",
     "google-spreadsheet": "^2.0.3",
-    "joi": "^10.0.5",
+    "joi": "^10.0.6",
     "ldapauth-fork": "^2.5.4",
     "lodash": "^4.17.2",
     "moment": "^2.17.1",

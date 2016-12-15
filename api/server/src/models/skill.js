@@ -19,7 +19,8 @@ let skill = new Model(
     ['Skill'],
     {
         id: Joi.number(),
-        name: Joi.string().required()
+        name: Joi.string().required(),
+        description: Joi.string().allow(null)
     }
 );
 
