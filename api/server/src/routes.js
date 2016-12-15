@@ -10,6 +10,7 @@ const approverController = new (require('./controllers/approver'));
 const resourceManagerController = new (require('./controllers/resource-manager'));
 const searchAllController = new (require('./controllers/search-all'));
 const interestController = new (require('./controllers/interest'));
+const clientController = new (require('./controllers/client'));
 const officeController = new (require('./controllers/office'));
 const taskController = new (require('./controllers/task'));
 
@@ -27,6 +28,8 @@ router.get('/skill/all-groups', skillController.findAllGroups.bind(skillControll
 router.get('/skill/by-group-type/:type', skillController.findByType.bind(skillController));
 
 router.get('/interest', interestController.find.bind(interestController));
+
+router.get('/client', clientController.find.bind(clientController));
 
 router.get('/office', officeController.find.bind(officeController));
 
