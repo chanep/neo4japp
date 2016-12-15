@@ -21,6 +21,12 @@ module.exports = function() {
             minimumInterestLength: 3,
             maximumInterestLength: 25
         },
+        clients: {
+            minimumLenghtLookup: 2,
+            suggestionsNumber: 5,
+            minimumInterestLength: 3,
+            maximumInterestLength: 25
+        },
         preselectedFilter: {
             "Quality Assurance": "Technology",
             "Prototype Studio": "Technology",
