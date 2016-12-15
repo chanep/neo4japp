@@ -18,11 +18,12 @@ class InterestDa extends BaseDa{
     }
 
     findOrCreate(name){
-        let label = this.labelsStr;
-        let cmd = `MERGE (n:${label} {name: {name}}) RETURN n`;
-        let params = {name: name};
-        return this._run(cmd, params)
-            .then(r => this._cypher.parseResult(r));
+        return this.findOne({name: {$ilike: `${name}`}})
+            .then(interest => {
+                if(interest)
+                    return interest;
+                return this.create({name: name});
+            });
     }
 }
 

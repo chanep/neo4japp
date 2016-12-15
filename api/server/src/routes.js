@@ -10,6 +10,7 @@ const approverController = new (require('./controllers/approver'));
 const resourceManagerController = new (require('./controllers/resource-manager'));
 const searchAllController = new (require('./controllers/search-all'));
 const interestController = new (require('./controllers/interest'));
+const clientController = new (require('./controllers/client'));
 const officeController = new (require('./controllers/office'));
 const taskController = new (require('./controllers/task'));
 
@@ -28,16 +29,21 @@ router.get('/skill/by-group-type/:type', skillController.findByType.bind(skillCo
 
 router.get('/interest', interestController.find.bind(interestController));
 
+router.get('/client', clientController.find.bind(clientController));
+
 router.get('/office', officeController.find.bind(officeController));
 
 router.get('/user/details', userController.details.bind(userController));
 router.get('/user/:userId/details', userController.details.bind(userController));
 router.get('/user/:userId/similar-skilled-users', userController.findUsersWithSimilarSkills.bind(userController));
 router.get('/user/:userId/skills', userController.findUserSkills.bind(userController));
+router.get('/user/level', userController.findAllEmployeeLevels.bind(userController));
 router.put('/user/knowledge', userController.setKnowledge.bind(userController));
 router.delete('/user/knowledge', userController.deleteKnowledge.bind(userController));
 router.put('/user/interest', userController.addInterest.bind(userController));
 router.delete('/user/interest', userController.removeInterest.bind(userController));
+router.put('/user/client', userController.addClient.bind(userController));
+router.delete('/user/client', userController.removeClient.bind(userController));
 router.put('/user/skill-suggestion', userController.suggestSkill.bind(userController));
 
 // ---------

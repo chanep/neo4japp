@@ -53,7 +53,8 @@ function createUser(values, index){
         email: `pepe.test${i}@rga.com`,
         fullname: 'Pepe Test' + i,
         type: 'UserEmployee',
-        roles: roles.allRoles
+        roles: roles.allRoles,
+        level: "Mid-level"
     };
 
     let userData = _.extend({}, userDefaults, values);
@@ -301,7 +302,7 @@ function createBasicData(){
         })
         .then(u => {
             data.admin = u;
-            return createUser({roles: [roles.approver]}, 2);
+            return createUser({roles: [roles.approver], level: "Senior"}, 2);
         })
         .then(u => {
             data.approver = u;

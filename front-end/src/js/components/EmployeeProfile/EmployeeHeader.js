@@ -21,9 +21,11 @@ export default class EmployeeHeader extends React.Component {
        
         this.state = {
             interest: "",
+            pastClient: "",
             suggestions: [],
             suggestedInterest: "",
             industries: [],
+            pastClients: [],
             user: null,
             skillsCount: 0,
             addSkills: true,
@@ -31,6 +33,7 @@ export default class EmployeeHeader extends React.Component {
             showForManagerVerification: false,
             editingInterests: false,
             editingIndustries: false,
+            editingPastClients: false,
             userIndustries: [],
             remainderSent: false,
             addingInterest: false
@@ -52,6 +55,9 @@ export default class EmployeeHeader extends React.Component {
 
         this.handleIndustriesKeyDown = this.handleIndustriesKeyDown.bind(this);
 
+        this.editPastClients = this.editPastClients.bind(this);
+        this.onPastClientsAutocompleteChange = this.onPastClientsAutocompleteChange.bind(this);
+
         this.basePage = new BasePage();
     }
 
@@ -64,6 +70,14 @@ export default class EmployeeHeader extends React.Component {
         if (this.state.editingIndustries) {
             ReactDOM.findDOMNode(this.refs.industries).focus();
         }
+    }
+
+    finishPastClientsEdition () {
+        this.setState({ 'editingPastClients': false });
+    }
+
+    editPastClients () {
+        this.setState({ 'editingPastClients': true });
     }
 
     handleIndustriesKeyDown(e) {
@@ -281,6 +295,12 @@ export default class EmployeeHeader extends React.Component {
         });
     }
 
+    onPastClientsAutocompleteChange(event, newValue, method) {
+        this.setState({
+          pastClient: newValue.newValue
+        });
+    }
+
     renderSuggestion(suggestion) {
       return (
         <span>{suggestion.name}</span>
@@ -321,11 +341,17 @@ export default class EmployeeHeader extends React.Component {
 
         var self = this;
 
-        const { interest, suggestions } = this.state;
+        const { interest, suggestions, pastClient } = this.state;
         const inputProps = {
           placeholder: "Interest",
           value: interest,
           onChange: this.onAutocompleteChange
+        };
+
+        const pastClientsInputProps = {
+          placeholder: "Past clients",
+          value: pastClient,
+          onChange: this.onPastClientsAutocompleteChange
         };
 
         if (this.state.user === null)
@@ -372,6 +398,14 @@ export default class EmployeeHeader extends React.Component {
 
         let newId = "tooltip_" + this.makeid();
 
+        let pastClients = "";
+        if (this.state.pastClients.length > 0) {
+            pastClients = "";
+            this.state.pastClients.forEach(function(pastClient) {
+                pastClients += (pastClients !== ""? ", ": "") + pastClient.name;
+            });
+        }
+
         return (
         	<div className="employee-header-container">
         		<div className="grid">
@@ -414,6 +448,38 @@ export default class EmployeeHeader extends React.Component {
                                 </div>
                             </div>
                         : false }
+
+
+                        {this.state.editingPastClients ?
+                            <div className="modal">
+                                <div className="modal-header" onClick={this.finishPastClientsEdition.bind(this)}>
+                                    <span className="modal-close ss-icon-close"><span className="path1"></span><span className="path2"></span></span>
+                                </div>
+                                <div className="modal-contents">
+                                    <h2>Add non R/GA clients</h2>
+                                    <h3>Add Clients from previous experience</h3>
+                                    <form onSubmit={this.addInterest.bind(this)}>
+                                      <input type="submit" className="add-past-client" value="Add client" />
+                                      <Autosuggest
+                                        suggestions={suggestions}
+                                        onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+                                        onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+                                        getSuggestionValue={this.getSuggestionValue}
+                                        renderSuggestion={this.renderSuggestion}
+                                        inputProps={pastClientsInputProps}
+                                      />
+                                    </form>
+                                    <ul className="past-clients">
+                                    {this.state.pastClients.map((pastClient, index)=>{
+                                      return (<li className="past-client" key={index}><span className="remove-interest ss-icon-remove" data-past-client-id={pastClient.id} onClick={self.removeInterest.bind(this, pastClient.id)}></span> {pastClient.name}</li>)
+                                    })}
+                                    </ul>
+                                </div>
+                            </div>
+                        : false }
+
+
+
 
                         {this.state.editingIndustries ?
                             <div className="modal" tabIndex="0" ref="industries" onKeyDown={this.handleIndustriesKeyDown}>
@@ -480,6 +546,24 @@ export default class EmployeeHeader extends React.Component {
                                     : <span className="none-available"> No clients available</span>
                                 }
                             </div>
+                            { this.state.showActions ?
+                                <div>
+                                    <div className="interest editable-interest" onClick={this.editPastClients.bind(this)}>
+                                        <span className="ss-icon-clients"></span>
+                                        {pastClients != ''
+                                            ? <span> Past clients: {pastClients} <span className="edit"></span></span>
+                                            : <span className="none-items"> Past clients: <span className="edit"></span></span>
+                                        }
+                                    </div>
+                                </div>
+                                :
+                                <div className="past-clients"><span className="ss-icon-clients"></span>
+                                    {pastClients != ''
+                                        ? <span> Past clients: {pastClients}</span>
+                                        : <span className="none-available"> No past clients available</span>
+                                    }
+                                </div>
+                            }
         				</div>
         			</div>
         			<div className="col -col-2">

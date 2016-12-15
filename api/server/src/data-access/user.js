@@ -4,6 +4,7 @@ const model = require('../models/models').user;
 const roles = require('../models/roles');
 const AllocationDa = require('./allocation');
 const InterestDa = require('./interest');
+const ClientDa = require('./client');
 const skillModel = require('../models/models').skill;
 const skillGroupModel = require('../models/models').skillGroup;
 
@@ -155,6 +156,16 @@ class UserDa extends BaseDa{
         return this.findOne({username: username});
     }
 
+    findAllEmployeeLevels(){
+        let label = this.labelsStr;
+
+		let cmd = `match (n:${label})
+            return distinct n.level
+            `;
+        let params = {};
+		return this.query(cmd, params, null);
+    }
+
     setOffice(userId, officeId){
         return this.relate(userId, officeId, 'office');
     }
@@ -182,8 +193,27 @@ class UserDa extends BaseDa{
     addClient(userId, clientId){
         return this.relate(userId, clientId, 'clients');
     }
-    clearClients(userId){
-        return this.deleteAllRelationships(userId, 'clients');
+    addClientByClientName(userId, clientName){
+        let clientDa = new ClientDa();
+        return clientDa.findOrCreate(clientName)
+            .then(c => {
+                return this.addClient(userId, c.id)
+                    .then(() => c);
+            });
+    }
+    removeClient(userId, clientId){
+        return this.deleteRelationship(userId, clientId, 'clients');
+    }
+    clearPhonelistClients(userId){
+        let label = this.labelsStr;
+        let clientRelL = this.model.getRelationByKey("clients").label;
+        let cmd = `match (n:${label})-[r:${clientRelL}]->(c) where id(n) = {userId} and c.phonelistId is not null
+                    delete r
+                    return count(r) as affected`
+        let params = {userId: userId};
+        return this._run(cmd, params)
+            .then(r => this._cypher.parseResultAffected(r))
+            .catch(err => { throw new errors.GenericError("Error clearing user phonelist clients", err) });
     }
 
     addInterest(userId, interestName){

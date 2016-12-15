@@ -50,12 +50,8 @@ let client = new Model(
     ['Client'],
     {
         id: Joi.number(),
-        phonelistId: Joi.number().required(),
-        name: Joi.string().required(),
-        short: Joi.string().required(),
-        office: Joi.string(),
-        familyID: Joi.string(),
-        family: Joi.string()
+        phonelistId: Joi.number().allow(null),
+        name: Joi.string().required()
     }
 );
 
@@ -72,6 +68,7 @@ let user = new Model(
         fullname: Joi.string().required(),
         first: Joi.string().allow(null),
         last: Joi.string().allow(null),
+        level: Joi.string().allow(null),
         roles: Joi.array().default([]).items(Joi.string()),
         phone: Joi.string().allow(null),
         image: Joi.string().allow(null),

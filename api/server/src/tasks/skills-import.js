@@ -24,81 +24,87 @@ class SkillImportTask extends BaseTask{
 		var GoogleSpreadsheet = require('google-spreadsheet');
 		var doc = new GoogleSpreadsheet(config.skills_spreadsheet_key);
 		var sheet;
+		return new P((resolve, reject) => {
+			async.series([
+				function setAuth(step) {
+					var creds = require('../googledriveaccess.json');
+					doc.useServiceAccountAuth(creds, step);
+				},
 
-		return async.series([
-			function setAuth(step) {
-				var creds = require('../googledriveaccess.json');
-				doc.useServiceAccountAuth(creds, step);
-		  	},
+				function getAllSkills(step) {
+					doc.getInfo(function(err, info) {
+						sheet = info.worksheets[0];
+						sheet.getRows({
+							'offset': 1,
+							'limit': 1000,
+							'orderby': 'level1',
+							'return-empty': true
+						}, function(err, rows) {
+							async.eachSeries = P.promisify(async.eachSeries);
+							return async.eachSeries(rows, function (row, callback) {
+								if (row['level1'].trim() != '' && row['level2'].trim() != '') {
+									var skDa = new SkillGroupDa();
 
-			function getAllSkills(step) {
-				doc.getInfo(function(err, info) {
-					sheet = info.worksheets[0];
-					sheet.getRows({
-						'offset': 1,
-						'limit': 1000,
-						'orderby': 'level1',
-						'return-empty': true
-					}, function(err, rows) {
-						async.eachSeries = P.promisify(async.eachSeries);
-						return async.eachSeries(rows, function (row, callback) {
-							if (row['level1'].trim() != '' && row['level2'].trim() != '') {
-								var skDa = new SkillGroupDa();
+									skDa.checkLevel1({
+										'name': row['level1'].trim(),
+										'type': row['type'].toLowerCase().trim()
+									}).then(result => {
+										if (result.action == 'inserted')
+											inforeturn.created++;
 
-		        				skDa.checkLevel1({
-	    							'name': row['level1'].trim(),
-	    							'type': row['type'].toLowerCase().trim()
-	    						}).then(result => {
-	    							if (result.action == 'inserted')
-	    								inforeturn.created++;
+										return result;
+									}).then(result => {
+										if (row['level3'].trim() != '') {
+											return skDa.checkLevel2({
+												'level1Id': result.id,
+												'name': row['level2'].trim(),
+												'type': row['type'].toLowerCase().trim()
+											}).then(result => {
+												if (result.action == 'inserted')
+													inforeturn.created++;
 
-				        			return result;
-				        		}).then(result => {
-				        			if (row['level3'].trim() != '') {
-					        			return skDa.checkLevel2({
-					        				'level1Id': result.id,
-			    							'name': row['level2'].trim(),
-			    							'type': row['type'].toLowerCase().trim()
-					        			}).then(result => {
-	    									if (result.action == 'inserted')
-	    										inforeturn.created++;
+												return result.id;
+											});
+										} else {
+											return result.id;
+										}
+									}).then(parentId => {
+										var skillName = row['level2'];
+										if (row['level3'].trim() != '')
+											skillName = row['level3'].trim();
 
-					        				return result.id;
-					        			});
-				        			} else {
-				        				return result.id;
-				        			}
-				        		}).then(parentId => {
-				        			var skillName = row['level2'];
-				        			if (row['level3'].trim() != '')
-				        				skillName = row['level3'].trim();
-
-				        			var skillDa = new SkillDa();
-				        			return skillDa.checkOrCreateSkill({
-				        				'groupId': parentId,
-				        				'name': skillName
-				        			}).then(result => {
-    									if (result.action == 'inserted')
-    										inforeturn.created++;
-
-    									callback();
-				        			});
-				        		}).catch(err => {
-				        			inforeturn.errors++;
-				        		});
-							}
-				        }).then(() => {
-    	    				console.log("Proc. completed", inforeturn)
-							return inforeturn;
-				        });
+										var skillDa = new SkillDa();
+										return skillDa.checkOrCreateSkill({
+											groupId: parentId,
+											name: skillName,
+											description: row['description'].trim()
+										}).then(result => {
+											if (result.action == 'inserted')
+												inforeturn.created++;
+											if (result.action == 'updated')
+												inforeturn.updated++;
+											callback();
+										});
+									}).catch(err => {
+										inforeturn.errors++;
+									});
+								}
+							}).then(() => {
+								step();
+							});
+						});
 					});
-				});
 
-				return step();
-			}
-		]);
-
-		return P.resolve("Done");
+					
+				}
+			],
+			function(err){
+				if(!err)
+					resolve(inforeturn);
+				else
+					reject(err);
+			});
+		});
     }
 }
 

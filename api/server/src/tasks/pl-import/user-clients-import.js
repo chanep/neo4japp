@@ -53,7 +53,7 @@ class UserClientsImportTask extends BaseTask{
     _updateUserClients(user){
         let query = {phonelistId: {$in: user.clientIds}};
 
-        return userDa.clearClients(user.id)
+        return userDa.clearPhonelistClients(user.id)
             .then(() => clientDa.find(query))
             .then(clients => {
                 return asyncEachSeries(clients, (client, callback) =>{

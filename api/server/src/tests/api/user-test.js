@@ -13,6 +13,9 @@ let ks = [
     {level: null, want: true}
 ];
 
+let clientName = "Cocacola";
+let clientId = null;
+
 
 vows.describe('User api test')
 
@@ -133,7 +136,7 @@ vows.describe('User api test')
             assert.isTrue(!!u.resourceManagers[0].position.name);
 
             assert.isArray(u.clients);
-            assert.isTrue(!!u.clients[0].short);
+            assert.isTrue(!!u.clients[0].name);
 
             assert.isArray(u.industries);
             assert.equal(u.industries[0].name, data.industries[0].name);
@@ -238,6 +241,100 @@ vows.describe('User api test')
                 assert.isNotNull(sAux.knowledge);
                 assert.equal(sAux.knowledge.id, k.id);
             }
+        }
+    }
+})
+
+.addBatch({
+    '7. Get all employee levels': {
+        topic: function () {
+            let userId = data.employee.id;
+            req.get('user/level', 
+                this.callback);
+        },
+        'response is 200': testHelper.assertSuccess(),
+        'should return user details including knowledges ': function (err, result, body) {
+            if (err) {
+                console.log("error", err);
+                throw err;
+            }
+            let levels = body.data;
+
+            //console.log('levels', JSON.stringify(levels));
+
+            assert.isArray(levels);
+            assert.isTrue(levels.indexOf("Mid-level") >= 0);
+        }
+    }
+})
+
+.addBatch({
+    '8. Add client': {
+        topic: function () {
+            req.put('user/client', 
+                {body: {clientName: clientName}},
+                this.callback);
+        },
+        'response is 200': testHelper.assertSuccess()
+    }
+})
+
+.addBatch({
+    '9. Get user details': {
+        topic: function () {
+            req.get('user/details', 
+                this.callback);
+        },
+        'response is 200': testHelper.assertSuccess(),
+        'should return user details including added client ': function (err, result, body) {
+            if (err) {
+                console.log("error", err);
+                throw err;
+            }
+            let u = body.data;
+
+            //console.log("user", JSON.stringify(u));
+
+            assert.isObject(u);
+            let client = _.find(u.clients, {name : clientName});
+            assert.isNotNull(client);
+            clientId = client.id;
+
+        }
+    }
+})
+
+.addBatch({
+    '10. Remove client': {
+        topic: function () {
+            req.delete('user/client', 
+                {body: {clientId: clientId}},
+                this.callback);
+        },
+        'response is 200': testHelper.assertSuccess()
+    }
+})
+
+.addBatch({
+    '11. Get user details': {
+        topic: function () {
+            req.get('user/details', 
+                this.callback);
+        },
+        'response is 200': testHelper.assertSuccess(),
+        'should return user details without removed client ': function (err, result, body) {
+            if (err) {
+                console.log("error", err);
+                throw err;
+            }
+            let u = body.data;
+
+            //console.log("user", JSON.stringify(u));
+
+            assert.isObject(u);
+            let client = _.find(u.clients, {name : clientName});
+            assert.isUndefined(client);
+
         }
     }
 })
