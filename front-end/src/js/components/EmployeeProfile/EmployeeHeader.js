@@ -73,7 +73,7 @@ export default class EmployeeHeader extends React.Component {
     }
 
     componentDidUpdate(){
-        if (this.state.editingInterests) {
+        if (this.state.editingInterests || this.state.editingPastClients) {
             document.getElementsByClassName('react-autosuggest__input')[0].focus();
             document.getElementsByClassName('react-autosuggest__input')[0].setAttribute('maxlength', ENV().interests.maximumInterestLength);
         }
@@ -341,8 +341,10 @@ export default class EmployeeHeader extends React.Component {
     Past Clients autocomplete function
     */
     getPastClientsSuggestions(value) {
-        let user = this.state.user;
-        this.setState({ "pastClientsSuggestions": user.clients });
+        var ids = [];
+        this.userData.GetClients(value.value, ids, ENV().clients.suggestionsNumber).then(data => {
+            this.setState({ "pastClientsSuggestions": data });
+        });
     }
 
     /*
