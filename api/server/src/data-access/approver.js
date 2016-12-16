@@ -57,13 +57,27 @@ class ApproverDa extends UserDa{
 
     }
 
+
     /**
      * Returns true if the user is the approver of the employee
      * @param {number} userId
      * @param {number} employeeId
+     * @param {boolean} deep if deep is true, approver of approver of is considered also approver
+     * @returns
+     * @memberOf ApproverDa
      */
-    isApproverOf(userId, employeeId){
-        return this.relationshipExists(employeeId, "approvers", userId);
+    isApproverOf(userId, employeeId, deep){
+        if(!deep)
+            return this.relationshipExists(employeeId, "approvers", userId);
+
+        let label = this.labelsStr;
+        let approverRelL = this.model.getRelationByKey("approvers").label;
+        let cmd = `match (u:${label})<-[:${approverRelL}*1..15]-(e:${label})
+            where id(u) = {userId} and id(e) = {employeeId}
+            return (count(u) <> 0)`;
+        let params = {userId: userId, employeeId: employeeId};
+        return this.query(cmd, params)
+            .then(result => result[0]);;
     }
      /**
      * Returns true if the user is one of possible the approvers of a knowledge 
@@ -83,7 +97,8 @@ class ApproverDa extends UserDa{
             where id(n) = {userId} and id(k) = {knowledgeId}
             return (count(n) <> 0)`;
         let params = {userId: userId, knowledgeId: knowledgeId};
-        return this.query(cmd, params);
+        return this.query(cmd, params)
+            .then(result => result[0]);
     }
     /**
      * An Approver (manager) approves (verify) a employee's skill knowledge 

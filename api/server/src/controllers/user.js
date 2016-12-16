@@ -336,7 +336,7 @@ class UserController extends BaseController{
             .then(isApproverOf => {
                 if(isApproverOf)
                     return true;
-                return new errors.ForbiddenError("You don't have access to this user details")
+                throw new errors.ForbiddenError("You don't have access to this user details")
             });
     }
 

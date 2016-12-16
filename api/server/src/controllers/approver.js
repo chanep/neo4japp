@@ -8,7 +8,7 @@ const approverDa = new (require('../data-access/approver'));
 class ApproverController extends BaseController{
 
     /**
-    @api {get} /api/approver/my-team 1 Team
+    @api {get} /api/approver/my-team 1 My team
     @apiDescription List the logged user's team users (sorted by pending approval skills count descending)
     @apiGroup Approvers
 
@@ -17,20 +17,36 @@ class ApproverController extends BaseController{
     
     @apiUse teamResponse
     */
-    findMyTeamUsers(req, res, next){
-        let userId = req.session.user.id;
 
+    /**
+    @api {get} /api/approver/:approverId/my-team 2 Approver's team
+    @apiDescription List the team of the given approver (sorted by pending approval skills count descending). 
+        The approver must be in the chain of command of the logged user
+    @apiGroup Approvers
+
+    @apiParam (Filter) {boolean} onlyPendingApprove List users with pending approval skills only
+    @apiParam (Filter) {boolean} includeWantSkills Include also skills that user would like to learn
+    
+    @apiUse teamResponse
+    */
+    findMyTeamUsers(req, res, next){
+        let loggedUserId = req.session.user.id;
+        let approverId = Number(req.params.approverId || loggedUserId);
+        
         let search = this._buildSearch(req);
         let onlyPendingApproval = search.onlyPendingApproval;
         let includeWantSkills = search.includeWantSkills;
 
-        let promise = approverDa.findMyTeamUsers(userId, onlyPendingApproval, includeWantSkills);
+        let promise = this._validateUserAccess(loggedUserId, approverId)
+            .then(() => {
+                return approverDa.findMyTeamUsers(approverId, onlyPendingApproval, includeWantSkills);
+            });
 
         this._respondPromise(req, res, promise);
     }
 
     /**
-    @api {put} /api/approver/approve 3 Approve
+    @api {put} /api/approver/approve 4 Approve
     @apiDescription An Approver (manager) approves (verify) a employee's skill knowledge 
     @apiGroup Approvers
 
@@ -68,6 +84,17 @@ class ApproverController extends BaseController{
     }
 
 
+    _validateUserAccess(loggedUserId, approverId){
+        if(loggedUserId == approverId)
+            return P.resolve();
+        const deep = true;
+        return approverDa.isApproverOf(loggedUserId, approverId, deep)
+            .then(isApproverOf => {
+                if(isApproverOf)
+                    return true;
+                throw new errors.ForbiddenError("You don't have access to this approver's team")
+            });
+    }
 } 
 
 module.exports = ApproverController;
