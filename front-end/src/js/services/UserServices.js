@@ -36,6 +36,10 @@ export default class UserServices extends ServicesBase {
 		return super.callPutServices('approver/approve', {'knowledgeId': knowledgeId});
 	}
 
+	DisapproveKnowledge(knowledgeId) {
+		return super.callPutServices('approver/approve', {'knowledgeId': knowledgeId, disapprove: true});
+	}
+
 	AddInterest(interestName) {
 		return super.callPutServices('user/interest', {'interestName': interestName});
 	}
@@ -54,5 +58,17 @@ export default class UserServices extends ServicesBase {
 
 	RequestManagerApproval(employeeId) {
 		return super.callPutServices("resource-manager/approval-request/" + employeeId, null);
+	}
+
+	AddClient(clientName) {
+		return super.callPutServices('user/client', {'clientName': clientName});
+	}
+
+	GetClients(name, ids, limit) {
+		return super.callGetServices('client', { "name": name, "ids": ids, "limit": limit });
+	}
+
+	RemoveClient(clientId) {
+		return super.callDeleteServices('user/client', {'clientId': clientId});
 	}
 }

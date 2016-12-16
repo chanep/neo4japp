@@ -5,17 +5,37 @@
 	}
 }
 
+.search-results-table {
+	.results-section {
+		.zebra-table:nth-child(even) {
+    		background-color: #fafafb;
+    	}
+	}
+}
+
 .skill-level-grid {
 	overflow: hidden;
-	
-	.col {  }
+	border-bottom: em(1) solid #e4e4e4;
+
+	.col {
+
+	}
+
+	.sub-table-header {
+		font-size: em(12);
+	}
+
+	.with-indent {
+		padding-left: em(20);
+	}
 }
 
 .skill-level-grid__header {
 	color: white;
+	overflow: hidden;
+	background-color: #666666;
 
-	.col {
-		background-color: #58585a;
+	.col {	
 		height: 2.8rem;
 
 		&.skill-level-empty { background-color: $LIGHTEST-GREY; }
@@ -27,32 +47,110 @@
 	}
 }
 
+.group-skills-title {
+	text-align: center !important;
+	line-height: em(50);
+
+	.table-header {
+		font-size: em(14) !important;
+	}
+}
+
+.skill-subgroup-title {
+	font-size: em(14) !important;
+}
+
+.subgroup-title-name {
+	border-bottom: em(1) solid #e4e4e4;
+	border-left: em(1) solid #e4e4e4;
+	border-right: em(1) solid #e4e4e4;
+}
+
 .skill-level-grid__levels {
-	background-color: $LIGHTEST-GREY;
+	overflow: hidden;
+	border-left: em(1) solid #e4e4e4;
+	border-right: em(1) solid #e4e4e4;
 
 	.col {
-		padding: .45em .6em;
+		padding: 0px .6em;
 		white-space: nowrap;
     	text-overflow: ellipsis;
     	max-width: 100%;
     	overflow: hidden;
+    	line-height: em(30);
+
+    	span {
+			display: block;
+			line-height: 30px;
+    	}
 
 		&:nth-oftype(1) {
 			text-align: left;
 		}
+
+		border-right: em(1) solid #e4e4e4;
+		&:last-child {
+			border-right: none;
+		}
+	}
+}
+
+.skill-level-grid-add {
+	background-color: $LIGHTEST-GREY;
+
+	.-header-heavy-supervision {
+		padding-left: em(8);
+		padding-right: em(8);
+	}
+
+	.add-row {
+		 .-col-skill-name {
+		 	padding-left: em(10);
+		 }
+
+		 .col {
+		 	line-height: 25px;
+
+		 	span {
+		 		line-height: 25px;
+		 	}
+		 }
 	}
 }
 
 .skill-level-box {
-	background-color: #cbcbcb;
+	background-color: #E3E3E3;
 	border-left: 1px solid white;
 	border-bottom: 1px solid white;
-	height: 2.55rem;
 	transition: background-color .2s ease-in-out;
+	text-align: center;
+	font-size: em(12);
+	color: white;
 
-	&.level-selected { background-color: $RED; }
-	&.level-verified { background-color: $RED; }
-	&.level-non-verified { background-color: $LESS-GREY; }
+	&.level-selected { background-color: #BCBCBC; }
+	&.level-verified {
+		background-color: $VERIFIED-SKILL;
+
+		&.skill-level-changeable {
+			cursor: pointer;
+		}
+
+		&.skill-level-changeable:hover {
+			background-color: $NON-VERIFIED-SKILL;
+		}
+	}
+	&.level-non-verified {
+		background-color: $NON-VERIFIED-SKILL;
+
+		&.skill-level-changeable {
+			cursor: pointer;
+		}
+
+		&.skill-level-changeable:hover {
+			background-color: $VERIFIED-SKILL;
+		}
+	}
+
 
 	&:last-child { border-right: 1px solid white; }
 

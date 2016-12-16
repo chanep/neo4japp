@@ -374,7 +374,6 @@
         display: block;
         font-size: 1em;
         text-align: center;
-        padding: .45em .6em;
         font-weight: lighter;
         text-align: center;
         color: $GREY;
@@ -394,6 +393,14 @@
         .row-add-skill {
             border-bottom: em(1) solid $LIGHTEST-GREY;
 
+            .add-row-div {
+                cursor: pointer;
+
+                &:hover {
+                    background-color: #e8e8e8;
+                }
+            }
+
             .-col-name {
                 font-weight: bold;
             }
@@ -408,6 +415,33 @@
                 max-width: 100%;
                 overflow: hidden;
             }
+        }
+    }
+}
+
+.add-skills-information {
+    padding: em(30) em(10) em(10) em(20);
+    font-size: em(12);
+
+    p {
+        padding: 0;
+        margin: 0 0 em(10) 0;
+    }
+
+    h4 {
+        font-size: em(17);
+        font-weight: bold;
+        margin-bottom: em(20);
+        margin-top: em(20);
+    }
+
+    ul {
+        margin-bottom: em(40);
+
+        li {
+            list-style-type: disc !important;
+            list-style-position: inside;
+            margin-bottom: em(20);
         }
     }
 }
@@ -461,17 +495,24 @@
             top: 33px;
             right: 13px;
             font-size: 18px;
+
+            .path1 {
+                &:before {
+                    color: $BLACK;
+                }
+            }
         }
     }
 
     .modal-contents {
-        background-color: #f3f3f4;
+        border: 1px solid $BLACK;
+        background-color: $WHITE;
         max-height: 30rem;
         padding: 2.75rem;
 
         h2 {
-            font-size: 1rem;
-            font-weight: 400;
+            font-size: 1.2rem;
+            font-weight: 700;
         }
 
         div {
@@ -501,9 +542,9 @@
             margin-top: 1rem;
             font-size: .95em;
             font-weight: 100;
-            color: $GREY-FONT;
+            color: $WHITE;
             border: 0;
-            background-color: #e7e7e8;
+            background-color: $BLACK;
             padding: .75em 0;
             cursor: pointer;
             width: 100%;

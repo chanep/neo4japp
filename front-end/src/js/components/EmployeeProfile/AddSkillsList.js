@@ -84,7 +84,23 @@ export default class AddSkillsList extends React.Component {
                             }
                         })
                     :
-                        <div className="selectCategory">Please, select a category</div>
+                        <div className="add-skills-information">
+                            <p>Start by selecting a category to you left.</p>
+
+                            <h4>GUIDING PRINCIPLES</h4>
+                            <ul>
+                                <li>Don't rate yourself higher than you are comfortable, expectations will be higher than can be met, and that's not great.</li>
+                                <li>There are no awards/raises for the most skills on the platform, this will not be used for any type of compensation discussion.</li>
+                                <li>Only include skills that you can deliver at a level in line with R/GA expectations. You may be a photographer at home, but is Nike asking you to shoot their spring campaign? :)</li>
+                            </ul>
+
+                            <h4>SKILL LEVEL DESCRIPTIONS</h4>
+                            <p><strong>Heavy Supervision:</strong> You have the skill, but have limited experience and require heavy oversight.</p>
+                            <p><strong>Light Supervision:</strong> You have the skill, but have some experience where you could still use help.</p>
+                            <p><strong>No Supervision:</strong> You have the skill and significant experience utilizing it in a work setting.</p>
+                            <p><strong>Teach/Manage:</strong> You have the skill and have experience teaching or managing teams delivering the work.</p>
+
+                        </div>
                     }
                     {this.basePage.GetCurrentUserType() == 'employee' ?
                         <div onClick={this.openModal} className="suggest"><span>Suggest skill/tool &#43;</span></div>

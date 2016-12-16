@@ -90,24 +90,56 @@
     		text-decoration: none;
     	}
 
-        &.employee-skills-verify span.label {
-            color: $RED;
-            font-size: em(12);
-            font-weight: bold;
-            text-decoration: none;
+        &.employee-skills-verify .alert {
+            margin-bottom: em(5);
+
+            .icon-alert {
+                background-color: $RED;
+                border-radius: 50%;
+                color: white;
+                display: inline-block;
+                height: em(16);
+                width: em(16);
+                margin: .3rem .4rem 0 0;
+                text-align: center;
+                font-size: em(12);
+            }
+
+            span.label {
+                color: $RED;
+                font-size: em(12);
+                font-weight: bold;
+                text-decoration: none;
+            }
         }
 
-        .icon-alert {
-            background-color: $RED;
-            border-radius: 50%;
-            color: white;
-            display: inline-block;
-            float: left;
-            height: 1.625rem;
-            line-height: 1.7;
-            margin: .3rem .4rem 0 0;
-            text-align: center; 
-            width: 1.625rem;
+        &.employee-skills-verify {
+            .notes-references {
+                display: block;
+
+                .note {
+                    display: block;
+                    font-size: em(12);
+
+                    span.box {
+                        display: inline-block;
+                        width: em(15);
+                        height: em(12);
+
+                        &.verified {
+                            background-color: $VERIFIED-SKILL;
+                        }
+                        &.non-verified {
+                            background-color: $NON-VERIFIED-SKILL;
+                        }
+                    }
+
+                    strong {
+                        font-weight: normal;
+                        color: $NON-VERIFIED-SKILL;
+                    }
+                }
+            }
         }
     }
 
@@ -141,7 +173,7 @@
         margin: 1.2rem 0 1rem 0;
 
         .inputTextBox, .react-autosuggest__input {
-            border: .0625em solid #e7e7e8;
+            border: .0625em solid $GREY;
             font-size: .95em;
             font-weight: 100;
             color: #868686;
@@ -149,6 +181,7 @@
             height: 50px;
             vertical-align: top;
             width: 65%;
+            margin-bottom: 1px;
         }
 
         .react-autosuggest__suggestions-list {
@@ -159,44 +192,53 @@
         .add-past-client {
             font-size: .95em;
             font-weight: 100;
-            color: #868686;
+            color: $WHITE;
             border: 0;
-            background-color: #e7e7e8;
+            background-color: $BLACK;
             padding: 1.125em 0;
-            width: 35%;
+            width: 32%;
             cursor: pointer;
             height: 50px;
             float: right;
         }
 
         .interest-suggested, .react-autosuggest__suggestion {
-            width: 254px;
-            background: $LIGHT-GREY;
+            width: 253px;
+            background: $LIGHTEST-GREY;
+            border-left: 1px solid $GREY;
+            border-right: 1px solid $GREY;
             padding: .45rem;
             display: inline-block;
             cursor: pointer;
             margin-top: -1px;
+            color: $GREY-FONT;
+
+            &:last-of-type {
+                border-bottom: 1px solid $GREY;
+            }
         }
 
         .react-autosuggest__suggestion--focused {
-            background: $LIGHTEST-GREY;
+            color: $BLACK;
         }
     }
 
-    .interests {
-        .interest {
+    .interests,
+    .past-clients {
+        .interest,
+        .past-client {
             .remove-interest {
                 cursor: pointer;
-                vertical-align: -15%;
-                font-weight: bold;
-                font-size: 1.2rem;
+                vertical-align: -22%;
+                font-weight: 400;
+                font-size: 1.4rem;
                 color: #e71d39;
             }
 
-            margin: .4rem 0;
-            color: #868686;
-            font-size: .95rem;
-            font-weight: 100;
+            margin: .5rem 0;
+            color: $BLACK;
+            font-size: 1rem;
+            font-weight: 400;
 
             input[type="checkbox"] {
                 margin-right: .2rem;
@@ -209,9 +251,9 @@
 
         .industry {
             margin: .7rem 0;
-            color: #868686;
-            font-size: .95rem;
-            font-weight: 100;
+            color: $BLACK;
+            font-size: 1rem;
+            font-weight: 400;
 
             input[type="checkbox"] {
                 margin-right: .2rem;

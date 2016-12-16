@@ -51,6 +51,44 @@ export default class ApproverEmployeeSkill extends React.Component {
         return text;
     }
 
+    changeState(level) {
+        let self = this;
+
+        if (this.state.data.knowledge === null)
+            return;
+        if (this.state.data.knowledge !== null && this.getChild(this.state.data.knowledge, "want"))
+            return;
+        if (this.state.data.knowledge !== null && this.getChild(this.state.data.knowledge, "approved") !== undefined) {
+            this.userServices.DisapproveKnowledge(this.state.data.knowledge.id).then(data => {
+                self.setState({
+                    data: update(
+                        self.state.data, {knowledge: {$set: data}}
+                    )
+                });
+
+                self.showAlert('Skill knowledge unckeded');
+            }).catch(err => {
+                console.log("Error disapproving skill knowledge", err);
+            });
+        }
+        else {
+            this.userServices.ApproveKnowledge(this.state.data.knowledge.id).then(data => {
+                self.setState({
+                    data: update(
+                        self.state.data, {knowledge: {$set: data}}
+                    )
+                });
+
+                self.showAlert('Skill knowledge approved');
+
+                if (this.props.onSkillApproved !== undefined)
+                    this.props.onSkillApproved(self.state.data.id);
+            }).catch(err => {
+                console.log("Error approving skill knowledge", err);
+            });
+        }
+    }
+
     approve() {
         let self = this;
 
@@ -92,8 +130,8 @@ export default class ApproverEmployeeSkill extends React.Component {
         let newId = "tooltip_" + this.makeid();
 
         return (
-            <div className="skill-level-grid__levels col -col-12 -col-no-gutter">
-                <div className="col -col-2">
+            <div className="skill-level-grid__levels">
+                <div className="col -col-3">
                     <span className="sub-table-header">{this.state.data.name}</span>
                 </div>
                 <div className="col -col-1 skill-level-want-wrapper">
@@ -101,25 +139,36 @@ export default class ApproverEmployeeSkill extends React.Component {
                         <input className="readOnly" type="checkbox" label="skill-want" checked={want} {...opts} />
                     </span>
                 </div>
-                <div title={verified?"Approved by " + approver: "Verification pending"} className={"col -col-2 " + (this.state.data.knowledge.level === 1? "skill-level-box " + (verified? "level-verified": "level-non-verified"): "")}>
-                    <span className="skill-title"></span>
+                <div title={this.state.data.knowledge.level === 1 && verified?"Approved by " + approver: "Verification pending"} onClick={this.changeState.bind(this, 1)} className={"col -col-2 " + (this.state.data.knowledge.level === 1? "skill-level-box skill-level-changeable " + (verified? "level-verified": "level-non-verified"): "")}>
+                    {this.state.data.knowledge.level === 1?
+                        (want?<span>&nbsp;</span>:
+                            (!verified? <span className="skill-title">Verify</span>:
+                                        <span className="skill-title">&nbsp;</span>)
+                        ):<span>&nbsp;</span>
+                    }
                 </div>
-                <div title={verified?"Approved by " + approver: "Verification pending"} className={"col -col-2 " + (this.state.data.knowledge.level === 2? "skill-level-box " + (verified? "level-verified": "level-non-verified"): "")}>
-                    <span className="skill-title"></span>
+                <div title={this.state.data.knowledge.level === 2 && verified?"Approved by " + approver: "Verification pending"} onClick={this.changeState.bind(this, 2)} className={"col -col-2 " + (this.state.data.knowledge.level === 2? "skill-level-box skill-level-changeable " + (verified? "level-verified": "level-non-verified"): "")}>
+                    {this.state.data.knowledge.level === 2?
+                        (want?<span>&nbsp;</span>:
+                            (!verified? <span className="skill-title">Verify</span>:
+                                        <span className="skill-title">&nbsp;</span>)
+                        ):<span>&nbsp;</span>
+                    }
                 </div>
-                <div title={verified?"Approved by " + approver: "Verification pending"} className={"col -col-2 " + (this.state.data.knowledge.level === 3? "skill-level-box " + (verified? "level-verified": "level-non-verified"): "")}>
-                    <span className="skill-title"></span>
+                <div title={this.state.data.knowledge.level === 3 && verified?"Approved by " + approver: "Verification pending"} onClick={this.changeState.bind(this, 3)} className={"col -col-2 " + (this.state.data.knowledge.level === 3? "skill-level-box skill-level-changeable " + (verified? "level-verified": "level-non-verified"): "")}>
+                    {this.state.data.knowledge.level === 3?
+                        (want?<span>&nbsp;</span>:
+                            (!verified? <span className="skill-title">Verify</span>:
+                                        <span className="skill-title">&nbsp;</span>)
+                        ):<span>&nbsp;</span>
+                    }
                 </div>
-                <div title={verified?"Approved by " + approver: "Verification pending"} className={"col -col-2 " + (this.state.data.knowledge.level === 4? "skill-level-box " + (verified? "level-verified": "level-non-verified"): "")}>
-                    <span className="skill-title"></span>
-                </div>
-                <div className="col -col-1 remove-skill">
-                    {!verified && !want?
-                        <div>
-                            <span className="ss-icon-check" onClick={this.approve.bind(this)} data-tip data-for={newId}></span>
-                            <ReactTooltip id={newId} class="tooltipFormat">Approve knowledge</ReactTooltip>
-                        </div>
-                        :null
+                <div title={this.state.data.knowledge.level === 4 && verified?"Approved by " + approver: "Verification pending"} onClick={this.changeState.bind(this, 4)} className={"col -col-2 " + (this.state.data.knowledge.level === 4? "skill-level-box skill-level-changeable " + (verified? "level-verified": "level-non-verified"): "")}>
+                    {this.state.data.knowledge.level === 4?
+                        (want?<span>&nbsp;</span>:
+                            (!verified? <span className="skill-title">Verify</span>:
+                                        <span className="skill-title">&nbsp;</span>)
+                        ):<span>&nbsp;</span>
                     }
                 </div>
             </div>

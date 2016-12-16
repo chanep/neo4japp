@@ -27,14 +27,6 @@ export default class EmployeeSkillSubGroup extends React.Component {
     	});
     }
 
-    showHideLevels() {
-        if(this.state.showLevels) {
-            this.setState({ showLevels: false });
-        } else {
-            this.setState({ showLevels: true });
-        }
-    }
-
     onSkillApproved(id) {
         if (this.props.onSkillApproved !== undefined)
             this.props.onSkillApproved(id);
@@ -48,55 +40,32 @@ export default class EmployeeSkillSubGroup extends React.Component {
             if (skill.knowledge !== null && skill.knowledge.approved === undefined && !skill.knowledge.want) pendings++;
         });
 
+        let multipleInside = this.state.data.skills.length > 1;
+
         return (
             <div className="zebra-table">
-                <div className="grid">
-                    <div className="col -col-10">
-                        <p className="table-row-heading">{this.state.data.name}</p>
-                    </div>
-                    <div className="col -col-1">
-                        <span className="table-row">{skillsCount}{pendings > 0?<i className="validate-pending" title={pendings + " pending approval"}></i>:null}</span>
-                    </div>
-                    <div className={this.state.showLevels ? "col -col-1 results-arrow-open-close skill-opened" : "col -col-1 results-arrow-open-close"} onClick={this.showHideLevels.bind(this)}>
-                        <i className="ss-icon-down-arrow"></i>
-                    </div>
-                </div>
-                { this.state.showLevels ? 
-                    <div className="skill-level-grid">
-                        <div className="skill-level-grid__header col -col-12 -col-no-gutter">
-                            <div className="col -col-2">
-                                <span className="sub-table-header"></span>
-                            </div>
-                            <div className="col -col-1">
-                                <span className="sub-table-header">Want?</span>
-                            </div>
-                            <div className="col -col-2">
-                                <span className="sub-table-header">Heavy Supervision</span>
-                            </div>
-                            <div className="col -col-2">
-                                <span className="sub-table-header">Light Supervision</span>
-                            </div>
-                            <div className="col -col-2">
-                                <span className="sub-table-header">No Supervision</span>
-                            </div>
-                            <div className="col -col-2">
-                                <span className="sub-table-header">Teach/Manage</span>
-                            </div>
-                            <div className="col -col-1 skill-level-empty">
-                                <span className="sub-table-header"></span>
-                            </div>
+                {multipleInside?
+                    <div className="grid">
+                        <div className="col -col-12 subgroup-title-name">
+                            <p className="table-row-heading skill-subgroup-title">{this.state.data.name}</p>
                         </div>
-                        {
-                            this.state.data.skills.map(function(skill, key) {
-                                return(
-                                        self.state.approverMode?
-                                          <ApproverEmployeeSkill skill={skill} key={key} onSkillApproved={self.onSkillApproved.bind(self)} />
-                                        : <EmployeeSkill skill={skill} key={key} />
-                                );
-                            })
-                        }
                     </div>
-                 : null }
+                    : null
+                }
+                <div>
+                    {
+                        this.state.data.skills.map(function(skill, key) {
+                            return(
+                                    <div className="skill-level-grid" key={key}>
+                                        {self.state.approverMode?
+                                            <ApproverEmployeeSkill skill={skill} indent={multipleInside} onSkillApproved={self.onSkillApproved.bind(self)} />
+                                            : <EmployeeSkill skill={skill} indent={multipleInside} />
+                                        }
+                                    </div>
+                            );
+                        })
+                    }
+                </div>
             </div>
         );
     }
