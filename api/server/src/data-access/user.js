@@ -190,14 +190,14 @@ class UserDa extends BaseDa{
         return this.deleteAllRelationships(userId, 'resourceManagers');
     }
 
-    addClient(userId, clientId){
-        return this.relate(userId, clientId, 'clients');
+    addClient(userId, clientId, previous){
+        return this.relate(userId, clientId, 'clients', {previously: !!previous});
     }
     addClientByClientName(userId, clientName){
         let clientDa = new ClientDa();
         return clientDa.findOrCreate(clientName)
             .then(c => {
-                return this.addClient(userId, c.id)
+                return this.addClient(userId, c.id, true)
                     .then(() => c);
             });
     }
@@ -207,7 +207,7 @@ class UserDa extends BaseDa{
     clearPhonelistClients(userId){
         let label = this.labelsStr;
         let clientRelL = this.model.getRelationByKey("clients").label;
-        let cmd = `match (n:${label})-[r:${clientRelL}]->(c) where id(n) = {userId} and c.phonelistId is not null
+        let cmd = `match (n:${label})-[r:${clientRelL}]->(c) where id(n) = {userId} and (r.previously is null or r.previously = false)
                     delete r
                     return count(r) as affected`
         let params = {userId: userId};
