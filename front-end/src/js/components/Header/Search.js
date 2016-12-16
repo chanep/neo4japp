@@ -24,6 +24,9 @@ class Search extends React.Component {
           skillsServices = new SkillsServices(),
           userServices = new UserServices();
 
+      console.log('props');
+      console.log(this.props);
+
       if (this.props.skillsIds != undefined &&
         this.props.skillsIds.length > 0) {
 
@@ -250,6 +253,19 @@ class Search extends React.Component {
 
           if (!repeated)
             results.push({ "id": industry.id, "name": industry.name, "type": 'industry'});
+         });
+
+        data.clients.forEach(function (client) {
+          var repeated = false;
+
+          that.state.chosenItems.forEach(function (item) {
+            if (item.id == industry.id) {
+              repeated = true;
+            }
+          });
+
+          if (!repeated)
+            results.push({ "id": client.id, "name": client.name, "type": 'client'});
          });
 
          this.setState({ results: results });
@@ -480,12 +496,14 @@ class Search extends React.Component {
 
     makeQuery() {
       var chosenItems = this.state.chosenItems,
-          skillsIds = [], interestsIds = [], queryConcat = '', path, i,
+          skillsIds = [], interestsIds = [], clients = [], queryConcat = '', path, i,
           hasUsers = false;
 
       for (i = 0; i < chosenItems.length; i++) {
           if (chosenItems[i].type == 'interest')
             interestsIds.push(chosenItems[i].id);
+          else if (chosenItems[i].type == 'client')
+            clientsIds.push(chosenItems[i].id);
           else
             skillsIds.push(chosenItems[i].id);
 
@@ -502,6 +520,9 @@ class Search extends React.Component {
 
         if (interestsIds.length > 0)
           queryConcat += '/interests/' + interestsIds.join();
+
+        if (clientsIds.length > 0)
+          queryConcat += '/clients/' + clientsIds.join();
 
         path = '/searchresults' + queryConcat;
         this.context.router.push({ pathname: path });

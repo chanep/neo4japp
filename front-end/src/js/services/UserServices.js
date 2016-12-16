@@ -59,4 +59,16 @@ export default class UserServices extends ServicesBase {
 	RequestManagerApproval(employeeId) {
 		return super.callPutServices("resource-manager/approval-request/" + employeeId, null);
 	}
+
+	AddClient(clientName) {
+		return super.callPutServices('user/client', {'clientName': clientName});
+	}
+
+	GetClients(name, ids, limit) {
+		return super.callGetServices('client', { "name": name, "ids": ids, "limit": limit });
+	}
+
+	RemoveClient(clientId) {
+		return super.callDeleteServices('user/client', {'clientId': clientId});
+	}
 }

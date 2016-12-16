@@ -23,7 +23,9 @@ export default class EmployeeHeader extends React.Component {
             interest: "",
             pastClient: "",
             suggestions: [],
+            pastClientsSuggestions: [],
             suggestedInterest: "",
+            suggestedPastClient: "",
             industries: [],
             pastClients: [],
             user: null,
@@ -36,7 +38,8 @@ export default class EmployeeHeader extends React.Component {
             editingPastClients: false,
             userIndustries: [],
             remainderSent: false,
-            addingInterest: false
+            addingInterest: false,
+            addingPastClient: false
         }
 
         this.editInterests = this.editInterests.bind(this);
@@ -57,12 +60,20 @@ export default class EmployeeHeader extends React.Component {
 
         this.editPastClients = this.editPastClients.bind(this);
         this.onPastClientsAutocompleteChange = this.onPastClientsAutocompleteChange.bind(this);
+        this.getPastClientsSuggestions = this.getPastClientsSuggestions.bind(this);
+        this.onPastClientsSuggestionsFetchRequested = this.onPastClientsSuggestionsFetchRequested.bind(this);
+        this.onPastClientsSuggestionsClearRequested = this.onPastClientsSuggestionsClearRequested.bind(this);
+        this.addSuggestedPastClient = this.addSuggestedPastClient.bind(this);
+
+        this.addPastClient = this.addPastClient.bind(this);
+        this.addPastClientQuery = this.addPastClientQuery.bind(this);
+        this.removeClient = this.removeClient.bind(this);
 
         this.basePage = new BasePage();
     }
 
     componentDidUpdate(){
-        if (this.state.editingInterests) {
+        if (this.state.editingInterests || this.state.editingPastClients) {
             document.getElementsByClassName('react-autosuggest__input')[0].focus();
             document.getElementsByClassName('react-autosuggest__input')[0].setAttribute('maxlength', ENV().interests.maximumInterestLength);
         }
@@ -185,6 +196,24 @@ export default class EmployeeHeader extends React.Component {
         });
     }
 
+    removeClient(clientId) {
+        var user = this.state.user;
+
+        this.userData.RemoveClient(clientId).then(data => {
+            console.log('Client removed successfully');
+
+            user.clients.forEach(function (client, index) {
+                if (client.id == clientId) {
+                    user.clients.splice(index, 1);
+                }
+            });
+
+            this.setState({ "user": user });
+        }).catch(data => {
+            console.log('Error while removing client', data);
+        });
+    }
+
     addInterest(e) {
         e.preventDefault();
 
@@ -208,6 +237,29 @@ export default class EmployeeHeader extends React.Component {
         }
     }
 
+    addPastClient(e) {
+        e.preventDefault();
+
+        var alreadyAdded = false,
+            that = this;
+
+        if (this.state.pastClient.trim().length >= ENV().interests.minimumInterestLength) {
+            this.state.user.clients.forEach(function (client) {
+                if (client.name == that.state.pastClient) {
+                    alreadyAdded = true;
+                }
+            });
+
+            if (!alreadyAdded) {
+                if (!this.state.addingPastClient) {
+                    this.setState({ "addingPastClient": true });
+                    this.addPastClientQuery(this.state.pastClient);
+                    this.setState({ "suggestedPastClient": null });
+                }
+            }
+        }
+    }
+
     addInterestQuery(interest) {
         let self = this,
             user = this.state.user;
@@ -224,9 +276,30 @@ export default class EmployeeHeader extends React.Component {
         });
     }
 
+    addPastClientQuery(clientName) {
+        let self = this,
+            user = this.state.user;
+
+        this.userData.AddClient(clientName).then(data => {
+          user.clients.push({ "id": data.id, "name": data.name });
+          self.setState({
+            "pastClient": "",
+            "user": user,
+            "addingPastClient": false
+          });
+        }).catch(data => {
+            console.log('Error while adding past client', data);
+        });
+    }
+
     addSuggestedInterest() {
         this.addInterestQuery(this.state.suggestedInterest.name);
         this.setState({ "suggestedInterest": null });
+    }
+
+    addSuggestedPastClient() {
+        this.addPastClientQuery(this.state.suggestedPastClient.name);
+        this.setState({ "suggestedPastClient": null });
     }
 
     toggleIndustry(industry) {
@@ -265,6 +338,16 @@ export default class EmployeeHeader extends React.Component {
     }
 
     /*
+    Past Clients autocomplete function
+    */
+    getPastClientsSuggestions(value) {
+        var ids = [];
+        this.userData.GetClients(value.value, ids, ENV().clients.suggestionsNumber).then(data => {
+            this.setState({ "pastClientsSuggestions": data });
+        });
+    }
+
+    /*
     Autocomplete functions
     */
 
@@ -283,9 +366,19 @@ export default class EmployeeHeader extends React.Component {
         this.getSuggestions(value);
     };
 
+    onPastClientsSuggestionsFetchRequested(value) {
+        this.getPastClientsSuggestions(value);
+    };
+
     onSuggestionsClearRequested() {
         this.setState({
             suggestions: []
+        });
+    };
+
+    onPastClientsSuggestionsClearRequested() {
+        this.setState({
+            pastClientsSuggestions: []
         });
     };
 
@@ -341,7 +434,7 @@ export default class EmployeeHeader extends React.Component {
 
         var self = this;
 
-        const { interest, suggestions, pastClient } = this.state;
+        const { interest, suggestions, pastClientsSuggestions, pastClient } = this.state;
         const inputProps = {
           placeholder: "Interest",
           value: interest,
@@ -390,19 +483,24 @@ export default class EmployeeHeader extends React.Component {
 
         let clients = "No clients data available";
         if (this.state.user.clients.length > 0) {
-            clients = "";
+            clients = "Clients at R/GA: ";
             this.state.user.clients.forEach(function(client) {
-                clients += (clients !== ""? ", ": "") + client.name;
+                if (client.phonelistId !== undefined) {
+                    clients += (clients !== "Clients at R/GA: "? ", ": "") + client.name;
+                }
             });
         }
 
         let newId = "tooltip_" + this.makeid();
 
         let pastClients = "";
-        if (this.state.pastClients.length > 0) {
+        if (this.state.user.clients.length > 0) {
             pastClients = "";
-            this.state.pastClients.forEach(function(pastClient) {
-                pastClients += (pastClients !== ""? ", ": "") + pastClient.name;
+            this.state.user.clients.forEach(function(pastClient) {
+                console.log(pastClient);
+                if (pastClient.phonelistId == undefined) {
+                    pastClients += (pastClients !== ""? ", ": "") + pastClient.name;
+                }
             });
         }
 
@@ -458,20 +556,22 @@ export default class EmployeeHeader extends React.Component {
                                 <div className="modal-contents">
                                     <h2>Add non R/GA clients</h2>
                                     <h3>Add Clients from previous experience</h3>
-                                    <form onSubmit={this.addInterest.bind(this)}>
-                                      <input type="submit" className="add-past-client" value="Add client" />
+                                    <form onSubmit={this.addPastClient.bind(this)}>
+                                      <input type="submit" className="add-past-client" value="Add Client" />
                                       <Autosuggest
-                                        suggestions={suggestions}
-                                        onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-                                        onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+                                        suggestions={pastClientsSuggestions}
+                                        onSuggestionsFetchRequested={this.onPastClientsSuggestionsFetchRequested}
+                                        onSuggestionsClearRequested={this.onPastClientsSuggestionsClearRequested}
                                         getSuggestionValue={this.getSuggestionValue}
                                         renderSuggestion={this.renderSuggestion}
                                         inputProps={pastClientsInputProps}
                                       />
                                     </form>
                                     <ul className="past-clients">
-                                    {this.state.pastClients.map((pastClient, index)=>{
-                                      return (<li className="past-client" key={index}><span className="remove-interest ss-icon-remove" data-past-client-id={pastClient.id} onClick={self.removeInterest.bind(this, pastClient.id)}></span> {pastClient.name}</li>)
+                                    {this.state.user.clients.map((pastClient, index)=>{
+                                        if (pastClient.phonelistId == undefined) {
+                                            return (<li className="past-client" key={index}><span className="remove-interest ss-icon-remove" data-past-client-id={pastClient.id} onClick={self.removeClient.bind(this, pastClient.id)}></span> {pastClient.name}</li>)
+                                        }
                                     })}
                                     </ul>
                                 </div>

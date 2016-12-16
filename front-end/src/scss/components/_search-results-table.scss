@@ -495,17 +495,24 @@
             top: 33px;
             right: 13px;
             font-size: 18px;
+
+            .path1 {
+                &:before {
+                    color: $BLACK;
+                }
+            }
         }
     }
 
     .modal-contents {
-        background-color: #f3f3f4;
+        border: 1px solid $BLACK;
+        background-color: $WHITE;
         max-height: 30rem;
         padding: 2.75rem;
 
         h2 {
-            font-size: 1rem;
-            font-weight: 400;
+            font-size: 1.2rem;
+            font-weight: 700;
         }
 
         div {
@@ -535,9 +542,9 @@
             margin-top: 1rem;
             font-size: .95em;
             font-weight: 100;
-            color: $GREY-FONT;
+            color: $WHITE;
             border: 0;
-            background-color: #e7e7e8;
+            background-color: $BLACK;
             padding: .75em 0;
             cursor: pointer;
             width: 100%;

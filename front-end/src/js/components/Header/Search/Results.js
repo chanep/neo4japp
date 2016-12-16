@@ -52,7 +52,7 @@ class Results extends React.Component {
       let self = this;
       let results = this.props.results || [];
 
-      var skills = [], tools = [], users = [], interests = [], industries = [], i = 0;
+      var skills = [], tools = [], users = [], interests = [], industries = [], clients = [], i = 0;
 
       for (i; i < results.length; i++) {
         if (results[i].type == 'skill') {
@@ -73,6 +73,10 @@ class Results extends React.Component {
 
         if (results[i].type == 'industry') {
           industries.push(results[i]);
+        }
+
+        if (results[i].type == 'client') {
+          clients.push(results[i]);
         }
       };
 
@@ -159,6 +163,22 @@ class Results extends React.Component {
                      
                         industries.map(function (industry, props){
                           return <li key={industry.id} className="subcategory-result" data-suggested={industry.suggested} data-id={industry.id} onClick={self.clickingState.bind(self, props, industry)}>{industry.name}</li>;
+                        })
+
+                    }
+                  </ul>
+                </li>
+              </ul>
+              : false}
+              {clients.length > 0 ?
+              <ul>
+                <li className="category-list">Clients</li>
+                <li className="subcategory-list">
+                  <ul>
+                    {
+                     
+                        clients.map(function (client, props){
+                          return <li key={client.id} className="subcategory-result" data-suggested={client.suggested} data-id={client.id} onClick={self.clickingState.bind(self, props, client)}>{client.name}</li>;
                         })
 
                     }
