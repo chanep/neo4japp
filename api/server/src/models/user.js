@@ -86,6 +86,11 @@ let knowledgeSchema = {
         approverFullname: Joi.string().allow(null)
     };
 
+let workedForSchema = {
+    id: Joi.number(),
+    previously: Joi.boolean().default(false) //worked for that client before RGA
+}
+
 let searchSchema = {
         id: Joi.number(),
         date: Joi.date().required()
@@ -128,7 +133,7 @@ user.relateWithMany(skill, "SEARCHED", "searches", outgoing, searchSchema, multi
 user.relateWithMany(user, "APPROVED_BY", "approvers", outgoing, null);
 user.relateWithMany(user, "R_MANAGED_BY", "resourceManagers", outgoing, null);
 
-user.relateWithMany(client, "WORKED_FOR", "clients", outgoing, null);
+user.relateWithMany(client, "WORKED_FOR", "clients", outgoing, workedForSchema);
 user.relateWithOne(allocation, "ALLOCATION", "allocation", outgoing, null);
 allocation.relateWithOne(user, "ALLOCATION", "user", incoming, null);
 
