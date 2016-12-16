@@ -61,6 +61,7 @@ export default class SearchResults extends BasePage {
 
         var skillsConcat = this.state.skillsIds.join(),
             interestsConcat = this.state.interestsIds.join(),
+            clientsConcat = this.state.clientsIds.join(),
             locationsConcat = this.state.locationsIds.join(),
             path = '/searchresults';
 
@@ -70,11 +71,11 @@ export default class SearchResults extends BasePage {
         if (this.state.interestsIds.length > 0)
             path += '/interests/' + interestsConcat;
 
-        if (locationsIds.length > 0)
-            path += '/locations/' + locationsConcat;
-
         if (this.state.clientsIds.length > 0)
             path += '/clients/' + clientsConcat;
+
+        if (locationsIds.length > 0)
+            path += '/locations/' + locationsConcat;
 
         this.context.router.push({ pathname: path });
     }
@@ -82,6 +83,7 @@ export default class SearchResults extends BasePage {
     allSelected() {
         var skillsConcat = this.state.skillsIds.join(),
             interestsConcat = this.state.interestsIds.join(),
+            clientsConcat = this.state.clientsIds.join(),
             path = '/searchresults';
 
         if (this.state.skillsIds.length > 0)
@@ -141,7 +143,7 @@ export default class SearchResults extends BasePage {
             locationsIds = this.props.params.locationsIds.split(',');
         }
 
-        this.getData(skillsIds, interestsIds, locationsIds);
+        this.getData(skillsIds, interestsIds, clientsIds, locationsIds);
     }
 
     componentWillReceiveProps(newProps) {

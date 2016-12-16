@@ -67,4 +67,8 @@ export default class UserServices extends ServicesBase {
 	RemoveClient(clientId) {
 		return super.callDeleteServices('user/client', {'clientId': clientId});
 	}
+
+	GetClientsByIds(ids, limit) {
+		return super.callGetServices('client', {ids: ids, limit: limit});
+	}
 }
