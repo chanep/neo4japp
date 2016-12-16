@@ -52,6 +52,7 @@ router.put('/user/skill-suggestion', userController.suggestSkill.bind(userContro
 router.use('/approver', security.checkRole(roles.approver).bind(security));
 
 router.get('/approver/my-team', approverController.findMyTeamUsers.bind(approverController));
+router.get('/approver/:approverId/my-team', approverController.findMyTeamUsers.bind(approverController));
 router.put('/approver/approve', approverController.approveKnowledge.bind(approverController));
 router.get('/approver/search-all', searchAllController.searchAll.bind(searchAllController));
 

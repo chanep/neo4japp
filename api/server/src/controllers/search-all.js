@@ -21,7 +21,7 @@ class SearchAllController extends BaseController{
     */
 
     /**
-    @api {get} /api/approver/search-all 2 Search all
+    @api {get} /api/approver/search-all 3 Search all
     @apiDescription Search skills, tools and users (people)
     @apiGroup Approvers
 
