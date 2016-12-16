@@ -9,7 +9,7 @@ import AddSkillsFilter from './AddSkillsFilter';
 import UserServices from '../../services/UserServices';
 import AddSkillsList from './AddSkillsList';
 import BasePage from '../../pages/BasePage';
-import ENV from "../../../config.js";
+//import ENV from "../../../config.js";
 
 export default class EmployeeAddSkillsTable extends React.Component {
     constructor(props) {
@@ -17,7 +17,7 @@ export default class EmployeeAddSkillsTable extends React.Component {
 
         this.state = {
         	data: [],
-        	selectedGroup: 0
+            selectedGroup: 0
         };
 
         this.userData = new UserServices();
@@ -25,12 +25,13 @@ export default class EmployeeAddSkillsTable extends React.Component {
 
     handleFilter(selectedValue, newText) {
     	this.setState({
-            selectedGroup: selectedValue,
-            preselectedFilter: newText
+            selectedGroup: selectedValue
+            //,preselectedFilter: newText
         });
     }
 
     getData(employeeId) {
+        /*
         let basePage = new BasePage();
         let employee = basePage.GetUserLogged();
         let preselectedFilter = "Other";
@@ -39,17 +40,21 @@ export default class EmployeeAddSkillsTable extends React.Component {
                 preselectedFilter = ENV().preselectedFilter[employee.department.name];
             }
         }
+        */
 
         this.userData.GetEmployeeSkills(employeeId, true).then(data => {
+            /*
             let preselectedId = null;
             data.forEach(function(val) {
                 if (val.type === "tool" && val.name === preselectedFilter) preselectedId = val.id;
             });
+            */
 
             this.setState({
                 data: data,
-                preselectedFilter: preselectedFilter,
-                selectedGroup: preselectedId
+                //preselectedFilter: preselectedFilter,
+                //selectedGroup: preselectedId
+                selectedGroup: 0
             });
         }).catch(data => {
           
