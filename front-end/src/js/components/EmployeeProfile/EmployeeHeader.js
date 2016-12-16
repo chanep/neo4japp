@@ -175,7 +175,10 @@ export default class EmployeeHeader extends React.Component {
     }
 
     finishIndustriesEdition() {
-        this.setState({ editingIndustries: false });
+        this.setState({
+            editingIndustries: false,
+            pastClient: ""
+        });
     }
 
     removeInterest(interestId) {
