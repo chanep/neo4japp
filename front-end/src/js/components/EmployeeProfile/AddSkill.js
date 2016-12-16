@@ -92,32 +92,32 @@ export default class AddSkill extends React.Component {
         }
 
         return (
-            <div className="skill-level-grid__levels col -col-12 -col-no-gutter">
-                <div className="col -col-2 overflowHidden">
+            <div className="add-row">
+                <div className="col -col-2 overflowHidden -col-no-gutter -col-skill-name">
                     <span className="sub-table-header" title={this.state.skill.name}>{this.state.skill.name}</span>
                 </div>
-                <div className="col -col-1 skill-level-want-wrapper">
+                <div className="col -col-1 skill-level-want-wrapper -col-no-gutter">
                     <span className="skill-title">
                         <input className={this.state.skill.knowledge === null?"selectable":"readOnly"} type="checkbox" label="skill-want" checked={checked} onChange={this.levelChanged.bind(this, true, null)} {...opts} />
                     </span>
                 </div>
-                <div className={"col -col-2 skill-level-box " + (this.state.skill.knowledge === null? "selectable" : (this.state.skill.knowledge.level === 1? "level-selected" : ""))}
+                <div className={"col -col-2 -col-no-gutter skill-level-box " + (this.state.skill.knowledge === null? "selectable" : (this.state.skill.knowledge.level === 1? (this.state.skill.knowledge.approved === undefined? "level-non-verified": "level-verified") : ""))}
                     onClick={this.levelChanged.bind(this, false, 1)}>
-                    <span className="skill-title"></span>
+                    <span className="skill-title">&nbsp;</span>
                 </div>
-                <div className={"col -col-2 skill-level-box " + (this.state.skill.knowledge === null? "selectable" : (this.state.skill.knowledge.level === 2? "level-selected" : ""))}
+                <div className={"col -col-2 -col-no-gutter skill-level-box " + (this.state.skill.knowledge === null? "selectable" : (this.state.skill.knowledge.level === 2? (this.state.skill.knowledge.approved === undefined? "level-non-verified": "level-verified") : ""))}
                     onClick={this.levelChanged.bind(this, false, 2)}>
-                    <span className="skill-title"></span>
+                    <span className="skill-title">&nbsp;</span>
                 </div>
-                <div className={"col -col-2 skill-level-box " + (this.state.skill.knowledge === null? "selectable" : (this.state.skill.knowledge.level === 3? "level-selected" : ""))}
+                <div className={"col -col-2 -col-no-gutter skill-level-box " + (this.state.skill.knowledge === null? "selectable" : (this.state.skill.knowledge.level === 3? (this.state.skill.knowledge.approved === undefined? "level-non-verified": "level-verified") : ""))}
                     onClick={this.levelChanged.bind(this, false, 3)}>
-                    <span className="skill-title"></span>
+                    <span className="skill-title">&nbsp;</span>
                 </div>
-                <div className={"col -col-2 skill-level-box " + (this.state.skill.knowledge === null? "selectable" : (this.state.skill.knowledge.level === 4? "level-selected" : ""))}
+                <div className={"col -col-2 -col-no-gutter skill-level-box " + (this.state.skill.knowledge === null? "selectable" : (this.state.skill.knowledge.level === 4? (this.state.skill.knowledge.approved === undefined? "level-non-verified": "level-verified") : ""))}
                     onClick={this.levelChanged.bind(this, false, 4)}>
-                    <span className="skill-title"></span>
+                    <span className="skill-title">&nbsp;</span>
                 </div>
-                <div className={"col -col-1 " + (this.state.skill.knowledge !== null?"remove-skill": "")}>
+                <div className={"col -col-1 -col-no-gutter " + (this.state.skill.knowledge !== null?"remove-skill": "")}>
                     {this.state.skill.knowledge !== null?<span className="ss-icon-close" title="Remove skill" onClick={this.removeKnowledge.bind(this)}><span className="path1"></span><span className="path2"></span></span>: null}
                 </div>
             </div>

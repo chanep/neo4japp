@@ -29,11 +29,14 @@ ReactDOM.render(
         <Route path="/allocations" component={Layout}></Route>
         <Route path="/searchresults" component={SearchResults}>
              <Route path="/searchresults/skills/:skillsIds" component={SearchResults}/>
+             <Route path="/searchresults/clients/:clientsIds" component={SearchResults}/>
              <Route path="/searchresults/interests/:interestsIds" component={SearchResults}/>
              <Route path="/searchresults/skills/:skillsIds/locations/:locationsIds" component={SearchResults}/>
              <Route path="/searchresults/interests/:interestsIds/locations/:locationsIds" component={SearchResults}/>
              <Route path="/searchresults/skills/:skillsIds/interests/:interestsIds" component={SearchResults}/>
              <Route path="/searchresults/skills/:skillsIds/interests/:interestsIds/locations/:locationsIds" component={SearchResults}/>
+             <Route path="/searchresults/skills/:skillsIds/interests/:interestsIds" component={SearchResults}/>
+             <Route path="/searchresults/skills/:skillsIds/interests/:interestsIds/clients/:clients/locations/:locationsIds" component={SearchResults}/>
         </Route>
         <Route path="/myprofile" component={EmployeeProfile}></Route>
         <Route path="/myprofile/myskills" component={MySkills}></Route>

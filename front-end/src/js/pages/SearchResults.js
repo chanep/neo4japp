@@ -32,12 +32,18 @@ export default class SearchResults extends BasePage {
             skillsIds = this.props.params.skillsIds.split(',');
         }
 
+        let clientsIds = [];
+        if (this.props.params.clientsIds !== undefined) {
+            clientsIds = this.props.params.clientsIds.split(',');
+        }
+
         this.searchServices = new SearchServices();
         this.state = {
             "data": [],
             "skillsCount": 0,
             "searching": true,
             "skillsIds": skillsIds,
+            "clientsIds": clientsIds,
             "interestsIds": interestsIds,
             "locationsIds": locationsIds
         };
@@ -67,6 +73,9 @@ export default class SearchResults extends BasePage {
         if (locationsIds.length > 0)
             path += '/locations/' + locationsConcat;
 
+        if (this.state.clientsIds.length > 0)
+            path += '/clients/' + clientsConcat;
+
         this.context.router.push({ pathname: path });
     }
 
@@ -81,20 +90,24 @@ export default class SearchResults extends BasePage {
         if (this.state.interestsIds.length > 0)
             path += '/interests/' + interestsConcat;
 
+        if (this.state.clientsIds.length > 0)
+            path += '/clients/' + clientsConcat;
+
         this.context.router.push({ pathname: path });
     }
 
-    getData(skillsIds, interestsIds, locationsIds) {
+    getData(skillsIds, interestsIds, clientsIds, locationsIds) {
         let self = this;
 
-        this.setState({data: [], skillsIds: [], interestsIds: [], locationsIds: [], skillsCount: 0, searching: true});
-        if (skillsIds.length > 0 || interestsIds.length > 0) {
-            this.searchServices.GetSearchBySkills(skillsIds, interestsIds, ENV().search.resultsLimit, locationsIds).then(data => {
+        this.setState({data: [], skillsIds: [], interestsIds: [], clientsIds: [], locationsIds: [], skillsCount: 0, searching: true});
+        if (skillsIds.length > 0 || interestsIds.length > 0 || clientsIds.length > 0) {
+            this.searchServices.GetSearchBySkills(skillsIds, interestsIds, clientsIds, ENV().search.resultsLimit, locationsIds).then(data => {
                 self.setState({
                     data: data,
                     skillsIds: skillsIds,
                     interestsIds: interestsIds,
                     locationsIds: locationsIds,
+                    clientsIds: clientsIds,
                     skillsCount: skillsIds.length,
                     searching: false
                 });
@@ -102,13 +115,14 @@ export default class SearchResults extends BasePage {
                 console.log("Error performing search", data);
             });
         } else {
-            this.setState({data: [], skillsIds: skillsIds, interestsIds: interestsIds, locationsIds: locationsIds, skillsCount: 0, searching: false});
+            this.setState({data: [], skillsIds: skillsIds, interestsIds: interestsIds, clientsIds: clientsIds, locationsIds: locationsIds, skillsCount: 0, searching: false});
         }
     }
 
     componentDidMount() {
         let skillsIds = [];
         let interestsIds = [];
+        let clientsIds = [];
         let locationsIds = [];
 
         if (this.props.params.skillsIds !== undefined) {
@@ -117,6 +131,10 @@ export default class SearchResults extends BasePage {
 
         if (this.props.params.interestsIds !== undefined) {
             interestsIds = this.props.params.interestsIds.split(',');
+        }
+
+        if (this.props.params.clientsIds !== undefined) {
+            clientsIds = this.props.params.clientsIds.split(',');
         }
 
         if (this.props.params.locationsIds !== undefined) {
@@ -129,6 +147,7 @@ export default class SearchResults extends BasePage {
     componentWillReceiveProps(newProps) {
         let skillsIds = [];
         let interestsIds = [];
+        let clientsIds = [];
         let locationsIds = [];
 
         if (newProps.params.skillsIds !== undefined) {
@@ -139,17 +158,21 @@ export default class SearchResults extends BasePage {
             interestsIds = newProps.params.interestsIds.split(',');
         }
 
+        if (newProps.params.clientsIds !== undefined) {
+            clientsIds = newProps.params.clientsIds.split(',');
+        }
+
         if (newProps.params.locationsIds !== undefined) {
             locationsIds = newProps.params.locationsIds.split(',');
         }
 
-        this.getData(skillsIds, interestsIds, locationsIds);
+        this.getData(skillsIds, interestsIds, clientsIds, locationsIds);
     }
 
     render() {
         return (
             <div>
-                <Header search={super._showSearch()} loggedIn={true} skillsIds={this.state.skillsIds} interestsIds={this.state.interestsIds} />
+                <Header search={super._showSearch()} loggedIn={true} skillsIds={this.state.skillsIds} interestsIds={this.state.interestsIds} clientsIds={this.state.clientsIds} />
                 <SearchResultsTable data={this.state.data} skillsCount={this.state.skillsCount} searching={this.state.searching} locations={this.state.locationsIds} onLocationsChanged={this.onLocationsChanged.bind(this)} allSelected={this.allSelected.bind(this)} />
             </div>
         );
