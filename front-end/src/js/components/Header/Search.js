@@ -18,14 +18,12 @@ class Search extends React.Component {
       var chosenItems = [],
           skillsIds = [],
           interestsIds = [],
+          clientsIds = [],
           that = this,
           pillsLimit = ENV().search.pillsLimit,
           key,
           skillsServices = new SkillsServices(),
           userServices = new UserServices();
-
-      console.log('props');
-      console.log(this.props);
 
       if (this.props.skillsIds != undefined &&
         this.props.skillsIds.length > 0) {
@@ -67,6 +65,30 @@ class Search extends React.Component {
               "name": v.name, 
               "type": 'interest' 
             });
+          });
+
+          this.forceUpdate();
+        });
+      }
+
+      if (this.props.clientsIds != undefined &&
+        this.props.clientsIds.length > 0) {
+
+        for (var k in this.props.clientsIds) {
+          if (this.props.clientsIds.hasOwnProperty(k)) {
+            clientsIds.push(this.props.clientsIds[k]);
+          }
+        }
+
+        userServices.GetClientsByIds(clientsIds, pillsLimit).then(data =>{
+          data.forEach(function (v) {
+            if (clientsIds.indexOf(v.id.toString()) != -1) {
+              chosenItems.push({
+                "id": v.id,
+                "name": v.name,
+                "type": 'client'
+              });
+            }
           });
 
           this.forceUpdate();
@@ -259,7 +281,7 @@ class Search extends React.Component {
           var repeated = false;
 
           that.state.chosenItems.forEach(function (item) {
-            if (item.id == industry.id) {
+            if (item.id == client.id) {
               repeated = true;
             }
           });
@@ -496,7 +518,7 @@ class Search extends React.Component {
 
     makeQuery() {
       var chosenItems = this.state.chosenItems,
-          skillsIds = [], interestsIds = [], clients = [], queryConcat = '', path, i,
+          skillsIds = [], interestsIds = [], clientsIds = [], queryConcat = '', path, i,
           hasUsers = false;
 
       for (i = 0; i < chosenItems.length; i++) {

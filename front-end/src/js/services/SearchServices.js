@@ -9,9 +9,12 @@ export default class SearchServices extends ServicesBase {
 		if (interestsIds.length == 0)
 			interestsIds = [];
 
+		if (clientsIds.length == 0)
+			clientsIds = [];
+
 		if (officesIds.length == 0)
-			return super.callGetServices('resource-manager/users-by-skill', {skills:skillsIds, limit:limit, interests:interestsIds, clientsIds:clientsIds});
+			return super.callGetServices('resource-manager/users-by-skill', {skills:skillsIds, limit:limit, interests:interestsIds, clients:clientsIds});
 		else
-			return super.callGetServices('resource-manager/users-by-skill', {skills:skillsIds, limit:limit, interests:interestsIds, offices: officesIds, clientsIds:clientsIds});
+			return super.callGetServices('resource-manager/users-by-skill', {skills:skillsIds, limit:limit, interests:interestsIds, offices: officesIds, clients:clientsIds});
 	}
 }
