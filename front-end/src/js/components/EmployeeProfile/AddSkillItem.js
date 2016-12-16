@@ -65,7 +65,7 @@ export default class AddSkillItem extends React.Component {
                     <div className={this.state.open ? "col -col-1 results-arrow-open-close skill-opened" : "col -col-1 results-arrow-open-close"}><i className="ss-icon-down-arrow"></i></div>
                 </div>
                 { this.state.open ? 
-					<div className="skill-level-grid">
+					<div className="skill-level-grid skill-level-grid-add">
                         <div className="skill-level-grid__header col -col-12 -col-no-gutter">
                             <div className="col -col-2">
                                 <span className="sub-table-header">Skill</span>
@@ -73,7 +73,7 @@ export default class AddSkillItem extends React.Component {
                             <div className="col -col-1">
                                 <span className="sub-table-header">Want?</span>
                             </div>
-                            <div className="col -col-2">
+                            <div className="col -col-2 -header-heavy-supervision">
                                 <span className="sub-table-header">Heavy Supervision</span>
                             </div>
                             <div className="col -col-2">

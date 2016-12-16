@@ -374,7 +374,6 @@
         display: block;
         font-size: 1em;
         text-align: center;
-        padding: .45em .6em;
         font-weight: lighter;
         text-align: center;
         color: $GREY;
@@ -416,6 +415,33 @@
                 max-width: 100%;
                 overflow: hidden;
             }
+        }
+    }
+}
+
+.add-skills-information {
+    padding: em(30) em(10) em(10) em(20);
+    font-size: em(12);
+
+    p {
+        padding: 0;
+        margin: 0 0 em(10) 0;
+    }
+
+    h4 {
+        font-size: em(17);
+        font-weight: bold;
+        margin-bottom: em(20);
+        margin-top: em(20);
+    }
+
+    ul {
+        margin-bottom: em(40);
+
+        li {
+            list-style-type: disc !important;
+            list-style-position: inside;
+            margin-bottom: em(20);
         }
     }
 }

@@ -95,6 +95,29 @@
 	}
 }
 
+.skill-level-grid-add {
+	background-color: $LIGHTEST-GREY;
+
+	.-header-heavy-supervision {
+		padding-left: em(8);
+		padding-right: em(8);
+	}
+
+	.add-row {
+		 .-col-skill-name {
+		 	padding-left: em(10);
+		 }
+
+		 .col {
+		 	line-height: 25px;
+
+		 	span {
+		 		line-height: 25px;
+		 	}
+		 }
+	}
+}
+
 .skill-level-box {
 	background-color: #E3E3E3;
 	border-left: 1px solid white;
