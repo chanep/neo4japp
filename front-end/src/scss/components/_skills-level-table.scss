@@ -104,24 +104,40 @@
 	}
 
 	.add-row {
-		 .-col-skill-name {
-		 	padding-left: em(10);
-		 }
+		.row-levels {
+			overflow: hidden;
 
-		 .col {
-		 	line-height: 25px;
+			.col {
+				line-height: 30px;
+				border-right: 1px solid white;
+				border-bottom: 1px solid white;
 
-		 	span {
-		 		line-height: 25px;
-		 	}
-		 }
+				&:last-child {
+					border-right: none;
+					border-bottom: none;
+				}
+			}
+		}
+
+		.-col-skill-name {
+			font-size: em(12);
+			padding-left: em(10);
+			border-right: none !important;
+		}
+
+		.skill-description {
+			font-size: em(12);
+			color: $GREY;
+			padding-left: em(15);
+			line-height: em(17);
+		}
 	}
 }
 
 .skill-level-box {
-	background-color: #E3E3E3;
-	border-left: 1px solid white;
-	border-bottom: 1px solid white;
+	//background-color: #E3E3E3;
+	//border-left: 1px solid white;
+	//border-bottom: 1px solid white;
 	transition: background-color .2s ease-in-out;
 	text-align: center;
 	font-size: em(12);

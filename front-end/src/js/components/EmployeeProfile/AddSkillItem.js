@@ -43,6 +43,8 @@ export default class AddSkillItem extends React.Component {
 	}
 
     render() {
+        let self = this;
+
     	if (this.state.data === null && this.state.parent === null)
     		return <div />
 
@@ -50,6 +52,8 @@ export default class AddSkillItem extends React.Component {
         this.state.data.skills.forEach(function(skill, index) {
             if (skill.knowledge !== null) employeeHasThisCategory++;
         });
+
+        console.log("this.state.data.skills", this.state.data.skills);
 
         return (
             <div className="row-add-skill">
@@ -92,7 +96,7 @@ export default class AddSkillItem extends React.Component {
                         {
                             this.state.data.skills.map(function(skill, key) {
                                 return(
-                                    <AddSkill skill={skill} key={key} />
+                                    <AddSkill skill={skill} key={key} groupLength={self.state.data.skills.length} />
                                 );
                             })
                         }
