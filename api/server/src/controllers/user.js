@@ -336,7 +336,7 @@ class UserController extends BaseController{
             .then(isApproverOf => {
                 if(isApproverOf)
                     return true;
-                return new errors.ForbiddenError("You don't have access to this user details")
+                throw new errors.ForbiddenError("You don't have access to this user details")
             });
     }
 
@@ -393,7 +393,7 @@ HTTP/1.1 200 OK
             weekHours:[30,30,30,30], 
             workingWeekHours:[40,40,40,40], 
             startDate: ["09-05-2016","09-12-2016","09-19-2016","09-26-2016"]},
-        clients: [{ id: 134, name: "Nike", short: "NIKE" }], 
+        clients: [{ id: 134, name: "Nike", phonelistId: 23463 }], 
         interests: [{ id: 298, name: "Chess"}],
         industries: [{ id: 346, name: "Financial"}]
     }, {
