@@ -53,8 +53,6 @@ export default class AddSkillItem extends React.Component {
             if (skill.knowledge !== null) employeeHasThisCategory++;
         });
 
-        console.log("this.state.data.skills", this.state.data.skills);
-
         return (
             <div className="row-add-skill">
                 <div className="grid add-row-div" onClick={this.openClose.bind(this)}>

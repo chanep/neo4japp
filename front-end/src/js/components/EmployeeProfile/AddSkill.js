@@ -8,6 +8,7 @@ import { Link } from 'react-router';
 import update from 'react-addons-update';
 import UserServices from '../../services/UserServices';
 import AlertContainer from 'react-alert';
+import ReactTooltip from 'react-tooltip'
 
 export default class AddSkill extends React.Component {
     constructor(props) {
@@ -83,6 +84,17 @@ export default class AddSkill extends React.Component {
         });
     }
 
+    makeid()
+    {
+        var text = "";
+        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+        for( var i=0; i < 15; i++ )
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+        return text;
+    }
+
     render() {
         if (this.state.skill === null)
             return <div />
@@ -94,11 +106,19 @@ export default class AddSkill extends React.Component {
             opts['readOnly'] = 'readOnly';
         }
 
+        let newId = "tooltip_" + this.makeid();
+
         return (
             <div className="add-row col -col-12 -col-no-gutter">
                 <div className="row-levels">
                     <div className="col -col-2 overflowHidden -col-no-gutter -col-skill-name" title={this.state.skill.name}>
                         {this.state.skill.name}
+                        {this.state.groupLength > 1 && this.state.skill.description !== undefined?
+                            <div className="icon-description" data-tip data-for={newId}>
+                                <span className="icon-info"></span>
+                                <ReactTooltip id={newId} class="tooltipFormat">{this.state.skill.description}</ReactTooltip>
+                            </div>:null
+                        }
                     </div>
                     <div className="col -col-1 skill-level-want-wrapper -col-no-gutter">
                         <span className="skill-title">

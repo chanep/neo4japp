@@ -80,8 +80,14 @@
     	line-height: em(30);
 
     	span {
-			display: block;
+			//display: block;
 			line-height: 30px;
+    	}
+
+    	span.icon-unverify {
+    		font-family: Helvetica Neue,Helvetica,sans-serif; 
+    		font-size: 1em;
+    		padding-right: em(5);
     	}
 
 		&:nth-oftype(1) {
@@ -123,12 +129,18 @@
 			font-size: em(12);
 			padding-left: em(10);
 			border-right: none !important;
+
+			.icon-description {
+				position: relative;
+				float: right;
+				color: $GREY;
+			}
 		}
 
 		.skill-description {
 			font-size: em(12);
 			color: $GREY;
-			padding-left: em(15);
+			padding: em(10) em(10) em(10) em(15);
 			line-height: em(17);
 		}
 	}
@@ -146,13 +158,19 @@
 	&.level-selected { background-color: #BCBCBC; }
 	&.level-verified {
 		background-color: $VERIFIED-SKILL;
+		color: $VERIFIED-SKILL;
 
 		&.skill-level-changeable {
 			cursor: pointer;
+
+			span {
+				font-weight: normal !important;
+			}
 		}
 
 		&.skill-level-changeable:hover {
-			background-color: $NON-VERIFIED-SKILL;
+			background-color: #323030;
+			color: white;
 		}
 	}
 	&.level-non-verified {
@@ -160,10 +178,14 @@
 
 		&.skill-level-changeable {
 			cursor: pointer;
+
+			span {
+				font-weight: normal !important;
+			}
 		}
 
 		&.skill-level-changeable:hover {
-			background-color: $VERIFIED-SKILL;
+			background-color: #740C0C;
 		}
 	}
 
