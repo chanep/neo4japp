@@ -18,7 +18,8 @@ export default class SearchResultsTable extends React.Component {
         	data: data.data,
             skillsCount: data.skillsCount,
             searching: data.searching,
-            locationsIds: data.locations
+            locationsIds: data.locations,
+            sortBy: data.sortBy
         };
     }
 
@@ -27,7 +28,8 @@ export default class SearchResultsTable extends React.Component {
             data: nextProps.data,
             skillsCount: nextProps.skillsCount,
             searching: nextProps.searching,
-            locationsIds: nextProps.locations
+            locationsIds: nextProps.locations,
+            sortBy: nextProps.sortBy
         });
     }
 
@@ -39,24 +41,28 @@ export default class SearchResultsTable extends React.Component {
         this.props.allSelected();
     }
 
+    sortBy(sortBy) {
+        this.props.sortByChanged(sortBy);
+    }
+
     render() {
         return (
             <div className="search-results-table">
                 <div className="header-bar">
                     <div className="col -col-3">
-                        <span className="table-header">Filter</span>
+                        <span className="header-label">Filter</span>
                     </div>
                     <div className="col -col-4">
-                        <span className="table-header">Employee</span>
+                        <span className={"header-label " + (this.state.sortBy === "fullname_asc"? "selected" : "clicleable")} onClick={this.sortBy.bind(this, 'fullname_asc')}>Employee</span>
                     </div>
                     <div className="col -col-1">
-                        <span className="table-header">Location</span>
+                        <span className={"header-label " + (this.state.sortBy === "office_asc"? "selected" : "clicleable")} onClick={this.sortBy.bind(this, 'office_asc')}>Location</span>
                     </div>
                     <div className="col -col-1">
-                        <span className="table-header">Skill</span>
+                        <span className={"header-label " + (this.state.sortBy === "matchedItems"? "selected" : "clicleable")} onClick={this.sortBy.bind(this, 'matchedItems')}>Skill</span>
                     </div>
                     <div className="col -col-2">
-                        <span className="table-header">Allocation per week</span>
+                        <span className={"header-label " + (this.state.sortBy === "allocation"? "selected" : "clicleable")} onClick={this.sortBy.bind(this, 'allocation')}>Allocation per week</span>
                     </div>
                     <div className="col -col-1">&nbsp;</div>
                 </div>

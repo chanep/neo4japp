@@ -11,6 +11,26 @@
     		background-color: #fafafb;
     	}
 	}
+
+	.header-bar {
+		span.header-label {
+			font-size: em(12);
+			color: white;
+			font-weight: normal;
+
+			&.clicleable {
+				cursor: pointer;
+			}
+
+			&.clicleable:hover {
+				text-decoration: underline;
+			}
+
+			&.selected {
+				font-weight: bold;
+			}
+		}
+	}
 }
 
 .skill-level-grid {
@@ -185,7 +205,7 @@
 		}
 
 		&.skill-level-changeable:hover {
-			background-color: #740C0C;
+			background-color: $RED-HOVER;
 		}
 	}
 

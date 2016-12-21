@@ -45,7 +45,8 @@ export default class SearchResults extends BasePage {
             "skillsIds": skillsIds,
             "clientsIds": clientsIds,
             "interestsIds": interestsIds,
-            "locationsIds": locationsIds
+            "locationsIds": locationsIds,
+            "sortBy": "relevance"
         };
 	}
 
@@ -77,6 +78,8 @@ export default class SearchResults extends BasePage {
         if (locationsIds.length > 0)
             path += '/locations/' + locationsConcat;
 
+        path += '?orderBy=' + this.state.sortBy;
+
         this.context.router.push({ pathname: path });
     }
 
@@ -95,15 +98,21 @@ export default class SearchResults extends BasePage {
         if (this.state.clientsIds.length > 0)
             path += '/clients/' + clientsConcat;
 
+        path += '?orderBy=' + this.state.sortBy;
+
         this.context.router.push({ pathname: path });
     }
 
-    getData(skillsIds, interestsIds, clientsIds, locationsIds) {
+    sortBy(sortBy) {
+        this.getData(this.state.skillsIds, this.state.interestsIds, this.state.clientsIds, this.state.locationsIds, sortBy);
+    }
+
+    getData(skillsIds, interestsIds, clientsIds, locationsIds, sortBy) {
         let self = this;
 
-        this.setState({data: [], skillsIds: [], interestsIds: [], clientsIds: [], locationsIds: [], skillsCount: 0, searching: true});
+        this.setState({data: [], skillsIds: [], interestsIds: [], clientsIds: [], locationsIds: [], skillsCount: 0, searching: true, sortBy: sortBy});
         if (skillsIds.length > 0 || interestsIds.length > 0 || clientsIds.length > 0) {
-            this.searchServices.GetSearchBySkills(skillsIds, interestsIds, clientsIds, ENV().search.resultsLimit, locationsIds).then(data => {
+            this.searchServices.GetSearchBySkills(skillsIds, interestsIds, clientsIds, ENV().search.resultsLimit, locationsIds, sortBy).then(data => {
                 self.setState({
                     data: data,
                     skillsIds: skillsIds,
@@ -111,13 +120,14 @@ export default class SearchResults extends BasePage {
                     locationsIds: locationsIds,
                     clientsIds: clientsIds,
                     skillsCount: skillsIds.length,
-                    searching: false
+                    searching: false,
+                    sortBy:sortBy
                 });
             }).catch(data => {
                 console.log("Error performing search", data);
             });
         } else {
-            this.setState({data: [], skillsIds: skillsIds, interestsIds: interestsIds, clientsIds: clientsIds, locationsIds: locationsIds, skillsCount: 0, searching: false});
+            this.setState({data: [], skillsIds: skillsIds, interestsIds: interestsIds, clientsIds: clientsIds, locationsIds: locationsIds, skillsCount: 0, searching: false, sortBy: "relevance"});
         }
     }
 
@@ -126,6 +136,7 @@ export default class SearchResults extends BasePage {
         let interestsIds = [];
         let clientsIds = [];
         let locationsIds = [];
+        let sortBy = "relevance";
 
         if (this.props.params.skillsIds !== undefined) {
             skillsIds = this.props.params.skillsIds.split(',');
@@ -143,7 +154,11 @@ export default class SearchResults extends BasePage {
             locationsIds = this.props.params.locationsIds.split(',');
         }
 
-        this.getData(skillsIds, interestsIds, clientsIds, locationsIds);
+        if (this.props.location.query.orderBy !== undefined && this.props.location.query.orderBy !== "undefined" && this.props.location.query.orderBy !== "" && this.props.location.query.orderBy !== null) {
+            sortBy = this.props.location.query.orderBy;
+        }
+
+        this.getData(skillsIds, interestsIds, clientsIds, locationsIds, sortBy);
     }
 
     componentWillReceiveProps(newProps) {
@@ -151,6 +166,7 @@ export default class SearchResults extends BasePage {
         let interestsIds = [];
         let clientsIds = [];
         let locationsIds = [];
+        let sortBy = "relevance";
 
         if (newProps.params.skillsIds !== undefined) {
             skillsIds = newProps.params.skillsIds.split(',');
@@ -168,14 +184,18 @@ export default class SearchResults extends BasePage {
             locationsIds = newProps.params.locationsIds.split(',');
         }
 
-        this.getData(skillsIds, interestsIds, clientsIds, locationsIds);
+        if (newProps.location.query.orderBy !== undefined && newProps.location.query.orderBy !== "undefined" && newProps.location.query.orderBy !== "" && newProps.location.query.orderBy !== null) {
+            sortBy = newProps.location.query.orderBy;
+        }
+
+        this.getData(skillsIds, interestsIds, clientsIds, locationsIds, sortBy);
     }
 
     render() {
         return (
             <div>
                 <Header search={super._showSearch()} loggedIn={true} skillsIds={this.state.skillsIds} interestsIds={this.state.interestsIds} clientsIds={this.state.clientsIds} />
-                <SearchResultsTable data={this.state.data} skillsCount={this.state.skillsCount} searching={this.state.searching} locations={this.state.locationsIds} onLocationsChanged={this.onLocationsChanged.bind(this)} allSelected={this.allSelected.bind(this)} />
+                <SearchResultsTable data={this.state.data} skillsCount={this.state.skillsCount} searching={this.state.searching} locations={this.state.locationsIds} sortBy={this.state.sortBy} onLocationsChanged={this.onLocationsChanged.bind(this)} allSelected={this.allSelected.bind(this)} sortByChanged={this.sortBy.bind(this)} />
             </div>
         );
     }

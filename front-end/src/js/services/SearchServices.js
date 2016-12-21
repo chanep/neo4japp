@@ -5,7 +5,7 @@ export default class SearchServices extends ServicesBase {
 		return super.callGetServices('resource-manager/search-all', {term: query, limit: limit});
 	}
 
-	GetSearchBySkills(skillsIds, interestsIds, clientsIds, limit, officesIds = []) {
+	GetSearchBySkills(skillsIds, interestsIds, clientsIds, limit, officesIds = [], sortBy) {
 		if (interestsIds.length == 0)
 			interestsIds = [];
 
@@ -13,8 +13,8 @@ export default class SearchServices extends ServicesBase {
 			clientsIds = [];
 
 		if (officesIds.length == 0)
-			return super.callGetServices('resource-manager/users-by-skill', {skills:skillsIds, limit:limit, interests:interestsIds, clients:clientsIds});
+			return super.callGetServices('resource-manager/users-by-skill', {skills:skillsIds, limit:limit, interests:interestsIds, clients:clientsIds, orderBy:sortBy});
 		else
-			return super.callGetServices('resource-manager/users-by-skill', {skills:skillsIds, limit:limit, interests:interestsIds, offices: officesIds, clients:clientsIds});
+			return super.callGetServices('resource-manager/users-by-skill', {skills:skillsIds, limit:limit, interests:interestsIds, offices: officesIds, clients:clientsIds, orderBy:sortBy});
 	}
 }
