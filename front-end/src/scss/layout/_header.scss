@@ -4,7 +4,7 @@
 
 header {
     display: block;
-    background: linear-gradient(to right, #ffffff 0%,#ffffff 50%,$RED 51%,$RED 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    background: linear-gradient(to right, #ffffff 0%,#ffffff 50%,$RGA-RED 51%,$RGA-RED 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 
 
     .header-wrapper {
@@ -28,7 +28,7 @@ header {
         }
 
         .allocations-btn {
-            background: $RED;
+            background: $RGA-RED;
             color: #fff;
             font-weight: bold;
             float: right;
@@ -68,7 +68,7 @@ header {
                 overflow: hidden;
                 transition: all .35s .5s ease-in-out; 
 
-                background-color: $RED;
+                background-color: $RGA-RED;
                 width: 293px;
                 font-size: 16px;
                 position: absolute;
