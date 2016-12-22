@@ -113,7 +113,7 @@ export default class AddSkill extends React.Component {
                 <div className="row-levels">
                     <div className="col -col-2 overflowHidden -col-no-gutter -col-skill-name" title={this.state.skill.name}>
                         {this.state.skill.name}
-                        {this.state.groupLength > 1 && this.state.skill.description !== undefined?
+                        {this.state.groupLength > 1 && this.state.skill.description !== undefined && this.state.skill.description !== ""?
                             <div className="icon-description" data-tip data-for={newId}>
                                 <span className="icon-info"></span>
                                 <ReactTooltip id={newId} class="tooltipFormat">{this.state.skill.description}</ReactTooltip>
@@ -146,7 +146,7 @@ export default class AddSkill extends React.Component {
                     </div>
                 </div>
                 {
-                    this.state.groupLength === 1 && this.state.skill.description !== undefined?
+                    this.state.groupLength === 1 && this.state.skill.description !== undefined && this.state.skill.description !== ""?
                     <div className="skill-description">
                         {this.state.skill.description}
                     </div>

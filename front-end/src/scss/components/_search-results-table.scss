@@ -19,13 +19,13 @@
     .header-bar {
         background-color: $DARK-GREY;
         color: $WHITE;
-        height: 50px;
+        height: 40px;
         margin: 0;
         font-size: 12pt;
         font-weight: bold;
 
         .col {
-            line-height: em(29);
+            //line-height: em(29);
 
             // &:nth-of-type(2) {
             //     @include nestedColumn($width: 2, $context: 9);
