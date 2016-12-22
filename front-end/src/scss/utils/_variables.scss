@@ -33,11 +33,11 @@ $VERIFIED-SKILL: #565050;
  * @value {int}    - Vertical grid height
  */
 $BREAKPOINTS: (
-    default: min 0 12 12 10 0 24,
-    phablet: min 480 12 12 10 0 24,
-    tablet: min 768 12 12 10 0 24,
-    laptop: min 1024 12 12 10 0 24,
-    desktop: min 1366 12 12 10 0 24
+    default: min 0 12 12 8 0 24,
+    phablet: min 480 12 12 8 0 24,
+    tablet: min 768 12 12 8 0 24,
+    laptop: min 1024 12 12 8 0 24,
+    desktop: min 1366 12 12 8 0 24
 );
 
 /**

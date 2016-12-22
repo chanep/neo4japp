@@ -69,25 +69,25 @@ export default class AddSkillItem extends React.Component {
                 { this.state.open ? 
 					<div className="skill-level-grid skill-level-grid-add">
                         <div className="skill-level-grid__header col -col-12 -col-no-gutter">
-                            <div className="col -col-2">
+                            <div className="col -col-2 -col-no-gutter">
                                 <span className="sub-table-header">Skill</span>
                             </div>
-                            <div className="col -col-1">
+                            <div className="col -col-1 -col-no-gutter">
                                 <span className="sub-table-header">Want?</span>
                             </div>
-                            <div className="col -col-2 -header-heavy-supervision">
+                            <div className="col -col-2 -header-heavy-supervision -col-no-gutter">
                                 <span className="sub-table-header">Heavy Supervision</span>
                             </div>
-                            <div className="col -col-2">
+                            <div className="col -col-2 -col-no-gutter">
                                 <span className="sub-table-header">Light Supervision</span>
                             </div>
-                            <div className="col -col-2">
+                            <div className="col -col-2 -col-no-gutter">
                                 <span className="sub-table-header">No Supervision</span>
                             </div>
-                            <div className="col -col-2">
+                            <div className="col -col-2 -col-no-gutter">
                                 <span className="sub-table-header">Teach/Manage</span>
                             </div>
-                            <div className="col -col-1 skill-level-empty">
+                            <div className="col -col-1 skill-level-empty -col-no-gutter">
                                 <span className="table-header"></span>
                             </div>
                         </div>

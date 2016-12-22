@@ -56,7 +56,9 @@
 	background-color: #666666;
 
 	.col {	
-		height: 2.8rem;
+		height: em(30);
+		line-height: em(30);
+		vertical-align: middle;
 
 		&.skill-level-empty { background-color: $LIGHTEST-GREY; }
 	}
@@ -69,7 +71,7 @@
 
 .group-skills-title {
 	text-align: center !important;
-	line-height: em(50);
+	line-height: em(40);
 
 	.table-header {
 		font-size: em(14) !important;
@@ -134,7 +136,7 @@
 			overflow: hidden;
 
 			.col {
-				line-height: 30px;
+				line-height: 24px;
 				border-right: 1px solid white;
 				border-bottom: 1px solid white;
 
