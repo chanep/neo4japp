@@ -24,6 +24,7 @@ export default class SearchResultsTable extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
+        console.log("componentWillReceiveProps", nextProps);
         this.setState({
             data: nextProps.data,
             skillsCount: nextProps.skillsCount,
