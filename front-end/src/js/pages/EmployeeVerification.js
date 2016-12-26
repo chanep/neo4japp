@@ -53,6 +53,11 @@ export default class EmployeeVerification extends BasePage {
                 <Header search={false} loggedIn={true} />
                 <EmployeeHeader userId={this.state.employeeId} showActions={false} showForManagerVerification={true} />
                 <div className="search-results-table">
+                    <div className="verification-notes">
+                        Skills in <span className="unverified">red</span> have been selected by your team member. If you agree
+                        with that level, simply click to verify the skill and it will turn <span className="verified">grey</span>.<br />
+                        If you don't agree with the level, leave it alone and keep it red and unverified.
+                    </div>
                     {this.state.loading ?
                         <div className="loading-data-note"><span>loading data...</span></div>
                         :

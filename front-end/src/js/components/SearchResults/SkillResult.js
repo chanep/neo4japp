@@ -31,10 +31,16 @@ export default class SkillResult extends React.Component {
                 <div className="title">
                     <span>{this.state.obj.obj.name}</span>
                 </div>
-                <div className="proficiency">
-                    <span>{this.state.obj.obj.level}. {ENV().knowledgeLevels[this.state.obj.obj.level-1].desc}</span>
-                </div>
-                <SkillLevel level={this.state.obj.obj.level} approved={approved} />
+                {this.state.obj.obj.want?
+                	<div className="proficiency"><span>(want)</span></div>
+                	:
+                	<div>
+		                <div className="proficiency">
+		                    <span>{this.state.obj.obj.level}. {ENV().knowledgeLevels[this.state.obj.obj.level-1].desc}</span>
+		                </div>
+		                <SkillLevel level={this.state.obj.obj.level} approved={approved} />
+		            </div>
+	            }
             </li>
 		);
 	}

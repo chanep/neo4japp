@@ -66,14 +66,8 @@ class Header extends React.Component {
               }
             </div>
           </div>
-          { (this.state.search ? <Search skillsIds={this.props.skillsIds} interestsIds={this.props.interestsIds} /> :
-            <div className="search">
-              <div className="search__input__wrapper">
-                <div className="search__input">
-                  <div className="search-field-wrapper"></div>
-                </div>
-              </div>
-            </div>
+          { (this.state.search ? <Search skillsIds={this.props.skillsIds} interestsIds={this.props.interestsIds} clientsIds={this.props.clientsIds} /> :
+            <div className="no-search-bar"></div>
           )}
         </header>
     );

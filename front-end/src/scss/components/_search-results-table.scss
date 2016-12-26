@@ -19,13 +19,13 @@
     .header-bar {
         background-color: $DARK-GREY;
         color: $WHITE;
-        height: 50px;
+        height: 40px;
         margin: 0;
         font-size: 12pt;
         font-weight: bold;
 
         .col {
-            line-height: em(29);
+            //line-height: em(29);
 
             // &:nth-of-type(2) {
             //     @include nestedColumn($width: 2, $context: 9);
@@ -305,7 +305,7 @@
     }
 
     .manager-notifications__status {
-        color: #e71d39;
+        color: $RED;
         font-size: em(20);
         margin-bottom: 3.5rem;
     }
@@ -573,6 +573,27 @@
     }
 }
 
+.verification-notes {
+    color: $GREY;
+    font-size: em(12);
+    line-height: em(24);
+    margin-bottom: em(15);
+    vertical-align: middle;
+
+    span.unverified, span.verified {
+        color: white;
+        padding: em(3) em(6) em(3) em(6);
+    }
+
+    span.unverified {
+        background-color: $NON-VERIFIED-SKILL;
+    }
+
+    span.verified {
+        background-color: $VERIFIED-SKILL;
+    }
+}
+
 .validate-pending, .employee-Has-Category {
     border-radius: 50%;
     display: inline-block;
@@ -582,7 +603,7 @@
 }
 
 .validate-pending {
-    background-color: #e71d39;
+    background-color: $RED;
     margin-left: 15px;
 }
 

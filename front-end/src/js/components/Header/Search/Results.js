@@ -89,7 +89,7 @@ class Results extends React.Component {
           <div className="search__results__wrapper">
 
           {this.props.hasResults &&
-            (skills.length > 0 || tools.length > 0 || users.length > 0 || interests.length > 0 || industries.length > 0) ?
+            (skills.length > 0 || tools.length > 0 || users.length > 0 || interests.length > 0 || industries.length > 0 || clients.length > 0) ?
             (<div className="search__results">
               <span className="close-suggestion">Press <kbd>ESC</kbd> to close</span>
               {skills.length > 0 ?

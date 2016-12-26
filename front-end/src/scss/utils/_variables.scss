@@ -11,9 +11,11 @@ $LIGHT-GREY: #FAFAFC;
 $LIGHTEST-GREY: #E8E8E8;
 $WHITE: #FFFFFF;
 $GREY-FONT: #666767;
-$RED: #E71D39;
+$RGA-RED: #E51837;
+$RED: #D33336;
+$RED-HOVER: #AB0B11;
 
-$NON-VERIFIED-SKILL: #ea1a1a;
+$NON-VERIFIED-SKILL: #D33336;
 $VERIFIED-SKILL: #565050;
 
 // Maps
@@ -31,11 +33,11 @@ $VERIFIED-SKILL: #565050;
  * @value {int}    - Vertical grid height
  */
 $BREAKPOINTS: (
-    default: min 0 12 12 10 0 24,
-    phablet: min 480 12 12 10 0 24,
-    tablet: min 768 12 12 10 0 24,
-    laptop: min 1024 12 12 10 0 24,
-    desktop: min 1366 12 12 10 0 24
+    default: min 0 12 12 8 0 24,
+    phablet: min 480 12 12 8 0 24,
+    tablet: min 768 12 12 8 0 24,
+    laptop: min 1024 12 12 8 0 24,
+    desktop: min 1366 12 12 8 0 24
 );
 
 /**

@@ -41,22 +41,22 @@ export default class EmployeeSkillsGroup extends React.Component {
 		        <div className="results-section">
                     <div className="skill-level-grid">
                         <div className="skill-level-grid__header">
-                            <div className="col -col-3">
+                            <div className="col -col-3 -col-no-gutter">
                                 <span className="sub-table-header"></span>
                             </div>
-                            <div className="col -col-1">
+                            <div className="col -col-1 -col-no-gutter">
                                 <span className="sub-table-header">Want?</span>
                             </div>
-                            <div className="col -col-2">
+                            <div className="col -col-2 -col-no-gutter">
                                 <span className="sub-table-header">Heavy Supervision</span>
                             </div>
-                            <div className="col -col-2">
+                            <div className="col -col-2 -col-no-gutter">
                                 <span className="sub-table-header">Light Supervision</span>
                             </div>
-                            <div className="col -col-2">
+                            <div className="col -col-2 -col-no-gutter">
                                 <span className="sub-table-header">No Supervision</span>
                             </div>
-                            <div className="col -col-2">
+                            <div className="col -col-2 -col-no-gutter">
                                 <span className="sub-table-header">Teach/Manage</span>
                             </div>
                         </div>

@@ -175,7 +175,10 @@ export default class EmployeeHeader extends React.Component {
     }
 
     finishIndustriesEdition() {
-        this.setState({ editingIndustries: false });
+        this.setState({
+            editingIndustries: false,
+            pastClient: ""
+        });
     }
 
     removeInterest(interestId) {
@@ -497,7 +500,6 @@ export default class EmployeeHeader extends React.Component {
         if (this.state.user.clients.length > 0) {
             pastClients = "";
             this.state.user.clients.forEach(function(pastClient) {
-                console.log(pastClient);
                 if (pastClient.phonelistId == undefined) {
                     pastClients += (pastClients !== ""? ", ": "") + pastClient.name;
                 }
@@ -693,7 +695,7 @@ export default class EmployeeHeader extends React.Component {
                                 <div className="notes-references">
                                     <div className="note">
                                         <span className="box non-verified"></span> Skills need verification
-                                        <span className="box verified"></span> Skills already <strong>verified</strong>
+                                        <span className="box verified"></span> Skills already verified
                                     </div>
                                 </div>
                             </div>
