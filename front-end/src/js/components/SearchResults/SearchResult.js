@@ -76,6 +76,8 @@ export default class SearchResult extends React.Component {
 				       		}
 				        </ul>
 				        <ul className="interests grid">
+				        	{
+				        		this.getChild(this.state.obj, 'interests').map((obj, key) =>
 				        			<li className="col -col-4 interest-cell" key={key}>
 				        				<span className="name">{obj.name}</span>
 				        				<span className="label">(interest)</span>
