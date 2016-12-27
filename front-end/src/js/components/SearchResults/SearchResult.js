@@ -54,7 +54,7 @@ export default class SearchResult extends React.Component {
 			            <span className="table-row">{this.getChild(this.state.obj.office, 'acronym')}</span>
 			        </div>
 			        <div className="col -col-1">
-			            <span className="table-row">{this.state.obj.skills.length}/{this.state.skillsCount}</span>
+			            <span className="table-row">{this.state.obj.matchedItems}/{this.state.obj.searchedItems}</span>
 			        </div>
 			        <div className="col -col-2">
 			        	<AllocationData allocations={this.state.obj.allocation} employeeId={this.state.obj.phonelistId} />
