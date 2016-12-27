@@ -84,7 +84,7 @@ class ResourceManagerDa extends UserDa{
                     ( reduce(acc = 0, wwh IN al.workingWeekHours | acc + wwh) - reduce(acc = 0, wh IN al.weekHours | acc + wh)) as freeHours,
                     ( reduce(acc = 0, s IN skills | acc + coalesce(s.level, 0)) + size(industries)*2 + size(interests) ) as score,
                     ( size({skillIds}) + size({interests}) + size({clients}) ) as searchedItems,
-                    ( size(skills) + size(industries) + size(interests) + size(clients) ) as matchedItems
+                    ( size(filter(s in skills where not(s.want))) + size(industries) + size(interests) + size(clients) ) as matchedItems
                     ${order}
                     skip {skip} limit {limit}
                     return {    
