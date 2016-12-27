@@ -17,24 +17,26 @@ export default class SearchResults extends BasePage {
 	constructor(props) {
 		super(props);
 
+        console.log("componentDidMount", this.props, props);
+
         let locationsIds = [];
-        if (this.props.params.locationsIds !== undefined) {
-            locationsIds = this.props.params.locationsIds.split(',');
+        if (this.props.location.query.locations !== undefined) {
+            locationsIds = this.props.location.query.locations.split(',');
         }
 
         let interestsIds = [];
-        if (this.props.params.interestsIds !== undefined) {
-            interestsIds = this.props.params.interestsIds.split(',');
+        if (this.props.location.query.interests !== undefined) {
+            interestsIds = this.props.location.query.interests.split(',');
         }
 
         let skillsIds = [];
-        if (this.props.params.skillsIds !== undefined) {
-            skillsIds = this.props.params.skillsIds.split(',');
+        if (this.props.location.query.skills !== undefined) {
+            skillsIds = this.props.location.query.skills.split(',');
         }
 
         let clientsIds = [];
-        if (this.props.params.clientsIds !== undefined) {
-            clientsIds = this.props.params.clientsIds.split(',');
+        if (this.props.location.query.clients !== undefined) {
+            clientsIds = this.props.location.query.clients.split(',');
         }
 
         this.searchServices = new SearchServices();
@@ -64,21 +66,23 @@ export default class SearchResults extends BasePage {
             interestsConcat = this.state.interestsIds.join(),
             clientsConcat = this.state.clientsIds.join(),
             locationsConcat = this.state.locationsIds.join(),
-            path = '/searchresults';
+            path = "";
 
         if (this.state.skillsIds.length > 0)
-            path += '/skills/' + skillsConcat;
+            path += (path !== ""? '&' : '') + 'skills=' + skillsConcat;
 
         if (this.state.interestsIds.length > 0)
-            path += '/interests/' + interestsConcat;
+            path += (path !== ""? '&' : '') + 'interests=' + interestsConcat;
 
         if (this.state.clientsIds.length > 0)
-            path += '/clients/' + clientsConcat;
+            path += (path !== ""? '&' : '') + 'clients=' + clientsConcat;
 
         if (locationsIds.length > 0)
-            path += '/locations/' + locationsConcat;
+            path += (path !== ""? '&' : '') + 'locations=' + locationsConcat;
 
-        path += '?orderBy=' + this.state.sortBy;
+        path += (path !== ""? '&' : '') + 'orderBy=' + this.state.sortBy;
+
+        path = '/searchresults?' + path;
 
         this.context.router.push({ pathname: path });
     }
@@ -87,18 +91,20 @@ export default class SearchResults extends BasePage {
         var skillsConcat = this.state.skillsIds.join(),
             interestsConcat = this.state.interestsIds.join(),
             clientsConcat = this.state.clientsIds.join(),
-            path = '/searchresults';
+            path = '';
 
         if (this.state.skillsIds.length > 0)
-            path += '/skills/' + skillsConcat;
+            path += (path !== ""? '&' : '') + 'skills=' + skillsConcat;
 
         if (this.state.interestsIds.length > 0)
-            path += '/interests/' + interestsConcat;
+            path += (path !== ""? '&' : '') + 'interests=' + interestsConcat;
 
         if (this.state.clientsIds.length > 0)
-            path += '/clients/' + clientsConcat;
+            path += (path !== ""? '&' : '') + 'clients=' + clientsConcat;
 
-        path += '?orderBy=' + this.state.sortBy;
+        path += (path !== ""? '&' : '') + 'orderBy=' + this.state.sortBy;
+
+        path = "/searchresults?" + path;
 
         this.context.router.push({ pathname: path });
     }
@@ -138,20 +144,20 @@ export default class SearchResults extends BasePage {
         let locationsIds = [];
         let sortBy = "relevance";
 
-        if (this.props.params.skillsIds !== undefined) {
-            skillsIds = this.props.params.skillsIds.split(',');
+        if (this.props.location.query.skills !== undefined) {
+            skillsIds = this.props.location.query.skills.split(',');
         }
 
-        if (this.props.params.interestsIds !== undefined) {
-            interestsIds = this.props.params.interestsIds.split(',');
+        if (this.props.location.query.interests !== undefined) {
+            interestsIds = this.props.location.query.interests.split(',');
         }
 
-        if (this.props.params.clientsIds !== undefined) {
-            clientsIds = this.props.params.clientsIds.split(',');
+        if (this.props.location.query.clients !== undefined) {
+            clientsIds = this.props.location.query.clients.split(',');
         }
 
-        if (this.props.params.locationsIds !== undefined) {
-            locationsIds = this.props.params.locationsIds.split(',');
+        if (this.props.location.query.locations !== undefined) {
+            locationsIds = this.props.location.query.locations.split(',');
         }
 
         if (this.props.location.query.orderBy !== undefined && this.props.location.query.orderBy !== "undefined" && this.props.location.query.orderBy !== "" && this.props.location.query.orderBy !== null) {
@@ -162,26 +168,27 @@ export default class SearchResults extends BasePage {
     }
 
     componentWillReceiveProps(newProps) {
+        console.log("componentWillReceiveProps", newProps);
         let skillsIds = [];
         let interestsIds = [];
         let clientsIds = [];
         let locationsIds = [];
         let sortBy = "relevance";
 
-        if (newProps.params.skillsIds !== undefined) {
-            skillsIds = newProps.params.skillsIds.split(',');
+        if (newProps.location.query.skills !== undefined) {
+            skillsIds = newProps.location.query.skills.split(',');
         }
 
-        if (newProps.params.interestsIds !== undefined) {
-            interestsIds = newProps.params.interestsIds.split(',');
+        if (newProps.location.query.interests !== undefined) {
+            interestsIds = newProps.location.query.interests.split(',');
         }
 
-        if (newProps.params.clientsIds !== undefined) {
-            clientsIds = newProps.params.clientsIds.split(',');
+        if (newProps.location.query.clients !== undefined) {
+            clientsIds = newProps.location.query.clients.split(',');
         }
 
-        if (newProps.params.locationsIds !== undefined) {
-            locationsIds = newProps.params.locationsIds.split(',');
+        if (newProps.location.query.locations !== undefined) {
+            locationsIds = newProps.location.query.locations.split(',');
         }
 
         if (newProps.location.query.orderBy !== undefined && newProps.location.query.orderBy !== "undefined" && newProps.location.query.orderBy !== "" && newProps.location.query.orderBy !== null) {
@@ -192,6 +199,7 @@ export default class SearchResults extends BasePage {
     }
 
     render() {
+        console.log("render");
         return (
             <div>
                 <Header search={super._showSearch()} loggedIn={true} skillsIds={this.state.skillsIds} interestsIds={this.state.interestsIds} clientsIds={this.state.clientsIds} />

@@ -54,7 +54,7 @@ export default class SearchResult extends React.Component {
 			            <span className="table-row">{this.getChild(this.state.obj.office, 'acronym')}</span>
 			        </div>
 			        <div className="col -col-1">
-			            <span className="table-row">{this.state.obj.skills.length}/{this.state.skillsCount}</span>
+			            <span className="table-row">{this.state.obj.matchedItems}/{this.state.obj.searchedItems}</span>
 			        </div>
 			        <div className="col -col-2">
 			        	<AllocationData allocations={this.state.obj.allocation} employeeId={this.state.obj.phonelistId} />
@@ -80,7 +80,7 @@ export default class SearchResult extends React.Component {
 				        		this.getChild(this.state.obj, 'interests').map((obj, key) =>
 				        			<li className="col -col-4 interest-cell" key={key}>
 				        				<span className="name">{obj.name}</span>
-				        				<span className="label">(Interest)</span>
+				        				<span className="label">(interest)</span>
 				        			</li>
 				        		)
 				       		}
@@ -90,7 +90,7 @@ export default class SearchResult extends React.Component {
 				        		this.getChild(this.state.obj, 'industries').map((obj, key) =>
 				        			<li className="col -col-4 industry-cell" key={key}>
 				        				<span className="name">{obj.name}</span>
-				        				<span className="label">(Industry)</span>
+				        				<span className="label">(industry)</span>
 				        			</li>
 				        		)
 				       		}

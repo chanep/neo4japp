@@ -538,15 +538,15 @@ class Search extends React.Component {
 
       if (!hasUsers) {
         if (skillsIds.length > 0)
-          queryConcat += '/skills/' + skillsIds.join();
+          queryConcat += (queryConcat !== ""? '&': '') + 'skills=' + skillsIds.join();
 
         if (interestsIds.length > 0)
-          queryConcat += '/interests/' + interestsIds.join();
+          queryConcat += (queryConcat !== ""? '&': '') + 'interests=' + interestsIds.join();
 
         if (clientsIds.length > 0)
-          queryConcat += '/clients/' + clientsIds.join();
+          queryConcat += (queryConcat !== ""? '&': '') + 'clients=' + clientsIds.join();
 
-        path = '/searchresults' + queryConcat;
+        path = '/searchresults' + (queryConcat !== ''? '?' + queryConcat: '');
         this.context.router.push({ pathname: path });
       }
 
