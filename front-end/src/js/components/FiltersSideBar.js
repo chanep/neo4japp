@@ -53,41 +53,22 @@ export default class FiltersSideBar extends React.Component {
         var self = this;
 
         return (
-            <div className="addSkillsFilter filters col -col-3 filters__backgrounded">
-                <div className="filterType">
-                    <span className="filter-title">Locations</span> <span className="filter-title-group all-bottom" onClick={self.allSelected.bind(self)}>(All)</span>
-                    <ul>
-                        {
-                            this.state.offices.map((office) => {
-                                let officeName = office.name;
-                                if (officeName === "Bucuresti") officeName = "Bucharest";
+            <div className="filterType">
+                <span className="filter-title">Locations</span> <span className="filter-title-group all-bottom" onClick={self.allSelected.bind(self)}>(All)</span>
+                <ul>
+                    {
+                        this.state.offices.map((office) => {
+                            let officeName = office.name;
+                            if (officeName === "Bucuresti") officeName = "Bucharest";
 
-                                return <li key={office.id} className="filter-option">
-                                    <label>
-                                        <input type="checkbox" id={office.id} value={office.id} checked={self.state.locationsIds.indexOf(office.id.toString()) !== -1} onChange={self.handleChange.bind(self, office.id.toString())} /> {officeName}
-                                    </label>
-                                </li>
-                            })
-                        }
-                    </ul>
-                </div>
-                <div className="filterType">
-                    <span className="filter-title">Levels</span> <span className="filter-title-group all-bottom">(All)</span>
-                    <ul>
-                        <li className="filter-option">
-                            <label><input type="radio" name="skillstools" /> Exec</label>
-                        </li>
-                        <li className="filter-option">
-                            <label><input type="radio" name="skillstools" /> Senior</label>
-                        </li>
-                        <li className="filter-option">
-                            <label><input type="radio" name="skillstools" /> Mid</label>
-                        </li>
-                        <li className="filter-option">
-                            <label><input type="radio" name="skillstools" /> Low</label>
-                        </li>
-                    </ul>
-                </div>
+                            return <li key={office.id} className="filter-option">
+                                <label>
+                                    <input type="checkbox" id={office.id} value={office.id} checked={self.state.locationsIds.indexOf(office.id.toString()) !== -1} onChange={self.handleChange.bind(self, office.id.toString())} /> {officeName}
+                                </label>
+                            </li>
+                        })
+                    }
+                </ul>
             </div>
         );
     }

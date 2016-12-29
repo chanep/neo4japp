@@ -59,7 +59,7 @@ export default class TopSearchedSkills extends React.Component {
               <ul className="top-searched-skills">
                 {
                   this.state.data.map(function (x, i, props) {
-                    return <li className={(this.state.hoveredSkillId === x.id ? 'highlighted' : '')} onMouseOver={() => self.highlightSkill(props, x.id)} onMouseOut={() => self.clear()} key={i}><Link to={'/searchresults/skills/' + x.id}>{x.name}</Link></li>
+                    return <li className={(this.state.hoveredSkillId === x.id ? 'highlighted' : '')} onMouseOver={() => self.highlightSkill(props, x.id)} onMouseOut={() => self.clear()} key={i}><Link to={'/searchresults?skills=' + x.id}>{x.name}</Link></li>
                   }, this)
                 }
               </ul>
