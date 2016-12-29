@@ -159,7 +159,7 @@ class UserDa extends BaseDa{
     findAllEmployeeLevels(){
         let label = this.labelsStr;
 
-		let cmd = `match (n:${label})
+		let cmd = `match (n:${label}) where n.level is not null
             return distinct n.level
             `;
         let params = {};
