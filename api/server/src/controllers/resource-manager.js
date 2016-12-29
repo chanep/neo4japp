@@ -1,5 +1,6 @@
 'use strict'
 const P = require('bluebird');
+const _ = require('lodash');
 const config = require('../shared/config');
 const errors = require('../shared/errors');
 const BaseController = require('./base-controller');
@@ -29,22 +30,16 @@ class ResourceManagerController extends BaseController{
     */
     findUsersBySkill(req, res, next){
         let search = this._buildSearch(req);
-
         let skillIds = search.skills || [];
+        let skip = search.skip || 0;
+        let limit = search.limit || 20;
+        let filters = _.omit(search, ['skills', 'skip', 'limit']);
 
         let searchData = {
             userId: req.session.user.id,
             skillIds: skillIds
         };
         skillChannel.publish("searched", searchData);
-
-        let filters = {};
-        filters.offices = search.offices;
-        filters.interests = search.interests;
-        filters.clients = search.clients;
-        
-        let skip = search.skip || 0;
-        let limit = search.limit || 20;
 
         let promise = resourceManagerDa.findUsersBySkill(skillIds, filters, skip, limit, search.orderBy);
 
