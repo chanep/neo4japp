@@ -17,8 +17,6 @@ export default class SearchResults extends BasePage {
 	constructor(props) {
 		super(props);
 
-        console.log("componentDidMount", this.props, props);
-
         let locationsIds = [];
         if (this.props.location.query.locations !== undefined) {
             locationsIds = this.props.location.query.locations.split(',');
@@ -39,6 +37,11 @@ export default class SearchResults extends BasePage {
             clientsIds = this.props.location.query.clients.split(',');
         }
 
+        let levelsIds = [];
+        if (this.props.location.query.levels !== undefined) {
+            levelsIds = this.props.location.query.levels.split(',');
+        }
+
         this.searchServices = new SearchServices();
         this.state = {
             "data": [],
@@ -48,6 +51,7 @@ export default class SearchResults extends BasePage {
             "clientsIds": clientsIds,
             "interestsIds": interestsIds,
             "locationsIds": locationsIds,
+            "levelsIds": levelsIds,
             "sortBy": "relevance"
         };
 	}
@@ -66,6 +70,7 @@ export default class SearchResults extends BasePage {
             interestsConcat = this.state.interestsIds.join(),
             clientsConcat = this.state.clientsIds.join(),
             locationsConcat = this.state.locationsIds.join(),
+            levelsConcat = this.state.levelsIds.join(),
             path = "";
 
         if (this.state.skillsIds.length > 0)
@@ -76,6 +81,9 @@ export default class SearchResults extends BasePage {
 
         if (this.state.clientsIds.length > 0)
             path += (path !== ""? '&' : '') + 'clients=' + clientsConcat;
+
+        if (this.state.levelsIds.length > 0)
+            path += (path !== ""? '&' : '') + 'levels=' + levelsConcat;
 
         if (locationsIds.length > 0)
             path += (path !== ""? '&' : '') + 'locations=' + locationsConcat;
@@ -91,6 +99,7 @@ export default class SearchResults extends BasePage {
         var skillsConcat = this.state.skillsIds.join(),
             interestsConcat = this.state.interestsIds.join(),
             clientsConcat = this.state.clientsIds.join(),
+            levelsConcat = this.state.levelsIds.join(),
             path = '';
 
         if (this.state.skillsIds.length > 0)
@@ -102,6 +111,74 @@ export default class SearchResults extends BasePage {
         if (this.state.clientsIds.length > 0)
             path += (path !== ""? '&' : '') + 'clients=' + clientsConcat;
 
+        if (this.state.levelsIds.length > 0)
+            path += (path !== ""? '&' : '') + 'levels=' + levelsConcat;
+
+        path += (path !== ""? '&' : '') + 'orderBy=' + this.state.sortBy;
+
+        path = "/searchresults?" + path;
+
+        this.context.router.push({ pathname: path });
+    }
+
+    onLevelChanged(levelId, e) {
+        var levelsIds = this.state.levelsIds,
+            index = levelsIds.indexOf(levelId);
+
+        if (index === -1) {
+            levelsIds.push(levelId);
+        } else {
+            levelsIds.splice(index, 1);
+        }
+
+        var skillsConcat = this.state.skillsIds.join(),
+            interestsConcat = this.state.interestsIds.join(),
+            clientsConcat = this.state.clientsIds.join(),
+            locationsConcat = this.state.locationsIds.join(),
+            levelsConcat = this.state.levelsIds.join(),
+            path = "";
+
+        if (this.state.skillsIds.length > 0)
+            path += (path !== ""? '&' : '') + 'skills=' + skillsConcat;
+
+        if (this.state.interestsIds.length > 0)
+            path += (path !== ""? '&' : '') + 'interests=' + interestsConcat;
+
+        if (this.state.clientsIds.length > 0)
+            path += (path !== ""? '&' : '') + 'clients=' + clientsConcat;
+
+        if (this.state.levelsIds.length > 0)
+            path += (path !== ""? '&' : '') + 'levels=' + levelsConcat;
+
+        if (this.state.locationsIds.length > 0)
+            path += (path !== ""? '&' : '') + 'locations=' + locationsConcat;
+
+        path += (path !== ""? '&' : '') + 'orderBy=' + this.state.sortBy;
+
+        path = '/searchresults?' + path;
+
+        this.context.router.push({ pathname: path });
+    }
+
+    allLevelsSelected() {
+        var skillsConcat = this.state.skillsIds.join(),
+            interestsConcat = this.state.interestsIds.join(),
+            clientsConcat = this.state.clientsIds.join(),
+            locationsConcat = this.state.locationsIds.join(),
+            path = '';
+
+        if (this.state.skillsIds.length > 0)
+            path += (path !== ""? '&' : '') + 'skills=' + skillsConcat;
+
+        if (this.state.interestsIds.length > 0)
+            path += (path !== ""? '&' : '') + 'interests=' + interestsConcat;
+
+        if (this.state.clientsIds.length > 0)
+            path += (path !== ""? '&' : '') + 'clients=' + clientsConcat;
+
+        if (this.state.locationsIds.length > 0)
+            path += (path !== ""? '&' : '') + 'locations=' + locationsConcat;
+
         path += (path !== ""? '&' : '') + 'orderBy=' + this.state.sortBy;
 
         path = "/searchresults?" + path;
@@ -110,15 +187,15 @@ export default class SearchResults extends BasePage {
     }
 
     sortBy(sortBy) {
-        this.getData(this.state.skillsIds, this.state.interestsIds, this.state.clientsIds, this.state.locationsIds, sortBy);
+        this.getData(this.state.skillsIds, this.state.interestsIds, this.state.clientsIds, this.state.locationsIds, this.state.levelsIds, sortBy);
     }
 
-    getData(skillsIds, interestsIds, clientsIds, locationsIds, sortBy) {
+    getData(skillsIds, interestsIds, clientsIds, locationsIds, levelsIds, sortBy) {
         let self = this;
 
         this.setState({data: [], skillsIds: [], interestsIds: [], clientsIds: [], locationsIds: [], skillsCount: 0, searching: true, sortBy: sortBy});
         if (skillsIds.length > 0 || interestsIds.length > 0 || clientsIds.length > 0) {
-            this.searchServices.GetSearchBySkills(skillsIds, interestsIds, clientsIds, ENV().search.resultsLimit, locationsIds, sortBy).then(data => {
+            this.searchServices.GetSearchBySkills(skillsIds, interestsIds, clientsIds, ENV().search.resultsLimit, locationsIds, levelsIds, sortBy).then(data => {
                 self.setState({
                     data: data,
                     skillsIds: skillsIds,
@@ -142,6 +219,7 @@ export default class SearchResults extends BasePage {
         let interestsIds = [];
         let clientsIds = [];
         let locationsIds = [];
+        let levelsIds = [];
         let sortBy = "relevance";
 
         if (this.props.location.query.skills !== undefined) {
@@ -160,19 +238,23 @@ export default class SearchResults extends BasePage {
             locationsIds = this.props.location.query.locations.split(',');
         }
 
+        if (this.props.location.query.levels !== undefined) {
+            levelsIds = this.props.location.query.levels.split(',');
+        }
+
         if (this.props.location.query.orderBy !== undefined && this.props.location.query.orderBy !== "undefined" && this.props.location.query.orderBy !== "" && this.props.location.query.orderBy !== null) {
             sortBy = this.props.location.query.orderBy;
         }
 
-        this.getData(skillsIds, interestsIds, clientsIds, locationsIds, sortBy);
+        this.getData(skillsIds, interestsIds, clientsIds, locationsIds, levelsIds, sortBy);
     }
 
     componentWillReceiveProps(newProps) {
-        console.log("componentWillReceiveProps", newProps);
         let skillsIds = [];
         let interestsIds = [];
         let clientsIds = [];
         let locationsIds = [];
+        let levelsIds = [];
         let sortBy = "relevance";
 
         if (newProps.location.query.skills !== undefined) {
@@ -191,19 +273,22 @@ export default class SearchResults extends BasePage {
             locationsIds = newProps.location.query.locations.split(',');
         }
 
+        if (newProps.location.query.levels !== undefined) {
+            levelsIds = newProps.location.query.levels.split(',');
+        }
+
         if (newProps.location.query.orderBy !== undefined && newProps.location.query.orderBy !== "undefined" && newProps.location.query.orderBy !== "" && newProps.location.query.orderBy !== null) {
             sortBy = newProps.location.query.orderBy;
         }
 
-        this.getData(skillsIds, interestsIds, clientsIds, locationsIds, sortBy);
+        this.getData(skillsIds, interestsIds, clientsIds, locationsIds, levelsIds, sortBy);
     }
 
     render() {
-        console.log("render");
         return (
             <div>
                 <Header search={super._showSearch()} loggedIn={true} skillsIds={this.state.skillsIds} interestsIds={this.state.interestsIds} clientsIds={this.state.clientsIds} />
-                <SearchResultsTable data={this.state.data} skillsCount={this.state.skillsCount} searching={this.state.searching} locations={this.state.locationsIds} sortBy={this.state.sortBy} onLocationsChanged={this.onLocationsChanged.bind(this)} allSelected={this.allSelected.bind(this)} sortByChanged={this.sortBy.bind(this)} />
+                <SearchResultsTable data={this.state.data} skillsCount={this.state.skillsCount} searching={this.state.searching} locations={this.state.locationsIds} levels={this.state.levelsIds} sortBy={this.state.sortBy} onLocationsChanged={this.onLocationsChanged.bind(this)} allSelected={this.allSelected.bind(this)} sortByChanged={this.sortBy.bind(this)} onLevelChanged={this.onLevelChanged.bind(this)} allLevelsSelected={this.allLevelsSelected.bind(this)} />
             </div>
         );
     }
