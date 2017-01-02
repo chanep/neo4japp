@@ -5,6 +5,7 @@
 // Dependencies
 import React from 'react';
 import FiltersSideBar from '../../components/FiltersSideBar';
+import EmployeeLevelsFilter from './EmployeeLevelsFilter';
 import { Router, Route, Link } from 'react-router'
 import SearchResult from '../../components/SearchResults/SearchResult';
 
@@ -19,17 +20,18 @@ export default class SearchResultsTable extends React.Component {
             skillsCount: data.skillsCount,
             searching: data.searching,
             locationsIds: data.locations,
+            levelsIds: data.levels,
             sortBy: data.sortBy
         };
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log("componentWillReceiveProps", nextProps);
         this.setState({
             data: nextProps.data,
             skillsCount: nextProps.skillsCount,
             searching: nextProps.searching,
             locationsIds: nextProps.locations,
+            levelsIds: nextProps.levels,
             sortBy: nextProps.sortBy
         });
     }
@@ -40,6 +42,14 @@ export default class SearchResultsTable extends React.Component {
 
     allSelected() {
         this.props.allSelected();
+    }
+
+    onLevelChanged(levelId, e) {
+        this.props.onLevelChanged(levelId);
+    }
+
+    allLevelsSelected() {
+        this.props.allLevelsSelected();
     }
 
     sortBy(sortBy) {
@@ -70,7 +80,11 @@ export default class SearchResultsTable extends React.Component {
                 <div className="results-section">
 
                     {/*FILTERS SIDE BAR*/}
-                    <FiltersSideBar locations={this.state.locationsIds} onLocationsChanged={this.onLocationsChanged.bind(this)} allSelected={this.allSelected.bind(this)} /> 
+                    <div className="addSkillsFilter filters col -col-3 filters__backgrounded">
+                        <FiltersSideBar locations={this.state.locationsIds} onLocationsChanged={this.onLocationsChanged.bind(this)} allSelected={this.allSelected.bind(this)} />
+
+                        <EmployeeLevelsFilter levels={this.state.levelsIds} onLevelChanged={this.onLevelChanged.bind(this)} allSelected={this.allLevelsSelected.bind(this)} />
+                    </div>
 
                     <ul className="results col -col-9 -col-no-gutter">
                     	{

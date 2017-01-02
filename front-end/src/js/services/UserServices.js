@@ -75,4 +75,7 @@ export default class UserServices extends ServicesBase {
 	GetClientsByIds(ids, limit) {
 		return super.callGetServices('client', {ids: ids, limit: limit});
 	}
+	GetEmployeeLevels() {
+		return super.callGetServices('user/level', {});
+	}
 }
