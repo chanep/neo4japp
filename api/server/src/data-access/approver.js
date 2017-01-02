@@ -38,7 +38,7 @@ class ApproverDa extends UserDa{
             with n, o, d, p, sg, sgp, 
                 collect({_:s, knowledge: k}) as skills
             with n, o, d, p, sg, sgp, skills,
-                (case when sg is not null then count(filter(s2 in skills where ((s2.knowledge.approved is null or s2.knowledge.approved = false) and (s2.knowledge.want is null or s2.knowledge.want = false)))) else 0 end) as pendingApprovalCount
+                (case when sg is not null then size(filter(s2 in skills where ((s2.knowledge.approved is null or s2.knowledge.approved = false) and (s2.knowledge.want is null or s2.knowledge.want = false)))) else 0 end) as pendingApprovalCount
             order by pendingApprovalCount DESC
             with n, o, d, p, (case when sg is not null then collect({_:sg, parent:sgp, skills: skills, pendingApprovalCount: pendingApprovalCount}) else [] end) as skillGroups,
                 sum(pendingApprovalCount) as totalPendingApproval
