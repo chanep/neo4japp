@@ -27,18 +27,11 @@ export default class ManagerHomeTable extends React.Component {
             let userToValidate = 0;
 
             data.forEach(function(employee) {
-                let addedToValidation = false;
-                employee.skillGroups.forEach(function(skillsGroup) {
-                    skillsGroup.skills.forEach(function(skill) {
-                        if (!skill.knowledge.want && skill.knowledge.approved === undefined) {
-                            skillsValidations++;
-                            if (!addedToValidation) {
-                                userToValidate++;
-                                addedToValidation = true;
-                            }
-                        }
-                    });
-                });
+                skillsValidations += employee.totalPendingApproval;
+
+                if (employee.totalPendingApproval > 0) {
+                    userToValidate++;
+                }
             });
 
             this.setState({
