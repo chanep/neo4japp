@@ -31,8 +31,9 @@ export default class EmployeeSkill extends React.Component {
     render() {
         let verified = false;
         let approver = "";
+
         if (this.state.data.knowledge !== null && this.getChild(this.state.data.knowledge, "approved") !== undefined) {
-            verified = true;
+            verified = this.state.data.knowledge.approved;
             approver = this.getChild(this.state.data.knowledge, "approverFullname");
         }
 
