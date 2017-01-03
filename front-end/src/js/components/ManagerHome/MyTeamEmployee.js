@@ -33,16 +33,13 @@ export default class MyTeemEmployee extends React.Component {
             return <div />
 
         let skillsCount = 0;
-        let skillsPendingValidation = 0;
-
+        let skillsPendingValidation = this.state.employee.totalPendingApproval;
+        
         this.state.employee.skillGroups.forEach(function(skillGroup) {
             skillGroup.skills.forEach(function(skill) {
                 skillsCount++;
-                if (skill.knowledge.approved === undefined) {
-                    skillsPendingValidation++;
-                }
             });
-        })
+        });
 
         return(
             <Link to={"/employee/" + this.state.employee.id + "/verification"}>

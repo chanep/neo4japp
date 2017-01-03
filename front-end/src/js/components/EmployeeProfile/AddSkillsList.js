@@ -95,6 +95,7 @@ export default class AddSkillsList extends React.Component {
                             </ul>
 
                             <h4>SKILL LEVEL DESCRIPTIONS</h4>
+                            <p><strong>Want:</strong> You do not have the skill but want to actively learn and apply the skill to your projects.</p>
                             <p><strong>Heavy Supervision:</strong> You have the skill, but have limited experience and require heavy oversight.</p>
                             <p><strong>Light Supervision:</strong> You have the skill, but have some experience where you could still use help.</p>
                             <p><strong>No Supervision:</strong> You have the skill and significant experience utilizing it in a work setting.</p>
