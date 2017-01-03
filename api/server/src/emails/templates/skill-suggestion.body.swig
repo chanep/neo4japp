@@ -3,4 +3,4 @@ Skill: {{skillName}} <br/>
 Type: {{skillType}} <br/>
 Description: {{decription}} <br/><br/>
 
-Reply this email for any question for {{userName}}
+Reply to this email address with any further questions.
