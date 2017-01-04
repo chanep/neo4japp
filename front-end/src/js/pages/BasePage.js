@@ -73,7 +73,7 @@ class BasePage extends React.Component {
 
 		if (currentUserType === 'resourcemanager') return '/resourceshotspot';
 		if (currentUserType === 'approver') return '/managerhome';
-		if (currentUserType === 'employee') return '/myprofile';
+		if (currentUserType === 'employee' || currentUserType === 'admin') return '/myprofile';
 
         return '/';
 	}
