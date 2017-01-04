@@ -391,6 +391,7 @@
 
     .addSkillsList {
         .row-add-skill {
+            cursor: pointer;
             border-bottom: em(1) solid $LIGHTEST-GREY;
 
             .add-row-div {

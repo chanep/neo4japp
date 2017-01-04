@@ -62,7 +62,7 @@ export default class SkillItem extends React.Component {
 
         return (
             <div>
-                <div className="row-add-skill">
+                <div className="row-add-skill" onClick={this.openClose.bind(this)}>
                     <div className="grid">
                         <div className="col -col-6 -col-name overflowHidden">
                             {this.state.data.name}
@@ -73,7 +73,7 @@ export default class SkillItem extends React.Component {
                         <div className="col -col-1">
                             {this.state.data.skills.length}
                         </div>
-                        <div className={this.state.showLevels ? "col -col-1 results-arrow-open-close skill-opened" : "col -col-1 results-arrow-open-close"} onClick={this.openClose.bind(this)}>
+                        <div className={this.state.showLevels ? "col -col-1 results-arrow-open-close skill-opened" : "col -col-1 results-arrow-open-close"}>
                             <i className="ss-icon-down-arrow"></i>
                         </div>
                     </div>
