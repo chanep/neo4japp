@@ -167,6 +167,9 @@ export default class SearchResults extends BasePage {
             locationsConcat = this.state.locationsIds.join(),
             path = '';
 
+        // Fix SKLLSRCH-159
+        this.setState({ 'levelsIds': [] });
+
         if (this.state.skillsIds.length > 0)
             path += (path !== ""? '&' : '') + 'skills=' + skillsConcat;
 
