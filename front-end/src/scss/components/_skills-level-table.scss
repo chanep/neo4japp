@@ -70,9 +70,6 @@
 }
 
 .group-skills-title {
-	padding: 0px .6em;
-	line-height: em(40);
-
 	.table-header {
 		font-size: em(14) !important;
 	}
@@ -94,7 +91,6 @@
 	border-right: em(1) solid #e4e4e4;
 
 	.col {
-		padding: 0px .6em;
 		white-space: nowrap;
     	text-overflow: ellipsis;
     	max-width: 100%;
