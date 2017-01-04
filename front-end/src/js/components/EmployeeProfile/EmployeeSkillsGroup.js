@@ -34,7 +34,7 @@ export default class EmployeeSkillsGroup extends React.Component {
     	return(
     		<div>
 		        <div className="header-bar">
-		            <div className="group-skills-title">
+		            <div className="group-skills-title col col-12">
 		                <span className="table-header">{this.state.data.name}</span>
 		            </div>
 		        </div>
