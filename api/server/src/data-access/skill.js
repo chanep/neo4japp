@@ -33,7 +33,7 @@ class SkillDa extends BaseDa{
 	findByType(type){
         if(!type)
             return P.reject(new errors.GenericError(`SkillDa.findByType type undefined`));
-        let query = { includes: [{key: "group", query: {type: type}, notInclude: true}] };
+        let query = { includes: [{key: "group", query: {type: type}, notInclude: true}], orderBy: "name ASC" };
         return this.find(query);
 	}
 
