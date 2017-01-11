@@ -215,12 +215,12 @@
                             height: 100%;
                             float: left;
                             width: calc(25% - 4px);
-                            background-color: $RED;
+                            background-color: $GREY;
                             margin-right: 4px;
                         }
 
                         & > div.notApproved {
-                            background-color: $GREY;
+                            background-color: $RED;
                         }
                     }
 
