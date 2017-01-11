@@ -135,11 +135,6 @@
 				line-height: 24px;
 				border-right: 1px solid white;
 				border-bottom: 1px solid white;
-
-				&:last-child {
-					border-right: none;
-					border-bottom: none;
-				}
 			}
 		}
 
@@ -164,6 +159,10 @@
 	}
 }
 
+.add-skill-box {
+	width: 20% !important;
+}
+
 .skill-level-box {
 	//background-color: #E3E3E3;
 	//border-left: 1px solid white;
@@ -171,12 +170,12 @@
 	transition: background-color .2s ease-in-out;
 	text-align: center;
 	font-size: em(12);
-	color: white;
+	color: $LESS-GREY;
 
-	&.level-selected { background-color: #BCBCBC; }
+	&.level-selected { color: $WHITE; background-color: #BCBCBC; }
 	&.level-verified {
 		background-color: $VERIFIED-SKILL;
-		color: $VERIFIED-SKILL;
+		color: $WHITE;
 
 		&.skill-level-changeable {
 			cursor: pointer;
@@ -192,6 +191,7 @@
 		}
 	}
 	&.level-non-verified {
+		color: $WHITE;
 		background-color: $NON-VERIFIED-SKILL;
 
 		&.skill-level-changeable {
@@ -215,6 +215,7 @@
 	}
 
 	&.selectable:hover {
+		color: $WHITE;
 		background-color: $RED;
 	}
 }
