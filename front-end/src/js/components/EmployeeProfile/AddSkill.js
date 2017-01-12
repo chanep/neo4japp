@@ -50,9 +50,9 @@ export default class AddSkill extends React.Component {
 
     toggleWant() {
         var want = !this.state.skillWant,
-            level = this.state.skillLevel;
+            level = null;
 
-        this.setState({ 'skillWant': want });
+        this.setState({ 'skillLevel': level, 'skillWant': want });
 
         this.levelChanged(level, want);
     }
@@ -64,7 +64,7 @@ export default class AddSkill extends React.Component {
             level = null;
         }
 
-        this.setState({ 'skillLevel': level });
+        this.setState({ 'skillWant': false, 'skillLevel': level });
 
         if (this.state.skill.knowledge === null) {
             this.levelChanged(level, this.state.skillWant);
@@ -146,6 +146,13 @@ export default class AddSkill extends React.Component {
 
         return (
             <div className="add-row col -col-12 -col-no-gutter">
+                {
+                    this.state.groupLength === 1 && this.state.skill.description !== undefined && this.state.skill.description !== ""?
+                    <div className="skill-description">
+                        {this.state.skill.description}
+                    </div>
+                    :null
+                }
                 <div className="row-levels">
                     <div className={"col -col-3 -col-no-gutter add-skill-box skill-level-box selectable " + (checked ? "level-verified" : "")}
                         onClick={this.toggleWant.bind(this)}>
@@ -168,13 +175,6 @@ export default class AddSkill extends React.Component {
                         <span className="skill-title">Teach/Manage</span>
                     </div>
                 </div>
-                {
-                    this.state.groupLength === 1 && this.state.skill.description !== undefined && this.state.skill.description !== ""?
-                    <div className="skill-description">
-                        {this.state.skill.description}
-                    </div>
-                    :null
-                }
             </div>
         );
     }

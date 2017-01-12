@@ -396,6 +396,7 @@
             .add-row-div {
                 cursor: pointer;
                 border-bottom: em(1) solid $WHITE;
+                border-right: em(1) solid $WHITE;
 
                 &:hover {
                     background-color: #e8e8e8;
@@ -407,7 +408,7 @@
             }
 
             .results-arrow-open-close {
-                line-height: 3.8 !important;
+                line-height: 3 !important;
             }
 
             .overflowHidden {

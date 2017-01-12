@@ -153,8 +153,10 @@
 		.skill-description {
 			font-size: em(12);
 			color: $GREY;
-			padding: em(10) em(10) em(10) em(15);
+			padding: em(13) em(10) em(13) em(15);
 			line-height: em(17);
+			border-bottom: em(1) solid $WHITE;
+			border-right: em(1) solid $WHITE;
 		}
 	}
 }
