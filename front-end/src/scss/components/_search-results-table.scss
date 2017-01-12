@@ -354,7 +354,6 @@
     }
 
     .results-arrow-open-close {
-        background: $LIGHTEST-GREY;
         display: block;
         font-size: .75em;
         line-height: 3.5;
@@ -396,6 +395,8 @@
 
             .add-row-div {
                 cursor: pointer;
+                border-bottom: em(1) solid $WHITE;
+                border-right: em(1) solid $WHITE;
 
                 &:hover {
                     background-color: #e8e8e8;
@@ -407,7 +408,7 @@
             }
 
             .results-arrow-open-close {
-                line-height: 2.5 !important;
+                line-height: 3 !important;
             }
 
             .overflowHidden {
@@ -595,6 +596,26 @@
     }
 }
 
+.skill-name-label {
+    margin-left: 20px;
+
+    &.skill-name-label--light {
+        font-weight: 400;
+    }
+}
+
+.skill-name {
+    padding-top: .78em !important;
+    padding-bottom: .78em !important;
+    position: relative;
+}
+
+.sub-skill-name {
+    padding-left: em(55) !important;
+    border-bottom: em(1) solid $WHITE;
+    border-right: em(1) solid $WHITE;
+}
+
 .validate-pending, .employee-Has-Category {
     border-radius: 50%;
     display: inline-block;
@@ -605,12 +626,16 @@
 
 .validate-pending {
     background-color: $RED;
-    margin-left: 15px;
+    position: absolute;
+    transform: translateY(-50%);
+    top: 50%;
 }
 
 .employee-Has-Category {
     background-color: $GREY;
-    margin-left: 5px;
+    position: absolute;
+    transform: translateY(-50%);
+    top: 50%;
 }
 
 .pieAllocation {

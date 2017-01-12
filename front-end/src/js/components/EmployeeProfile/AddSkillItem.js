@@ -48,49 +48,38 @@ export default class AddSkillItem extends React.Component {
     	if (this.state.data === null && this.state.parent === null)
     		return <div />
 
-        let employeeHasThisCategory = 0;
+        let employeeHasThisCategory = 0,
+            approvedCategory = false;
+
         this.state.data.skills.forEach(function(skill, index) {
-            if (skill.knowledge !== null) employeeHasThisCategory++;
+            if (skill.knowledge !== null && skill.knowledge.level !== undefined) {
+                employeeHasThisCategory++;
+
+                if (skill.knowledge.approved) {
+                    approvedCategory = true;
+                }
+            }
         });
 
         return (
             <div className="row-add-skill">
                 <div className="grid add-row-div" onClick={this.openClose.bind(this)}>
-                    <div className="col -col-6 -col-name overflowHidden" title={this.state.data.name}>
-                        {this.state.data.name}
+                    <div className="col -col-11 -col-name overflowHidden skill-name" title={this.state.data.name}>
+                        {employeeHasThisCategory > 0 ? <i className={approvedCategory ? "employee-Has-Category" : "validate-pending"} title={"You have " + employeeHasThisCategory + " skill(s)/tool(s) from this category"}></i> : false}
+                        {
+                            this.state.data.skills.length > 1
+                                ? <span className="skill-name-label skill-name-label--light">{this.state.data.name} ({this.state.data.skills.length})</span>
+                                : <span className="skill-name-label">{this.state.data.name}</span>
+                        }
                     </div>
-                    <div className="col -col-4 overflowHidden" title={this.state.parent.name}>{this.state.parent.name}</div>
-                    <div className="col -col-1">
-                        {this.state.data.skills.length}
-                        {employeeHasThisCategory >0? <i className="employee-Has-Category" title={"You have " + employeeHasThisCategory + " skill(s)/tool(s) from this category"}></i> : null}
-                    </div>
-                    <div className={this.state.open ? "col -col-1 results-arrow-open-close skill-opened" : "col -col-1 results-arrow-open-close"}><i className="ss-icon-down-arrow"></i></div>
+                    {
+                        this.state.data.skills.length > 1 ?
+                        <div className={this.state.open ? "col -col-1 results-arrow-open-close skill-opened" : "col -col-1 results-arrow-open-close"}><i className="ss-icon-down-arrow"></i></div>
+                        : false
+                    }
                 </div>
                 { this.state.open ? 
 					<div className="skill-level-grid skill-level-grid-add">
-                        <div className="skill-level-grid__header col -col-12 -col-no-gutter">
-                            <div className="col -col-2 -col-no-gutter">
-                                <span className="sub-table-header">Skill</span>
-                            </div>
-                            <div className="col -col-1 -col-no-gutter">
-                                <span className="sub-table-header">Want?</span>
-                            </div>
-                            <div className="col -col-2 -header-heavy-supervision -col-no-gutter">
-                                <span className="sub-table-header">Heavy Supervision</span>
-                            </div>
-                            <div className="col -col-2 -col-no-gutter">
-                                <span className="sub-table-header">Light Supervision</span>
-                            </div>
-                            <div className="col -col-2 -col-no-gutter">
-                                <span className="sub-table-header">No Supervision</span>
-                            </div>
-                            <div className="col -col-2 -col-no-gutter">
-                                <span className="sub-table-header">Teach/Manage</span>
-                            </div>
-                            <div className="col -col-1 skill-level-empty -col-no-gutter">
-                                <span className="table-header"></span>
-                            </div>
-                        </div>
                         {
                             this.state.data.skills.map(function(skill, key) {
                                 return(
