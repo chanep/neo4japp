@@ -610,6 +610,12 @@
     position: relative;
 }
 
+.sub-skill-name {
+    padding-left: em(55) !important;
+    border-bottom: em(1) solid $WHITE;
+    border-right: em(1) solid $WHITE;
+}
+
 .validate-pending, .employee-Has-Category {
     border-radius: 50%;
     display: inline-block;

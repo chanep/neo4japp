@@ -76,9 +76,9 @@ export default class AddSkill extends React.Component {
                     )
                 });
 
-                self.levelChanged(this.state.skillLevel, self.state.skillWant);
-
-                self.showAlert('Skill removed');
+                if (level != null) {
+                    self.levelChanged(this.state.skillLevel, self.state.skillWant);
+                }
             }).catch(err => {
                 console.log("Error removing skill", err);
             });
@@ -145,34 +145,52 @@ export default class AddSkill extends React.Component {
         let newId = "tooltip_" + this.makeid();
 
         return (
-            <div className="add-row col -col-12 -col-no-gutter">
+            <div>
                 {
-                    this.state.groupLength === 1 && this.state.skill.description !== undefined && this.state.skill.description !== ""?
-                    <div className="skill-description">
-                        {this.state.skill.description}
-                    </div>
-                    :null
+                    this.state.groupLength > 1 ?
+                        <div className="add-row col -col-12 -col-no-gutter">
+                            <div className="col -col-12 -col-name overflowHidden skill-name sub-skill-name" title={this.state.skill.name}>
+                                {this.state.skill.name}
+                            </div>
+                            {
+                                this.state.groupLength === 1 && this.state.skill.description !== undefined && this.state.skill.description !== ""?
+                                <div className="skill-description">
+                                    {this.state.skill.description}
+                                </div>
+                                :null
+                            }
+                        </div>
+                        : false
                 }
-                <div className="row-levels">
-                    <div className={"col -col-3 -col-no-gutter add-skill-box skill-level-box selectable " + (checked ? "level-verified" : "")}
-                        onClick={this.toggleWant.bind(this)}>
-                        <span className="skill-title">Want</span>
-                    </div>
-                    <div className={"col -col-2 -col-no-gutter add-skill-box skill-level-box selectable " + (this.state.skill.knowledge === null ? "" : (this.state.skill.knowledge.level === 1 ? (this.state.skill.knowledge.approved === undefined? "level-non-verified": "level-verified") : ""))}
-                        onClick={this.changeLevel.bind(this, 1)}>
-                        <span className="skill-title">Heavy Supervision</span>
-                    </div>
-                    <div className={"col -col-2 -col-no-gutter add-skill-box skill-level-box selectable " + (this.state.skill.knowledge === null ? "" : (this.state.skill.knowledge.level === 2 ? (this.state.skill.knowledge.approved === undefined? "level-non-verified": "level-verified") : ""))}
-                        onClick={this.changeLevel.bind(this, 2)}>
-                        <span className="skill-title">Light Supervision</span>
-                    </div>
-                    <div className={"col -col-2 -col-no-gutter add-skill-box skill-level-box selectable " + (this.state.skill.knowledge === null ? "" : (this.state.skill.knowledge.level === 3 ? (this.state.skill.knowledge.approved === undefined? "level-non-verified": "level-verified") : ""))}
-                        onClick={this.changeLevel.bind(this, 3)}>
-                        <span className="skill-title">No Supervision</span>
-                    </div>
-                    <div className={"col -col-2 -col-no-gutter add-skill-box skill-level-box selectable " + (this.state.skill.knowledge === null ? "" : (this.state.skill.knowledge.level === 4 ? (this.state.skill.knowledge.approved === undefined? "level-non-verified": "level-verified") : ""))}
-                        onClick={this.changeLevel.bind(this, 4)}>
-                        <span className="skill-title">Teach/Manage</span>
+                <div className="add-row col -col-12 -col-no-gutter">
+                    {
+                        this.state.groupLength === 1 && this.state.skill.description !== undefined && this.state.skill.description !== ""?
+                        <div className="skill-description">
+                            {this.state.skill.description}
+                        </div>
+                        :null
+                    }
+                    <div className="row-levels">
+                        <div className={"col -col-3 -col-no-gutter add-skill-box skill-level-box selectable " + (checked ? "level-verified" : "")}
+                            onClick={this.toggleWant.bind(this)}>
+                            <span className="skill-title">Want</span>
+                        </div>
+                        <div className={"col -col-2 -col-no-gutter add-skill-box skill-level-box selectable " + (this.state.skill.knowledge === null ? "" : (this.state.skill.knowledge.level === 1 ? (this.state.skill.knowledge.approved === undefined? "level-non-verified": "level-verified") : ""))}
+                            onClick={this.changeLevel.bind(this, 1)}>
+                            <span className="skill-title">Heavy Supervision</span>
+                        </div>
+                        <div className={"col -col-2 -col-no-gutter add-skill-box skill-level-box selectable " + (this.state.skill.knowledge === null ? "" : (this.state.skill.knowledge.level === 2 ? (this.state.skill.knowledge.approved === undefined? "level-non-verified": "level-verified") : ""))}
+                            onClick={this.changeLevel.bind(this, 2)}>
+                            <span className="skill-title">Light Supervision</span>
+                        </div>
+                        <div className={"col -col-2 -col-no-gutter add-skill-box skill-level-box selectable " + (this.state.skill.knowledge === null ? "" : (this.state.skill.knowledge.level === 3 ? (this.state.skill.knowledge.approved === undefined? "level-non-verified": "level-verified") : ""))}
+                            onClick={this.changeLevel.bind(this, 3)}>
+                            <span className="skill-title">No Supervision</span>
+                        </div>
+                        <div className={"col -col-2 -col-no-gutter add-skill-box skill-level-box selectable " + (this.state.skill.knowledge === null ? "" : (this.state.skill.knowledge.level === 4 ? (this.state.skill.knowledge.approved === undefined? "level-non-verified": "level-verified") : ""))}
+                            onClick={this.changeLevel.bind(this, 4)}>
+                            <span className="skill-title">Teach/Manage</span>
+                        </div>
                     </div>
                 </div>
             </div>
