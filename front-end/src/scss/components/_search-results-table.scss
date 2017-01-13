@@ -624,11 +624,14 @@
     width: 6px;
 }
 
-.validate-pending {
-    background-color: $RED;
+.add-skill-validate-pending {
     position: absolute;
     transform: translateY(-50%);
     top: 50%;
+}
+
+.validate-pending {
+    background-color: $RED;
 }
 
 .employee-Has-Category {

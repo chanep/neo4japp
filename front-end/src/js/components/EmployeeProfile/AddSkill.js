@@ -62,6 +62,12 @@ export default class AddSkill extends React.Component {
 
         if (level == this.state.skillLevel) {
             level = null;
+        } else {
+            if (this.state.skill.knowledge !== null) {
+                if (level == this.state.skill.knowledge.level) {
+                    level = null;
+                }
+            }
         }
 
         this.setState({ 'skillWant': false, 'skillLevel': level });

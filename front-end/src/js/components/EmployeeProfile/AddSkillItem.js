@@ -65,7 +65,7 @@ export default class AddSkillItem extends React.Component {
             <div className="row-add-skill">
                 <div className="grid add-row-div" onClick={this.openClose.bind(this)}>
                     <div className="col -col-11 -col-name overflowHidden skill-name" title={this.state.data.name}>
-                        {employeeHasThisCategory > 0 ? <i className={approvedCategory ? "employee-Has-Category" : "validate-pending"} title={"You have " + employeeHasThisCategory + " skill(s)/tool(s) from this category"}></i> : false}
+                        {employeeHasThisCategory > 0 ? <i className={approvedCategory ? "employee-Has-Category" : "validate-pending add-skill-validate-pending"} title={"You have " + employeeHasThisCategory + " skill(s)/tool(s) from this category"}></i> : false}
                         {
                             this.state.data.skills.length > 1
                                 ? <span className="skill-name-label skill-name-label--light">{this.state.data.name} ({this.state.data.skills.length})</span>
