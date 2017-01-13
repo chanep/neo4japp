@@ -369,6 +369,24 @@
         }
     }
 
+    .sub-results-arrow-open-close {
+        display: block;
+        font-size: .75em;
+        line-height: 3.1;
+        text-align: center;
+        cursor: pointer;
+        border-right: em(1) solid $WHITE;
+        border-bottom: em(1) solid $WHITE;
+
+        .ss-icon-down-arrow { transition: all .2s ease-in-out;  }
+
+        &.skill-opened {
+            .ss-icon-down-arrow {
+                transform: rotate(180deg);
+            }
+        }
+    }
+
     .remove-skill {
         display: block;
         font-size: 1em;
@@ -399,6 +417,10 @@
                 border-right: em(1) solid $WHITE;
 
                 &:hover {
+                    background-color: #e8e8e8;
+                }
+
+                &.add-row-div-open {
                     background-color: #e8e8e8;
                 }
             }
@@ -613,7 +635,6 @@
 .sub-skill-name {
     padding-left: em(55) !important;
     border-bottom: em(1) solid $WHITE;
-    border-right: em(1) solid $WHITE;
 }
 
 .validate-pending, .employee-Has-Category {

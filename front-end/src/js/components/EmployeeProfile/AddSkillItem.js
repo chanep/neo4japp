@@ -63,7 +63,7 @@ export default class AddSkillItem extends React.Component {
 
         return (
             <div className="row-add-skill">
-                <div className="grid add-row-div" onClick={this.openClose.bind(this)}>
+                <div className={"grid add-row-div " + (this.state.open ? "add-row-div-open" : false )} onClick={this.openClose.bind(this)}>
                     <div className="col -col-11 -col-name overflowHidden skill-name" title={this.state.data.name}>
                         {employeeHasThisCategory > 0 ? <i className={approvedCategory ? "employee-Has-Category" : "validate-pending add-skill-validate-pending"} title={"You have " + employeeHasThisCategory + " skill(s)/tool(s) from this category"}></i> : false}
                         {
@@ -74,7 +74,12 @@ export default class AddSkillItem extends React.Component {
                     </div>
                     {
                         this.state.data.skills.length > 1 ?
-                        <div className={this.state.open ? "col -col-1 results-arrow-open-close skill-opened" : "col -col-1 results-arrow-open-close"}><i className="ss-icon-down-arrow"></i></div>
+                        <div className="col -col-1 results-arrow-open-close">
+                            {this.state.open
+                                ? <i className="ss-icon-minus"></i>
+                                : <i className="ss-icon-plus"></i>
+                            }
+                        </div>
                         : false
                     }
                 </div>
@@ -83,7 +88,7 @@ export default class AddSkillItem extends React.Component {
                         {
                             this.state.data.skills.map(function(skill, key) {
                                 return(
-                                    <AddSkill skill={skill} key={key} groupLength={self.state.data.skills.length} />
+                                    <AddSkill skill={skill} key={key} groupLength={self.state.data.skills.length}  />
                                 );
                             })
                         }

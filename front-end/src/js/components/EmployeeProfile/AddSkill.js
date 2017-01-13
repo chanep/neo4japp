@@ -18,10 +18,9 @@ export default class AddSkill extends React.Component {
         	skill: null,
             groupLength: 0,
             skillWant: false,
-            skillLevel: null
+            skillLevel: null,
+            levelsOpen: false
         };
-
-
 
         this.userServices = new UserServices();
     }
@@ -31,13 +30,17 @@ export default class AddSkill extends React.Component {
     		skill: this.props.skill,
             groupLength: this.props.groupLength
     	});
+
+        if (this.props.groupLength === 1) { this.setState({ "levelsOpen": true })}
     }
 
 	componentWillReceiveProps(nextProps) {
 		this.setState({
 			skill: nextProps.skill,
-            groupLength: nextProps.groupLength
+            groupLength: nextProps.groupLength,
 		});
+
+        if (nextProps.groupLength === 1) { this.setState({ "levelsOpen": true })}
 	}
 
     showAlert(messg){
@@ -126,6 +129,12 @@ export default class AddSkill extends React.Component {
         });
     }
 
+    openLevels() {
+        let levelsOpen = this.state.levelsOpen;
+
+        this.setState({ levelsOpen: !levelsOpen });
+    }
+
     makeid()
     {
         var text = "";
@@ -154,12 +163,13 @@ export default class AddSkill extends React.Component {
             <div>
                 {
                     this.state.groupLength > 1 ?
-                        <div className="add-row col -col-12 -col-no-gutter">
-                            <div className="col -col-12 -col-name overflowHidden skill-name sub-skill-name" title={this.state.skill.name}>
+                        <div className="add-row col -col-12 -col-no-gutter" onClick={this.openLevels.bind(this)}>
+                            <div className="col -col-11 -col-name overflowHidden skill-name sub-skill-name" title={this.state.skill.name}>
                                 {this.state.skill.name}
                             </div>
+                            <div className={this.state.levelsOpen ? "col -col-1 sub-results-arrow-open-close skill-opened" : "col -col-1 sub-results-arrow-open-close"}><i className="ss-icon-down-arrow"></i></div>
                             {
-                                this.state.groupLength === 1 && this.state.skill.description !== undefined && this.state.skill.description !== ""?
+                                this.state.groupLength === 1 && this.state.skill.description !== undefined && this.state.skill.description !== "" ?
                                 <div className="skill-description">
                                     {this.state.skill.description}
                                 </div>
@@ -170,12 +180,13 @@ export default class AddSkill extends React.Component {
                 }
                 <div className="add-row col -col-12 -col-no-gutter">
                     {
-                        this.state.groupLength === 1 && this.state.skill.description !== undefined && this.state.skill.description !== ""?
+                        this.state.groupLength === 1 && this.state.skill.description !== undefined && this.state.skill.description !== "" ?
                         <div className="skill-description">
                             {this.state.skill.description}
                         </div>
                         :null
                     }
+                    { this.state.levelsOpen ?
                     <div className="row-levels">
                         <div className={"col -col-3 -col-no-gutter add-skill-box skill-level-box selectable " + (checked ? "level-verified" : "")}
                             onClick={this.toggleWant.bind(this)}>
@@ -198,6 +209,7 @@ export default class AddSkill extends React.Component {
                             <span className="skill-title">Teach/Manage</span>
                         </div>
                     </div>
+                    : false }
                 </div>
             </div>
         );
