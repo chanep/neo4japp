@@ -19,7 +19,9 @@ export default class AddSkill extends React.Component {
             groupLength: 0,
             skillWant: false,
             skillLevel: null,
-            levelsOpen: false
+            clicksCount: 0,
+            parentClicksCount: 0
+            //levelsOpen: false
         };
 
         this.userServices = new UserServices();
@@ -28,7 +30,9 @@ export default class AddSkill extends React.Component {
     componentDidMount() {
     	this.setState({
     		skill: this.props.skill,
-            groupLength: this.props.groupLength
+            groupLength: this.props.groupLength,
+            clicksCount: 0,
+            parentClicksCount: this.props.clicksCount
     	});
 
         if (this.props.groupLength === 1) { this.setState({ "levelsOpen": true })}
@@ -38,6 +42,8 @@ export default class AddSkill extends React.Component {
 		this.setState({
 			skill: nextProps.skill,
             groupLength: nextProps.groupLength,
+            clicksCount: 0,
+            parentClicksCount: nextProps.clicksCount
 		});
 
         if (nextProps.groupLength === 1) { this.setState({ "levelsOpen": true })}
@@ -130,9 +136,12 @@ export default class AddSkill extends React.Component {
     }
 
     openLevels() {
-        let levelsOpen = this.state.levelsOpen;
+        let clicksCount = this.state.clicksCount + 1;
 
-        this.setState({ levelsOpen: !levelsOpen });
+        if ((clicksCount > 2) || (clicksCount === 2  && (this.state.skill.description === undefined || this.state.skill.description === "")))
+            clicksCount = 0;
+
+        this.setState({clicksCount: clicksCount});
     }
 
     makeid()
@@ -161,32 +170,25 @@ export default class AddSkill extends React.Component {
 
         return (
             <div>
-                {
-                    this.state.groupLength > 1 ?
-                        <div className="add-row col -col-12 -col-no-gutter" onClick={this.openLevels.bind(this)}>
-                            <div className="col -col-11 -col-name overflowHidden skill-name sub-skill-name" title={this.state.skill.name}>
-                                {this.state.skill.name}
-                            </div>
-                            <div className={this.state.levelsOpen ? "col -col-1 sub-results-arrow-open-close skill-opened" : "col -col-1 sub-results-arrow-open-close"}><i className="ss-icon-down-arrow"></i></div>
-                            {
-                                this.state.groupLength === 1 && this.state.skill.description !== undefined && this.state.skill.description !== "" ?
-                                <div className="skill-description">
-                                    {this.state.skill.description}
-                                </div>
-                                :null
-                            }
+                <div className="add-row col -col-12 -col-no-gutter" onClick={this.openLevels.bind(this)}>
+                    {this.state.groupLength > 1 ?
+                        <div className="col -col-11 -col-name overflowHidden skill-name sub-skill-name" title={this.state.skill.name}>
+                            {this.state.skill.name}
                         </div>
-                        : false
-                }
+                        : null}
+                    {this.state.groupLength > 1 ?
+                        <div className={this.state.clicksCount > 0 ? "col -col-1 sub-results-arrow-open-close skill-opened" : "col -col-1 sub-results-arrow-open-close"}><i className="ss-icon-down-arrow"></i></div>
+                        : null}
+                </div>
                 <div className="add-row col -col-12 -col-no-gutter">
                     {
-                        this.state.groupLength === 1 && this.state.skill.description !== undefined && this.state.skill.description !== "" ?
-                        <div className="skill-description">
-                            {this.state.skill.description}
-                        </div>
+                        ((this.state.groupLength === 1 && this.state.parentClicksCount === 2) || this.state.clicksCount > 1) && this.state.skill.description !== undefined && this.state.skill.description !== "" ?
+                            <div className="skill-description">
+                                {this.state.skill.description}
+                            </div>
                         :null
                     }
-                    { this.state.levelsOpen ?
+                    { this.state.clicksCount > 0 || this.state.groupLength === 1 ?
                     <div className="row-levels">
                         <div className={"col -col-3 -col-no-gutter add-skill-box skill-level-box selectable " + (checked ? "level-verified" : "")}
                             onClick={this.toggleWant.bind(this)}>
