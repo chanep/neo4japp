@@ -7,6 +7,7 @@ const P = require('bluebird');
 const UserDa = require('../../data-access/user');
 const BaseTask = require('../base-task');
 const path = require('path');
+const roles = require('../../models/roles');
 const tmpPhonelistFile = path.resolve(__dirname, "../../tmp/employees.json");
 
 const request = require('request');
@@ -132,12 +133,28 @@ class PhonelistIdImportTask extends BaseTask{
             mustUpdate = true;
             updateData.disabled = true;
         }
+
         if(existsInPhonelist && (phonelistUser.phonelistId != user.phonelistId || phonelistUser.level != user.level || user.disabled)){
             mustUpdate = true;
             updateData.phonelistId = phonelistUser.phonelistId;
             updateData.level = phonelistUser.level;
             updateData.disabled = false;
         }
+
+        if(existsInPhonelist){
+            if(!user.roles)
+                user.roles = [];
+            let searcherRole = (phonelistUser.level == 'Executive' || phonelistUser.level == 'Leadership');
+            if(roles.hasRole(user.roles, roles.searcher) != searcherRole){
+                mustUpdate = true;
+                if(searcherRole)
+                    roles.addRole(user.roles, roles.searcher);
+                else
+                    roles.removeRole(user.roles, roles.searcher);
+                updateData.roles = user.roles;
+            }
+        }
+        
             
         if(mustUpdate){
             let userDa = new UserDa();

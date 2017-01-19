@@ -59,7 +59,7 @@ export default class RelatedEmployees extends React.Component {
 
                     areaCoordinator = {
                         "id": approver.id,
-                        "section": "Area Coordination",
+                        "section": "Manager",
                         "name": approver.fullname,
                         "position": approver.position !== null ? approver.position.name : "",
                         "department": approver.department !== null ? approver.department.name : "",
