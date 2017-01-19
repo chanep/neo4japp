@@ -129,6 +129,7 @@
 
 	.add-row {
 		.row-levels {
+			cursor: pointer;
 			overflow: hidden;
 
 			.col {
@@ -153,7 +154,7 @@
 		.skill-description {
 			font-size: em(12);
 			color: $GREY;
-			padding: em(13) em(10) em(13) em(15);
+			padding: em(13) em(10) em(13) em(55);
 			line-height: em(17);
 			border-bottom: em(1) solid $WHITE;
 			border-right: em(1) solid $WHITE;

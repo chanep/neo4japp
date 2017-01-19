@@ -408,7 +408,7 @@
 
     .addSkillsList {
         .row-add-skill {
-            cursor: pointer;
+            //cursor: pointer;
             border-bottom: em(1) solid $LIGHTEST-GREY;
 
             .add-row-div {
@@ -438,6 +438,10 @@
                 text-overflow: ellipsis;
                 max-width: 100%;
                 overflow: hidden;
+            }
+
+            &:nth-child(even) {
+                background-color: #fafafb;
             }
         }
     }
@@ -619,7 +623,7 @@
 }
 
 .skill-name-label {
-    margin-left: 20px;
+    margin-left: 28px;
 
     &.skill-name-label--light {
         font-weight: 400;
