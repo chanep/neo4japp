@@ -408,7 +408,7 @@
 
     .addSkillsList {
         .row-add-skill {
-            cursor: pointer;
+            //cursor: pointer;
             border-bottom: em(1) solid $LIGHTEST-GREY;
 
             .add-row-div {
@@ -623,7 +623,7 @@
 }
 
 .skill-name-label {
-    margin-left: 20px;
+    margin-left: 28px;
 
     &.skill-name-label--light {
         font-weight: 400;
