@@ -59,11 +59,11 @@ router.get('/approver/search-all', searchAllController.searchAll.bind(searchAllC
 // -----------------
 // Resource Managers
 // -----------------
-router.use('/resource-manager', security.checkRole(roles.resourceManager).bind(security));
+router.use('/resource-manager', security.checkRole([roles.resourceManager, roles.searcher]).bind(security));
 router.get('/resource-manager/search-all', searchAllController.searchAll.bind(searchAllController));
 router.get('/resource-manager/users-by-skill', resourceManagerController.findUsersBySkill.bind(resourceManagerController));
 router.get('/resource-manager/top-skill-searches', resourceManagerController.topSkillSearches.bind(resourceManagerController));
-router.get('/resource-manager/skilled-users-by-office/:skillId', resourceManagerController.skilledUsersByOffice.bind(resourceManagerController));
+router.get('/resource-manager/skilled-users-by-office/:skillId', security.checkRole(roles.resourceManager), resourceManagerController.skilledUsersByOffice.bind(resourceManagerController));
 router.put('/resource-manager/approval-request/:employeeId', resourceManagerController.requestApproval.bind(resourceManagerController));
 
 // ------
@@ -72,8 +72,6 @@ router.put('/resource-manager/approval-request/:employeeId', resourceManagerCont
 router.use('/admin', security.checkRole(roles.admin).bind(security));
 router.get('/admin/task', taskController.status.bind(taskController));
 router.post('/admin/task/:taskName', taskController.run.bind(taskController));
-
-
 
 
 module.exports = router;
