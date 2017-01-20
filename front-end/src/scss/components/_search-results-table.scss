@@ -653,6 +653,12 @@
     position: absolute;
     transform: translateY(-50%);
     top: 50%;
+
+    &.add-subskill-validate-pending {
+        margin-left: -20px;
+        width: 4px;
+        height: 4px;
+    }
 }
 
 .validate-pending {
@@ -664,6 +670,12 @@
     position: absolute;
     transform: translateY(-50%);
     top: 50%;
+
+    &.employee-Has-Category--subskill {
+        margin-left: -20px;
+        width: 4px;
+        height: 4px;
+    }
 }
 
 .pieAllocation {

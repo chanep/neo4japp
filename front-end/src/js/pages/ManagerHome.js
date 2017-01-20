@@ -13,7 +13,7 @@ export default class ManagerHome extends BasePage {
     render() {
         return (
             <div>
-                <Header search={false} loggedIn={true} />
+                <Header search={super._showSearch()} loggedIn={true} />
                 <div className="body-layout">
                 	<ManagerHomeTable />
                 </div>
