@@ -168,11 +168,25 @@ export default class AddSkill extends React.Component {
 
         let newId = "tooltip_" + this.makeid();
 
+        let employeeHasThisCategory = false,
+            approvedCategory = false;
+
+        if (this.state.skill.knowledge !== null && this.state.skill.knowledge.level !== undefined) {
+            if (this.state.skill.knowledge !== null && this.state.skill.knowledge.level !== undefined) {
+                employeeHasThisCategory = true;
+            }
+
+            if (this.state.skill.knowledge.approved) {
+                approvedCategory = true;
+            }
+        }
+
         return (
             <div>
                 <div className="add-row col -col-12 -col-no-gutter" onClick={this.openLevels.bind(this)}>
                     {this.state.groupLength > 1 ?
                         <div className="col -col-11 -col-name overflowHidden skill-name sub-skill-name" title={this.state.skill.name}>
+                            {(employeeHasThisCategory && this.state.groupLength > 1) ? <i className={approvedCategory ? "employee-Has-Category employee-Has-Category--subskill" : "validate-pending add-skill-validate-pending add-subskill-validate-pending"} title={"You have " + employeeHasThisCategory + " skill(s)/tool(s) from this category"}></i> : false}
                             {this.state.skill.name}
                         </div>
                         : null}
@@ -192,23 +206,23 @@ export default class AddSkill extends React.Component {
                     <div className="row-levels">
                         <div className={"col -col-3 -col-no-gutter add-skill-box skill-level-box selectable " + (checked ? "level-verified" : "")}
                             onClick={this.toggleWant.bind(this)}>
-                            <span className="skill-title">Want</span>
+                            <span className="skill-title--add">Want</span>
                         </div>
                         <div className={"col -col-2 -col-no-gutter add-skill-box skill-level-box selectable " + (this.state.skill.knowledge === null ? "" : (this.state.skill.knowledge.level === 1 ? (this.state.skill.knowledge.approved === undefined? "level-non-verified": "level-verified") : ""))}
                             onClick={this.changeLevel.bind(this, 1)}>
-                            <span className="skill-title">Heavy Supervision</span>
+                            <span className="skill-title--add">Heavy Supervision</span>
                         </div>
                         <div className={"col -col-2 -col-no-gutter add-skill-box skill-level-box selectable " + (this.state.skill.knowledge === null ? "" : (this.state.skill.knowledge.level === 2 ? (this.state.skill.knowledge.approved === undefined? "level-non-verified": "level-verified") : ""))}
                             onClick={this.changeLevel.bind(this, 2)}>
-                            <span className="skill-title">Light Supervision</span>
+                            <span className="skill-title--add">Light Supervision</span>
                         </div>
                         <div className={"col -col-2 -col-no-gutter add-skill-box skill-level-box selectable " + (this.state.skill.knowledge === null ? "" : (this.state.skill.knowledge.level === 3 ? (this.state.skill.knowledge.approved === undefined? "level-non-verified": "level-verified") : ""))}
                             onClick={this.changeLevel.bind(this, 3)}>
-                            <span className="skill-title">No Supervision</span>
+                            <span className="skill-title--add">No Supervision</span>
                         </div>
                         <div className={"col -col-2 -col-no-gutter add-skill-box skill-level-box selectable " + (this.state.skill.knowledge === null ? "" : (this.state.skill.knowledge.level === 4 ? (this.state.skill.knowledge.approved === undefined? "level-non-verified": "level-verified") : ""))}
                             onClick={this.changeLevel.bind(this, 4)}>
-                            <span className="skill-title">Teach/Manage</span>
+                            <span className="skill-title--add">Teach/Manage</span>
                         </div>
                     </div>
                     : false }

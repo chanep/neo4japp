@@ -61,6 +61,8 @@
 		vertical-align: middle;
 
 		&.skill-level-empty { background-color: $LIGHTEST-GREY; }
+
+		&.skill-employee-header { width: 143px; }
 	}
 
 	.table-header, .sub-table-header {
@@ -96,6 +98,10 @@
     	max-width: 100%;
     	overflow: hidden;
     	line-height: em(30);
+
+		&.skill-employee-profile {
+			width: 143px;
+		}
 
     	span {
 			//display: block;
@@ -172,8 +178,12 @@
 	//border-bottom: 1px solid white;
 	transition: background-color .2s ease-in-out;
 	text-align: center;
-	font-size: em(12);
+	font-size: em(17);
 	color: $LESS-GREY;
+
+	&.skill-employee-profile {
+		width: 143px;
+	}
 
 	&.level-selected { color: $WHITE; background-color: #BCBCBC; }
 	&.level-verified {
