@@ -6,9 +6,15 @@
 import React from 'react';
 import BasePage from './BasePage';
 import Header from '../components/Header';
+import ReactDOM from "react-dom";
 
 // Class: FAQ
 export default class FAQ extends React.Component {
+
+    componentDidMount () {
+        ReactDOM.findDOMNode(this).scrollIntoView();
+    }
+
     render() {
         return (
             <div>
