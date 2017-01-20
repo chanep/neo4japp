@@ -50,7 +50,7 @@ export default class EmployeeVerification extends BasePage {
     render() {
         return (
             <div className="body-layout">
-                <Header search={false} loggedIn={true} />
+                <Header search={super._showSearch()} loggedIn={true} />
                 <EmployeeHeader userId={this.state.employeeId} showActions={false} showForManagerVerification={true} />
                 <div className="search-results-table">
                     <div className="verification-notes">

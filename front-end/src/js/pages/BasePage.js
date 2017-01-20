@@ -20,7 +20,7 @@ class BasePage extends React.Component {
 		}).catch(() => {
 			return resolve(false);
 		});
-		console.log("result", result);
+
 		return result;
 	}
 
@@ -45,7 +45,7 @@ class BasePage extends React.Component {
 	}
 
 	_showSearch() {
-		return (this.ResourceManagerLoggedIn());
+		return (this.ResourceManagerLoggedIn() || this.SearcherLoggedIn());
 	}
 
 	GetUserLogged() {
@@ -66,6 +66,12 @@ class BasePage extends React.Component {
 		return 'employee';
 	}
 
+	EmployeeHasRole(roleName) {
+		let data = cookie.load('currentUser');
+
+		return data.roles.includes(roleName);
+	}
+
 	GetMyRootPath() {
 		let currentUserType = this.GetCurrentUserType();
 		if (currentUserType === null)
@@ -81,6 +87,10 @@ class BasePage extends React.Component {
 	ResourceManagerLoggedIn() {
 		let currentUserType = this.GetCurrentUserType();
 		return (currentUserType === 'admin' || currentUserType === 'resourcemanager');
+	}
+
+	SearcherLoggedIn() {
+		return this.EmployeeHasRole('searcher');
 	}
 }
 
