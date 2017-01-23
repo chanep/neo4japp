@@ -57,6 +57,14 @@ export default class AddSkill extends React.Component {
         });
     }
 
+    showDeleteAlert(messg){
+        msg.show(messg, {
+            time: 3500,
+            type: 'success',
+            icon: <img src="/img/delete-ico.png" />
+        });
+    }
+
     toggleWant() {
         var want = !this.state.skillWant,
             level = null;
@@ -90,6 +98,8 @@ export default class AddSkill extends React.Component {
                         self.state.skill, {knowledge: {$set: null}}
                     )
                 });
+
+                self.showDeleteAlert('Skill removed');
 
                 if (level != null) {
                     self.levelChanged(this.state.skillLevel, self.state.skillWant);
@@ -129,7 +139,7 @@ export default class AddSkill extends React.Component {
                 )
             });
 
-            self.showAlert('Skill removed');
+            self.showDeleteAlert('Skill removed');
         }).catch(err => {
             console.log("Error removing skill", err);
         });
