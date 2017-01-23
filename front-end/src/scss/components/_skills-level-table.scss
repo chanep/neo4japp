@@ -35,6 +35,7 @@
 
 .skill-level-grid {
 	overflow: hidden;
+	border-bottom: em(1) solid #e4e4e4;
 
 	.col {
 
@@ -126,6 +127,7 @@
 
 .skill-level-grid-add {
 	background-color: $LIGHTEST-GREY;
+	border-bottom: none;
 
 	.-header-heavy-supervision {
 		padding-left: em(8);
