@@ -127,6 +127,7 @@
 
 .skill-level-grid-add {
 	background-color: $LIGHTEST-GREY;
+	border-bottom: none;
 
 	.-header-heavy-supervision {
 		padding-left: em(8);
@@ -137,6 +138,7 @@
 		.row-levels {
 			cursor: pointer;
 			overflow: hidden;
+			border-bottom: 6px solid $WHITE;
 
 			.col {
 				line-height: 24px;
@@ -161,7 +163,7 @@
 			font-size: em(12);
 			color: $GREY;
 			padding: em(13) em(10) em(13) em(55);
-			line-height: em(17);
+			line-height: em(25);
 			border-bottom: em(1) solid $WHITE;
 			border-right: em(1) solid $WHITE;
 		}

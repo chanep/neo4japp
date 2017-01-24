@@ -639,6 +639,7 @@
 .sub-skill-name {
     padding-left: em(55) !important;
     border-bottom: em(1) solid $WHITE;
+    cursor: pointer;
 }
 
 .validate-pending, .employee-Has-Category {

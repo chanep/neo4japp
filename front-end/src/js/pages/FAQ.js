@@ -6,9 +6,15 @@
 import React from 'react';
 import BasePage from './BasePage';
 import Header from '../components/Header';
+import ReactDOM from "react-dom";
 
 // Class: FAQ
 export default class FAQ extends React.Component {
+
+    componentDidMount () {
+        ReactDOM.findDOMNode(this).scrollIntoView();
+    }
+
     render() {
         return (
             <div>
@@ -33,7 +39,7 @@ export default class FAQ extends React.Component {
                             <div className="faq-entry-content"><p><strong>Want:</strong> You do not have the skill but want to actively learn and apply the skill to future projects. This skill is in line with your career path at R/GA.</p><p><strong>Heavy Supervision:</strong> You have very little experience and would need someone with that skill managing your role throughout the project.</p>
                             <p><strong>Light Supervision:</strong> You have minimal experience and possibly done the skill with assistance but would need someone overseeing your progress during the project.</p>
                             <p><strong>No Supervision:</strong> You have done this skill many times before and confidant in your capabilities.</p>
-                            <p><strong>Teach/Manage:</strong> You are considered an expert and can adequately explain the skills to someone inexperienced or conduct an R/GAU seminar.Want? This is skill you would like to learn, and coincides with your career path at R/GA.</p></div>
+                            <p><strong>Teach/Manage:</strong> You are considered an expert and can adequately explain the skills to someone inexperienced or conduct an R/GAU seminar.</p></div>
                         </article>
                         <article className="faq-entry">
                             <h4 className="faq-entry-title"><span></span>Who sees my skills?</h4>
@@ -49,7 +55,7 @@ export default class FAQ extends React.Component {
                         </article>
                         <article className="faq-entry">
                             <h4 className="faq-entry-title"><span></span>I still have a question.</h4>
-                            <div className="faq-entry-content"><p>Any Questions, Concerns, Problems, email <a href="mailto:skillsearch@rga.com">skillsearch@rga.com</a></p></div>
+                            <div className="faq-entry-content"><p>Any Questions, Concerns, Problems, email <a href="mailto:skillsearch@rga.com" className="faq-mailto">skillsearch@rga.com</a>.</p></div>
                         </article>
                     </div>
                 </div>
