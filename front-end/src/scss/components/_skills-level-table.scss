@@ -36,6 +36,7 @@
 .skill-level-grid {
 	overflow: hidden;
 	border-bottom: em(1) solid #e4e4e4;
+	width: 960px;
 
 	.col {
 
@@ -91,21 +92,22 @@
 	overflow: hidden;
 	border-left: em(1) solid #e4e4e4;
 	border-right: em(1) solid #e4e4e4;
+	height: 36px;
 
 	.col {
 		white-space: nowrap;
     	text-overflow: ellipsis;
     	max-width: 100%;
     	overflow: hidden;
-    	line-height: em(30);
+    	line-height: em(19);
 
-		&.skill-employee-profile {
+		&.skill-employee-profile,
+		&.skill-approver-profile {
 			width: 143px;
 		}
 
     	span {
 			//display: block;
-			line-height: 30px;
     	}
 
     	span.icon-unverify {
@@ -128,6 +130,7 @@
 .skill-level-grid-add {
 	background-color: $LIGHTEST-GREY;
 	border-bottom: none;
+	width: 100%;
 
 	.-header-heavy-supervision {
 		padding-left: em(8);
@@ -183,7 +186,8 @@
 	font-size: em(17);
 	color: $LESS-GREY;
 
-	&.skill-employee-profile {
+	&.skill-employee-profile,
+	&.skill-approver-profile {
 		width: 143px;
 	}
 
@@ -196,7 +200,7 @@
 			cursor: pointer;
 
 			span {
-				font-weight: normal !important;
+				font-weight: 100 !important;
 			}
 		}
 
@@ -213,7 +217,7 @@
 			cursor: pointer;
 
 			span {
-				font-weight: normal !important;
+				font-weight: 100 !important;
 			}
 		}
 

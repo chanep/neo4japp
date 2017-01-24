@@ -112,40 +112,38 @@ export default class ApproverEmployeeSkill extends React.Component {
                 <div className="col -col-3">
                     <span className={"sub-table-header " + (this.state.indent?"with-indent": "")}>{this.state.data.name}</span>
                 </div>
-                <div className="col -col-1 skill-level-want-wrapper">
-                    <span className="skill-title">
-                        <input className="readOnly" type="checkbox" label="skill-want" checked={want} {...opts} />
-                    </span>
+                <div className={"col -col-1 skill-level-box skill-level-want-wrapper skill-approver-profile " + (this.state.data.knowledge.want ? "level-verified" : "")}>
+                    <span className="skill-title">&nbsp;</span>
                 </div>
-                <div title={this.state.data.knowledge.level === 1 && verified?"Approved by " + approver: "Verification pending"} onClick={this.changeState.bind(this, 1)} className={"col -col-2 " + (this.state.data.knowledge.level === 1? "skill-level-box skill-level-changeable " + (verified? "level-verified": "level-non-verified"): "")}>
+                <div className="skill-level-box skill-approver-profile" title={this.state.data.knowledge.level === 1 && verified?"Approved by " + approver: "Verification pending"} onClick={this.changeState.bind(this, 1)} className={"col -col-2 skill-level-box skill-approver-profile " + (this.state.data.knowledge.level === 1? "skill-level-box skill-level-changeable " + (verified? "level-verified": "level-non-verified"): "")}>
                     {this.state.data.knowledge.level === 1?
                         (want?<span>&nbsp;</span>:
                             (!verified? <span className="skill-title">Verify</span>:
-                                        <div><span className="icon-unverify">x</span> <span className="skill-title">Unverify</span></div>)
+                                        <div><span>&nbsp;</span></div>)
                         ):<span>&nbsp;</span>
                     }
                 </div>
-                <div title={this.state.data.knowledge.level === 2 && verified?"Approved by " + approver: "Verification pending"} onClick={this.changeState.bind(this, 2)} className={"col -col-2 " + (this.state.data.knowledge.level === 2? "skill-level-box skill-level-changeable " + (verified? "level-verified": "level-non-verified"): "")}>
+                <div title={this.state.data.knowledge.level === 2 && verified?"Approved by " + approver: "Verification pending"} onClick={this.changeState.bind(this, 2)} className={"col -col-2 skill-level-box skill-approver-profile " + (this.state.data.knowledge.level === 2? "skill-level-box skill-level-changeable " + (verified? "level-verified": "level-non-verified"): "")}>
                     {this.state.data.knowledge.level === 2?
                         (want?<span>&nbsp;</span>:
                             (!verified? <span className="skill-title">Verify</span>:
-                                        <div><span className="icon-unverify">x</span> <span className="skill-title">Unverify</span></div>)
+                                        <div><span>&nbsp;</span></div>)
                         ):<span>&nbsp;</span>
                     }
                 </div>
-                <div title={this.state.data.knowledge.level === 3 && verified?"Approved by " + approver: "Verification pending"} onClick={this.changeState.bind(this, 3)} className={"col -col-2 " + (this.state.data.knowledge.level === 3? "skill-level-box skill-level-changeable " + (verified? "level-verified": "level-non-verified"): "")}>
+                <div title={this.state.data.knowledge.level === 3 && verified?"Approved by " + approver: "Verification pending"} onClick={this.changeState.bind(this, 3)} className={"col -col-2 skill-level-box skill-approver-profile " + (this.state.data.knowledge.level === 3? "skill-level-box skill-level-changeable " + (verified? "level-verified": "level-non-verified"): "")}>
                     {this.state.data.knowledge.level === 3?
                         (want?<span>&nbsp;</span>:
                             (!verified? <span className="skill-title">Verify</span>:
-                                        <div><span className="icon-unverify">x</span> <span className="skill-title">Unverify</span></div>)
+                                        <div><span>&nbsp;</span></div>)
                         ):<span>&nbsp;</span>
                     }
                 </div>
-                <div title={this.state.data.knowledge.level === 4 && verified?"Approved by " + approver: "Verification pending"} onClick={this.changeState.bind(this, 4)} className={"col -col-2 " + (this.state.data.knowledge.level === 4? "skill-level-box skill-level-changeable " + (verified? "level-verified": "level-non-verified"): "")}>
+                <div title={this.state.data.knowledge.level === 4 && verified?"Approved by " + approver: "Verification pending"} onClick={this.changeState.bind(this, 4)} className={"col -col-2 kill-level-box skill-approver-profile " + (this.state.data.knowledge.level === 4? "skill-level-box skill-level-changeable " + (verified? "level-verified": "level-non-verified"): "")}>
                     {this.state.data.knowledge.level === 4?
                         (want?<span>&nbsp;</span>:
                             (!verified? <span className="skill-title">Verify</span>:
-                                        <div><span className="icon-unverify">x</span> <span className="skill-title">Unverify</span></div>)
+                                        <div><span>&nbsp;</span></div>)
                         ):<span>&nbsp;</span>
                     }
                 </div>
