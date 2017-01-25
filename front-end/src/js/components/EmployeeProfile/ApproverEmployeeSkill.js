@@ -119,7 +119,7 @@ export default class ApproverEmployeeSkill extends React.Component {
                     {this.state.data.knowledge.level === 1?
                         (want?<span>&nbsp;</span>:
                             (!verified? <span className="skill-title">Verify</span>:
-                                        <div><span>&nbsp;</span></div>)
+                                        <div><span className="not-hovered">&nbsp;</span><span className="hovered"><span className="ss-icon-remove"></span><span>Unverify</span></span></div>)
                         ):<span>&nbsp;</span>
                     }
                 </div>
@@ -127,7 +127,7 @@ export default class ApproverEmployeeSkill extends React.Component {
                     {this.state.data.knowledge.level === 2?
                         (want?<span>&nbsp;</span>:
                             (!verified? <span className="skill-title">Verify</span>:
-                                        <div><span>&nbsp;</span></div>)
+                                        <div><span className="not-hovered">&nbsp;</span><span className="hovered"><span className="ss-icon-remove"></span><span>Unverify</span></span></div>)
                         ):<span>&nbsp;</span>
                     }
                 </div>
@@ -135,7 +135,7 @@ export default class ApproverEmployeeSkill extends React.Component {
                     {this.state.data.knowledge.level === 3?
                         (want?<span>&nbsp;</span>:
                             (!verified? <span className="skill-title">Verify</span>:
-                                        <div><span>&nbsp;</span></div>)
+                                        <div><span className="not-hovered">&nbsp;</span><span className="hovered"><span className="ss-icon-remove"></span><span>Unverify</span></span></div>)
                         ):<span>&nbsp;</span>
                     }
                 </div>
@@ -143,7 +143,7 @@ export default class ApproverEmployeeSkill extends React.Component {
                     {this.state.data.knowledge.level === 4?
                         (want?<span>&nbsp;</span>:
                             (!verified? <span className="skill-title">Verify</span>:
-                                        <div><span>&nbsp;</span></div>)
+                                        <div><span className="not-hovered">&nbsp;</span><span className="hovered"><span className="ss-icon-remove"></span><span>Unverify</span></span></div>)
                         ):<span>&nbsp;</span>
                     }
                 </div>
