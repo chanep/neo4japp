@@ -35,6 +35,10 @@ export default class AddSkill extends React.Component {
             parentClicksCount: this.props.clicksCount
     	});
 
+        if (this.props.skill.knowledge != undefined) {
+            this.setState({ skillWant: this.props.skill.knowledge.want });
+        }
+
         if (this.props.groupLength === 1) { this.setState({ "levelsOpen": true })}
     }
 
@@ -45,6 +49,10 @@ export default class AddSkill extends React.Component {
             clicksCount: 0,
             parentClicksCount: nextProps.clicksCount
 		});
+
+        if (nextProps.skill.knowledge != undefined) {
+            this.setState({ skillWant: nextProps.skill.knowledge.want });
+        }
 
         if (nextProps.groupLength === 1) { this.setState({ "levelsOpen": true })}
 	}
@@ -181,12 +189,12 @@ export default class AddSkill extends React.Component {
         let employeeHasThisCategory = false,
             approvedCategory = false;
 
-        if (this.state.skill.knowledge !== null && this.state.skill.knowledge.level !== undefined) {
-            if (this.state.skill.knowledge !== null && this.state.skill.knowledge.level !== undefined) {
+        if (this.state.skill.knowledge !== null) {
+            if (this.state.skill.knowledge !== null && this.state.skill.knowledge.level !== undefined || this.state.skill.knowledge.want) {
                 employeeHasThisCategory = true;
             }
 
-            if (this.state.skill.knowledge.approved) {
+            if (this.state.skill.knowledge.approved || this.state.skill.knowledge.want) {
                 approvedCategory = true;
             }
         }
