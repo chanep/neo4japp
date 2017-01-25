@@ -42,6 +42,10 @@ export default class FAQ extends React.Component {
                             <p><strong>Teach/Manage:</strong> You are considered an expert and can adequately explain the skills to someone inexperienced or conduct an R/GAU seminar.</p></div>
                         </article>
                         <article className="faq-entry">
+                            <h4 className="faq-entry-title"><span></span>Why are my skills marked red or grey?</h4>
+                            <div className="faq-entry-content"><p>Skills that you have selected have two states. Red indicates that the skill has not been verified by your manager yet. When you update your skill profile, your manager will receive an alert that your profile has been modified. Skills in grey have been verified by your manager. Skills that you <span className="highlight">want</span> to learn are automatically marked grey.</p></div>
+                         </article>
+                        <article className="faq-entry">
                             <h4 className="faq-entry-title"><span></span>Who sees my skills?</h4>
                             <div className="faq-entry-content"><p>Only your direct manager and resource managers have access to view your skill profile. Also your department heads and R/GA leadership can view and search skills.</p></div>
                          </article>

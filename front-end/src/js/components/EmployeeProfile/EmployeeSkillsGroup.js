@@ -45,7 +45,7 @@ export default class EmployeeSkillsGroup extends React.Component {
                                 <span className="sub-table-header"></span>
                             </div>
                             <div className="col -col-1 -col-no-gutter skill-employee-header">
-                                <span className="sub-table-header">Want?</span>
+                                <span className="sub-table-header">Want</span>
                             </div>
                             <div className="col -col-2 -col-no-gutter skill-employee-header">
                                 <span className="sub-table-header">Heavy Supervision</span>

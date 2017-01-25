@@ -47,7 +47,10 @@ export default class ResultsProfileTable extends React.Component {
 
     render() {
         return (
-            <div className="search-results-table">
+            <div className="search-results-table search-results-table--employee">
+                <div className="verification-notes verification-notes--employee">
+                    Skills in <span className="unverified">red</span> have not been verified by your manager yet. Skills in <span className="verified">grey</span> have been verified.<br />
+                </div>
             {    
                 this.state.searching ?
                     <div className="loading-data-note">Searching...</div>

@@ -59,11 +59,17 @@ export default class AddSkillItem extends React.Component {
             approvedCategory = false;
 
         this.state.data.skills.forEach(function(skill, index) {
-            if (skill.knowledge !== null && skill.knowledge.level !== undefined) {
-                employeeHasThisCategory++;
+            if (skill.knowledge !== null) {
+                if (skill.knowledge.level !== undefined || skill.knowledge.want) {
+                    employeeHasThisCategory++;
 
-                if (skill.knowledge.approved) {
-                    approvedCategory = true;
+                    if (skill.knowledge.approved || skill.knowledge.want) {
+                        approvedCategory = true;
+                    }
+                } else {
+                    if (skill.knowledge.want) {
+                        approvedCategory = true;
+                    }
                 }
             }
         });
