@@ -63,7 +63,7 @@
 
 		&.skill-level-empty { background-color: $LIGHTEST-GREY; }
 
-		&.skill-employee-header { width: 143px; }
+		&.skill-employee-header { width: 143.7px; }
 	}
 
 	.table-header, .sub-table-header {
@@ -103,7 +103,7 @@
 
 		&.skill-employee-profile,
 		&.skill-approver-profile {
-			width: 143px;
+			width: 143.7px;
 		}
 
     	span {
@@ -188,7 +188,7 @@
 
 	&.skill-employee-profile,
 	&.skill-approver-profile {
-		width: 143px;
+		width: 143.7px;
 	}
 
 	&.level-selected { color: $WHITE; background-color: #BCBCBC; }
@@ -207,6 +207,22 @@
 		&.skill-level-changeable:hover {
 			background-color: #323030;
 			color: white;
+		}
+
+		.not-hovered { display: block; }
+		.hovered {
+			display: none;
+
+			.ss-icon-remove {
+				font-size: 20px;
+			    vertical-align: -15%;
+			    margin-left: -5px;
+			}
+		}
+
+		&:hover {
+			.not-hovered { display: none; }
+			.hovered { display: block; }
 		}
 	}
 	&.level-non-verified {
