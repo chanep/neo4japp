@@ -7,6 +7,10 @@
     margin-top: 1.5rem;
     overflow: hidden;
 
+    &.search-results-table--employee {
+        margin-top: 34px;
+    }
+
     .searching {
         text-align: center;
         padding: em(15);
@@ -607,6 +611,10 @@
     line-height: em(24);
     margin-bottom: em(15);
     vertical-align: middle;
+
+    &.verification-notes--employee {
+        margin-left: 12px;
+    }
 
     span.unverified, span.verified {
         color: white;
