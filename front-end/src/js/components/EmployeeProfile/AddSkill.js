@@ -20,8 +20,8 @@ export default class AddSkill extends React.Component {
             skillWant: false,
             skillLevel: null,
             clicksCount: 0,
-            parentClicksCount: 0
-            //levelsOpen: false
+            parentClicksCount: 0,
+            levelsOpen: false
         };
 
         this.userServices = new UserServices();
@@ -158,6 +158,9 @@ export default class AddSkill extends React.Component {
     }
 
     openLevels() {
+        let levelsOpen = this.state.levelsOpen;
+        this.setState({ levelsOpen: !levelsOpen });
+
         let clicksCount = this.state.clicksCount + 1;
 
         if ((clicksCount > 2) || (clicksCount === 2  && (this.state.skill.description === undefined || this.state.skill.description === "")))
@@ -213,18 +216,18 @@ export default class AddSkill extends React.Component {
                         </div>
                         : null}
                     {this.state.groupLength > 1 ?
-                        <div className={this.state.clicksCount > 0 ? "col -col-1 sub-results-arrow-open-close skill-opened" : "col -col-1 sub-results-arrow-open-close"}><i className="ss-icon-down-arrow"></i></div>
+                        <div className={this.state.levelsOpen ? "col -col-1 sub-results-arrow-open-close skill-opened" : "col -col-1 sub-results-arrow-open-close"}><i className="ss-icon-down-arrow"></i></div>
                         : null}
                 </div>
                 <div className="add-row col -col-12 -col-no-gutter">
                     {
-                        ((this.state.groupLength === 1 && this.state.parentClicksCount === 2) || this.state.clicksCount > 1) && this.state.skill.description !== undefined && this.state.skill.description !== "" ?
-                            <div className="skill-description">
-                                {this.state.skill.description}
-                            </div>
+                        (this.state.skill.description !== undefined && this.state.skill.description !== "") && (this.state.levelsOpen || this.state.groupLength === 1) ?
+                        <div className="skill-description">
+                            {this.state.skill.description}
+                        </div>
                         :null
                     }
-                    { this.state.clicksCount > 0 || this.state.groupLength === 1 ?
+                    { this.state.levelsOpen || this.state.groupLength === 1 ?
                     <div className="row-levels">
                         <div className={"col -col-3 -col-no-gutter add-skill-box skill-level-box selectable " + (checked ? "level-verified" : "")}
                             onClick={this.toggleWant.bind(this)}>
