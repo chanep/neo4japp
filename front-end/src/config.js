@@ -1,6 +1,6 @@
 module.exports = function() {
 	var ENV = {
-    	baseServicesURL: 'https://skillsearch2.ny.rga.com:5005/api/',
+    	baseServicesURL: 'https://skillsearch2.ny.rga.com:4435/api/',
     	knowledgeLevels: [
     		{level: 1, desc: 'Heavy Supervision'},
     		{level: 2, desc: 'Light Supervision'},
