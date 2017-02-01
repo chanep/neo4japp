@@ -1,0 +1,1 @@
+scp skillsearch2:/var/www/node/apps/skillsearch/repo/api/server/logs/*.log /Users/estebanc/repos/skillsearch/api/server/logs/prod/
