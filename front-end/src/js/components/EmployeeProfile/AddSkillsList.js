@@ -103,9 +103,7 @@ export default class AddSkillsList extends React.Component {
 
                         </div>
                     }
-                    {this.basePage.GetCurrentUserType() == 'employee' ?
-                        <div onClick={this.openModal} className="suggest"><span>Suggest skill/tool &#43;</span></div>
-                    : false}
+                    <div onClick={this.openModal} className="suggest"><span>Suggest skill/tool &#43;</span></div>
                 </div>
                 <Modal
                     isOpen={this.state.open}
