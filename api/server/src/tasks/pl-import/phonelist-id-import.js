@@ -145,12 +145,9 @@ class PhonelistIdImportTask extends BaseTask{
             if(!user.roles)
                 user.roles = [];
             let searcherRole = (phonelistUser.level == 'Executive' || phonelistUser.level == 'Leadership');
-            if(roles.hasRole(user.roles, roles.searcher) != searcherRole){
+            if(!roles.hasRole(user.roles, roles.searcher) && searcherRole){
                 mustUpdate = true;
-                if(searcherRole)
-                    roles.addRole(user.roles, roles.searcher);
-                else
-                    roles.removeRole(user.roles, roles.searcher);
+                roles.addRole(user.roles, roles.searcher);
                 updateData.roles = user.roles;
             }
         }
