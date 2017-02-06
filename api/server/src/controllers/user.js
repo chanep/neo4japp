@@ -330,7 +330,7 @@ class UserController extends BaseController{
 
 
     _validateUserAccess(loggedUser, userId){
-        if(loggedUser.id == userId || roles.hasRole(loggedUser.roles, roles.resourceManager))
+        if(loggedUser.id == userId || roles.hasRole(loggedUser.roles, roles.resourceManager) || roles.hasRole(loggedUser.roles, roles.searcher))
             return P.resolve();
         return approverDa.isApproverOf(loggedUser.id, userId)
             .then(isApproverOf => {
