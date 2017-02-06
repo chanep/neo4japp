@@ -287,6 +287,24 @@ class UserDa extends BaseDa{
             })
     }
 
+    updateSearcherRole(){
+        let updated = 0;
+        let label = this.labelsStr;
+        let ofDepartment = this.model.getRelationByKey("department").label;
+        let ofPosition = this.model.getRelationByKey("position").label;
+        let role = roles.searcher;
+        let cmd = `MATCH (u:${label})-[:${ofDepartment}]->(d),
+                        (u)-[:${ofPosition}]->(p)
+                    WHERE NOT({role} IN u.roles) 
+                        AND (u.level IN ['Executive', 'Leadership'] 
+                            OR (d.name = 'Technology' AND (u.level = 'Senior' OR p.name =~ '(?i).*director.*')))
+                    SET u.roles = u.roles + {role}
+                    return count(u)`;
+
+        return this._run(cmd, {role: role})
+            .then(r => this._cypher.parseIntResult(r));
+    }
+
     setKnowledge(userId, skillId, level, want){
         level = want? null : level;
         let knowledgeData = {

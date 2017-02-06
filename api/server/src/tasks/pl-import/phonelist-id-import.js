@@ -139,19 +139,7 @@ class PhonelistIdImportTask extends BaseTask{
             updateData.phonelistId = phonelistUser.phonelistId;
             updateData.level = phonelistUser.level;
             updateData.disabled = false;
-        }
-
-        if(existsInPhonelist){
-            if(!user.roles)
-                user.roles = [];
-            let searcherRole = (phonelistUser.level == 'Executive' || phonelistUser.level == 'Leadership');
-            if(!roles.hasRole(user.roles, roles.searcher) && searcherRole){
-                mustUpdate = true;
-                roles.addRole(user.roles, roles.searcher);
-                updateData.roles = user.roles;
-            }
-        }
-        
+        }      
             
         if(mustUpdate){
             let userDa = new UserDa();
@@ -179,6 +167,14 @@ class PhonelistIdImportTask extends BaseTask{
             .then(map => {
                 this.usernameIdmap = map;
                 return this._findAndUpdateUsers();
+            })
+            .then(info => {
+                let userDa = new UserDa(null);
+                return userDa.updateSearcherRole()
+                    .then(updated => {
+                        info.updated += updated;
+                        return info;
+                    })
             })
             .then(info => {
                 console.log("orphan phonelist users", JSON.stringify(_.keys(this.usernameIdmap)))
