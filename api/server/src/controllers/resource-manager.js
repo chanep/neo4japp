@@ -151,12 +151,7 @@ class ResourceManagerController extends BaseController{
         const userId = req.session.user.id;
         const employeeId = Number(req.params.employeeId);
 
-        let promise = resourceManagerDa.isResourceManagerOf(userId, employeeId)
-            .then(granted => {
-                if(!granted)
-                    throw new errors.ForbiddenError(`User ${req.session.user.username} is forbidden to request for user of id ${userId}`);
-                return messaging.sendApprovalRequestEmail(req.session.user, employeeId);
-            })
+        let promise = messaging.sendApprovalRequestEmail(req.session.user, employeeId)
             .then(() => "Email sent");
 
         this._respondPromise(req, res, promise);
