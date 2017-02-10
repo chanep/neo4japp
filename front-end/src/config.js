@@ -9,7 +9,7 @@ module.exports = function() {
     	],
         search: {
             pillsLimit: 100,
-            resultsLimit: 20
+            resultsLimit: 1000
         },
         resourceManagerHome: {
             topSearchedSkillsCount: 10,
