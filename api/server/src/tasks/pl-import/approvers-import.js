@@ -13,6 +13,7 @@ const request = require('request');
 let asyncDoUntil = P.promisify(async.doUntil);
 let asyncMap = P.promisify(async.map);
 let asyncEach = P.promisify(async.each);
+let asyncEachSeries = P.promisify(async.eachSeries);
 
 const taskname ='approvers-import';
 const phonelistUrl = 'http://phonelist/gateway/json/employeeManager.aspx'
@@ -91,7 +92,7 @@ class ApproversImportTask extends BaseTask{
                 return this._getUserApproversId(user.phonelistId);
             })
             .then(approversId => {
-                return asyncEach(approversId, (approverId, callback) => {
+                return asyncEachSeries(approversId, (approverId, callback) => {
                     if(!approverId){
                         //this.info.errors++;
                         callback();

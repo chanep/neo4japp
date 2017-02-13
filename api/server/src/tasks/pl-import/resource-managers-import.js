@@ -13,6 +13,7 @@ const request = require('request');
 let asyncDoUntil = P.promisify(async.doUntil);
 let asyncMap = P.promisify(async.map);
 let asyncEach = P.promisify(async.each);
+let asyncEachSeries = P.promisify(async.eachSeries);
 
 const taskname ='resource-managers-import';
 const phonelistUrl = 'http://phonelist/gateway/json/employeeResourceManager.aspx'
@@ -92,7 +93,7 @@ class ResourceManagersImportTask extends BaseTask{
                 return this._getUserResourceManagersId(user.phonelistId);
             })
             .then(resourceManagersId => {
-                return asyncEach(resourceManagersId, (resourceManagerId, callback) => {
+                return asyncEachSeries(resourceManagersId, (resourceManagerId, callback) => {
                     if(!resourceManagerId){
                         //this.info.errors++;
                         callback();
