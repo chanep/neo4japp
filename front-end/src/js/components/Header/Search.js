@@ -164,7 +164,10 @@ class Search extends React.Component {
       document.getElementById('querySearch').value = "";
     }
 
-    addItem(item) {
+    addItem(item, redirect) {
+      redirect = redirect || false; // 'redirect' determines whether the search
+                                    // should be performed when adding the pill
+
       let currentChosenItems = this.state.chosenItems;
 
       var repeated = false;
@@ -183,6 +186,10 @@ class Search extends React.Component {
       this.setState({ chosenItems: currentChosenItems });
       this.setState({ results: [] });
       this.hideResults();
+
+      if (redirect) {
+        this.makeQuery();
+      }
     }
 
     removeSkill(skill, index) {
