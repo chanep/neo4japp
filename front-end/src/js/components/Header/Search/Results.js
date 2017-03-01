@@ -20,7 +20,7 @@ class Results extends React.Component {
       //console.log("CLICK-STATE E" , event);
       //console.log("CLICK-STATE P", props);
       //console.log("CLICK-STATE S", skill);
-      this.props.addItem(props);
+      this.props.addItem(props, true);
     }
 
     showEmployee(self, props, person) {
