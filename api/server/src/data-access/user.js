@@ -32,9 +32,9 @@ class UserDa extends BaseDa{
         let allocationRelL = this.model.getRelationByKey("allocation").label;
 
         let cmd = `match (n:${label}) where id(n) = {id}
-                    match (n)-[:${officeRelL}]->(o),
-                    (n)-[:${departmentRelL}]->(d),
-                    (n)-[:${positionRelL}]->(p)
+                    optional match (n)-[:${officeRelL}]->(o)
+                    optional match (n)-[:${departmentRelL}]->(d)
+                    optional match (n)-[:${positionRelL}]->(p)
                     optional match (n)-[:${allocationRelL}]->(al)
                     optional match (n)-[:${approverRelL}]->(a)
                     optional match (a)-[:${departmentRelL}]->(ad)
@@ -75,9 +75,9 @@ class UserDa extends BaseDa{
                     return {    
                                 id: id(n), username: n.username, type: n.type, email: n.email, phonelistId: n.phonelistId,
                                 fullname: n.fullname, roles: n.roles, phone: n.phone, image: n.image, disabled: n.disabled, lastUpdate: n.lastUpdate,
-                                office: {id: id(o), name: o.name, country: o.country, acronym: o.acronym},
-                                department: {id: id(d), name: d.name},
-                                position: {id: id(p), name: p.name},
+                                office: case when (o is not null) then {id: id(o), name: o.name, country: o.country, acronym: o.acronym} else null end,
+                                department: case when (d is not null) then {id: id(d), name: d.name} else null end,
+                                position: case when (p is not null) then {id: id(p), name: p.name} else null end,
                                 approvers: approvers,
                                 resourceManagers: resourceManagers,
                                 allocation: al,
