@@ -139,17 +139,17 @@ class UsersImportTask extends CwBaseTask{
         if(s.main_image && s.main_image.sizes && s.main_image.sizes.one_one && s.main_image.sizes.one_one.s320x320)
             user.image = s.main_image.sizes.one_one.s320x320;
         if(s.data && s.data.department){
-            let sourceId = s.data.department._id;
+            let sourceId = s.data.department;
             if(this.departmentsMap[sourceId])
                 user.departmentId = this.departmentsMap[sourceId];
         }
         if(s.data && s.data.position){
-            let sourceId = s.data.position._id;
+            let sourceId = s.data.position;
             if(this.positionsMap[sourceId])
                 user.positionId = this.positionsMap[sourceId];
         }
         if(s.data && s.data.office){
-            let sourceId = s.data.office._id;
+            let sourceId = s.data.office;
             if(this.officesMap[sourceId])
                 user.officeId = this.officesMap[sourceId];
         }
