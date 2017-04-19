@@ -1,0 +1,27 @@
+$gutter: 10px;
+
+.dashboards-container {
+    @include grid($max-width: em(960));
+    display: flex;
+    flex-wrap: wrap;
+    padding: 90px 0 75px;
+
+    .dashboard-link {
+      width: calc((100% - (#{$gutter} * 2)) / 3);
+      margin-right: $gutter;
+      margin-top: $gutter;
+      height: 190px;
+      border: 1px solid currentColor;
+      padding: 20px;
+      font-size: 24px;
+      color: #999;
+
+      &:hover {
+        color: #000;
+      }
+
+      &:nth-child(3n) {
+        margin-right: 0;
+      }
+    }
+}

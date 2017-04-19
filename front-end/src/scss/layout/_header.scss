@@ -66,7 +66,7 @@ header {
                 opacity: 0;
                 height: 0;
                 overflow: hidden;
-                transition: all .35s .5s ease-in-out; 
+                transition: all .35s .5s ease-in-out;
 
                 background-color: $RGA-RED;
                 width: 293px;
@@ -91,7 +91,7 @@ header {
                 a:hover, input[type="button"]:hover {
                     background-color: $RED-HOVER;
                 }
-                
+
                 input[type="button"]{
                     background: none;
                     cursor: pointer;
@@ -102,14 +102,14 @@ header {
 
             .header-menu__item--title {
                 font-size: 18px;
-                line-height: 65px;
+                line-height: 64px;
                 padding-left: 30px;
                 padding-right: 30px;
             }
 
             &:hover {
                 padding-left: 200px;
-                transition: all .35s .5s ease-in-out; 
+                transition: all .35s .5s ease-in-out;
 
                 .header-menu {
                     opacity: 1;
@@ -118,11 +118,11 @@ header {
                 }
 
                 .resource-manager-menu {
-                    min-height: 165px;
+                    min-height: 198px;
                 }
 
                 .approver-menu {
-                    min-height: 285px;   
+                    min-height: 285px;
                 }
 
                 .employee-menu {
@@ -230,7 +230,7 @@ header {
                 margin-left: -5px;
                 width: 88%;
             }
-            
+
         }
 
         &__results {
@@ -298,7 +298,7 @@ header {
         padding: 4px 12px;
         margin: 12px 5px 0 5px;
 
-      
+
 
         &__close {
           font-size: 9px;
@@ -321,5 +321,3 @@ header {
 
 
 .header-menu-wrapper { position: relative; }
-
-
