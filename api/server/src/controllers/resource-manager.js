@@ -14,7 +14,7 @@ const skillChannel = postal.channel('skill');
 class ResourceManagerController extends BaseController{
 
     /**
-    @api {get} /api/resource-manager/users-by-skill 1 Find users with skills by office or deparment
+    @api {get} /api/resource-manager/skill-by-user 1 Find users with skills by office or deparment
     @apiDescription List amount of skills by users (sorted by fullname)
     @apiGroup Resource Managers
 
