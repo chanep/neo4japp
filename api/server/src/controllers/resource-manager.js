@@ -40,7 +40,7 @@ class ResourceManagerController extends BaseController{
     }
 
     /**
-    @api {get} /api/resource-manager/users-by-skill 2 Find users by skill
+    @api {get} /api/resource-manager/users-by-skill 3 Find users by skill
     @apiDescription List users who have at least one of the searched skills (sorted by skill match count and skill level, descending)
     @apiGroup Resource Managers
 
@@ -74,7 +74,7 @@ class ResourceManagerController extends BaseController{
     }
 
     /**
-    @api {get} /api/resource-manager/top-skill-searches 3 Top Skills
+    @api {get} /api/resource-manager/top-skill-searches 4 Top Skills
     @apiDescription List most searched skills
     @apiGroup Resource Managers
 
@@ -125,7 +125,7 @@ class ResourceManagerController extends BaseController{
     }
 
     /**
-    @api {get} /api/resource-manager/skilled-users-by-office/:skillId 4 Skilled users by office
+    @api {get} /api/resource-manager/skilled-users-by-office/:skillId 5 Skilled users by office
     @apiDescription List offices with the number of users who knows the given skill
     @apiGroup Resource Managers
 
@@ -161,7 +161,7 @@ class ResourceManagerController extends BaseController{
     }
 
     /**
-    @api {put} /api/resource-manager/approval-request/:employeeId 5 Request Approval
+    @api {put} /api/resource-manager/approval-request/:employeeId 6 Request Approval
     @apiDescription Send an email to the approver requesting an employee's skill approval
     @apiGroup Resource Managers
 
