@@ -7,7 +7,7 @@
         h2 {
             font-size: em(12);
             color: #666767;
-            border-bottom: em(1) solid #e7e7e8;
+            border-bottom: em(1) solid $LIGHTEST-GREY;
             margin: 0;
             padding: em(10) 0 em(11) em(20);
         }
@@ -74,7 +74,7 @@
         h2 {
             font-size: em(16);
             color: #000;
-            border-bottom: em(1) solid #e7e7e8;
+            border-bottom: em(1) solid $LIGHTEST-GREY;
             margin: 0;
             padding: 0 0 em(11) em(10);
         }
@@ -89,7 +89,7 @@
                 transition: color 0.5s ease;
 
                 a {
-                    background-color: #e7e7e8;
+                    background-color: $LIGHTEST-GREY;
                     height: 65px;
                     width: 65px;
                     display: block;

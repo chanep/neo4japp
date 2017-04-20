@@ -3,7 +3,7 @@
  */
 
 footer {
-    background: #e7e7e8;
+    background: $LIGHTEST-GREY;
     width: 100%;
     margin-top: 25px;
 
@@ -23,7 +23,7 @@ footer {
         span, a {
             font-size: 11px;
             font-weight: bold;
-            color: #868686;
+            color: $GREY;
         }
 
         > span {

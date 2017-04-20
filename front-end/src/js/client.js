@@ -15,6 +15,7 @@ import SearchAllSkills from "./pages/SearchAllSkills";
 import MySkills from "./pages/MySkills";
 import EmployeeVerification from "./pages/EmployeeVerification";
 import Dashboards from "./pages/Dashboards";
+import ComplianceDashboard from "./pages/ComplianceDashboard";
 import FAQ from "./pages/FAQ";
 import PageError from "./pages/PageError";
 
@@ -37,6 +38,7 @@ ReactDOM.render(
             <Route path="/resultsprofile" component={ResultsProfile}></Route>
             <Route path="/searchallskills" component={SearchAllSkills}></Route>
             <Route path="/dashboards" component={Dashboards}></Route>
+            <Route path="/dashboards/compliance" component={ComplianceDashboard}></Route>
             <Route path="/faq" component={FAQ}></Route>
             <Route path="/error" component={PageError}></Route>
 		</Route>

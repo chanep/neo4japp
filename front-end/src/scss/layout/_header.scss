@@ -160,7 +160,7 @@ header {
         width: 100%;
 
         .search__input__wrapper {
-            background-color: #e7e7e8;
+            background-color: $LIGHTEST-GREY;
         }
 
         .search__results__wrapper {
@@ -287,7 +287,7 @@ header {
         width: 962px;
         margin: 0 auto;
         background-color: #f3f3f4;
-        border-bottom: 1px solid #e7e7e8;
+        border-bottom: 1px solid $LIGHTEST-GREY;
         margin-top: -1px
     }
 

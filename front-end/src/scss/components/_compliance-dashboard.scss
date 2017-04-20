@@ -1,0 +1,15 @@
+.compliance-dashboard-container {
+    @include grid($max-width: em(960));
+    .compliance-dashboard__body {
+      .compliance-dashboard__sidebar {
+        background: $LIGHTEST-GREY;
+        padding: 2em 0;
+
+        a {
+          color: $LIGHT-GREY;
+          display: block;
+          padding: .25em 1em;
+        }
+      }
+    }
+}

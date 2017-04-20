@@ -21,7 +21,7 @@
     }
 
     .header-bar {
-        background-color: $DARK-GREY;
+        background-color: $DARKEST-GREY;
         color: $WHITE;
         height: 40px;
         margin: 0;
@@ -64,7 +64,7 @@
 
             & > li:nth-child(even) {
                 .header {
-                    background-color: $LIGHT-GREY;
+                    background-color: $OFF-WHITE;
                 }
             }
             & > li:nth-child(odd) {
@@ -365,7 +365,7 @@
         cursor: pointer;
 
         .ss-icon-down-arrow { transition: all .2s ease-in-out;  }
-        
+
         &.skill-opened {
             .ss-icon-down-arrow {
                 transform: rotate(180deg);
@@ -552,10 +552,10 @@
             color: $GREY-FONT;
             input, textarea {
                 width: 100%;
-                border: .0625em solid #e7e7e8;
+                border: .0625em solid $LIGHTEST-GREY;
                 font-size: .95em;
                 font-weight: 100;
-                color: #868686;
+                color: $GREY;
                 padding: 1em 1.3125em;
                 vertical-align: top;
             }
