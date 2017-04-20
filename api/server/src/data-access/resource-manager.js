@@ -106,6 +106,51 @@ class ResourceManagerDa extends UserDa{
         return this.queryPaged(cmd, countCmd, params);
     }
 
+    findSkillByUsers(officeIds, noSkills, filters, skip, limit, orderBy){
+        let label = this.labelsStr;
+        let officeRelL = this.model.getRelationByKey("office").label;
+        let skillL = skillModel.labelsStr;
+        let groupLbl = skillModel.getRelationByKey("group").label;
+        let kRelL = this.model.getRelationByKey("knowledges").label;
+
+        let params = {officeIds: officeIds, skip: skip, limit: limit};        
+
+        let defaultFilters = {
+            officeIds: null,
+            noSkills: false
+        };
+
+        params = _.merge(params, defaultFilters, filters);
+
+        let skillsCondition = 'is not null';
+        if (noSkills) {
+            skillsCondition = 'is null';
+        }
+
+        let match = `match (n:${label})-[:${officeRelL}]->(o) where not(n.disabled) and ({officeIds} is null or id(o) in {officeIds})
+                     optional match (n)-[k:${kRelL}]->(s:${skillL})-[:${groupLbl}]->(sg) where sg.type in ["tool", "skill"] 
+                     with n, o, k, s where (s ${skillsCondition})
+                     `;
+
+        let countCmd = `${match} return count(distinct n) as count`;
+
+        let cmd = `${match}
+                    with n, o, filter(x IN collect(distinct {id: id(s), name: s.name, level: k.level, approved: k.approved, want: k.want}) where x.id is not null) as skills
+                    order by n.fullname asc
+                    skip {skip} limit {limit}
+                    return {
+                        id: id(n), 
+                        username: n.username, 
+                        fullname: n.fullname, 
+                        type: n.type, 
+                        email: n.email,
+                        skillsCount: size(skills),
+                        office: {id: id(o), name: o.name, country: o.country, acronym: o.acronym}
+                    }`;
+
+        return this.queryPaged(cmd, countCmd, params);
+    }
+
      /**
      * Returns true if the user is the resource manager of the employee
      * @param {number} userId
