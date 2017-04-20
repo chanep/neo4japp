@@ -248,7 +248,7 @@ header {
                     &.category-list {
                         display: inline-block;
                         font-size: 13px;
-                        color: #666767;
+                        color: $DARK-GREY;
                         padding-right: 30px;
                         vertical-align: top;
                         width: 145px;
@@ -304,7 +304,7 @@ header {
           font-size: 9px;
           position: relative;
           display: inline-block;
-          background-color: #666767;
+          background-color: $DARK-GREY;
           padding: 3px 5px 3px;
           border-radius: 20px;
           color: #fff;

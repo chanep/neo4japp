@@ -1,5 +1,18 @@
 .compliance-dashboard-container {
     @include grid($max-width: em(960));
+
+    .compliance-dashboard__header {
+      background-color: $DARK-GREY;
+      color: #fff;
+      font-size: 24px;
+      padding: 1em;
+
+      .ss-icon-left-arrow {
+        vertical-align: bottom;
+        margin-right: .5em;
+      }
+    }
+
     .compliance-dashboard__body {
       .compliance-dashboard__sidebar {
         background: $LIGHTEST-GREY;
@@ -9,6 +22,10 @@
           color: $LIGHT-GREY;
           display: block;
           padding: .25em 1em;
+
+          &:hover, &.active {
+            color: $DARKEST-GREY;
+          }
         }
       }
     }

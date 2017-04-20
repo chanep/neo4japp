@@ -191,7 +191,7 @@
 
                     .proficiency {
                         span {
-                            color: $GREY-FONT;
+                            color: $DARK-GREY;
                             @include setTypeScale('.filter-title');
                         }
                     }
@@ -205,7 +205,7 @@
                         }
 
                         .label {
-                            color: $GREY-FONT;
+                            color: $DARK-GREY;
                             @include setTypeScale('.filter-title');
                         }
                     }
@@ -421,11 +421,11 @@
                 border-right: em(1) solid $WHITE;
 
                 &:hover {
-                    background-color: #e8e8e8;
+                    background-color: $LIGHTEST-GREY;
                 }
 
                 &.add-row-div-open {
-                    background-color: #e8e8e8;
+                    background-color: $LIGHTEST-GREY;
                 }
             }
 
@@ -549,7 +549,7 @@
 
         div {
             padding: 1rem 0 0 0;
-            color: $GREY-FONT;
+            color: $DARK-GREY;
             input, textarea {
                 width: 100%;
                 border: .0625em solid $LIGHTEST-GREY;

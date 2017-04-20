@@ -6,7 +6,7 @@
     .left-col {
         h2 {
             font-size: em(12);
-            color: #666767;
+            color: $DARK-GREY;
             border-bottom: em(1) solid $LIGHTEST-GREY;
             margin: 0;
             padding: em(10) 0 em(11) em(20);
@@ -131,7 +131,7 @@
                     left: 315px;
                     a {
                         span {
-                            border-bottom: 1px solid #a4a5a7;
+                            border-bottom: 1px solid $LIGHT-GREY;
                         }
                     }
                 }
@@ -178,7 +178,7 @@
                     z-index: 1;
                     a {
                         span {
-                            border-bottom: 1px solid #a4a5a7;
+                            border-bottom: 1px solid $LIGHT-GREY;
                         }
                     }
                 }
@@ -200,7 +200,7 @@
 
                 &.ist {
                     top: 190px;
-                    left: 380px;  
+                    left: 380px;
                 }
             }
         }

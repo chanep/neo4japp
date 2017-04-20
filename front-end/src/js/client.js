@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import Modal from "react-modal";
-import { Router, Route, IndexRoute, hashHistory } from "react-router";
+import { Router, Route, IndexRoute, Redirect, hashHistory } from "react-router";
 
 import Layout from "./components/Layout";
 import ResourceHotspot from "./pages/ResourceHotspot";
@@ -38,7 +38,8 @@ ReactDOM.render(
             <Route path="/resultsprofile" component={ResultsProfile}></Route>
             <Route path="/searchallskills" component={SearchAllSkills}></Route>
             <Route path="/dashboards" component={Dashboards}></Route>
-            <Route path="/dashboards/compliance" component={ComplianceDashboard}></Route>
+						<Redirect from="/dashboards/compliance" to="/dashboards/compliance/all" />
+            <Route path="/dashboards/compliance/:employeeGroup" component={ComplianceDashboard}></Route>
             <Route path="/faq" component={FAQ}></Route>
             <Route path="/error" component={PageError}></Route>
 		</Route>

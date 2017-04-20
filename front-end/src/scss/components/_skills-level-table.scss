@@ -35,7 +35,7 @@
 
 .skill-level-grid {
 	overflow: hidden;
-	border-bottom: em(1) solid #e4e4e4;
+	border-bottom: em(1) solid $LIGHTEST-GREY;
 	width: 960px;
 
 	.col {
@@ -54,9 +54,9 @@
 .skill-level-grid__header {
 	color: white;
 	overflow: hidden;
-	background-color: #666666;
+	background-color: $DARK-GREY;
 
-	.col {	
+	.col {
 		height: em(30);
 		line-height: em(30);
 		vertical-align: middle;
@@ -83,15 +83,15 @@
 }
 
 .subgroup-title-name {
-	border-bottom: em(1) solid #e4e4e4;
-	border-left: em(1) solid #e4e4e4;
-	border-right: em(1) solid #e4e4e4;
+	border-bottom: em(1) solid $LIGHTEST-GREY;
+	border-left: em(1) solid $LIGHTEST-GREY;
+	border-right: em(1) solid $LIGHTEST-GREY;
 }
 
 .skill-level-grid__levels {
 	overflow: hidden;
-	border-left: em(1) solid #e4e4e4;
-	border-right: em(1) solid #e4e4e4;
+	border-left: em(1) solid $LIGHTEST-GREY;
+	border-right: em(1) solid $LIGHTEST-GREY;
 	height: 36px;
 
 	.col {
@@ -111,7 +111,7 @@
     	}
 
     	span.icon-unverify {
-    		font-family: Helvetica Neue,Helvetica,sans-serif; 
+    		font-family: Helvetica Neue,Helvetica,sans-serif;
     		font-size: 1em;
     		padding-right: em(5);
     	}
@@ -120,7 +120,7 @@
 			text-align: left;
 		}
 
-		border-right: em(1) solid #e4e4e4;
+		border-right: em(1) solid $LIGHTEST-GREY;
 		&:last-child {
 			border-right: none;
 		}

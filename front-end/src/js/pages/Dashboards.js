@@ -4,6 +4,7 @@
 
 // Dependencies
 import React from 'react';
+import { Link } from "react-router";
 import BasePage from './BasePage';
 import Header from '../components/Header';
 
@@ -14,11 +15,7 @@ export default class Dashboards extends BasePage {
             <div>
                 <Header search={super._showSearch()} loggedIn={true} />
                 <div className="body-layout dashboards-container">
-                    <div className="dashboard-link">hi</div>
-                    <div className="dashboard-link">hi</div>
-                    <div className="dashboard-link">hi</div>
-                    <div className="dashboard-link">hi</div>
-                    <div className="dashboard-link">hi</div>
+                    <Link to="/dashboards/compliance" className="dashboard-link">Compliance</Link>
                 </div>
             </div>
         );
