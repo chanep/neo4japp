@@ -12,6 +12,33 @@ const messaging = require('../services/messaging');
 const skillChannel = postal.channel('skill');
 
 class ResourceManagerController extends BaseController{
+
+    /**
+    @api {get} /api/resource-manager/users-by-skill 1 Find users with skills by office or deparment
+    @apiDescription List amount of skills by users (sorted by fullname)
+    @apiGroup Resource Managers
+
+    @apiParam (Filter) {Array} [offices] Array with office ids
+    @apiParam (Filter) {bool}  [noSkills] Filters users without skills
+    @apiParam (Filter) {number} [skip] Skips n Users (for paged result)
+    @apiParam (Filter) {number} [limit] Limits then number or results. Default is 20  (for paged result)
+    @apiParam (Filter) {String="relevance", "matchedItems", "allocation", "fullname_asc", "fullname_desc", "office_asc", "office_desc"} [orderBy] Orders result
+    
+    @apiUse usersResponse
+    */
+    findSkillByUser(req, res, next){
+        let search = this._buildSearch(req);
+        let officeIds = search.offices || [];
+        let noSkills = search.noSkills || false;
+        let skip = search.skip || 0;
+        let limit = search.limit || 20;
+        let filters = _.omit(search, ['skills', 'offices', 'noSkills', 'skip', 'limit']);
+
+        let promise = resourceManagerDa.findSkillByUsers(officeIds, noSkills, filters, skip, limit, search.orderBy);
+
+        this._respondPromise(req, res, promise);   
+    }
+
     /**
     @api {get} /api/resource-manager/users-by-skill 1 Find users by skill
     @apiDescription List users who have at least one of the searched skills (sorted by skill match count and skill level, descending)
