@@ -22,7 +22,11 @@ export default class ComplianceDashboard extends BasePage {
                         <Link to="/dashboards/compliance/nyc" activeClassName="active">New York</Link>
                         <Link to="/dashboards/compliance/pdx" activeClassName="active">Portland</Link>
                       </div>
-                      <div className="compliance-dashboard__content col -col-9 -col-no-gutter">hi</div>
+                      <div className="compliance-dashboard__content col -col-9 -col-no-gutter">
+                        <div className="compliance-dashboard__content-header">
+                          San Francisco
+                        </div>
+                      </div>
                     </div>
                 </div>
             </div>

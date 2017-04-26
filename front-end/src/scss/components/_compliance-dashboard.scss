@@ -28,5 +28,13 @@
           }
         }
       }
+
+      .compliance-dashboard__content {
+        &-header {
+          font-size: 48px;
+          line-height: 100px;
+          padding-left: calc(100% / 9);
+        }
+      }
     }
 }
