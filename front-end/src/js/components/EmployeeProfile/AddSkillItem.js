@@ -49,10 +49,13 @@ export default class AddSkillItem extends React.Component {
         if (clicksCount > 2)
             clicksCount = 0;
 
-        if (clicksCount === 2 && this.state.data.skills.length < 2 && (this.state.data.skills[0].description === undefined || this.state.data.skills[0].description === ""))
+        if (clicksCount === 2 && (
+                this.state.data.skills.length < 2 &&
+                this.state.data.name !== this.state.data.skills[0].name
+            ) && (this.state.data.skills[0].description === undefined || this.state.data.skills[0].description === ""))
             clicksCount = 0;
 
-        if (this.state.data.skills.length > 1 && clicksCount === 2)
+        if ((this.state.data.skills.length > 1 || (this.state.data.skills.length === 1 && this.state.data.name !== this.state.data.skills[0].name)) && clicksCount === 2)
             clicksCount = 0;
 
         this.setState({clicksCount: clicksCount});
@@ -83,18 +86,19 @@ export default class AddSkillItem extends React.Component {
             }
         });
 
+        let showSubset = this.state.data.skills.length > 1 || (this.state.data.skills.length === 1 && this.state.data.name !== this.state.data.skills[0].name);
         return (
             <div className="row-add-skill">
                     <div className={"grid add-row-div " + (this.state.open ? "add-row-div-open" : false )} onClick={this.openClose.bind(this)}>                    <div className="col -col-11 -col-name overflowHidden skill-name" title={this.state.data.name}>
                         {employeeHasThisCategory > 0 ? <i className={approvedCategory ? "employee-Has-Category" : "validate-pending add-skill-validate-pending"} title={"You have " + employeeHasThisCategory + " skill(s)/tool(s) from this category"}></i> : false}
                         {
-                            this.state.data.skills.length > 1
+                            showSubset
                                 ? <span className="skill-name-label skill-name-label--light">{this.state.data.name} ({this.state.data.skills.length})</span>
                                 : <span className="skill-name-label">{this.state.data.name}</span>
                         }
                     </div>
                     {
-                        this.state.data.skills.length > 1 ?
+                        showSubset ?
                         <div className="col -col-1 results-arrow-open-close">
                             {this.state.open
                                 ? <i className="ss-icon-minus"></i>
@@ -109,7 +113,7 @@ export default class AddSkillItem extends React.Component {
                     {
                         this.state.data.skills.map(function(skill, key) {
                             return(
-                                <AddSkill skill={skill} key={key} groupLength={self.state.data.skills.length}  />
+                                <AddSkill skill={skill} key={key} groupLength={self.state.data.skills.length} showSubset={showSubset} />
                             );
                         })
                     }
