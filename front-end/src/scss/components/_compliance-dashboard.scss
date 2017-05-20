@@ -2,7 +2,7 @@
     @include grid($max-width: em(960));
 
     .compliance-dashboard__header {
-      background-color: $DARK-GREY;
+      background-color: $LIGHT-GREY;
       color: #fff;
       font-size: 24px;
       padding: 1em;
@@ -37,4 +37,51 @@
         }
       }
     }
+}
+
+.compliance-dashboard-item {
+  padding: 0 calc(100% / 9);
+
+  &__header {
+    background: $LIGHTEST-GREY;
+    padding: 7px 15px 5px;
+    font-size: 16px;
+    line-height: 1;
+    color: $DARK-GREY;
+  }
+
+  &__detail-list {
+    display: flex;
+    margin: 0 -5px;
+  }
+
+  &__detail {
+    flex: 1;
+    border: 1px solid $LIGHT-GREY;
+    color: $DARK-GREY;
+    padding: 15px 15px 10px;
+    margin: 5px;
+    height: 140px;
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+
+    &--wide {
+      flex: 1.5;
+    }
+  }
+
+  &__detail-title {
+    font-size: 14px;
+  }
+
+  &__detail-value {
+    font-size: 36px;
+    font-weight: lighter;
+  }
+
+  &__detail-cta {
+    font-size: 12px;
+    margin-top: auto;
+  }
 }

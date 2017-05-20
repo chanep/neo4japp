@@ -15,9 +15,10 @@ export default class ComplianceDashboard extends BasePage {
   constructor(props) {
     super(props);
 
-    console.log(this.props);
+    console.log(this.props.params.employeeGroup);
 
     this.state = {
+      activeGroup: {},
       groups: [],
       inactiveUsers: [],
       activeUsers: [],
@@ -27,7 +28,16 @@ export default class ComplianceDashboard extends BasePage {
     this.userData = this.fetchUserData();
 
     this.userData.then(d => console.log(d));
-    this.userData.then(d => this.setState(d));
+    this.userData.then(userData => this.setState(this.getUserDataForGroup(userData, this.props.params.employeeGroup)));
+  }
+
+  getUserDataForGroup(userData, groupShortName) {
+    return {
+      activeGroup: userData.groups.find(group => group.shortName === groupShortName),
+      groups: userData.groups,
+      inactiveUsers: (groupShortName == 'all' ? userData.inactiveUsers : userData.inactiveUsers.filter(user => user.office.acronym.toLowerCase() === groupShortName)),
+      activeUsers: (groupShortName == 'all' ? userData.activeUsers : userData.activeUsers.filter(user => user.office.acronym.toLowerCase() === groupShortName))
+    }
   }
 
   fetchUserData() {
@@ -104,7 +114,7 @@ export default class ComplianceDashboard extends BasePage {
   }
 
   componentWillReceiveProps(newProps) {
-    console.log(newProps);
+    this.userData.then(userData => this.setState(this.getUserDataForGroup(userData, newProps.params.employeeGroup)));
   }
 
   render() {
@@ -112,24 +122,42 @@ export default class ComplianceDashboard extends BasePage {
 
     return (
       <div>
-      <Header search={super._showSearch()} loggedIn={true} />
-      <div className="body-layout compliance-dashboard-container">
-      <div className="compliance-dashboard__header"><Link to="/dashboards/" className="ss-icon-left-arrow"></Link>Compliance Dashboard</div>
-      <div className="compliance-dashboard__body">
-      <div className="compliance-dashboard__sidebar col -col-3 -col-no-gutter">
+        <Header search={super._showSearch()} loggedIn={true} />
+        <div className="body-layout compliance-dashboard-container">
+          <div className="compliance-dashboard__header"><Link to="/dashboards/" className="ss-icon-left-arrow"></Link>Compliance Dashboard</div>
+          <div className="compliance-dashboard__body">
+            <div className="compliance-dashboard__sidebar col -col-3 -col-no-gutter">
 
-      {this.state.groups.map((group, index) =>
-        <Link to={'/dashboards/compliance/' + group.shortName} activeClassName="active" key={index}>{group.name} ({group.total})</Link>
-      )}
+              {this.state.groups.map((group, index) =>
+                <Link to={'/dashboards/compliance/' + group.shortName} activeClassName="active" key={index}>{group.name} ({group.total})</Link>
+              )}
 
-      </div>
-      <div className="compliance-dashboard__content col -col-9 -col-no-gutter">
-      <div className="compliance-dashboard__content-header">
-      San Francisco
-      </div>
-      </div>
-      </div>
-      </div>
+            </div>
+            <div className="compliance-dashboard__content col -col-9 -col-no-gutter">
+              <div className="compliance-dashboard__content-header">{this.state.activeGroup.name}</div>
+
+              <div className="compliance-dashboard-item">
+                <div className="compliance-dashboard-item__header">Searchable Employees</div>
+                <div className="compliance-dashboard-item__detail-list">
+                  <div className="compliance-dashboard-item__detail">
+                    <div className="compliance-dashboard-item__detail-title">Active Users</div>
+                    <div className="compliance-dashboard-item__detail-value">{this.state.activeUsers.length}</div>
+                    <div className="compliance-dashboard-item__detail-cta">more</div>
+                  </div>
+                  <div className="compliance-dashboard-item__detail">
+                    <div className="compliance-dashboard-item__detail-title">Inactive Users</div>
+                    <div className="compliance-dashboard-item__detail-value">{this.state.inactiveUsers.length}</div>
+                    <div className="compliance-dashboard-item__detail-cta">more</div>
+                  </div>
+                  <div className="compliance-dashboard-item__detail compliance-dashboard-item__detail--wide">
+                    <div className="compliance-dashboard-item__detail-title">Compliance</div>
+                    <div className="compliance-dashboard-item__detail-value">{Math.round(this.state.activeUsers.length / (this.state.activeUsers.length + this.state.inactiveUsers.length) * 100)}%</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
