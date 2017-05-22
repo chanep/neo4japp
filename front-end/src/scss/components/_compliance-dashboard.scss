@@ -101,6 +101,8 @@
   tr {
     border-bottom: 1px solid $LIGHTEST-GREY;
     line-height: 40px;
+    height: 40px;
+    transition: .5s;
 
     &:nth-child(even) {
       background: $OFF-WHITE;
@@ -108,6 +110,28 @@
 
     td {
       vertical-align: top;
+    }
+
+    &.open {
+      height: 80px;
+
+      .compliance-dashboard-table__name {
+        &-details {
+          opacity: 1;
+        }
+
+        > div {
+          height: 80px;
+        }
+      }
+
+      .compliance-dashboard-table__action {
+        button {
+          span {
+            transform: translate(-50%, -50%) rotate(90deg);
+          }
+        }
+      }
     }
   }
 
@@ -119,6 +143,20 @@
     text-align: left;
     font-size: 14px;
     font-weight: bold;
+
+    &-details {
+      font-size: 12px;
+      font-weight: normal;
+      line-height: 16px;
+      opacity: 0;
+      transition: .5s;
+    }
+
+    > div {
+      height: 40px;
+      transition: .5s;
+      overflow: hidden;
+    }
   }
 
   &__action {
