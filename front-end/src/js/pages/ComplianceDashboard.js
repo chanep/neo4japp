@@ -15,7 +15,7 @@ export default class ComplianceDashboard extends BasePage {
   constructor(props) {
     super(props);
 
-    console.log(this.props.params.employeeGroup);
+    //console.log(this.props.params.employeeGroup);
 
     this.state = {
       activeGroup: {},
@@ -99,8 +99,8 @@ export default class ComplianceDashboard extends BasePage {
           total: groupData.all.total
         });
 
-        console.log(groupData);
-        console.log(groupList);
+        // console.log(groupData);
+        // console.log(groupList);
 
         userData.groups = groupList;
 
@@ -110,11 +110,19 @@ export default class ComplianceDashboard extends BasePage {
   }
 
   componentDidMount() {
-    console.log(this.props);
+    //console.log(this.props);
   }
 
   componentWillReceiveProps(newProps) {
     this.userData.then(userData => this.setState(this.getUserDataForGroup(userData, newProps.params.employeeGroup)));
+  }
+
+  renderChildren(data) {
+    return React.Children.map(this.props.children, child => {
+      console.log('abc');
+      console.log(child);
+      return React.cloneElement(child, {data})
+    });
   }
 
   render() {
@@ -135,26 +143,7 @@ export default class ComplianceDashboard extends BasePage {
             </div>
             <div className="compliance-dashboard__content col -col-9 -col-no-gutter">
               <div className="compliance-dashboard__content-header">{this.state.activeGroup.name}</div>
-
-              <div className="compliance-dashboard-item">
-                <div className="compliance-dashboard-item__header">Searchable Employees</div>
-                <div className="compliance-dashboard-item__detail-list">
-                  <div className="compliance-dashboard-item__detail">
-                    <div className="compliance-dashboard-item__detail-title">Active Users</div>
-                    <div className="compliance-dashboard-item__detail-value">{this.state.activeUsers.length}</div>
-                    <div className="compliance-dashboard-item__detail-cta">more</div>
-                  </div>
-                  <div className="compliance-dashboard-item__detail">
-                    <div className="compliance-dashboard-item__detail-title">Inactive Users</div>
-                    <div className="compliance-dashboard-item__detail-value">{this.state.inactiveUsers.length}</div>
-                    <div className="compliance-dashboard-item__detail-cta">more</div>
-                  </div>
-                  <div className="compliance-dashboard-item__detail compliance-dashboard-item__detail--wide">
-                    <div className="compliance-dashboard-item__detail-title">Compliance</div>
-                    <div className="compliance-dashboard-item__detail-value">{Math.round(this.state.activeUsers.length / (this.state.activeUsers.length + this.state.inactiveUsers.length) * 100)}%</div>
-                  </div>
-                </div>
-              </div>
+              {this.renderChildren(this.state)}
             </div>
           </div>
         </div>

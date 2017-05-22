@@ -16,6 +16,9 @@ import MySkills from "./pages/MySkills";
 import EmployeeVerification from "./pages/EmployeeVerification";
 import Dashboards from "./pages/Dashboards";
 import ComplianceDashboard from "./pages/ComplianceDashboard";
+import GroupOverview from "./components/ComplianceDashboard/GroupOverview";
+import ActiveGroupDetail from "./components/ComplianceDashboard/ActiveGroupDetail";
+import InactiveGroupDetail from "./components/ComplianceDashboard/InactiveGroupDetail";
 import FAQ from "./pages/FAQ";
 import PageError from "./pages/PageError";
 
@@ -39,7 +42,11 @@ ReactDOM.render(
             <Route path="/searchallskills" component={SearchAllSkills}></Route>
             <Route path="/dashboards" component={Dashboards}></Route>
 						<Redirect from="/dashboards/compliance" to="/dashboards/compliance/all" />
-            <Route path="/dashboards/compliance/:employeeGroup" component={ComplianceDashboard}></Route>
+            <Route path="/dashboards/compliance/:employeeGroup" component={ComplianceDashboard}>
+							<IndexRoute component={GroupOverview}/>
+							<Route path="active" component={ActiveGroupDetail} />
+							<Route path="inactive" component={InactiveGroupDetail} />
+			      </Route>
             <Route path="/faq" component={FAQ}></Route>
             <Route path="/error" component={PageError}></Route>
 		</Route>
