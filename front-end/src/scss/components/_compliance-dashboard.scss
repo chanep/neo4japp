@@ -85,3 +85,63 @@
     margin-top: auto;
   }
 }
+
+.compliance-dashboard-table {
+  width: 100%;
+
+  th {
+    padding-left: calc(100% / 9);
+    text-align: left;
+    background: $DARKEST-GREY;
+    font-size: 11px;
+    font-weight: bold;
+    color: #fff;
+  }
+
+  tr {
+    border-bottom: 1px solid $LIGHTEST-GREY;
+    line-height: 40px;
+
+    &:nth-child(even) {
+      background: $OFF-WHITE;
+    }
+
+    td {
+      vertical-align: top;
+    }
+  }
+
+  &__checkbox {
+      width: calc(100% / 9);
+  }
+
+  &__name {
+    text-align: left;
+    font-size: 14px;
+    font-weight: bold;
+  }
+
+  &__action {
+    width: 40px;
+
+    button {
+      width: 100%;
+      height: 40px;
+      display: block;
+      background: $LIGHTEST-GREY;
+      position: relative;
+      cursor: pointer;
+
+      span {
+        position: absolute;
+        width: 16px;
+        height: 16px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) rotate(-90deg);
+        color: $DARK-GREY;
+        transition: .5s;
+      }
+    }
+  }
+}
