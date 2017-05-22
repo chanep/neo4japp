@@ -15,7 +15,8 @@ import SearchAllSkills from "./pages/SearchAllSkills";
 import MySkills from "./pages/MySkills";
 import EmployeeVerification from "./pages/EmployeeVerification";
 import Dashboards from "./pages/Dashboards";
-import ComplianceDashboard from "./pages/ComplianceDashboard";
+import DashboardList from "./components/Dashboards/DashboardList";
+import ComplianceDashboard from "./components/Dashboards/ComplianceDashboard";
 import GroupOverview from "./components/ComplianceDashboard/GroupOverview";
 import ActiveGroupDetail from "./components/ComplianceDashboard/ActiveGroupDetail";
 import InactiveGroupDetail from "./components/ComplianceDashboard/InactiveGroupDetail";
@@ -27,7 +28,7 @@ const app = document.getElementById('app');
 
 ReactDOM.render(
 	<Router history={hashHistory}>
-		<Route path="/" component={Layout}>
+		<Route path="/" component={Layout} name="App">
 			<IndexRoute component={Login}></IndexRoute>
             <Route path="/login" component={Login}></Route>
             <Route path="/resourceshotspot" component={ResourceHotspot}></Route>
@@ -40,13 +41,16 @@ ReactDOM.render(
             <Route path="/managerhome" component={ManagerHome}></Route>
             <Route path="/resultsprofile" component={ResultsProfile}></Route>
             <Route path="/searchallskills" component={SearchAllSkills}></Route>
-            <Route path="/dashboards" component={Dashboards}></Route>
+            <Route path="/dashboards" component={Dashboards} name="Dashboards">
+							<IndexRoute component={DashboardList}/>
+							<Route path="/dashboards/compliance/:employeeGroup" component={ComplianceDashboard} name="Compliance" staticName={true}>
+								<IndexRoute component={GroupOverview}/>
+								<Route path="active" component={ActiveGroupDetail} name="Active Users" />
+								<Route path="inactive" component={InactiveGroupDetail} name="Inctive Users" />
+							</Route>
+						</Route>
 						<Redirect from="/dashboards/compliance" to="/dashboards/compliance/all" />
-            <Route path="/dashboards/compliance/:employeeGroup" component={ComplianceDashboard}>
-							<IndexRoute component={GroupOverview}/>
-							<Route path="active" component={ActiveGroupDetail} />
-							<Route path="inactive" component={InactiveGroupDetail} />
-			      </Route>
+
             <Route path="/faq" component={FAQ}></Route>
             <Route path="/error" component={PageError}></Route>
 		</Route>

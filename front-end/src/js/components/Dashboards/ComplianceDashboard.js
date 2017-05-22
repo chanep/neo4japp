@@ -5,13 +5,11 @@
 // Dependencies
 import React from 'react';
 import { Link } from "react-router";
-import BasePage from './BasePage';
-import Header from '../components/Header';
 
-import SkillsServices from "../services/SkillsServices";
+import SkillsServices from "../../services/SkillsServices";
 
 // Class: Dashboards
-export default class ComplianceDashboard extends BasePage {
+export default class ComplianceDashboard extends React.Component {
   constructor(props) {
     super(props);
 
@@ -127,10 +125,7 @@ export default class ComplianceDashboard extends BasePage {
 
   render() {
 
-
     return (
-      <div>
-        <Header search={super._showSearch()} loggedIn={true} />
         <div className="body-layout compliance-dashboard-container">
           <div className="compliance-dashboard__header"><Link to="/dashboards/" className="ss-icon-left-arrow"></Link>Compliance Dashboard</div>
           <div className="compliance-dashboard__body">
@@ -147,7 +142,6 @@ export default class ComplianceDashboard extends BasePage {
             </div>
           </div>
         </div>
-      </div>
     );
   }
 }

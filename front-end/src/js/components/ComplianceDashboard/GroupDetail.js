@@ -19,7 +19,7 @@ export default class GroupDetail extends React.Component {
     let users = props.showActive ? props.data.activeUsers : props.data.inactiveUsers;
 
     this.state = {
-        users: users.map(user => Object.assign({}, user, {open: false, title: '', manager: '', detailsLoadStatus: 'not-loaded'}))
+        users: users.map(user => Object.assign({}, user, {checked: false, open: false, title: '', manager: '', detailsLoadStatus: 'not-loaded'}))
     };
   }
 
@@ -33,6 +33,17 @@ export default class GroupDetail extends React.Component {
       console.log(userId);
 
       this.getUserDetails(userId);
+
+      return Object.assign({}, prevState, {users});
+    });
+  }
+
+  toggleUserChecked(userId) {
+    this.setState((prevState) => {
+      let users = prevState.users,
+          userIndex = users.findIndex(user => user.id === userId);
+
+      users[userIndex].checked = !users[userIndex].checked;
 
       return Object.assign({}, prevState, {users});
     });
@@ -52,7 +63,7 @@ export default class GroupDetail extends React.Component {
               userIndex = users.findIndex(user => user.id === userId);
 
           users[userIndex].title = data.position.name;
-          users[userIndex].manager = data.resourceManagers[0].fullname;
+          users[userIndex].manager = data.approvers[0].fullname;
           users[userIndex].detailsLoadStatus = 'loaded';
 
           return Object.assign({}, prevState, {users});
@@ -75,7 +86,9 @@ export default class GroupDetail extends React.Component {
           <tbody>
             {this.state.users.map(user =>
               <tr key={user.id} className={user.open ? 'open' : 'closed' }>
-                <td className="compliance-dashboard-table__checkbox">check</td>
+                <td className="compliance-dashboard-table__checkbox">
+                  <input type="checkbox" checked={user.checked} onChange={() => this.toggleUserChecked(user.id)} />
+                </td>
                 <td className="compliance-dashboard-table__name">
                   <div>
                     {user.fullname}
