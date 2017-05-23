@@ -7,6 +7,7 @@ import React from 'react';
 import { Link } from "react-router";
 
 import SkillsServices from "../../services/SkillsServices";
+import UserServices from "../../services/UserServices";
 import OfficeMap from "../OfficeMap";
 
 // Class: Dashboards
@@ -21,27 +22,42 @@ export default class ComplianceDashboard extends React.Component {
       groups: [],
       inactiveUsers: [],
       activeUsers: [],
+      myTeam: [],
     }
 
     this.skillsServices = new SkillsServices();
-    this.userData = this.fetchUserData();
+    this.userServices = new UserServices();
 
-    this.userData.then(d => console.log(d));
+    this.userData = this.fetchUserData();
     this.userData.then(userData => this.setState(this.getUserDataForGroup(userData, this.props.params.employeeGroup)));
   }
 
   getUserDataForGroup(userData, groupShortName) {
+    function filterData(users) {
+      switch (groupShortName) {
+        case 'all':
+          return users;
+          break;
+        case 'myteam':
+          return users.filter(user => userData.myTeam.includes(user.id));
+          break;
+        default:
+          return users.filter(user => user.office.acronym.toLowerCase() === groupShortName);
+          break;
+      }
+    }
+
     return {
       activeGroup: userData.groups.find(group => group.shortName === groupShortName),
       groups: userData.groups,
-      inactiveUsers: (groupShortName == 'all' ? userData.inactiveUsers : userData.inactiveUsers.filter(user => user.office.acronym.toLowerCase() === groupShortName)),
-      activeUsers: (groupShortName == 'all' ? userData.activeUsers : userData.activeUsers.filter(user => user.office.acronym.toLowerCase() === groupShortName))
+      inactiveUsers: filterData(userData.inactiveUsers),
+      activeUsers: filterData(userData.activeUsers)
     }
   }
 
   fetchUserData() {
     return new Promise((resolve, reject) => {
-      Promise.all([this.skillsServices.GetUsersBySkillStatus(2000, true),this.skillsServices.GetUsersBySkillStatus(2000, false)])
+      Promise.all([this.skillsServices.GetUsersBySkillStatus(2000, true),this.skillsServices.GetUsersBySkillStatus(2000, false), this.userServices.GetMyTeam()])
       .then(data => {
         console.log(data);
 
@@ -49,6 +65,8 @@ export default class ComplianceDashboard extends React.Component {
           groups: [],
           inactiveUsers: data[0],
           activeUsers: data[1],
+          myTeam: data[2] ? data[2].map(user => user.id) : [],
+          hasTeam: data[2] ? true : false
         }
 
         let groupList = [];
@@ -98,8 +116,13 @@ export default class ComplianceDashboard extends React.Component {
           total: groupData.all.total
         });
 
-        // console.log(groupData);
-        // console.log(groupList);
+        if(userData.hasTeam) {
+          groupList.unshift({
+            name: 'My Team',
+            shortName: 'myteam',
+            total: userData.myTeam.length
+          });
+        }
 
         userData.groups = groupList;
 
@@ -108,18 +131,12 @@ export default class ComplianceDashboard extends React.Component {
     });
   }
 
-  componentDidMount() {
-    //console.log(this.props);
-  }
-
   componentWillReceiveProps(newProps) {
     this.userData.then(userData => this.setState(this.getUserDataForGroup(userData, newProps.params.employeeGroup)));
   }
 
   renderChildren(data) {
     return React.Children.map(this.props.children, child => {
-      console.log('abc');
-      console.log(child);
       return React.cloneElement(child, {data})
     });
   }
@@ -139,7 +156,8 @@ export default class ComplianceDashboard extends React.Component {
             <div className="compliance-dashboard__content col -col-9 -col-no-gutter">
               <div className="compliance-dashboard__content-header">
                 {this.state.activeGroup.name}
-                <OfficeMap office={this.state.activeGroup.shortName} />
+                {this.state.activeGroup.shortName !== 'all' && this.state.activeGroup.shortName !== 'myteam' ? <OfficeMap office={this.state.activeGroup.shortName} /> : ''}
+
               </div>
 
               {this.renderChildren(this.state)}
