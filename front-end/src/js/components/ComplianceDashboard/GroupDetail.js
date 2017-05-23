@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router";
 
+import DropdownMenu from '../DropdownMenu';
 import UserServices from '../../services/UserServices';
 
 export default class GroupDetail extends React.Component {
@@ -19,8 +20,13 @@ export default class GroupDetail extends React.Component {
     let users = props.showActive ? props.data.activeUsers : props.data.inactiveUsers;
 
     this.state = {
+        title: props.showActive ? 'Active Users' : 'Inactive Users',
         users: users.map(user => Object.assign({}, user, {checked: false, open: false, title: '', manager: '', detailsLoadStatus: 'not-loaded'}))
     };
+  }
+
+  doAlert() {
+    alert(this.state.users.length);
   }
 
   toggleUserPanel(userId) {
@@ -74,32 +80,42 @@ export default class GroupDetail extends React.Component {
 
   render () {
     return (
-      <table className="compliance-dashboard-table">
-        <thead>
-          <tr>
-            <th colSpan="3">Name</th>
-          </tr>
-        </thead>
-        <tbody>
-          {this.state.users.map(user =>
-            <tr key={user.id} className={user.open ? 'open' : 'closed' }>
-              <td className="compliance-dashboard-table__checkbox">
-                <input type="checkbox" checked={user.checked} onChange={() => this.toggleUserChecked(user.id)} />
-              </td>
-              <td className="compliance-dashboard-table__name">
-                <div>
-                  {user.fullname}
-                  <div className="compliance-dashboard-table__name-details">
-                    {user.title}<br />
-                    Manager: <strong>{user.manager}</strong>
-                  </div>
-                </div>
-              </td>
-              <td className="compliance-dashboard-table__action"><button onClick={() => this.toggleUserPanel(user.id)}><span className="ss-icon-left-arrow"></span></button></td>
+      <div>
+        <div className="compliance-dashboard-table__header">
+          <div className="compliance-dashboard-table__header-text">{this.state.title}</div>
+          <DropdownMenu items={[
+            {title: 'Select All', action: () => this.doAlert()},
+            {title: 'Deselect All', action: () => this.doAlert()},
+            {title: 'Send Email', action: () => this.doAlert()},
+          ]} align="right" />
+        </div>        
+        <table className="compliance-dashboard-table">
+          <thead>
+            <tr>
+              <th colSpan="3">Name</th>
             </tr>
-          )}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {this.state.users.map(user =>
+              <tr key={user.id} className={user.open ? 'open' : 'closed' }>
+                <td className="compliance-dashboard-table__checkbox">
+                  <input type="checkbox" checked={user.checked} onChange={() => this.toggleUserChecked(user.id)} />
+                </td>
+                <td className="compliance-dashboard-table__name">
+                  <div>
+                    {user.fullname}
+                    <div className="compliance-dashboard-table__name-details">
+                      {user.title}<br />
+                      Manager: <strong>{user.manager}</strong>
+                    </div>
+                  </div>
+                </td>
+                <td className="compliance-dashboard-table__action"><button onClick={() => this.toggleUserPanel(user.id)}><span className="ss-icon-left-arrow"></span></button></td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
     );
   }
 }

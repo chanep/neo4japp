@@ -4,12 +4,12 @@
     .compliance-dashboard {
       .compliance-dashboard__sidebar {
         background: $LIGHTEST-GREY;
-        padding: 2em 0;
+        padding: 1.5em 0;
 
         a {
           color: $LIGHT-GREY;
           display: block;
-          padding: .25em 1em;
+          padding: .25em 1.25em;
 
           &:hover, &.active {
             color: $DARKEST-GREY;
@@ -92,6 +92,19 @@
 }
 
 .compliance-dashboard-table {
+  &__header {
+    display: flex;
+    padding-left: calc(100% / 9);
+    align-items: baseline;
+  }
+
+  &__header-text {
+    flex: 1;
+    font-size: 24px;
+    line-height: 48px;
+    color: $DARK-GREY;
+  }
+
   width: 100%;
 
   th {
