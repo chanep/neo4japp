@@ -25,8 +25,30 @@ export default class GroupDetail extends React.Component {
     };
   }
 
-  doAlert() {
-    alert(this.state.users.length);
+  selectAll() {
+    this.setState((prevState) => {
+      return Object.assign({}, prevState, {users: prevState.users.map(user => Object.assign({}, user, {checked: true}))});
+    });
+  }
+
+  deselectAll() {
+    this.setState((prevState) => {
+      return Object.assign({}, prevState, {users: prevState.users.map(user => Object.assign({}, user, {checked: false}))});
+    });
+  }
+
+  sendEmail() {
+    let emailList = this.state.users.reduce((accumulator, user) => {
+      if(user.checked) {
+        accumulator.push(user.email);
+      }
+
+      return accumulator;
+    }, []);
+
+    let emailUrl = 'mailto:' + emailList.join(',');
+
+    window.location = emailUrl;
   }
 
   toggleUserPanel(userId) {
@@ -84,11 +106,11 @@ export default class GroupDetail extends React.Component {
         <div className="compliance-dashboard-table__header">
           <div className="compliance-dashboard-table__header-text">{this.state.title}</div>
           <DropdownMenu items={[
-            {title: 'Select All', action: () => this.doAlert()},
-            {title: 'Deselect All', action: () => this.doAlert()},
-            {title: 'Send Email', action: () => this.doAlert()},
+            {title: 'Select All', action: () => this.selectAll()},
+            {title: 'Deselect All', action: () => this.deselectAll()},
+            {title: 'Send Email', action: () => this.sendEmail()},
           ]} align="right" />
-        </div>        
+        </div>
         <table className="compliance-dashboard-table">
           <thead>
             <tr>
