@@ -10,12 +10,12 @@ export default class GroupOverview extends React.Component {
           <Link to={this.props.location.pathname + '/active'} className="compliance-dashboard-item__detail">
             <div className="compliance-dashboard-item__detail-title">Active Users</div>
             <div className="compliance-dashboard-item__detail-value">{this.props.data.activeUsers.length}</div>
-            <div className="compliance-dashboard-item__detail-cta">more</div>
+            <div className="compliance-dashboard-item__detail-cta">more <span className="ss-icon-right-arrow"></span></div>
           </Link>
           <Link to={this.props.location.pathname + '/inactive'} className="compliance-dashboard-item__detail">
             <div className="compliance-dashboard-item__detail-title">Inactive Users</div>
             <div className="compliance-dashboard-item__detail-value">{this.props.data.inactiveUsers.length}</div>
-            <div className="compliance-dashboard-item__detail-cta">more</div>
+            <div className="compliance-dashboard-item__detail-cta">more <span className="ss-icon-right-arrow"></span></div>
           </Link>
           <div className="compliance-dashboard-item__detail compliance-dashboard-item__detail--wide">
             <div className="compliance-dashboard-item__detail-title">Compliance</div>

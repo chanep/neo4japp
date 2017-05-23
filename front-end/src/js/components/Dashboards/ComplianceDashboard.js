@@ -7,6 +7,7 @@ import React from 'react';
 import { Link } from "react-router";
 
 import SkillsServices from "../../services/SkillsServices";
+import OfficeMap from "../OfficeMap";
 
 // Class: Dashboards
 export default class ComplianceDashboard extends React.Component {
@@ -127,8 +128,7 @@ export default class ComplianceDashboard extends React.Component {
 
     return (
         <div className="body-layout compliance-dashboard-container">
-          <div className="compliance-dashboard__header"><Link to="/dashboards/" className="ss-icon-left-arrow"></Link>Compliance Dashboard</div>
-          <div className="compliance-dashboard__body">
+          <div className="compliance-dashboard">
             <div className="compliance-dashboard__sidebar col -col-3 -col-no-gutter">
 
               {this.state.groups.map((group, index) =>
@@ -137,7 +137,11 @@ export default class ComplianceDashboard extends React.Component {
 
             </div>
             <div className="compliance-dashboard__content col -col-9 -col-no-gutter">
-              <div className="compliance-dashboard__content-header">{this.state.activeGroup.name}</div>
+              <div className="compliance-dashboard__content-header">
+                {this.state.activeGroup.name}
+                <OfficeMap office={this.state.activeGroup.shortName} />
+              </div>
+
               {this.renderChildren(this.state)}
             </div>
           </div>

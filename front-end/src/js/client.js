@@ -46,7 +46,7 @@ ReactDOM.render(
 							<Route path="/dashboards/compliance/:employeeGroup" component={ComplianceDashboard} name="Compliance" staticName={true}>
 								<IndexRoute component={GroupOverview}/>
 								<Route path="active" component={ActiveGroupDetail} name="Active Users" />
-								<Route path="inactive" component={InactiveGroupDetail} name="Inctive Users" />
+								<Route path="inactive" component={InactiveGroupDetail} name="Inactive Users" />
 							</Route>
 						</Route>
 						<Redirect from="/dashboards/compliance" to="/dashboards/compliance/all" />

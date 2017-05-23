@@ -1,0 +1,103 @@
+.office-map {
+  width: 718px;
+
+  .office-map__spacer {
+    background: url('../img/map.png') 100% no-repeat;
+    background-size: 100%;
+    padding-top: 57%;
+    position: relative;
+
+    .office-map__marker {
+      background: $RGA-RED;
+      width: 5px;
+      height: 5px;
+      position: absolute;
+      transform: translate(-50%, -50%);
+
+      &[data-office='atx'] {
+        top: 58%;
+        left: 25.5%;
+      }
+
+      &[data-office='ber'] {
+        top: 46.5%;
+        left: 51.5%;
+      }
+
+      &[data-office='bu'] {
+        top: 51%;
+        left: 54.5%;
+      }
+
+      &[data-office='ba'] {
+        top: 86.5%;
+        left: 34.5%;
+      }
+
+      &[data-office='chi'] {
+        top: 53%;
+        left: 28%;
+      }
+
+      &[data-office='ist'] {
+        top: 53.5%;
+        left: 55.5%;
+      }
+
+      &[data-office='ldn'] {
+        top: 47%;
+        left: 48.5%;
+      }
+
+      &[data-office='la'] {
+        top: 57%;
+        left: 21%;
+      }
+
+      &[data-office='ny'] {
+        top: 54%;
+        left: 31%;
+      }
+
+      &[data-office='pdx'] {
+        top: 51%;
+        left: 20.5%;
+      }
+
+      &[data-office='sf'] {
+        top: 55%;
+        left: 20%;
+      }
+
+      &[data-office='sa'] {
+        top: 87%;
+        left: 32%;
+      }
+
+      &[data-office='sp'] {
+        top: 81.5%;
+        left: 37.5%;
+      }
+
+      &[data-office='sh'] {
+        top: 58.5%;
+        left: 76.5%;
+      }
+
+      &[data-office='sgp'] {
+        top: 71%;
+        left: 72.5%;
+      }
+
+      &[data-office='syd'] {
+        top: 86%;
+        left: 83.5%;
+      }
+
+      &[data-office='tyo'] {
+        top: 57%;
+        left: 81.5%;
+      }
+    }
+  }
+}

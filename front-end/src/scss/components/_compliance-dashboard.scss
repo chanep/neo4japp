@@ -1,19 +1,7 @@
 .compliance-dashboard-container {
     @include grid($max-width: em(960));
 
-    .compliance-dashboard__header {
-      background-color: $LIGHT-GREY;
-      color: #fff;
-      font-size: 24px;
-      padding: 1em;
-
-      .ss-icon-left-arrow {
-        vertical-align: bottom;
-        margin-right: .5em;
-      }
-    }
-
-    .compliance-dashboard__body {
+    .compliance-dashboard {
       .compliance-dashboard__sidebar {
         background: $LIGHTEST-GREY;
         padding: 2em 0;
@@ -32,8 +20,16 @@
       .compliance-dashboard__content {
         &-header {
           font-size: 48px;
-          line-height: 100px;
+          line-height: 150px;
           padding-left: calc(100% / 9);
+          position: relative;
+
+          .office-map {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 263px;
+          }
         }
       }
     }
@@ -53,6 +49,11 @@
   &__detail-list {
     display: flex;
     margin: 0 -5px;
+
+    > a:hover {
+      color: $DARKER-GREY;
+      border-color: $DARKER-GREY;
+    }
   }
 
   &__detail {
@@ -83,6 +84,10 @@
   &__detail-cta {
     font-size: 12px;
     margin-top: auto;
+
+    .ss-icon-right-arrow {
+      vertical-align: middle;
+    }
   }
 }
 

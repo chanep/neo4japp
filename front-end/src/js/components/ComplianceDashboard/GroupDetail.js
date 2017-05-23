@@ -74,36 +74,32 @@ export default class GroupDetail extends React.Component {
 
   render () {
     return (
-      <div>
-        {this.props.showActive ? 'active' : 'inactive' } group detail: ({this.state.users.length})
-
-        <table className="compliance-dashboard-table">
-          <thead>
-            <tr>
-              <th colSpan="3">Name</th>
-            </tr>
-          </thead>
-          <tbody>
-            {this.state.users.map(user =>
-              <tr key={user.id} className={user.open ? 'open' : 'closed' }>
-                <td className="compliance-dashboard-table__checkbox">
-                  <input type="checkbox" checked={user.checked} onChange={() => this.toggleUserChecked(user.id)} />
-                </td>
-                <td className="compliance-dashboard-table__name">
-                  <div>
-                    {user.fullname}
-                    <div className="compliance-dashboard-table__name-details">
-                      {user.title}<br />
-                      Manager: <strong>{user.manager}</strong>
-                    </div>
+      <table className="compliance-dashboard-table">
+        <thead>
+          <tr>
+            <th colSpan="3">Name</th>
+          </tr>
+        </thead>
+        <tbody>
+          {this.state.users.map(user =>
+            <tr key={user.id} className={user.open ? 'open' : 'closed' }>
+              <td className="compliance-dashboard-table__checkbox">
+                <input type="checkbox" checked={user.checked} onChange={() => this.toggleUserChecked(user.id)} />
+              </td>
+              <td className="compliance-dashboard-table__name">
+                <div>
+                  {user.fullname}
+                  <div className="compliance-dashboard-table__name-details">
+                    {user.title}<br />
+                    Manager: <strong>{user.manager}</strong>
                   </div>
-                </td>
-                <td className="compliance-dashboard-table__action"><button onClick={() => this.toggleUserPanel(user.id)}><span className="ss-icon-left-arrow"></span></button></td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
+                </div>
+              </td>
+              <td className="compliance-dashboard-table__action"><button onClick={() => this.toggleUserPanel(user.id)}><span className="ss-icon-left-arrow"></span></button></td>
+            </tr>
+          )}
+        </tbody>
+      </table>
     );
   }
 }
