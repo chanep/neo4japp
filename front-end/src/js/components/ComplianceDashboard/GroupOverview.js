@@ -1,6 +1,8 @@
 import React from "react";
 import { Link } from "react-router";
 
+import DonutChart from '../DonutChart';
+
 export default class GroupOverview extends React.Component {
   render () {
     return (
@@ -19,8 +21,11 @@ export default class GroupOverview extends React.Component {
           </Link>
           <div className="compliance-dashboard-item__detail compliance-dashboard-item__detail--wide">
             <div className="compliance-dashboard-item__detail-title">Compliance</div>
-            <div className="compliance-dashboard-item__detail-value">{Math.round(this.props.data.activeUsers.length / (this.props.data.activeUsers.length + this.props.data.inactiveUsers.length) * 100)}%</div>
-          </div>
+            <figure>
+              <DonutChart value={this.props.data.activeUsers.length} total={this.props.data.activeUsers.length + this.props.data.inactiveUsers.length} />
+              <figcaption className="compliance-dashboard-item__detail-value">{Math.round(this.props.data.activeUsers.length / (this.props.data.activeUsers.length + this.props.data.inactiveUsers.length) * 100)}%</figcaption>  
+            </figure>
+            </div>
         </div>
       </div>
     );

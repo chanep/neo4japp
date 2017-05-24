@@ -1,0 +1,10 @@
+.donut-chart {
+  &__percent {
+    stroke: $RGA-RED;
+    transition: .5s;
+  }
+
+  &__remainder {
+    stroke: $LIGHTEST-GREY;
+  }
+}

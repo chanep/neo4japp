@@ -70,6 +70,16 @@
     &--wide {
       flex: 1.5;
     }
+
+    figure {
+      display: flex;
+      align-items: center;
+      margin: 10px;
+
+      svg {
+        margin-right: 10px;
+      }
+    }
   }
 
   &__detail-title {
