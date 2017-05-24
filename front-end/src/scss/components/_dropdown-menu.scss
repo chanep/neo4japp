@@ -37,11 +37,16 @@
       white-space: nowrap;
       background: none;
       color: $LIGHT-GREY;
-      cursor: pointer;
+      opacity: .5;
 
-      &:hover {
-        background: $LIGHTEST-GREY;
-        color: #000;
+      &:not([disabled]) {
+        opacity: 1;
+        cursor: pointer;
+
+        &:hover {
+          background: $LIGHTEST-GREY;
+          color: #000;
+        }
       }
     }
   }

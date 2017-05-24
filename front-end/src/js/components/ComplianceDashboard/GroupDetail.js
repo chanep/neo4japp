@@ -27,13 +27,13 @@ export default class GroupDetail extends React.Component {
 
   selectAll() {
     this.setState((prevState) => {
-      return Object.assign({}, prevState, {users: prevState.users.map(user => Object.assign({}, user, {checked: true}))});
+      return {users: prevState.users.map(user => Object.assign({}, user, {checked: true}))};
     });
   }
 
   deselectAll() {
     this.setState((prevState) => {
-      return Object.assign({}, prevState, {users: prevState.users.map(user => Object.assign({}, user, {checked: false}))});
+      return {users: prevState.users.map(user => Object.assign({}, user, {checked: false}))};
     });
   }
 
@@ -58,11 +58,9 @@ export default class GroupDetail extends React.Component {
 
       users[userIndex].open = !users[userIndex].open;
 
-      console.log(userId);
-
       this.getUserDetails(userId);
 
-      return Object.assign({}, prevState, {users});
+      return {users};
     });
   }
 
@@ -73,7 +71,7 @@ export default class GroupDetail extends React.Component {
 
       users[userIndex].checked = !users[userIndex].checked;
 
-      return Object.assign({}, prevState, {users});
+      return {users};
     });
   }
 
@@ -94,7 +92,7 @@ export default class GroupDetail extends React.Component {
           users[userIndex].manager = data.approvers[0].fullname;
           users[userIndex].detailsLoadStatus = 'loaded';
 
-          return Object.assign({}, prevState, {users});
+          return {users};
         });
       });
     }
@@ -108,7 +106,7 @@ export default class GroupDetail extends React.Component {
           <DropdownMenu items={[
             {title: 'Select All', action: () => this.selectAll()},
             {title: 'Deselect All', action: () => this.deselectAll()},
-            {title: 'Send Email', action: () => this.sendEmail()},
+            {title: 'Send Email', action: () => this.sendEmail(), disabled: !this.state.users.some(user => user.checked)},
           ]} align="right" />
         </div>
         <table className="compliance-dashboard-table">

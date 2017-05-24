@@ -7,7 +7,7 @@ export default class DropdownMenu extends React.Component {
 				<div className="dropdown-menu__title">Actions <span className="ss-icon-down-arrow"></span></div>
 				<div className="dropdown-menu__list">
 					{this.props.items.map(item =>
-						<button onClick={item.action}>{item.title}</button>
+						<button onClick={item.action} disabled={item.disabled}>{item.title}</button>
 					)}
 				</div>
 			</div>

@@ -7,8 +7,6 @@ export default class DonutChart extends React.Component {
     const percent = Math.round(value / total * 100);
     const remainder = 100 - percent;
 
-    console.log(total, value, percent, remainder);
-
 		return (
       <svg width="65" height="65" viewBox="0 0 36 36" className="donut-chart">
         <circle className="donut-chart__hole" cx="18" cy="18" r="15.91549430918954" fill="#fff"></circle>

@@ -59,7 +59,6 @@ export default class ComplianceDashboard extends React.Component {
     return new Promise((resolve, reject) => {
       Promise.all([this.skillsServices.GetUsersBySkillStatus(2000, true),this.skillsServices.GetUsersBySkillStatus(2000, false), this.userServices.GetMyTeam()])
       .then(data => {
-        console.log(data);
 
         let userData = {
           groups: [],
