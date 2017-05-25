@@ -4,10 +4,10 @@ $gutter: 10px;
     @include grid($max-width: em(960));
 }
 
-.dashboard-list {  
+.dashboard-list {
   display: flex;
   flex-wrap: wrap;
-  padding: 90px 0 75px;
+  padding: 50px 0 30px;
 
   .dashboard-link {
     width: calc((100% - (#{$gutter} * 2)) / 3);

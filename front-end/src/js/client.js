@@ -49,7 +49,7 @@ ReactDOM.render(
 								<Route path="inactive" component={InactiveGroupDetail} name="Inactive Users" />
 							</Route>
 						</Route>
-						<Redirect from="/dashboards/compliance" to="/dashboards/compliance/all" />
+						<Redirect from="/dashboards/compliance" to="/dashboards/compliance/myteam" />
 
             <Route path="/faq" component={FAQ}></Route>
             <Route path="/error" component={PageError}></Route>

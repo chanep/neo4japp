@@ -2,7 +2,7 @@ import React from "react";
 
 import Search from "./Header/Search";
 import cookie from 'react-cookie';
-import { hashHistory, Link, browserHistory, withRouter } from 'react-router';
+import { hashHistory, Link, IndexLink, browserHistory, withRouter } from 'react-router';
 import SessionServices from '../services/SessionServices';
 import BasePage from '../pages/BasePage';
 
@@ -55,11 +55,11 @@ class Header extends React.Component {
                   )}
                   <ul className={"header-menu " + menuClass}>
                     <li className="header-menu__item header-menu__item--title">{this.state.userLogged.fullname}</li>
-                    <li className="header-menu__item"><Link to="/myprofile">My Skills</Link></li>
-                    <li className="header-menu__item"><Link to="/dashboards">Dashboards</Link></li>
+                    <li className="header-menu__item"><Link to="/myprofile" activeClassName="active">My Skills</Link></li>
+                    <li className="header-menu__item"><IndexLink to="/dashboards" activeClassName="active">Dashboards</IndexLink></li>
                     {currentUserType === 'admin' || currentUserType === 'approver' || currentUserType === 'employee'? <li className="header-menu__item"><a href={'http://square/people/' + this.state.userLogged.username + '/'} target="_blank">My Work</a></li> : null}
                     {currentUserType === 'admin' || currentUserType === 'approver' || currentUserType === 'employee'? <li className="header-menu__item"><a href="http://reporter/newallocations/EmployeeAllocation.aspx" target="_blank">My Allocations</a></li>: null}
-                    {currentUserType === 'admin' || currentUserType === 'approver'? <li className="header-menu__item"><Link to="/managerhome">My Team</Link></li>: null}
+                    {currentUserType === 'admin' || currentUserType === 'approver'? <li className="header-menu__item"><Link to="/managerhome" activeClassName="active">My Team</Link></li>: null}
                     <li className="header-menu__item"><input type="button" onClick={this.logout.bind(this)} value="Log Out" /></li>
                   </ul>
 

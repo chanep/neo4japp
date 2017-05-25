@@ -88,7 +88,7 @@ header {
                     padding-top: 7px;
                 }
 
-                a:hover, input[type="button"]:hover {
+                a:hover, input[type="button"]:hover, .active {
                     background-color: $RED-HOVER;
                 }
 
@@ -97,6 +97,10 @@ header {
                     cursor: pointer;
                     width: 100%;
                     text-align: left;
+                }
+
+                .active {
+                  cursor: auto;
                 }
             }
 
@@ -122,7 +126,7 @@ header {
                 }
 
                 .approver-menu {
-                    min-height: 285px;
+                    min-height: 311px;
                 }
 
                 .employee-menu {
@@ -193,7 +197,7 @@ header {
                 font-size: 20px;
                 height: 100%;
                 width: auto;
-                height: 56px;
+                height: 60px;
                 font-weight: 100;
                 margin-left: 5px;
             }
@@ -226,7 +230,7 @@ header {
 
             .search-field-wrapper {
                 display: inline-block;
-                min-height: 57px;
+                min-height: 60px;
                 margin-left: -5px;
                 width: 88%;
             }

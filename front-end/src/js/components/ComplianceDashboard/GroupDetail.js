@@ -46,7 +46,7 @@ export default class GroupDetail extends React.Component {
       return accumulator;
     }, []);
 
-    let emailUrl = 'mailto:' + emailList.join(',');
+    let emailUrl = 'mailto:?bcc=' + emailList.join(',');
 
     window.location = emailUrl;
   }
