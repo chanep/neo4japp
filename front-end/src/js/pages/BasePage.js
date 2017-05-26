@@ -62,7 +62,8 @@ class BasePage extends React.Component {
 		if (data.roles.includes('admin')) return 'admin';
 		if (data.roles.includes('resourceManager')) return 'resourcemanager';
 		if (data.roles.includes('approver')) return 'approver';
-		
+		if (data.roles.includes('searcher')) return 'searcher';
+
 		return 'employee';
 	}
 
@@ -72,6 +73,10 @@ class BasePage extends React.Component {
 		return data.roles.includes(roleName);
 	}
 
+	EmployeeHasAnyRole(roleNameList) {
+		return roleNameList.some(roleName => this.EmployeeHasRole(roleName));
+	}
+
 	GetMyRootPath() {
 		let currentUserType = this.GetCurrentUserType();
 		if (currentUserType === null)
@@ -79,7 +84,7 @@ class BasePage extends React.Component {
 
 		if (currentUserType === 'resourcemanager') return '/resourceshotspot';
 		if (currentUserType === 'approver') return '/managerhome';
-		if (currentUserType === 'employee' || currentUserType === 'admin') return '/myprofile';
+		if (currentUserType === 'employee' || currentUserType === 'searcher' || currentUserType === 'admin') return '/myprofile';
 
         return '/';
 	}

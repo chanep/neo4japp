@@ -1,3 +1,26 @@
 /**
  * Layout: Navigation
  */
+
+.breadcrumbs {
+  line-height: 20px;
+  font-size: 20px;
+  padding: 22px 20px 18px;
+  background: $DARK-GREY;
+  color: $LIGHT-GREY;
+
+  a {
+    color: currentColor;
+
+    &:hover {
+      color: $LIGHTEST-GREY;
+    }
+  }
+
+  span {
+    &:last-child {
+      color: white;
+      font-weight: bold;
+    }
+  }
+}

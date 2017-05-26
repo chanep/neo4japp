@@ -16,7 +16,7 @@
     	line-height: 120%;
     	font-size: em(12);
     	font-weight: bold;
-    	color: $GREY-FONT;
+    	color: $DARK-GREY;
 
     	.subtitle-annotation {
     		font-weight: normal !important;
@@ -72,7 +72,7 @@
     	.label {
     		font-size: em(12);
     		font-weight: bold;
-    		color: $GREY-FONT;
+    		color: $DARK-GREY;
     	}
     }
 
@@ -145,7 +145,7 @@
 
     .employee-skills-last-update {
     	font-size: em(12);
-    	color: $GREY-FONT;
+    	color: $DARK-GREY;
         margin-bottom: em(15);
 
     	span {
@@ -176,7 +176,7 @@
             border: .0625em solid $GREY;
             font-size: .95em;
             font-weight: 100;
-            color: #868686;
+            color: $GREY;
             padding: 1em 1.3125em;
             height: 50px;
             vertical-align: top;
@@ -211,7 +211,7 @@
             display: inline-block;
             cursor: pointer;
             margin-top: -1px;
-            color: $GREY-FONT;
+            color: $DARK-GREY;
 
             &:last-of-type {
                 border-bottom: 1px solid $GREY;

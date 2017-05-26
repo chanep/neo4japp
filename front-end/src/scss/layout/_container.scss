@@ -1,3 +1,7 @@
+body {
+  overflow-x: hidden;
+}
+
 .container {
     @include grid($max-width: em(960));
 }

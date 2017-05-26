@@ -24,4 +24,8 @@ export default class SkillsServices extends ServicesBase {
 	SuggestSkill(skillName, skillDescription) {
 		return super.callPutServices('user/skill-suggestion', { skillName: skillName, skillType: 'skill', description: skillDescription });
 	}
+
+	GetUsersBySkillStatus(limit, noSkills) {
+		return super.callGetServices('resource-manager/skill-by-user', {limit, noSkills});
+	}
 }

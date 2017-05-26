@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import Modal from "react-modal";
-import { Router, Route, IndexRoute, hashHistory } from "react-router";
+import { Router, Route, IndexRoute, Redirect, hashHistory } from "react-router";
 
 import Layout from "./components/Layout";
 import ResourceHotspot from "./pages/ResourceHotspot";
@@ -14,6 +14,12 @@ import ResultsProfile from "./pages/ResultsProfile";
 import SearchAllSkills from "./pages/SearchAllSkills";
 import MySkills from "./pages/MySkills";
 import EmployeeVerification from "./pages/EmployeeVerification";
+import Dashboards from "./pages/Dashboards";
+import DashboardList from "./components/Dashboards/DashboardList";
+import ComplianceDashboard from "./components/Dashboards/ComplianceDashboard";
+import GroupOverview from "./components/ComplianceDashboard/GroupOverview";
+import ActiveGroupDetail from "./components/ComplianceDashboard/ActiveGroupDetail";
+import InactiveGroupDetail from "./components/ComplianceDashboard/InactiveGroupDetail";
 import FAQ from "./pages/FAQ";
 import PageError from "./pages/PageError";
 
@@ -22,7 +28,7 @@ const app = document.getElementById('app');
 
 ReactDOM.render(
 	<Router history={hashHistory}>
-		<Route path="/" component={Layout}>
+		<Route path="/" component={Layout} name="App">
 			<IndexRoute component={Login}></IndexRoute>
             <Route path="/login" component={Login}></Route>
             <Route path="/resourceshotspot" component={ResourceHotspot}></Route>
@@ -35,6 +41,16 @@ ReactDOM.render(
             <Route path="/managerhome" component={ManagerHome}></Route>
             <Route path="/resultsprofile" component={ResultsProfile}></Route>
             <Route path="/searchallskills" component={SearchAllSkills}></Route>
+            <Route path="/dashboards" component={Dashboards} name="Dashboards">
+							<IndexRoute component={DashboardList}/>
+							<Route path="/dashboards/compliance/:employeeGroup" component={ComplianceDashboard} name="Compliance" staticName={true}>
+								<IndexRoute component={GroupOverview}/>
+								<Route path="active" component={ActiveGroupDetail} name="Active Users" />
+								<Route path="inactive" component={InactiveGroupDetail} name="Inactive Users" />
+							</Route>
+						</Route>
+						<Redirect from="/dashboards/compliance" to="/dashboards/compliance/myteam" />
+
             <Route path="/faq" component={FAQ}></Route>
             <Route path="/error" component={PageError}></Route>
 		</Route>

@@ -1,0 +1,220 @@
+.compliance-dashboard-container {
+    @include grid($max-width: em(960));
+
+    .compliance-dashboard {
+      display: flex;
+
+      .compliance-dashboard__sidebar {
+        background: $LIGHTEST-GREY;
+        padding: 1.5em 0;
+
+        a {
+          color: $LIGHT-GREY;
+          display: block;
+          padding: .25em 1.25em;
+
+          &:hover, &.active {
+            color: $DARKEST-GREY;
+          }
+        }
+      }
+
+      .compliance-dashboard__content {
+        &-header {
+          font-size: 48px;
+          line-height: 120px;
+          padding-left: calc(100% / 9);
+          position: relative;
+          overflow: hidden;
+
+          .office-map {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 263px;
+          }
+        }
+      }
+    }
+}
+
+.compliance-dashboard-item {
+  padding: 0 calc(100% / 9);
+
+  &__header {
+    background: $LIGHTEST-GREY;
+    padding: 7px 15px 5px;
+    font-size: 16px;
+    line-height: 1;
+    color: $DARK-GREY;
+  }
+
+  &__detail-list {
+    display: flex;
+    margin: 0 -5px;
+
+    > a:hover {
+      color: $DARKER-GREY;
+      border-color: $DARKER-GREY;
+    }
+  }
+
+  &__detail {
+    flex: 1;
+    border: 1px solid $LIGHT-GREY;
+    color: $DARK-GREY;
+    padding: 15px 15px 10px;
+    margin: 5px;
+    height: 140px;
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+
+    &--wide {
+      flex: 1.5;
+    }
+
+    figure {
+      display: flex;
+      align-items: center;
+      margin: 10px;
+
+      svg {
+        margin-right: 10px;
+      }
+    }
+  }
+
+  &__detail-title {
+    font-size: 14px;
+  }
+
+  &__detail-value {
+    font-size: 36px;
+    font-weight: lighter;
+  }
+
+  &__detail-cta {
+    font-size: 12px;
+    margin-top: auto;
+
+    .ss-icon-right-arrow {
+      vertical-align: middle;
+    }
+  }
+}
+
+.compliance-dashboard-table {
+  &__header {
+    display: flex;
+    padding-left: calc(100% / 9);
+    align-items: baseline;
+  }
+
+  &__header-text {
+    flex: 1;
+    font-size: 24px;
+    line-height: 60px;
+    color: $DARK-GREY;
+  }
+
+  width: 100%;
+
+  th {
+    text-align: left;
+    background: $DARKEST-GREY;
+    font-size: 11px;
+    font-weight: bold;
+    color: #fff;
+  }
+
+  tr {
+    border-bottom: 1px solid $LIGHTEST-GREY;
+    line-height: 40px;
+    height: 40px;
+    transition: .5s;
+
+    &:nth-child(even) {
+      background: $OFF-WHITE;
+    }
+
+    td {
+      vertical-align: top;
+    }
+
+    &.open {
+      height: 80px;
+
+      .compliance-dashboard-table__name {
+        &-details {
+          opacity: 1;
+        }
+
+        > div {
+          height: 80px;
+        }
+      }
+
+      .compliance-dashboard-table__action {
+        button {
+          span {
+            transform: translate(-50%, -50%) rotate(90deg);
+          }
+        }
+      }
+    }
+  }
+
+  &__checkbox {
+      width: calc(100% / 9);
+      text-align: center;
+  }
+
+  &__name {
+    text-align: left;
+    font-size: 14px;
+    font-weight: bold;
+
+    &-details {
+      font-size: 12px;
+      font-weight: normal;
+      line-height: 16px;
+      opacity: 0;
+      transition: .5s;
+    }
+
+    > div {
+      height: 40px;
+      transition: .5s;
+      overflow: hidden;
+    }
+  }
+
+  &__skills {
+    width: 33%
+  }
+
+  &__action {
+    width: 40px;
+
+    button {
+      width: 100%;
+      height: 40px;
+      display: block;
+      background: $LIGHTEST-GREY;
+      position: relative;
+      cursor: pointer;
+
+      span {
+        position: absolute;
+        width: 16px;
+        height: 16px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) rotate(-90deg);
+        color: $DARK-GREY;
+        transition: .5s;
+      }
+    }
+  }
+}

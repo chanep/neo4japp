@@ -34,11 +34,18 @@
 .ss-icon-right-arrow:before {
     content: "\e908";
 }
+.ss-icon-left-arrow:before {
+    content: "\e908";
+    transform: scaleX(-1);
+    display: inline-block;
+}
 .ss-icon-down-arrow:before {
     content: "\e909";
 }
 .ss-icon-up-arrow:before {
     content: "\e909";
+    transform: scaleY(-1);
+    display: inline-block;
 }
 .ss-icon-arrow-down:before {
     content: "\e900";

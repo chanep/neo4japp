@@ -35,7 +35,7 @@ header {
             font-size: 14px;
             //padding: 10px 20px 10px 200px;
             padding: 10px 20px 10px 15px;
-            transition: all .35s 1.2s ease-in-out;
+            transition: all .333s .666s ease-in-out;
             position: relative;
             display: block;
             cursor: default;
@@ -64,9 +64,8 @@ header {
 
             .header-menu {
                 opacity: 0;
-                height: 0;
                 overflow: hidden;
-                transition: all .35s .5s ease-in-out; 
+                transition: all .333s .333s ease-in-out;
 
                 background-color: $RGA-RED;
                 width: 293px;
@@ -75,7 +74,7 @@ header {
                 font-weight: normal;
                 top: 0;
                 left: 0;
-                min-height: 65px;
+                min-height: 64px;
             }
 
             .header-menu__item {
@@ -88,41 +87,86 @@ header {
                     padding-top: 7px;
                 }
 
-                a:hover, input[type="button"]:hover {
+                a:hover, input[type="button"]:hover, .active {
                     background-color: $RED-HOVER;
                 }
-                
+
                 input[type="button"]{
                     background: none;
                     cursor: pointer;
                     width: 100%;
                     text-align: left;
                 }
+
+                .active {
+                  cursor: auto;
+                }
             }
 
             .header-menu__item--title {
                 font-size: 18px;
-                line-height: 65px;
+                line-height: 64px;
                 padding-left: 30px;
                 padding-right: 30px;
             }
 
+            .header-menu__item-list {
+              opacity: 0;
+              transition: all .333s .333s ease-in-out;
+              margin: 0;
+              padding: 0;
+
+              > * {
+                height: 0;
+                opacity: 0;
+                transition: all .333s .333s ease-in-out, background 0s linear;
+                line-height: 2.25em;
+                padding: 0 2em;
+                background: none;
+                color: white;
+                display: block;
+                padding: 0 2em;
+                cursor: pointer;
+                width: 100%;
+                text-align: left;
+
+                &:hover, &.active {
+                    background: $RED-HOVER;
+                }
+
+                &.active {
+                  cursor: auto;
+                }
+              }
+            }
+
             &:hover {
                 padding-left: 200px;
-                transition: all .35s .5s ease-in-out; 
+                transition: all .333s .333s ease-in-out;
 
                 .header-menu {
                     opacity: 1;
                     //min-height: 330px;
-                    transition: all .35s .5s ease-in-out;
+                    //transition: all .35s .5s ease-in-out;
+                }
+
+                .header-menu__item-list {
+                  opacity: 1;
+                  padding: 0 0 .75em 0;
+
+                  > * {
+                    height: 2.25em;
+                    line-height: 2.25em;
+                    opacity: 1;
+                  }
                 }
 
                 .resource-manager-menu {
-                    min-height: 165px;
+                    min-height: 198px;
                 }
 
                 .approver-menu {
-                    min-height: 285px;   
+                    min-height: 311px;
                 }
 
                 .employee-menu {
@@ -160,7 +204,7 @@ header {
         width: 100%;
 
         .search__input__wrapper {
-            background-color: #e7e7e8;
+            background-color: $LIGHTEST-GREY;
         }
 
         .search__results__wrapper {
@@ -193,7 +237,7 @@ header {
                 font-size: 20px;
                 height: 100%;
                 width: auto;
-                height: 56px;
+                height: 60px;
                 font-weight: 100;
                 margin-left: 5px;
             }
@@ -226,11 +270,11 @@ header {
 
             .search-field-wrapper {
                 display: inline-block;
-                min-height: 57px;
+                min-height: 60px;
                 margin-left: -5px;
                 width: 88%;
             }
-            
+
         }
 
         &__results {
@@ -248,7 +292,7 @@ header {
                     &.category-list {
                         display: inline-block;
                         font-size: 13px;
-                        color: #666767;
+                        color: $DARK-GREY;
                         padding-right: 30px;
                         vertical-align: top;
                         width: 145px;
@@ -287,7 +331,7 @@ header {
         width: 962px;
         margin: 0 auto;
         background-color: #f3f3f4;
-        border-bottom: 1px solid #e7e7e8;
+        border-bottom: 1px solid $LIGHTEST-GREY;
         margin-top: -1px
     }
 
@@ -298,13 +342,13 @@ header {
         padding: 4px 12px;
         margin: 12px 5px 0 5px;
 
-      
+
 
         &__close {
           font-size: 9px;
           position: relative;
           display: inline-block;
-          background-color: #666767;
+          background-color: $DARK-GREY;
           padding: 3px 5px 3px;
           border-radius: 20px;
           color: #fff;
@@ -321,5 +365,3 @@ header {
 
 
 .header-menu-wrapper { position: relative; }
-
-
