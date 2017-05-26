@@ -3,7 +3,7 @@
 
     .compliance-dashboard {
       display: flex;
-      
+
       .compliance-dashboard__sidebar {
         background: $LIGHTEST-GREY;
         padding: 1.5em 0;
@@ -121,7 +121,6 @@
   width: 100%;
 
   th {
-    padding-left: calc(100% / 9);
     text-align: left;
     background: $DARKEST-GREY;
     font-size: 11px;
@@ -189,6 +188,10 @@
       transition: .5s;
       overflow: hidden;
     }
+  }
+
+  &__skills {
+    width: 33%
   }
 
   &__action {

@@ -8,6 +8,7 @@ import { Link } from "react-router";
 
 import SkillsServices from "../../services/SkillsServices";
 import UserServices from "../../services/UserServices";
+import BasePage from '../../pages/BasePage';
 import OfficeMap from "../OfficeMap";
 
 // Class: Dashboards
@@ -57,7 +58,10 @@ export default class ComplianceDashboard extends React.Component {
 
   fetchUserData() {
     return new Promise((resolve, reject) => {
-      Promise.all([this.skillsServices.GetUsersBySkillStatus(2000, true),this.skillsServices.GetUsersBySkillStatus(2000, false), this.userServices.GetMyTeam()])
+      let base = new BasePage();
+      let teamPromise = base.EmployeeHasRole('approver') ? this.userServices.GetMyTeam() : Promise.resolve([]);
+
+      Promise.all([this.skillsServices.GetUsersBySkillStatus(2000, true),this.skillsServices.GetUsersBySkillStatus(2000, false), teamPromise])
       .then(data => {
 
         let userData = {

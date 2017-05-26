@@ -102,18 +102,27 @@ export default class GroupDetail extends React.Component {
     return (
       <div>
         <div className="compliance-dashboard-table__header">
-          <div className="compliance-dashboard-table__header-text">{this.state.title}</div>
+          <div className="compliance-dashboard-table__header-text">{this.state.title} ({this.state.users.length})</div>
           <DropdownMenu items={[
-            {title: 'Select All', action: () => this.selectAll()},
+            {title: 'Select All', action: () => this.selectAll(), disabled: this.state.users.length > 100},
             {title: 'Deselect All', action: () => this.deselectAll()},
             {title: 'Send Email', action: () => this.sendEmail(), disabled: !this.state.users.some(user => user.checked)},
           ]} align="right" />
         </div>
         <table className="compliance-dashboard-table">
           <thead>
-            <tr>
-              <th colSpan="3">Name</th>
-            </tr>
+              {this.props.showActive ?
+                <tr>
+                  <th colSpan="1"></th>
+                  <th colSpan="1">Name</th>
+                  <th colSpan="2">Skills</th>
+                </tr>
+              :
+                <tr>
+                  <th colSpan="1"></th>
+                  <th colSpan="3">Name</th>
+                </tr>
+              }
           </thead>
           <tbody>
             {this.state.users.map(user =>
@@ -130,6 +139,9 @@ export default class GroupDetail extends React.Component {
                     </div>
                   </div>
                 </td>
+                {this.props.showActive ?
+                  <td className="compliance-dashboard-table__skills">{user.skillsCount}</td>
+                : null}
                 <td className="compliance-dashboard-table__action"><button onClick={() => this.toggleUserPanel(user.id)}><span className="ss-icon-left-arrow"></span></button></td>
               </tr>
             )}

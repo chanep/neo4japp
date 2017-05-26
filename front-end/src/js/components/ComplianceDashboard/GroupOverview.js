@@ -5,6 +5,10 @@ import DonutChart from '../DonutChart';
 
 export default class GroupOverview extends React.Component {
   render () {
+    let value = this.props.data.activeUsers.length;
+    let total = this.props.data.activeUsers.length + this.props.data.inactiveUsers.length;
+    let percent = total > 0 ? Math.round( value / total * 100) : 0;
+
     return (
       <div className="compliance-dashboard-item">
         <div className="compliance-dashboard-item__header">Searchable Employees</div>
@@ -23,7 +27,7 @@ export default class GroupOverview extends React.Component {
             <div className="compliance-dashboard-item__detail-title">Compliance</div>
             <figure>
               <DonutChart value={this.props.data.activeUsers.length} total={this.props.data.activeUsers.length + this.props.data.inactiveUsers.length} />
-              <figcaption className="compliance-dashboard-item__detail-value">{Math.round(this.props.data.activeUsers.length / (this.props.data.activeUsers.length + this.props.data.inactiveUsers.length) * 100)}%</figcaption>  
+              <figcaption className="compliance-dashboard-item__detail-value">{percent}%</figcaption>  
             </figure>
             </div>
         </div>
