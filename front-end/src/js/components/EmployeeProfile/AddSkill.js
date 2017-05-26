@@ -21,7 +21,8 @@ export default class AddSkill extends React.Component {
             skillLevel: null,
             clicksCount: 0,
             parentClicksCount: 0,
-            levelsOpen: false
+            levelsOpen: false,
+            showSubset: false
         };
 
         this.userServices = new UserServices();
@@ -31,6 +32,7 @@ export default class AddSkill extends React.Component {
     	this.setState({
     		skill: this.props.skill,
             groupLength: this.props.groupLength,
+            showSubset: this.props.showSubset,
             clicksCount: 0,
             parentClicksCount: this.props.clicksCount
     	});
@@ -46,6 +48,7 @@ export default class AddSkill extends React.Component {
 		this.setState({
 			skill: nextProps.skill,
             groupLength: nextProps.groupLength,
+            showSubset: nextProps.showSubset,
             clicksCount: 0,
             parentClicksCount: nextProps.clicksCount
 		});
@@ -54,7 +57,7 @@ export default class AddSkill extends React.Component {
             this.setState({ skillWant: nextProps.skill.knowledge.want });
         }
 
-        if (nextProps.groupLength === 1) { this.setState({ "levelsOpen": true })}
+        if (!nextProps.showSubset) { this.setState({ "levelsOpen": true })}
 	}
 
     showAlert(messg){
@@ -209,25 +212,25 @@ export default class AddSkill extends React.Component {
         return (
             <div>
                 <div className="add-row col -col-12 -col-no-gutter" onClick={this.openLevels.bind(this)}>
-                    {this.state.groupLength > 1 ?
+                    {this.state.showSubset ?
                         <div className="col -col-11 -col-name overflowHidden skill-name sub-skill-name" title={this.state.skill.name}>
-                            {(employeeHasThisCategory && this.state.groupLength > 1) ? <i className={approvedCategory ? "employee-Has-Category employee-Has-Category--subskill" : "validate-pending add-skill-validate-pending add-subskill-validate-pending"} title={"You have " + employeeHasThisCategory + " skill(s)/tool(s) from this category"}></i> : false}
+                            {(employeeHasThisCategory && this.state.showSubset) ? <i className={approvedCategory ? "employee-Has-Category employee-Has-Category--subskill" : "validate-pending add-skill-validate-pending add-subskill-validate-pending"} title={"You have " + employeeHasThisCategory + " skill(s)/tool(s) from this category"}></i> : false}
                             {this.state.skill.name}
                         </div>
                         : null}
-                    {this.state.groupLength > 1 ?
+                    {this.state.showSubset ?
                         <div className={this.state.levelsOpen ? "col -col-1 sub-results-arrow-open-close skill-opened" : "col -col-1 sub-results-arrow-open-close"}><i className="ss-icon-down-arrow"></i></div>
                         : null}
                 </div>
                 <div className="add-row col -col-12 -col-no-gutter">
                     {
-                        (this.state.skill.description !== undefined && this.state.skill.description !== "") && (this.state.levelsOpen || this.state.groupLength === 1) ?
+                        (this.state.skill.description !== undefined && this.state.skill.description !== "") && (this.state.levelsOpen || !this.state.showSubset) ?
                         <div className="skill-description">
                             {this.state.skill.description}
                         </div>
                         :null
                     }
-                    { this.state.levelsOpen || this.state.groupLength === 1 ?
+                    { this.state.levelsOpen || !this.state.showSubset ?
                     <div className="row-levels">
                         <div className={"col -col-3 -col-no-gutter add-skill-box skill-level-box selectable " + (checked ? "level-verified" : "")}
                             onClick={this.toggleWant.bind(this)}>

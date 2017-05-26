@@ -12,8 +12,35 @@ const messaging = require('../services/messaging');
 const skillChannel = postal.channel('skill');
 
 class ResourceManagerController extends BaseController{
+
     /**
-    @api {get} /api/resource-manager/users-by-skill 1 Find users by skill
+    @api {get} /api/resource-manager/skill-by-user 1 Find users with skills by office or deparment
+    @apiDescription List amount of skills by users (sorted by fullname)
+    @apiGroup Resource Managers
+
+    @apiParam (Filter) {Array} [offices] Array with office ids
+    @apiParam (Filter) {bool}  [noSkills] Filters users without skills
+    @apiParam (Filter) {number} [skip] Skips n Users (for paged result)
+    @apiParam (Filter) {number} [limit] Limits then number or results. Default is 20  (for paged result)
+    @apiParam (Filter) {String="relevance", "matchedItems", "allocation", "fullname_asc", "fullname_desc", "office_asc", "office_desc"} [orderBy] Orders result
+    
+    @apiUse usersResponse
+    */
+    findSkillByUser(req, res, next){
+        let search = this._buildSearch(req);
+        let officeIds = search.offices || [];
+        let noSkills = search.noSkills || false;
+        let skip = search.skip || 0;
+        let limit = search.limit || 20;
+        let filters = _.omit(search, ['skills', 'offices', 'noSkills', 'skip', 'limit']);
+
+        let promise = resourceManagerDa.findSkillByUsers(officeIds, noSkills, filters, skip, limit, search.orderBy);
+
+        this._respondPromise(req, res, promise);   
+    }
+
+    /**
+    @api {get} /api/resource-manager/users-by-skill 3 Find users by skill
     @apiDescription List users who have at least one of the searched skills (sorted by skill match count and skill level, descending)
     @apiGroup Resource Managers
 
@@ -47,7 +74,7 @@ class ResourceManagerController extends BaseController{
     }
 
     /**
-    @api {get} /api/resource-manager/top-skill-searches 3 Top Skills
+    @api {get} /api/resource-manager/top-skill-searches 4 Top Skills
     @apiDescription List most searched skills
     @apiGroup Resource Managers
 
@@ -98,7 +125,7 @@ class ResourceManagerController extends BaseController{
     }
 
     /**
-    @api {get} /api/resource-manager/skilled-users-by-office/:skillId 4 Skilled users by office
+    @api {get} /api/resource-manager/skilled-users-by-office/:skillId 5 Skilled users by office
     @apiDescription List offices with the number of users who knows the given skill
     @apiGroup Resource Managers
 
@@ -134,7 +161,7 @@ class ResourceManagerController extends BaseController{
     }
 
     /**
-    @api {put} /api/resource-manager/approval-request/:employeeId 5 Request Approval
+    @api {put} /api/resource-manager/approval-request/:employeeId 6 Request Approval
     @apiDescription Send an email to the approver requesting an employee's skill approval
     @apiGroup Resource Managers
 
