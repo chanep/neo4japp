@@ -37,7 +37,7 @@ class LoginService {
                     //     console.log("error ldap", err)
                     //     reject(err);
                     // })
-                    ldap.authenticate(username, password, (err, user) => {
+                    ldap.authenticate(username.toLowerCase(), password, (err, user) => {
                         if (err)
                             reject(err);
                         resolve();
@@ -49,7 +49,7 @@ class LoginService {
         }
 
         let userDa = new UserDa();
-        const query = {username: username, includes:["department"]};
+        const query = {username: username.toLowerCase(), includes:["department"]};
         return userDa.findOne(query)
             .then(user => {
                if(!user)
@@ -65,7 +65,7 @@ class LoginService {
                         throw new errors.GenericError("Error in user authentication", err);
                     });
             });
-            
+
 
     }
 }
