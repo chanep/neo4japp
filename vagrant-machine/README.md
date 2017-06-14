@@ -21,10 +21,10 @@ Configurations needs to use Vagrant Environment:
 
 		// now inside the virtual machine
 	cd /etc/neo4j/
-	sudo vim neo4j.conf
-		a. Uncomment line 50
-		b. In line 57 replace 127.0.0.0:7473 by 0.0.0.0:7473
-		c. Uncomment "#dbms.tx_log.rotation.retention_policy=7 days" (~ line 91) and set 2 days
+	sudo vim neo4j.conf (line numbers are approximate because they change from version to version)
+		a. Uncomment line dbms.connectors.default_listen_address=0.0.0.0 (~line 45)
+		b. Uncomment the line dbms.connector.https.listen_address=:7473 (~line 69)
+		c. Uncomment if needed dbms.tx_log.rotation.retention_policy=7 days (~ line 100) and set 2 days
 		d. Save and exit --> :wq
 	exit
 		// we are now in the host machine terminal
