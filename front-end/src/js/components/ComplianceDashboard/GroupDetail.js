@@ -115,12 +115,13 @@ export default class GroupDetail extends React.Component {
                 <tr>
                   <th colSpan="1"></th>
                   <th colSpan="1">Name</th>
-                  <th colSpan="2">Skills</th>
+                  <th colSpan="1">Skills</th>
+                  <th colSpan="2">Unconfirmed Skills</th>
                 </tr>
               :
                 <tr>
                   <th colSpan="1"></th>
-                  <th colSpan="3">Name</th>
+                  <th colSpan="4">Name</th>
                 </tr>
               }
           </thead>
@@ -141,6 +142,9 @@ export default class GroupDetail extends React.Component {
                 </td>
                 {this.props.showActive ?
                   <td className="compliance-dashboard-table__skills">{user.skillsCount}</td>
+                : null}
+                {this.props.showActive ?
+                  <td className="compliance-dashboard-table__skills">{user.unconfirmedSkillsCount}</td>
                 : null}
                 <td className="compliance-dashboard-table__action"><button onClick={() => this.toggleUserPanel(user.id)}><span className="ss-icon-left-arrow"></span></button></td>
               </tr>
