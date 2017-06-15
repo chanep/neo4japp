@@ -21,7 +21,7 @@ class ResourceManagerDa extends UserDa{
         let interestedIn = this.model.getRelationByKey("interests").label;
         let workedFor = this.model.getRelationByKey("clients").label;
 
-        let params = {skillIds: skillIds, skip: skip, limit: limit};        
+        let params = {skillIds: skillIds, skip: skip, limit: limit};
 
         let defaultFilters = {
             offices: null,
@@ -59,7 +59,7 @@ class ResourceManagerDa extends UserDa{
                 break;
         }
 
-        let match = `match (n:${label})-[:${officeRelL}]->(o) where not(n.disabled) 
+        let match = `match (n:${label})-[:${officeRelL}]->(o) where not(n.disabled)
                          and ({levels} is null or n.level in {levels}) and ({offices} is null or id(o) in {offices})
                      match (n)-[:${positionRelL}]->(p)
                      optional match (n)-[k:${kRelL}]->(s:${skillL})-[:${groupLbl}]->(sg) where sg.type in ["tool", "skill"] and id(s) in {skillIds}
@@ -75,7 +75,7 @@ class ResourceManagerDa extends UserDa{
         let cmd = `${match}
                     optional match (n)-[:${approverRelL}]->(a)
                     optional match (n)-[:${allocationRelL}]->(al)
-                    with n, o, p, al, collect(distinct a) as approvers, 
+                    with n, o, p, al, collect(distinct a) as approvers,
                         filter(x IN collect(distinct {id: id(s), name: s.name, level: k.level, approved: k.approved, want: k.want}) where x.id is not null) as skills,
                         collect(distinct ind) as industries,
                         collect(distinct interest) as interests,
@@ -87,7 +87,7 @@ class ResourceManagerDa extends UserDa{
                     ( size(filter(s in skills where not(s.want))) + size(industries) + size(interests) + size(clients) ) as matchedItems
                     ${order}
                     skip {skip} limit {limit}
-                    return {    
+                    return {
                             id: id(n), username: n.username, type: n.type, email: n.email, phonelistId: n.phonelistId,
                             fullname: n.fullname, roles: n.roles, phone: n.phone, image: n.image, disabled: n.disabled, lastUpdate: n.lastUpdate,
                             office: {id: id(o), name: o.name, country: o.country, acronym: o.acronym},
@@ -113,7 +113,7 @@ class ResourceManagerDa extends UserDa{
         let groupLbl = skillModel.getRelationByKey("group").label;
         let kRelL = this.model.getRelationByKey("knowledges").label;
 
-        let params = {officeIds: officeIds, skip: skip, limit: limit};        
+        let params = {officeIds: officeIds, skip: skip, limit: limit};
 
         let defaultFilters = {
             officeIds: null,
@@ -128,7 +128,7 @@ class ResourceManagerDa extends UserDa{
         }
 
         let match = `match (n:${label})-[:${officeRelL}]->(o) where not(n.disabled) and ({officeIds} is null or id(o) in {officeIds})
-                     optional match (n)-[k:${kRelL}]->(s:${skillL})-[:${groupLbl}]->(sg) where sg.type in ["tool", "skill"] 
+                     optional match (n)-[k:${kRelL}]->(s:${skillL})-[:${groupLbl}]->(sg) where sg.type in ["tool", "skill"]
                      with n, o, k, s where (s ${skillsCondition})
                      `;
 
@@ -139,15 +139,15 @@ class ResourceManagerDa extends UserDa{
                     order by n.fullname asc
                     skip {skip} limit {limit}
                     return {
-                        id: id(n), 
-                        username: n.username, 
-                        fullname: n.fullname, 
-                        type: n.type, 
+                        id: id(n),
+                        username: n.username,
+                        fullname: n.fullname,
+                        type: n.type,
                         email: n.email,
                         skillsCount: size(skills),
+                        unconfirmedSkillsCount:size(filter(s IN skills WHERE s.approved)),
                         office: {id: id(o), name: o.name, country: o.country, acronym: o.acronym}
                     }`;
-
         return this.queryPaged(cmd, countCmd, params);
     }
 
