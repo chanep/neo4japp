@@ -78,7 +78,7 @@ export default class AddSkillsList extends React.Component {
                     {this.state.data.length > 0 && this.state.selectedGroup > 0 ?
                         this.state.data.map(function(obj, key) {
                             if (obj.id === self.state.selectedGroup) {
-                                return obj.children.map((subgroup, subgroupKey) => 
+                                return obj.children.map((subgroup, subgroupKey) =>
                                     <AddSkillItem data={subgroup} parent={obj} key={subgroupKey} />
                                 )
                             }
@@ -89,9 +89,8 @@ export default class AddSkillsList extends React.Component {
 
                             <h4>GUIDING PRINCIPLES</h4>
                             <ul>
-                                <li>Don't rate yourself higher than you are comfortable, expectations will be higher than can be met, and that's not great.</li>
-                                <li>There are no awards/raises for the most skills on the platform, this will not be used for any type of compensation discussion.</li>
-                                <li>Only include skills that you can deliver at a level in line with R/GA expectations. You may be a photographer at home, but is Nike asking you to shoot their spring campaign? :)</li>
+                                <li>Add the skills that are relevant to your career path. Include the skills you currently have and any skills you want to develop.</li>
+                                <li>It is important to set accurate expectations. Don’t rate yourself higher than you are comfortable. You can always update the skill level as you gain more experience.</li>
                             </ul>
 
                             <h4>SKILL LEVEL DESCRIPTIONS</h4>
