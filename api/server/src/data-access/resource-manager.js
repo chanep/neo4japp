@@ -145,7 +145,7 @@ class ResourceManagerDa extends UserDa{
                         type: n.type,
                         email: n.email,
                         skillsCount: size(skills),
-                        unconfirmedSkillsCount:size(filter(s IN skills WHERE s.approved)),
+                        unconfirmedSkillsCount:size(skills)-size(filter(s IN skills WHERE s.approved)),
                         office: {id: id(o), name: o.name, country: o.country, acronym: o.acronym}
                     }`;
         return this.queryPaged(cmd, countCmd, params);
