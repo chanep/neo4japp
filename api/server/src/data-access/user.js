@@ -326,6 +326,16 @@ class UserDa extends BaseDa{
     addSkillSearch(userId, skillId, date){
         return this.relate(userId, skillId, 'searches', {date: date}, false);
     }
+
+    setImage(userId, imageUrl){
+        let updated = 0;
+        let cmd = `MATCH (u:User) WHERE id(u) = ${userId}
+                    SET u.image = "${imageUrl}"
+                    return count(u)`;
+
+        return this._run(cmd)
+            .then(r => this._cypher.parseIntResult(r));
+    }
 }
 
 module.exports = UserDa;
