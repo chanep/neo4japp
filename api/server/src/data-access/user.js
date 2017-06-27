@@ -43,22 +43,22 @@ class UserDa extends BaseDa{
                     optional match (rm)-[:${departmentRelL}]->(rmd)
                     optional match (rm)-[:${positionRelL}]->(rmp)
 
-                    with n, o, d, p, al, 
-                    collect(distinct {_:a, department: ad, position: ap}) as approvers, 
+                    with n, o, d, p, al,
+                    collect(distinct {_:a, department: ad, position: ap}) as approvers,
                     collect(distinct {_:rm, department: rmd, position: rmp}) as resourceManagers
 
                     optional match (n)-[:${clientRelL}]->(c)
 
                     with n, o, d, p, al, approvers, resourceManagers,
                     collect(distinct c) as clients
-                    
+
                     optional match (n)-[:${interestRelL}]->(i)
 
                     with n, o, d, p, al, approvers, resourceManagers, clients,
                     collect(distinct i) as interests
 
                     optional match (n)-[:${kRelL}]->(ind)-[:${sgRelL}]->(sg) where sg.type = 'industry'
-                    
+
                     with n, o, d, p, al, approvers, resourceManagers, clients, interests,
                     collect(distinct ind) as industries
 
@@ -69,12 +69,12 @@ class UserDa extends BaseDa{
 
                     optional match (n)-[ku:${kRelL}]->(su)-[:${sgRelL}]->(sg3) where sg3.type in ['tool', 'skill'] and (ku.approved is null or ku.approved = false) and ku.want = false
 
-                    with n, o, d, p, al, approvers, resourceManagers, clients, interests, industries, skillCount, 
+                    with n, o, d, p, al, approvers, resourceManagers, clients, interests, industries, skillCount,
                     count(distinct su) as unapprovedSkillCount
 
-                    return {    
+                    return {
                                 id: id(n), username: n.username, type: n.type, email: n.email, phonelistId: n.phonelistId,
-                                fullname: n.fullname, roles: n.roles, phone: n.phone, image: n.image, disabled: n.disabled, lastUpdate: n.lastUpdate,
+                                fullname: n.fullname, roles: n.roles, phone: n.phone, image: n.image, disabled: n.disabled, lastUpdate: n.lastUpdate, lastLogin: n.lastLogin,
                                 office: case when (o is not null) then {id: id(o), name: o.name, country: o.country, acronym: o.acronym} else null end,
                                 department: case when (d is not null) then {id: id(d), name: d.name} else null end,
                                 position: case when (p is not null) then {id: id(p), name: p.name} else null end,
@@ -111,8 +111,8 @@ class UserDa extends BaseDa{
         with n, o, d, p, collect({level1: k1.level, level2: k2.level}) as knowledges
         with n, o, d, p, reduce(acc = 0, k in knowledges | acc + (5 - abs(k.level1 - k.level2))) as score
         order by score desc limit {limit}
-        return {    
-                id: id(n), username: n.username, email: n.email, 
+        return {
+                id: id(n), username: n.username, email: n.email,
                 fullname: n.fullname, image: n.image,
                 office: {id: id(o), name: o.name, country: o.country, acronym: o.acronym},
                 department: {id: id(d), name: d.name},
@@ -144,7 +144,7 @@ class UserDa extends BaseDa{
             ${operator} match (s)<-[k:${kRelL}]-(n:${label}) where id(n) = {userId}
             with g, cg, s, k
             order by s.name
-			with g, cg, collect({_:s, knowledge: k}) as skills 
+			with g, cg, collect({_:s, knowledge: k}) as skills
             order by cg.name
 			return {_:g, children: collect({_:cg, skills: skills})} as result
             order by result._.name
@@ -228,7 +228,7 @@ class UserDa extends BaseDa{
     removeInterest(userId, interestId){
         return this.deleteRelationship(userId, interestId, "interests");
     }
-    
+
     /**
      * Update all users role 'approver' based on relationships 'APPROVED_BY'
      */
@@ -295,8 +295,8 @@ class UserDa extends BaseDa{
         let role = roles.searcher;
         let cmd = `MATCH (u:${label})-[:${ofDepartment}]->(d),
                         (u)-[:${ofPosition}]->(p)
-                    WHERE NOT({role} IN u.roles) 
-                        AND (u.level IN ['Executive', 'Leadership'] 
+                    WHERE NOT({role} IN u.roles)
+                        AND (u.level IN ['Executive', 'Leadership']
                             OR (d.name = 'Technology' AND (u.level = 'Senior' OR p.name =~ '(?i).*director.*')))
                     SET u.roles = u.roles + {role}
                     return count(u)`;

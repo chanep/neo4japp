@@ -16,7 +16,7 @@ class BaseDa {
         this.labelsStr = model.labelsStr;
         this._cypher = new Cypher(model);
         this._tx = tx;
-        
+
     }
     _validateSchema(data, schema, schemaName){
         let options = schema._options || {stripUnknown: true};
@@ -62,7 +62,7 @@ class BaseDa {
         //     return P.resolve();
         // } else{
         //     return session.close()
-        // }     
+        // }
     }
     _logCmd(cmd, params){
         if(config.logCommands){
@@ -127,15 +127,15 @@ class BaseDa {
                 key2: value2,
             }
             Will match nodes with (key1 = value1 AND key2 = value2)
-        
+
         Operators
         ---------
-        $or:[{key1: value1}, {key2: value2}]    -> (key1=value1 OR key2=value2)   
-        $not:{key1: vaalue1, key2: value2}      -> NOT(key1=value1 AND key2=value2)     
+        $or:[{key1: value1}, {key2: value2}]    -> (key1=value1 OR key2=value2)
+        $not:{key1: vaalue1, key2: value2}      -> NOT(key1=value1 AND key2=value2)
         key1:{$in:[3,4,5]}                      -> (key1 IN [3,4,5])
         key1:{$ne: value1}                      -> (key1 <> value1)
         key1:{$like: '%abc%'}                   -> (key1 CONTAINS 'abc')
-        key1:{$ilike: '%abc%'}                  -> case insensitive version of $like 
+        key1:{$ilike: '%abc%'}                  -> case insensitive version of $like
         key1:{$lt: 10}                          -> (key1 < 10)
         key1:{$lte: 10}                         -> (key1 <= 10)
         key1:{$gt: 10}                          -> (key1 > 10)
@@ -166,7 +166,7 @@ class BaseDa {
             query: the query criteria for the related object
             includes: includes can have subincludes
             notInclude: Applies include query criterias but doesn't include the related object in the result
-        
+
         Pagination
         ----------
         query = {
@@ -255,7 +255,7 @@ class BaseDa {
      * Executes a raw cypher query
      * @param {String} cmd - Cypher command
      * @param {String} params - Command parameters
-     * @param {Object} [schema] - Optional Joi schema of the result 
+     * @param {Object} [schema] - Optional Joi schema of the result
      */
     query(cmd, params, schema){
         return this._run(cmd, params)
@@ -267,7 +267,7 @@ class BaseDa {
      * @param {String} cmd - Cypher command
      * @param {any} countCmd - Cypher command for counting the total number of records used for paging
      * @param {String} params - Command parameters
-     * @param {Object} [schema] - Optional Joi schema of the result 
+     * @param {Object} [schema] - Optional Joi schema of the result
      */
     queryPaged(cmd, countCmd, params, schema){
         let countParams = _.omit(params, ["skip", "limit"]);
@@ -296,7 +296,7 @@ class BaseDa {
             .then(r => this._cypher.parseResult(r))
             .catch(err => {throw new errors.GenericError("Error creating " + this.model.name, err)});
     }
-    
+
     /**
      * Updates node
      * @param {Object} data
@@ -528,7 +528,7 @@ class BaseDa {
     }
     /**
      * Updates a child node of relationship. This model must be the owner of the child
-     * which means the child can't exists without the owner. 
+     * which means the child can't exists without the owner.
      * @param {number} selfId - This model id
      * @param {string} relKey - Relationship key
      * @param {object} childData - id must be defined
@@ -576,7 +576,7 @@ class BaseDa {
         }
         return parsedParams;
     }
-    
+
 }
 
 module.exports = BaseDa;

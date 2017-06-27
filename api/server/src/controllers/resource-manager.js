@@ -23,7 +23,7 @@ class ResourceManagerController extends BaseController{
     @apiParam (Filter) {number} [skip] Skips n Users (for paged result)
     @apiParam (Filter) {number} [limit] Limits then number or results. Default is 20  (for paged result)
     @apiParam (Filter) {String="relevance", "matchedItems", "allocation", "fullname_asc", "fullname_desc", "office_asc", "office_desc"} [orderBy] Orders result
-    
+
     @apiUse usersResponse
     */
     findSkillByUser(req, res, next){
@@ -36,7 +36,7 @@ class ResourceManagerController extends BaseController{
 
         let promise = resourceManagerDa.findSkillByUsers(officeIds, noSkills, filters, skip, limit, search.orderBy);
 
-        this._respondPromise(req, res, promise);   
+        this._respondPromise(req, res, promise);
     }
 
     /**
@@ -52,7 +52,7 @@ class ResourceManagerController extends BaseController{
     @apiParam (Filter) {number} [skip] Skips n Users (for paged result)
     @apiParam (Filter) {number} [limit] Limits then number or results. Default is 20  (for paged result)
     @apiParam (Filter) {String="relevance", "matchedItems", "allocation", "fullname_asc", "fullname_desc", "office_asc", "office_desc"} [orderBy] Orders result
-    
+
     @apiUse usersResponse
     */
     findUsersBySkill(req, res, next){
@@ -70,7 +70,7 @@ class ResourceManagerController extends BaseController{
 
         let promise = resourceManagerDa.findUsersBySkill(skillIds, filters, skip, limit, search.orderBy);
 
-        this._respondPromise(req, res, promise);   
+        this._respondPromise(req, res, promise);
     }
 
     /**
@@ -81,7 +81,7 @@ class ResourceManagerController extends BaseController{
     @apiParam (Filter) {number} [limit] limit the skill count
     @apiParam (Filter) {number} [fromDate] (in milliseconds from Unix epoch datetime)
     @apiParam (Filter) {number} [toDate] (in milliseconds from Unix epoch datetime)
-    
+
     @apiSuccessExample {json} Success-Response:
     HTTP/1.1 200 OK
     {
@@ -121,7 +121,7 @@ class ResourceManagerController extends BaseController{
 
         let promise = resourceManagerDa.topSkillSearches(search.limit, search.fromDate, search.toDate);
 
-        this._respondPromise(req, res, promise);   
+        this._respondPromise(req, res, promise);
     }
 
     /**
@@ -130,23 +130,23 @@ class ResourceManagerController extends BaseController{
     @apiGroup Resource Managers
 
     @apiParam {number} skillId
-    
+
     @apiSuccessExample {json} Success-Response:
     HTTP/1.1 200 OK
     {
         status: "success",
         data: [{
             id: 260,
-            name: "Buenos Aires", 
-            description: "Buenos Aires", 
-            sourceId: "5679ad1fd7c7c2aaf75ab508", 
-            zip: "C1414DAP", 
-            country: "Argentina", 
-            address: "Uriarte 1572", 
-            acronym: "BA", 
-            phone: "+54 11 5984 0500", 
+            name: "Buenos Aires",
+            description: "Buenos Aires",
+            sourceId: "5679ad1fd7c7c2aaf75ab508",
+            zip: "C1414DAP",
+            country: "Argentina",
+            address: "Uriarte 1572",
+            acronym: "BA",
+            phone: "+54 11 5984 0500",
             longitude: -58.43251
-            latitude: -34.587572, 
+            latitude: -34.587572,
             uri: "buenos-aires",
             skilledUserCount: 14
         }, {...}]
@@ -157,7 +157,7 @@ class ResourceManagerController extends BaseController{
 
         let promise = resourceManagerDa.skilledUsersByOffice(skillId);
 
-        this._respondPromise(req, res, promise);   
+        this._respondPromise(req, res, promise);
     }
 
     /**
@@ -166,7 +166,7 @@ class ResourceManagerController extends BaseController{
     @apiGroup Resource Managers
 
     @apiParam {number} employeeId
-    
+
     @apiSuccessExample {json} Success-Response:
     HTTP/1.1 200 OK
     {
@@ -183,7 +183,7 @@ class ResourceManagerController extends BaseController{
 
         this._respondPromise(req, res, promise);
     }
-} 
+}
 
 module.exports = ResourceManagerController;
 
@@ -195,37 +195,38 @@ module.exports = ResourceManagerController;
 HTTP/1.1 200 OK
 {
     status: "success",
-    data: [{ 
-        id: 4839, 
-        fullname: "Pepe Test4", 
+    data: [{
+        id: 4839,
+        fullname: "Pepe Test4",
         roles: [],
-        email: "pepe.test4@rga.com", 
-        username: "pepetest4", 
+        email: "pepe.test4@rga.com",
+        username: "pepetest4",
         image: "http://x.com/pic.jpg",
         phone: null,
-        disabled: false,  
+        disabled: false,
+        lastLogin: "2016-10-24T17:21:22.633Z",
         lastUpdate: "2016-10-24T17:21:22.633Z",
-        position: { id: 4835, name: "Developer" }, 
-        office: { id: 4832, name: "Buenos Aires", country: "Argentina", acronym: "BA" }, 
+        position: { id: 4835, name: "Developer" },
+        office: { id: 4832, name: "Buenos Aires", country: "Argentina", acronym: "BA" },
         approvers: [{id: 4345, fullname: "Juan Manager"}],
         allocation: {
-            id: 6519, 
-            totalHours:120, 
-            weekHours:[30,30,30,30], 
-            workingWeekHours:[40,40,40,40], 
+            id: 6519,
+            totalHours:120,
+            weekHours:[30,30,30,30],
+            workingWeekHours:[40,40,40,40],
             startDate: ["09-05-2016","09-12-2016","09-19-2016","09-26-2016"]},
         matchedItems: 3,
         searchedItems: 4,
         score: 15,
-        skills: [{ 
-            id: 4844, 
-            name: "Angular", 
+        skills: [{
+            id: 4844,
+            name: "Angular",
             level: 4,
             approved: true,
             want: false
-        },{ 
-            id: 4844, 
-            name: "Php", 
+        },{
+            id: 4844,
+            name: "Php",
             level: 3,
             approved: false,
             want: false}]
@@ -233,7 +234,7 @@ HTTP/1.1 200 OK
         interests: [{id: 4354, name "Football"}],
         clients: [{id: 2354, name "Manaos"}]
     }, {
-       ... 
+       ...
     }]
 }
 */

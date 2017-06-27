@@ -55,6 +55,8 @@ router.get('/approver/my-team', approverController.findMyTeamUsers.bind(approver
 router.get('/approver/:approverId/my-team', approverController.findMyTeamUsers.bind(approverController));
 router.put('/approver/approve', approverController.approveKnowledge.bind(approverController));
 router.get('/approver/search-all', searchAllController.searchAll.bind(searchAllController));
+router.get('/approver/my-team', approverController.findMyTeamUsers.bind(approverController));
+router.get('/approver/pending', approverController.findApproversWithPendingApprovals.bind(approverController));
 
 // -----------------
 // Resource Managers
@@ -73,6 +75,5 @@ router.put('/resource-manager/approval-request/:employeeId', resourceManagerCont
 router.use('/admin', security.checkRole(roles.admin).bind(security));
 router.get('/admin/task', taskController.status.bind(taskController));
 router.post('/admin/task/:taskName', taskController.run.bind(taskController));
-
 
 module.exports = router;
