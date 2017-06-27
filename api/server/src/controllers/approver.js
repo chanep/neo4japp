@@ -14,25 +14,25 @@ class ApproverController extends BaseController{
 
     @apiParam (Filter) {boolean} onlyPendingApprove List users with pending approval skills only
     @apiParam (Filter) {boolean} includeWantSkills Include also skills that user would like to learn
-    
+
     @apiUse teamResponse
     */
 
     /**
     @api {get} /api/approver/:approverId/my-team 2 Approver's team
-    @apiDescription List the team of the given approver (sorted by pending approval skills count descending). 
+    @apiDescription List the team of the given approver (sorted by pending approval skills count descending).
         The approver must be in the chain of command of the logged user
     @apiGroup Approvers
 
     @apiParam (Filter) {boolean} onlyPendingApprove List users with pending approval skills only
     @apiParam (Filter) {boolean} includeWantSkills Include also skills that user would like to learn
-    
+
     @apiUse teamResponse
     */
     findMyTeamUsers(req, res, next){
         let loggedUserId = req.session.user.id;
         let approverId = Number(req.params.approverId || loggedUserId);
-        
+
         let search = this._buildSearch(req);
         let onlyPendingApproval = search.onlyPendingApproval;
         let includeWantSkills = search.includeWantSkills;
@@ -47,12 +47,12 @@ class ApproverController extends BaseController{
 
     /**
     @api {put} /api/approver/approve 4 Approve
-    @apiDescription An Approver (manager) approves (verify) a employee's skill knowledge 
+    @apiDescription An Approver (manager) approves (verify) a employee's skill knowledge
     @apiGroup Approvers
 
     @apiParam {number} knowledgeId List users with pending approval skills only
     @apiParam {boolean} [disapprove] True for clear approval
-    
+
     @apiSuccessExample {json} Success-Response:
     HTTP/1.1 200 OK
     {
@@ -65,7 +65,7 @@ class ApproverController extends BaseController{
             approverId: 456,
             approverFullname: "Juan Perez"
         }
-    } 
+    }
     */
     approveKnowledge(req, res, next){
         let userId = req.session.user.id;
@@ -83,6 +83,11 @@ class ApproverController extends BaseController{
         this._respondPromise(req, res, promise);
     }
 
+    findApproversWithPendingApprovals(req, res, next){
+        let promise = approverDa.findApproversWithPendingApprovals();
+
+        this._respondPromise(req, res, promise);
+    }
 
     _validateUserAccess(loggedUserId, approverId){
         if(loggedUserId == approverId)
@@ -95,7 +100,8 @@ class ApproverController extends BaseController{
                 throw new errors.ForbiddenError("You don't have access to this approver's team")
             });
     }
-} 
+
+}
 
 module.exports = ApproverController;
 
@@ -106,35 +112,36 @@ module.exports = ApproverController;
 HTTP/1.1 200 OK
 {
     status: "success",
-    data: [{ 
-        "id": 4839, 
-        "fullname": "Pepe Test4", 
+    data: [{
+        "id": 4839,
+        "fullname": "Pepe Test4",
         "roles": [],
-        "email": "pepe.test4@rga.com", 
-        "username": "pepetest4", 
+        "email": "pepe.test4@rga.com",
+        "username": "pepetest4",
         "image": "http://x.com/pic.jpg",
         "phone": null,
-        "disabled": false, 
+        "disabled": false,
+        lastLogin: "2016-10-24T17:21:22.633Z",
         lastUpdate: "2016-10-24T17:21:22.633Z",
-        "type": "UserEmployee", 
-        "totalPendingApproval": 1, 
-        "position": { "id": 4835, "name": "Developer" }, 
-        "office": { "id": 4832, "name": "Buenos Aires", "country": "Argentina", "acronym": "BA" }, 
-        "department": { "id": 4834, "name": "Technology" }, 
-        "skillGroups": [{ 
-            "id": 4844, 
-            "name": "languages", 
-            "type": "tool", 
-            "parent": { "id": 4841, "name": "Technology", "type": "tool" }, 
-            "skills": [{ 
-                "id": 4850, 
-                "name": "Php", 
-                "knowledge": { "id": 18753, "level": 3, "want": false } 
+        "type": "UserEmployee",
+        "totalPendingApproval": 1,
+        "position": { "id": 4835, "name": "Developer" },
+        "office": { "id": 4832, "name": "Buenos Aires", "country": "Argentina", "acronym": "BA" },
+        "department": { "id": 4834, "name": "Technology" },
+        "skillGroups": [{
+            "id": 4844,
+            "name": "languages",
+            "type": "tool",
+            "parent": { "id": 4841, "name": "Technology", "type": "tool" },
+            "skills": [{
+                "id": 4850,
+                "name": "Php",
+                "knowledge": { "id": 18753, "level": 3, "want": false }
             }],
-            "pendingApprovalCount": 1 
+            "pendingApprovalCount": 1
         }]
     }, {
-       ... 
+       ...
     }]
 }
 */
