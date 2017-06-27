@@ -14,10 +14,10 @@ let asyncDoUntil = P.promisify(async.doUntil);
 let asyncEach= P.promisify(async.each);
 let asyncEachSeries= P.promisify(async.eachSeries);
 
-const taskname ='user-clients-import';
-const phonelistUrl = 'https://phonelist.ny.rga.com/gateway/json/employeeClients.aspx'
+const taskname ='user-photo-import';
+const phonelistUrl = 'https://phonelist.ny.rga.com/gateway/json/employeeDetails.aspx'
 
-class UserClientsImportTask extends BaseTask{
+class UserPhotoImportTask extends BaseTask{
     constructor(){
         super(taskname);
     }
@@ -25,71 +25,62 @@ class UserClientsImportTask extends BaseTask{
         let query = {phonelistId: {$ne: null}, paged: {skip: skip, limit: limit}};
         return userDa.find(query);
     }
-    _getClientIds(phonelistId){
+    _getPhoto(phonelistId){
         return new P((resolve, reject) => {
             let url = phonelistUrl + '?e=' + phonelistId;
             request.get(url, 
                     (err, result, body) => {
                         if(err){
-                            reject(new errors.GenericError('error getting clients of user ' + phonelistId, err))
+                            reject(new errors.GenericError('error getting photo of user ' + phonelistId, err))
                         } else {
                             try{
                                 let json = JSON.parse(body);
                                 let user = json.Info[0];
-                                if(user.Clients){
-                                    let clientIds = user.Clients.map(c => c.clientID);
-                                    resolve(clientIds);
+                                if(user.photoURL){
+                                    resolve(user.photoURL);
                                 } else{
-                                    resolve([]);
+                                    resolve("");
                                 }
                                 
                             } catch(err){
-                                reject(new errors.GenericError('error getting clients of user ' + phonelistId, err))
+                                reject(new errors.GenericError('error getting photo of user ' + phonelistId, err))
                             }
                         }
                     })
         });
     }
-    _updateUserClients(user){
-        let query = {phonelistId: {$in: user.clientIds}};
-
-        return userDa.clearPhonelistClients(user.id)
-            .then(() => clientDa.find(query))
-            .then(clients => {
-                return asyncEachSeries(clients, (client, callback) =>{
-                    userDa.addClient(user.id, client.id)
-                        .then(() => callback())
-                        .catch(err => callback(err));
-                })
-            });
+    _updateUserPhoto(user){
+        return userDa.setImage(user.id, user.image);
     }
-    _updateUsersClients(users){
+    _updateUsersPhotos(users){
         return asyncEachSeries(users, (user, callback) => {
-            this._updateUserClients(user)
+            this._updateUserPhoto(user)
                 .then(() => this.info.updated++)
                 .catch(err => {
                     this.info.errors++;
-                    console.log(taskname + ` - error updating user ${user.username} clients`, err);
+                    console.log(taskname + ` - error updating user ${user.username} photo`, err);
                 })
                 .then(() => callback());
         })
     }
-    _getAndUpdateUsersClients(users){
-        return this._getUsersClients(users)
+    _getAndUpdateUsersPhotos(users){
+        return this._getUsersPhotos(users)
             .then(usrs => {
-                return this._updateUsersClients(usrs);
+                return this._updateUsersPhotos(usrs);
             })
     }
-    _getUsersClients(users){
+    _getUsersPhotos(users){
         return asyncEach(users, (user, callback) => {
-            this._getClientIds(user.phonelistId)
-                .then(clientIds => {
-                    user.clientIds = clientIds;
+            this._getPhoto(user.phonelistId)
+                .then(photoUrl => {
+                    if (photoUrl.length > 0) 
+                        user.image = "https://phonelist.ny.rga.com" + photoUrl;
                     callback();
                 })
         })
         .then(() => users);
     }
+    
     _processAllUsers() {
         const limit = 20;
         let skip = 0;
@@ -99,7 +90,7 @@ class UserClientsImportTask extends BaseTask{
                 .then(data => {
                     totalUsers = data.paged.totalCount;
                     let users = data.data;
-                    return this._getAndUpdateUsersClients(users);
+                    return this._getAndUpdateUsersPhotos(users);
                 })
                 .then(() => callback(null))
                 .catch(err => callback(err));
@@ -121,4 +112,4 @@ class UserClientsImportTask extends BaseTask{
     }
 }
 
-module.exports = UserClientsImportTask;
+module.exports = UserPhotoImportTask;

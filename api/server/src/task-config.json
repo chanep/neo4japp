@@ -89,6 +89,12 @@
 		"cronPattern" : null,
 		"args" : {
 		}
+	},{
+		"name" : "user-photo-import",
+		"path" : "./tasks/pl-import/user-photo-import",
+		"cronPattern" : null,
+		"args" : {
+		}
 	},
 	{
 		"name" : "approvers-import",

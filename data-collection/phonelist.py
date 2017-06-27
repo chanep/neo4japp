@@ -8,7 +8,7 @@ import logging
 import traceback
 
 logger = logging.getLogger('luigi-interface')
-PHONELIST_API_ORIGIN = 'http://phonelist'
+PHONELIST_API_ORIGIN = 'https://phonelist.ny.rga.com'
 PHONELIST_API_URL = PHONELIST_API_ORIGIN + '/gateway/json'
 
 class DownloadRGAPhonelistEmployees(luigi.Task):

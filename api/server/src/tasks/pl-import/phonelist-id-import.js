@@ -16,7 +16,7 @@ let asyncDoUntil = P.promisify(async.doUntil);
 let asyncMap = P.promisify(async.map);
 
 const taskname ='phonelist-id-import';
-const phonelistUrl = 'http://phonelist/gateway/json/employees.aspx'
+const phonelistUrl = 'https://phonelist.ny.rga.com/gateway/json/employees.aspx'
 
 class PhonelistIdImportTask extends BaseTask{
     constructor(){
