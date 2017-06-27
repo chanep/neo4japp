@@ -12,7 +12,7 @@ const request = require('request');
 let asyncEachLimit = P.promisify(async.eachLimit);
 
 const taskname ='clients-import';
-const phonelistUrl = 'http://phonelist/gateway/json/clients.aspx'
+const phonelistUrl = 'https://phonelist.ny.rga.com/gateway/json/clients.aspx'
 
 class ClientsImportTask extends BaseTask{
     constructor(){
