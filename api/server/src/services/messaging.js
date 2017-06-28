@@ -11,7 +11,7 @@ const asyncEachLimit = P.promisify(async.eachLimit);
 const pendingApprovalsTemplate = "pending-approvals";
 const approvalRequestTemplate = "approval-request";
 const skillSuggestionTemplate = "skill-suggestion";
-const emailLink = config.webBaseUrl + '/#/managerhome';
+const emailLink = config.webBaseUrl + '/';
 
 module.exports = {
     sendPendingApprovalsEmail: sendPendingApprovalsEmail,
