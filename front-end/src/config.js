@@ -1,6 +1,6 @@
 module.exports = function() {
 	var ENV = {
-    	baseServicesURL: 'http://127.0.0.1:5005/api/',
+			baseServicesURL: 'http://127.0.0.1:5005/api/',
     	knowledgeLevels: [
     		{level: 1, desc: 'Heavy Supervision'},
     		{level: 2, desc: 'Light Supervision'},

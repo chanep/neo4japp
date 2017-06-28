@@ -14,6 +14,33 @@ const skillChannel = postal.channel('skill');
 class ResourceManagerController extends BaseController{
 
     /**
+    @api {get} /api/resource-manager/:resourceManagerId/my-resources 2 Approver's team
+    @apiDescription List the resources of the given resource manager (sorted by pending approval skills count descending).
+        The resource manager must be in the chain of command of the logged user
+    @apiGroup Resource Managers
+
+    @apiParam (Filter) {boolean} onlyPendingApprove List users with pending approval skills only
+    @apiParam (Filter) {boolean} includeWantSkills Include also skills that user would like to learn
+
+    @apiUse teamResponse
+    */
+    findMyResourceUsers(req, res, next){
+        let loggedUserId = req.session.user.id;
+        let resourceManagerId = Number(req.params.resourceManager || loggedUserId);
+
+        let search = this._buildSearch(req);
+        let onlyPendingApproval = search.onlyPendingApproval;
+        let includeWantSkills = search.includeWantSkills;
+
+        let promise = this._validateUserAccess(loggedUserId, resourceManagerId)
+            .then(() => {
+                return resourceManagerDa.findMyResourceUsers(resourceManagerId, onlyPendingApproval, includeWantSkills);
+            });
+
+        this._respondPromise(req, res, promise);
+    }
+
+    /**
     @api {get} /api/resource-manager/skill-by-user 1 Find users with skills by office or deparment
     @apiDescription List amount of skills by users (sorted by fullname)
     @apiGroup Resource Managers
@@ -182,6 +209,18 @@ class ResourceManagerController extends BaseController{
             .then(() => "Email sent");
 
         this._respondPromise(req, res, promise);
+    }
+
+    _validateUserAccess(loggedUserId, resourceManagerId){
+        if(loggedUserId == resourceManagerId)
+            return P.resolve();
+        const deep = true;
+        return resourceManagerDa.isResourceManagerOf(loggedUserId, resourceManagerId, deep)
+            .then(isResourceManagerOf => {
+                if(isResourceManagerOf)
+                    return true;
+                throw new errors.ForbiddenError("You don't have access to this approver's team")
+            });
     }
 }
 

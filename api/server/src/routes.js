@@ -62,6 +62,7 @@ router.get('/approver/pending', approverController.findApproversWithPendingAppro
 // Resource Managers
 // -----------------
 router.use('/resource-manager', security.checkRole([roles.resourceManager, roles.searcher]).bind(security));
+router.get('/resource-manager/my-resources', resourceManagerController.findMyResourceUsers.bind(resourceManagerController));
 router.get('/resource-manager/search-all', searchAllController.searchAll.bind(searchAllController));
 router.get('/resource-manager/users-by-skill', resourceManagerController.findUsersBySkill.bind(resourceManagerController));
 router.get('/resource-manager/skill-by-user', resourceManagerController.findSkillByUser.bind(resourceManagerController));
