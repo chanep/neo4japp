@@ -55,7 +55,7 @@ class Header extends React.Component {
                       {base.EmployeeHasAnyRole(['admin','resourcemanager','searcher']) ? <IndexLink to="/dashboards" activeClassName="active">Dashboards</IndexLink> : null}
                       {base.EmployeeHasAnyRole(['admin','approver','employee']) ? <a href={'http://square/people/' + this.state.userLogged.username + '/'} target="_blank">My Work</a> : null}
                       {base.EmployeeHasAnyRole(['admin','approver','employee']) ? <a href="http://reporter/newallocations/EmployeeAllocation.aspx" target="_blank">My Allocations</a>: null}
-                      {base.EmployeeHasAnyRole(['admin','approver']) ? <Link to="/managerhome" activeClassName="active">My Team</Link> : null}
+                      {base.EmployeeHasAnyRole(['approver']) ? <Link to="/managerhome" activeClassName="active">My Team</Link> : null}
                       <input type="button" onClick={this.logout.bind(this)} value="Log Out" />
                     </div>
                   </div>
