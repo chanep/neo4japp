@@ -16,7 +16,7 @@ let asyncEach = P.promisify(async.each);
 let asyncEachSeries = P.promisify(async.eachSeries);
 
 const taskname ='resource-managers-import';
-const phonelistUrl = 'http://phonelist/gateway/json/employeeResourceManager.aspx'
+const phonelistUrl = 'https://phonelist.ny.rga.com/gateway/json/employeeResourceManager.aspx'
 
 class ResourceManagersImportTask extends BaseTask{
     constructor(){

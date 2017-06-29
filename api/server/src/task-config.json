@@ -30,7 +30,7 @@
 	{
 		"name" : "send-pending-approval-emails",
 		"path" : "./tasks/send-pending-approval-emails",
-		"cronPattern" : "0 11 15 * *",
+		"cronPattern" : "0 11 * * 1",
 		"args" : {
 		}
 	},
@@ -86,6 +86,12 @@
 	{
 		"name" : "user-clients-import",
 		"path" : "./tasks/pl-import/user-clients-import",
+		"cronPattern" : null,
+		"args" : {
+		}
+	},{
+		"name" : "user-photo-import",
+		"path" : "./tasks/pl-import/user-photo-import",
 		"cronPattern" : null,
 		"args" : {
 		}

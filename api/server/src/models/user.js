@@ -74,6 +74,8 @@ let user = new Model(
         image: Joi.string().allow(null),
         disabled: Joi.boolean().default(false),
         lastUpdate: Joi.date(),
+        lastSkillUpdate: Joi.date(),
+        lastLogin: Joi.date(),
     }
 );
 

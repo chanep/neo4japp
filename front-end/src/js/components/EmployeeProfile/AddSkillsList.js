@@ -85,7 +85,7 @@ export default class AddSkillsList extends React.Component {
                         })
                     :
                         <div className="add-skills-information">
-                            <p>Start by selecting a category to you left.</p>
+                            <p>Start by selecting a category on the left side of this page.</p>
 
                             <h4>GUIDING PRINCIPLES</h4>
                             <ul>

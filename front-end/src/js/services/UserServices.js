@@ -28,6 +28,10 @@ export default class UserServices extends ServicesBase {
 		return super.callGetServices('approver/my-team', {'onlyPendingApprove': false, 'includeWantSkills': true});
 	}
 
+	GetMyResources() {
+		return super.callGetServices('/resource-manager/my-resources', {'onlyPendingApprove': false, 'includeWantSkills': true});
+	}
+
 	GetOffice() {
 		return super.callGetServices('office', null);
 	}

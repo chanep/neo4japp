@@ -35,7 +35,7 @@ class ApproverDa extends UserDa{
             ${matchType} match (sg:${sgL})<-[:${sgRelL}]-(s:${skillL})<-[k:${kRelL}]-(n),
             (sg)-[:${sgRelL}]->(sgp:${sgL})
             where (sg.type = 'tool' or sg.type = 'skill') ${wantCondition}
-            with n, o, d, p, sg, sgp, 
+            with n, o, d, p, sg, sgp,
                 collect({_:s, knowledge: k}) as skills
             with n, o, d, p, sg, sgp, skills,
                 (case when sg is not null then size(filter(s2 in skills where ((s2.knowledge.approved is null or s2.knowledge.approved = false) and (s2.knowledge.want is null or s2.knowledge.want = false)))) else 0 end) as pendingApprovalCount
@@ -43,8 +43,8 @@ class ApproverDa extends UserDa{
             with n, o, d, p, (case when sg is not null then collect({_:sg, parent:sgp, skills: skills, pendingApprovalCount: pendingApprovalCount}) else [] end) as skillGroups,
                 sum(pendingApprovalCount) as totalPendingApproval
             order by totalPendingApproval DESC, n.fullname ASC
-            return {    
-                        id: id(n), username: n.username, type: n.type, email: n.email, 
+            return {
+                        id: id(n), username: n.username, type: n.type, email: n.email,
                         fullname: n.fullname, roles: n.roles, phone: n.phone, image: n.image, disabled: n.disabled, lastUpdate: n.lastUpdate,
                         office: {id: id(o), name: o.name, country: o.country, acronym: o.acronym},
                         department: d,
@@ -80,7 +80,7 @@ class ApproverDa extends UserDa{
             .then(result => result[0]);;
     }
      /**
-     * Returns true if the user is one of possible the approvers of a knowledge 
+     * Returns true if the user is one of possible the approvers of a knowledge
      * @param {number} userId
      * @param {number} knowledgeId
      */
@@ -101,7 +101,7 @@ class ApproverDa extends UserDa{
             .then(result => result[0]);
     }
     /**
-     * An Approver (manager) approves (verify) a employee's skill knowledge 
+     * An Approver (manager) approves (verify) a employee's skill knowledge
      * @param {number} approverId
      * @param {number} knowledgeId
      * @param {boolean} disapproved - True for delete approval
@@ -136,13 +136,13 @@ class ApproverDa extends UserDa{
 
         const cmd = `
             match (a:${userL})<-[:${approversL}]-(e:${userL}),
-            (e)-[k:${knowledgesL}]->(s:${skillL})-[:${groupL}]-(sg:${sgL}) 
-            where not(a.disabled) and not(e.disabled) and (sg.type = 'tool' or sg.type = 'skill') and (k.approved is null or k.approved = false)
+            (e)-[k:${knowledgesL}]->(s:${skillL})-[:${groupL}]-(sg:${sgL})
+            where not(a.disabled) and not(e.disabled) and (a.lastLogin <= e.lastSkillUpdate) and (sg.type = 'tool' or sg.type = 'skill') and (k.approved is null or k.approved = false)
             with a, e
             order by e.fullname
-            with a, collect(distinct {id: id(e), fullname: e.fullname, email: e.email}) as pendingApprovalEmployees    
-            return {    
-                id: id(a), username: a.username, first: a.first, email: a.email, fullname: a.fullname,
+            with a, collect(distinct {id: id(e), fullname: e.fullname, email: e.email, lastSkillUpdate: e.lastSkillUpdate}) as pendingApprovalEmployees
+            return {
+                id: id(a), username: a.username, lastLogin:a.lastLogin, first: a.first, email: a.email, fullname: a.fullname,
                 pendingApprovalEmployees: pendingApprovalEmployees
             }`
         const params = {};

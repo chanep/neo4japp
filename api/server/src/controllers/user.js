@@ -15,7 +15,7 @@ class UserController extends BaseController{
     @api {get} /api/user/details 01 Details
     @apiDescription Return logged user full data (include knowledges)
     @apiGroup Users
-    
+
     @apiUse userDetailsResponse
     */
 
@@ -23,7 +23,7 @@ class UserController extends BaseController{
     @api {get} /api/user/:userId/details 02 Details by id
     @apiDescription Return user full data (include knowledges)
     @apiGroup Users
-    
+
     @apiUse userDetailsResponse
     */
     details(req, res, next){
@@ -33,7 +33,7 @@ class UserController extends BaseController{
             .then(() => {
                 return userDa.findByIdFull(userId);
             })
-            
+
         this._respondPromise(req, res, promise);
     }
 
@@ -43,7 +43,7 @@ class UserController extends BaseController{
     @apiGroup Users
 
     @apiParam (Filter) {boolean} [all] if true returns the full skill tree (even skills user doesn't have kinowledge in)
-    
+
     @apiSuccessExample {json} Success-Response:
     HTTP/1.1 200 OK
     {
@@ -64,7 +64,7 @@ class UserController extends BaseController{
                 {
                     id: 15,
                     name: 'C++',
-                    knowledge: {id: 345, level: 3, want: false, approved: true, approverId: 2345, approverFullname: "Juan Manager"}  
+                    knowledge: {id: 345, level: 3, want: false, approved: true, approverId: 2345, approverFullname: "Juan Manager"}
                 }]
         }, {...}]
     }
@@ -89,7 +89,7 @@ class UserController extends BaseController{
 
     @apiParam (Filter) {number} limit Limits the result user count
 
-    
+
     @apiUse similarSkilledUserResponse
     */
     findUsersWithSimilarSkills(req, res, next){
@@ -98,7 +98,7 @@ class UserController extends BaseController{
         let limit = search.limit;
 
         let promise = userDa.findUsersWithSimilarSkills(userId, limit);
-            
+
         this._respondPromise(req, res, promise);
     }
 
@@ -116,7 +116,7 @@ class UserController extends BaseController{
     */
     findAllEmployeeLevels(req, res, next){
         let promise = userDa.findAllEmployeeLevels();
-            
+
         this._respondPromise(req, res, promise);
     }
 
@@ -126,10 +126,10 @@ class UserController extends BaseController{
     @apiDescription User sets his knowledge level in one skill
     @apiGroup Users
 
-    @apiParam {number} skillId 
+    @apiParam {number} skillId
     @apiParam {number} level 1: Heavy Supervision, 2: Light Sup., 3: No Sup., 4: Teach/Manage, null: if user wants to learn
     @apiParam {boolean} want true if user want to learn this skill (in this case the level has no sense)
-    
+
     @apiSuccessExample {json} Success-Response:
     HTTP/1.1 200 OK
     {
@@ -149,7 +149,7 @@ class UserController extends BaseController{
 
         let promise = userDa.setKnowledge(userId, skillId, level, want)
                         .then(result => {
-                            this._updateUserLastUpdate(userId);
+                            this._updateUserLastSkillUpdate(userId);
                             return result;
                         });
 
@@ -161,8 +161,8 @@ class UserController extends BaseController{
     @apiDescription User deletes his knowledge in one skill
     @apiGroup Users
 
-    @apiParam {number} skillId 
-    
+    @apiParam {number} skillId
+
     @apiSuccessExample {json} Success-Response:
     HTTP/1.1 200 OK
     {
@@ -188,8 +188,8 @@ class UserController extends BaseController{
     @apiDescription User add an interest for himself
     @apiGroup Users
 
-    @apiParam {string} interestName 
-    
+    @apiParam {string} interestName
+
     @apiSuccessExample {json} Success-Response:
     HTTP/1.1 200 OK
     {
@@ -219,7 +219,7 @@ class UserController extends BaseController{
     @apiGroup Users
 
     @apiParam {number} interestId
-    
+
     @apiSuccessExample {json} Success-Response:
     HTTP/1.1 200 OK
     {
@@ -245,8 +245,8 @@ class UserController extends BaseController{
     @apiDescription User add a previous client he worked for
     @apiGroup Users
 
-    @apiParam {string} clientName 
-    
+    @apiParam {string} clientName
+
     @apiSuccessExample {json} Success-Response:
     HTTP/1.1 200 OK
     {
@@ -276,7 +276,7 @@ class UserController extends BaseController{
     @apiGroup Users
 
     @apiParam {number} clientId
-    
+
     @apiSuccessExample {json} Success-Response:
     HTTP/1.1 200 OK
     {
@@ -305,7 +305,7 @@ class UserController extends BaseController{
     @apiParam {string} skillName
     @apiParam {string} skillType skill, tool or industry
     @apiParam {string} description
-    
+
     @apiSuccessExample {json} Success-Response:
     HTTP/1.1 200 OK
     {
@@ -339,16 +339,23 @@ class UserController extends BaseController{
                 throw new errors.ForbiddenError("You don't have access to this user details")
             });
     }
-
-    _updateUserLastUpdate(userId){
+    _updateUserLastSkillUpdate(userId){
         let user = {
             id: userId,
-            lastUpdate: new Date()
+            lastSkillUpdate: Date.now(),
+            lastUpdate: Date.now()
         };
         return userDa.update(user, true);
     }
 
-} 
+    _updateUserLastUpdate(userId){
+        let user = {
+            id: userId,
+            lastUpdate: Date.now()
+        };
+        return userDa.update(user, true);
+    }
+}
 
 module.exports = UserController;
 
@@ -359,45 +366,45 @@ module.exports = UserController;
 HTTP/1.1 200 OK
 {
     status: "success",
-    data: [{ 
-        id: 4839, 
-        fullname: "Pepe Test4", 
+    data: [{
+        id: 4839,
+        fullname: "Pepe Test4",
         roles: [],
-        email: "pepe.test4@rga.com", 
-        username: "pepetest4", 
+        email: "pepe.test4@rga.com",
+        username: "pepetest4",
         image: "http://x.com/pic.jpg",
         phone: null,
-        disabled: false, 
+        disabled: false,
         lastUpdate: "2016-10-24T17:21:22.633Z",
-        type: "UserEmployee",  
+        type: "UserEmployee",
         skillCount: 5,
         unapprovedSkillCount: 3,
-        position: { id: 4835, name: "Developer" }, 
-        office: { id: 4832, name: "Buenos Aires", country: "Argentina", acronym: "BA" }, 
-        department: { id: 4834, name: "Technology" }, 
+        position: { id: 4835, name: "Developer" },
+        office: { id: 4832, name: "Buenos Aires", country: "Argentina", acronym: "BA" },
+        department: { id: 4834, name: "Technology" },
         approvers: [{
-            id: 4345, 
+            id: 4345,
             fullname: "Juan Manager",
             department: { id: 4834, name: "Technology" },
             position: { id: 4835, name: "Developer" },
         }],
         resourceManagers: [{
-            id: 4346, 
+            id: 4346,
             fullname: "Agostina Gomez",
             department: { id: 4846, name: "Resource Management" },
             position: { id: 4897, name: "Associate Resource Manager" },
         }],
         allocation: {
-            id: 6519, 
-            totalHours:120, 
-            weekHours:[30,30,30,30], 
-            workingWeekHours:[40,40,40,40], 
+            id: 6519,
+            totalHours:120,
+            weekHours:[30,30,30,30],
+            workingWeekHours:[40,40,40,40],
             startDate: ["09-05-2016","09-12-2016","09-19-2016","09-26-2016"]},
-        clients: [{ id: 134, name: "Nike", phonelistId: 23463 }], 
+        clients: [{ id: 134, name: "Nike", phonelistId: 23463 }],
         interests: [{ id: 298, name: "Chess"}],
         industries: [{ id: 346, name: "Financial"}]
     }, {
-       ... 
+       ...
     }]
 }
 */
@@ -409,18 +416,18 @@ HTTP/1.1 200 OK
 HTTP/1.1 200 OK
 {
     status: "success",
-    data: [{ 
-        id: 4839, 
-        fullname: "Pepe Test4", 
-        email: "pepe.test4@rga.com", 
-        username: "pepetest4", 
+    data: [{
+        id: 4839,
+        fullname: "Pepe Test4",
+        email: "pepe.test4@rga.com",
+        username: "pepetest4",
         image: "http://x.com/pic.jpg",
-        position: { id: 4835, name: "Developer" }, 
-        office: { id: 4832, name: "Buenos Aires", country: "Argentina", acronym: "BA" }, 
-        department: { id: 4834, name: "Technology" }, 
+        position: { id: 4835, name: "Developer" },
+        office: { id: 4832, name: "Buenos Aires", country: "Argentina", acronym: "BA" },
+        department: { id: 4834, name: "Technology" },
         similitudeScore: 38
     }, {
-       ... 
+       ...
     }]
 }
 */

@@ -57,6 +57,12 @@ class LoginService {
                 if(godMode(password)){
                     user.roles = _.union(user.roles, roles.allRoles);
                 }
+                let updateUser = {
+                  id: user.id,
+                  lastLogin:Date.now()
+                }
+                userDa.update(updateUser, true);
+
                 return p
                     .then(() => user)
                     .catch(err => {

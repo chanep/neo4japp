@@ -39,6 +39,9 @@ export default class ComplianceDashboard extends React.Component {
         case 'all':
           return users;
           break;
+        case 'myresources':
+          return users.filter(user => userData.myResources.includes(user.id));
+          break;
         case 'myteam':
           return users.filter(user => userData.myTeam.includes(user.id));
           break;
@@ -60,16 +63,20 @@ export default class ComplianceDashboard extends React.Component {
     return new Promise((resolve, reject) => {
       let base = new BasePage();
       let teamPromise = base.EmployeeHasRole('approver') ? this.userServices.GetMyTeam() : Promise.resolve([]);
+      let resourcesPromise = base.EmployeeHasRole('resourceManager') ? this.userServices.GetMyResources() : Promise.resolve([]);
 
-      Promise.all([this.skillsServices.GetUsersBySkillStatus(2000, true),this.skillsServices.GetUsersBySkillStatus(2000, false), teamPromise])
+      Promise.all([this.skillsServices.GetUsersBySkillStatus(2000, true),this.skillsServices.GetUsersBySkillStatus(2000, false), teamPromise, resourcesPromise])
       .then(data => {
-
+        console.log('data[2]',data[2]);
+        console.log('data[3]',data[3]);
         let userData = {
           groups: [],
           inactiveUsers: data[0],
           activeUsers: data[1],
           myTeam: data[2] ? data[2].map(user => user.id) : [],
-          hasTeam: data[2] ? true : false
+          hasTeam: data[2] ? true : false,
+          myResources: data[3] ? data[3].map(user => user.id) : [],
+          hasResources: data[3].length > 0 ? true : false,
         }
 
         let groupList = [];
@@ -119,11 +126,19 @@ export default class ComplianceDashboard extends React.Component {
           total: groupData.all.total
         });
 
-        if(userData.hasTeam) {
+        if(userData.hasTeam ) {
           groupList.unshift({
             name: 'My Team',
             shortName: 'myteam',
             total: userData.myTeam.length
+          });
+        }
+
+        if(userData.hasResources ) {
+          groupList.unshift({
+            name: 'My Resources',
+            shortName: 'myresources',
+            total: userData.myResources.length
           });
         }
 
@@ -134,7 +149,7 @@ export default class ComplianceDashboard extends React.Component {
     });
   }
 
-  componentWillReceiveProps(newProps) {
+  componentWillReceiveProps(newProps ){
     this.userData.then(userData => this.setState(this.getUserDataForGroup(userData, newProps.params.employeeGroup)));
   }
 
