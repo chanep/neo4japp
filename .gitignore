@@ -14,6 +14,7 @@ api/server/logs/**/*.log
 api/server/src/typings
 .vagrant
 vagrant-machine/.vagrant
-/dist
+front-end/dist
 front-end/dist/js/client.min.js
 front-end/dist/css/styles.css
+front-end/dist/index.html
