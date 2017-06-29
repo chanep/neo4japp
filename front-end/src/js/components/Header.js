@@ -52,7 +52,7 @@ class Header extends React.Component {
                     <div className="header-menu__item--title">{this.state.userLogged.fullname}</div>
                     <div className="header-menu__item-list">
                       <Link to="/myprofile" activeClassName="active">My Skills</Link>
-                      {base.EmployeeHasAnyRole(['admin','resourcemanager','resourceManager','searcher']) ? <IndexLink to="/dashboards" activeClassName="active">Dashboards</IndexLink> : null}
+                      {base.EmployeeHasAnyRole(['admin','resourceManager','searcher']) ? <IndexLink to="/dashboards" activeClassName="active">Dashboards</IndexLink> : null}
                       {base.EmployeeHasAnyRole(['admin','approver','employee']) ? <a href={'http://square/people/' + this.state.userLogged.username + '/'} target="_blank">My Work</a> : null}
                       {base.EmployeeHasAnyRole(['admin','approver','employee']) ? <a href="http://reporter/newallocations/EmployeeAllocation.aspx" target="_blank">My Allocations</a>: null}
                       {base.EmployeeHasAnyRole(['approver']) ? <Link to="/managerhome" activeClassName="active">My Team</Link> : null}
