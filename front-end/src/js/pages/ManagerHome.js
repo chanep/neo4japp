@@ -12,11 +12,8 @@ import ManagerHomeTable from '../components/ManagerHomeTable';
 export default class ManagerHome extends BasePage {
     render() {
         return (
-            <div>
-                <Header search={super._showSearch()} loggedIn={true} />
-                <div className="body-layout">
-                	<ManagerHomeTable />
-                </div>
+            <div className="body-layout">
+            	<ManagerHomeTable />
             </div>
         );
     }

@@ -70,7 +70,7 @@ class BasePage extends React.Component {
 	EmployeeHasRole(roleName) {
 		let data = cookie.load('currentUser');
 
-		return data.roles.includes(roleName);
+		return data ? data.roles.includes(roleName) : false;
 	}
 
 	EmployeeHasAnyRole(roleNameList) {

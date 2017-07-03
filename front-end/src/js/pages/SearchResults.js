@@ -17,43 +17,16 @@ export default class SearchResults extends BasePage {
 	constructor(props) {
 		super(props);
 
-        let locationsIds = [];
-        if (this.props.location.query.locations !== undefined) {
-            locationsIds = this.props.location.query.locations.split(',');
-        }
-
-        let interestsIds = [];
-        if (this.props.location.query.interests !== undefined) {
-            interestsIds = this.props.location.query.interests.split(',');
-        }
-
-        let skillsIds = [];
-        if (this.props.location.query.skills !== undefined) {
-            skillsIds = this.props.location.query.skills.split(',');
-        }
-
-        let clientsIds = [];
-        if (this.props.location.query.clients !== undefined) {
-            clientsIds = this.props.location.query.clients.split(',');
-        }
-
-        let levelsIds = [];
-        if (this.props.location.query.levels !== undefined) {
-            levelsIds = this.props.location.query.levels.split(',');
-        }
-
         this.searchServices = new SearchServices();
-        this.state = {
+				let searchState = this.searchServices.GetSearchStateFromLocationQuery(this.props.location.query);
+
+
+        this.state = Object.assign({
             "data": [],
             "skillsCount": 0,
-            "searching": true,
-            "skillsIds": skillsIds,
-            "clientsIds": clientsIds,
-            "interestsIds": interestsIds,
-            "locationsIds": locationsIds,
-            "levelsIds": levelsIds,
-            "sortBy": "relevance"
-        };
+            "searching": true
+        }, searchState);
+				//console.log(this.context.router);
 	}
 
     onLocationsChanged(locationId, e) {
@@ -218,81 +191,18 @@ export default class SearchResults extends BasePage {
     }
 
     componentDidMount() {
-        let skillsIds = [];
-        let interestsIds = [];
-        let clientsIds = [];
-        let locationsIds = [];
-        let levelsIds = [];
-        let sortBy = "relevance";
-
-        if (this.props.location.query.skills !== undefined) {
-            skillsIds = this.props.location.query.skills.split(',');
-        }
-
-        if (this.props.location.query.interests !== undefined) {
-            interestsIds = this.props.location.query.interests.split(',');
-        }
-
-        if (this.props.location.query.clients !== undefined) {
-            clientsIds = this.props.location.query.clients.split(',');
-        }
-
-        if (this.props.location.query.locations !== undefined) {
-            locationsIds = this.props.location.query.locations.split(',');
-        }
-
-        if (this.props.location.query.levels !== undefined) {
-            levelsIds = this.props.location.query.levels.split(',');
-        }
-
-        if (this.props.location.query.orderBy !== undefined && this.props.location.query.orderBy !== "undefined" && this.props.location.query.orderBy !== "" && this.props.location.query.orderBy !== null) {
-            sortBy = this.props.location.query.orderBy;
-        }
-
-        this.getData(skillsIds, interestsIds, clientsIds, locationsIds, levelsIds, sortBy);
+				let searchState = this.searchServices.GetSearchStateFromLocationQuery(this.props.location.query);
+        this.getData(searchState.skillsIds, searchState.interestsIds, searchState.clientsIds, searchState.locationsIds, searchState.levelsIds, searchState.sortBy);
     }
 
     componentWillReceiveProps(newProps) {
-        let skillsIds = [];
-        let interestsIds = [];
-        let clientsIds = [];
-        let locationsIds = [];
-        let levelsIds = [];
-        let sortBy = "relevance";
-
-        if (newProps.location.query.skills !== undefined) {
-            skillsIds = newProps.location.query.skills.split(',');
-        }
-
-        if (newProps.location.query.interests !== undefined) {
-            interestsIds = newProps.location.query.interests.split(',');
-        }
-
-        if (newProps.location.query.clients !== undefined) {
-            clientsIds = newProps.location.query.clients.split(',');
-        }
-
-        if (newProps.location.query.locations !== undefined) {
-            locationsIds = newProps.location.query.locations.split(',');
-        }
-
-        if (newProps.location.query.levels !== undefined) {
-            levelsIds = newProps.location.query.levels.split(',');
-        }
-
-        if (newProps.location.query.orderBy !== undefined && newProps.location.query.orderBy !== "undefined" && newProps.location.query.orderBy !== "" && newProps.location.query.orderBy !== null) {
-            sortBy = newProps.location.query.orderBy;
-        }
-
-        this.getData(skillsIds, interestsIds, clientsIds, locationsIds, levelsIds, sortBy);
+				let searchState = this.searchServices.GetSearchStateFromLocationQuery(newProps.location.query);
+        this.getData(searchState.skillsIds, searchState.interestsIds, searchState.clientsIds, searchState.locationsIds, searchState.levelsIds, searchState.sortBy);
     }
 
     render() {
         return (
-            <div>
-                <Header search={super._showSearch()} loggedIn={true} skillsIds={this.state.skillsIds} interestsIds={this.state.interestsIds} clientsIds={this.state.clientsIds} />
-                <SearchResultsTable data={this.state.data} skillsCount={this.state.skillsCount} searching={this.state.searching} locations={this.state.locationsIds} levels={this.state.levelsIds} sortBy={this.state.sortBy} onLocationsChanged={this.onLocationsChanged.bind(this)} allSelected={this.allSelected.bind(this)} sortByChanged={this.sortBy.bind(this)} onLevelChanged={this.onLevelChanged.bind(this)} allLevelsSelected={this.allLevelsSelected.bind(this)} />
-            </div>
+            <SearchResultsTable data={this.state.data} skillsCount={this.state.skillsCount} searching={this.state.searching} locations={this.state.locationsIds} levels={this.state.levelsIds} sortBy={this.state.sortBy} onLocationsChanged={this.onLocationsChanged.bind(this)} allSelected={this.allSelected.bind(this)} sortByChanged={this.sortBy.bind(this)} onLevelChanged={this.onLevelChanged.bind(this)} allLevelsSelected={this.allLevelsSelected.bind(this)} />
         );
     }
 }

@@ -12,10 +12,7 @@ import SearchAllSkillsTable from '../components/SearchAllSkillsTable';
 export default class SearchResults extends BasePage {
     render() {
         return (
-            <div>
-                <Header search={super._showSearch()} loggedIn={true} />
-                <SearchAllSkillsTable />
-            </div>
+            <SearchAllSkillsTable />
         );
     }
 }

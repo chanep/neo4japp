@@ -30,29 +30,30 @@ ReactDOM.render(
 	<Router history={hashHistory}>
 		<Route path="/" component={Layout} name="App">
 			<IndexRoute component={Login}></IndexRoute>
-            <Route path="/login" component={Login}></Route>
-            <Route path="/resourceshotspot" component={ResourceHotspot}></Route>
-            <Route path="/allocations" component={Layout}></Route>
-            <Route path="/searchresults" component={SearchResults}></Route>
-            <Route path="/myprofile" component={EmployeeProfile}></Route>
-            <Route path="/myprofile/myskills" component={MySkills}></Route>
-            <Route path="/employee/:employeeID" component={EmployeeProfile}/>
-            <Route path="/employee/:employeeID/verification" component={EmployeeVerification}/>
-            <Route path="/managerhome" component={ManagerHome}></Route>
-            <Route path="/resultsprofile" component={ResultsProfile}></Route>
-            <Route path="/searchallskills" component={SearchAllSkills}></Route>
-            <Route path="/dashboards" component={Dashboards} name="Dashboards">
-							<IndexRoute component={DashboardList}/>
-							<Route path="/dashboards/compliance/:employeeGroup" component={ComplianceDashboard} name="Compliance" staticName={true}>
-								<IndexRoute component={GroupOverview}/>
-								<Route path="active" component={ActiveGroupDetail} name="Active Users" />
-								<Route path="inactive" component={InactiveGroupDetail} name="Inactive Users" />
-							</Route>
-						</Route>
-						<Redirect from="/dashboards/compliance" to="/dashboards/compliance/myteam" />
+			<Route path="/login" component={Login}></Route>
+			<Route path="/resourceshotspot" component={ResourceHotspot}></Route>
+			<Route path="/allocations" component={Layout}></Route>
+			<Route path="/searchresults" component={SearchResults}></Route>
+			<Route path="/myprofile" component={EmployeeProfile}></Route>
+			<Route path="/myprofile/myskills" component={MySkills}></Route>
+			<Route path="/employee/:employeeID" component={EmployeeProfile}/>
+			<Route path="/employee/:employeeID/verification" component={EmployeeVerification}/>
+			<Route path="/managerhome" component={ManagerHome}></Route>
+			<Route path="/resultsprofile" component={ResultsProfile}></Route>
+			<Route path="/searchallskills" component={SearchAllSkills}></Route>
+			<Route path="/dashboards" component={Dashboards} name="Dashboards">
+				<IndexRoute component={DashboardList}/>
+				<Route path="/dashboards/compliance/:employeeGroup" component={ComplianceDashboard} name="Compliance" staticName={true}>
+					<IndexRoute component={GroupOverview}/>
+					<Route path="active" component={ActiveGroupDetail} name="Active Users" />
+					<Route path="inactive" component={InactiveGroupDetail} name="Inactive Users" />
+				</Route>
+			</Route>
+			<Redirect from="/dashboards/compliance" to="/dashboards/compliance/myteam" />
 
-            <Route path="/faq" component={FAQ}></Route>
-            <Route path="/error" component={PageError}></Route>
+			<Route path="/faq" component={FAQ}></Route>
+			<Route path="/error" component={PageError}></Route>
+			<Route path="*" component={PageError}></Route>
 		</Route>
 	</Router>,
 app);

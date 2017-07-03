@@ -17,6 +17,14 @@ class Header extends React.Component {
     }
   }
 
+  componentWillReceiveProps(newProps) {
+		this.setState({
+      'search': newProps.search,
+      'loggedIn': newProps.loggedIn,
+      'userLogged': cookie.load('currentUser')
+    });
+	}
+
   logout(e) {
 
     let session = new SessionServices();
