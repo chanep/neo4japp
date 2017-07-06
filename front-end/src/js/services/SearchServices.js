@@ -1,4 +1,5 @@
 import ServicesBase from './ServicesBase';
+import { hashHistory } from 'react-router';
 
 export default class SearchServices extends ServicesBase {
 	GetSearchAll(query,limit) {
@@ -46,12 +47,44 @@ export default class SearchServices extends ServicesBase {
 				levelsIds = locationQueryData.levels.split(',');
 		}
 
-		if (locationQueryData.orderBy !== undefined && locationQueryData.orderBy !== "undefined" && locationQueryData.orderBy !== "" && locationQueryData.orderBy !== null) {
-				sortBy = locationQueryData.orderBy;
+		if (locationQueryData.sortBy !== undefined && locationQueryData.sortBy !== "undefined" && locationQueryData.sortBy !== "" && locationQueryData.sortBy !== null) {
+				sortBy = locationQueryData.sortBy;
 		}
 
 		return {
 			skillsIds, interestsIds, clientsIds, locationsIds, levelsIds, sortBy
 		}
+	}
+
+	UpdateSearchState(newSearchState) {
+		var path = '';
+
+		if (newSearchState.skillsIds.length > 0) {
+				path += (path !== ""? '&' : '') + 'skills=' + newSearchState.skillsIds.join();
+		}
+
+		if (newSearchState.interestsIds.length > 0) {
+				path += (path !== ""? '&' : '') + 'interests=' + newSearchState.interestsIds.join();
+		}
+
+		if (newSearchState.clientsIds.length > 0) {
+				path += (path !== ""? '&' : '') + 'clients=' + newSearchState.clientsIds.join();
+		}
+
+		if (newSearchState.levelsIds.length > 0) {
+				path += (path !== ""? '&' : '') + 'levels=' + newSearchState.levelsIds.join();
+		}
+
+		if (newSearchState.locationsIds.length > 0) {
+				path += (path !== ""? '&' : '') + 'locations=' + newSearchState.locationsIds.join();
+		}
+
+		if (newSearchState.sortBy != 'relevance') {
+			path += (path !== ""? '&' : '') + 'sortBy=' + newSearchState.sortBy;
+		}
+
+		path = "/searchresults?" + path;
+
+		hashHistory.push({ pathname: path });
 	}
 }

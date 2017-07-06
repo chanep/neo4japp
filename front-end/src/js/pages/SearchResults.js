@@ -21,16 +21,19 @@ export default class SearchResults extends BasePage {
 				let searchState = this.searchServices.GetSearchStateFromLocationQuery(this.props.location.query);
 
 
-        this.state = Object.assign({
+        this.state = {
             "data": [],
             "skillsCount": 0,
-            "searching": true
-        }, searchState);
+            "searching": true,
+						searchState: searchState
+        };
 				//console.log(this.context.router);
 	}
 
     onLocationsChanged(locationId, e) {
-        var locationsIds = this.state.locationsIds,
+				var newSearchState = Object.assign({}, this.state.searchState);
+
+        var locationsIds = newSearchState.locationsIds,
             index = locationsIds.indexOf(locationId);
 
         if (index === -1) {
@@ -39,63 +42,19 @@ export default class SearchResults extends BasePage {
             locationsIds.splice(index, 1);
         }
 
-        var skillsConcat = this.state.skillsIds.join(),
-            interestsConcat = this.state.interestsIds.join(),
-            clientsConcat = this.state.clientsIds.join(),
-            locationsConcat = this.state.locationsIds.join(),
-            levelsConcat = this.state.levelsIds.join(),
-            path = "";
-
-        if (this.state.skillsIds.length > 0)
-            path += (path !== ""? '&' : '') + 'skills=' + skillsConcat;
-
-        if (this.state.interestsIds.length > 0)
-            path += (path !== ""? '&' : '') + 'interests=' + interestsConcat;
-
-        if (this.state.clientsIds.length > 0)
-            path += (path !== ""? '&' : '') + 'clients=' + clientsConcat;
-
-        if (this.state.levelsIds.length > 0)
-            path += (path !== ""? '&' : '') + 'levels=' + levelsConcat;
-
-        if (locationsIds.length > 0)
-            path += (path !== ""? '&' : '') + 'locations=' + locationsConcat;
-
-        path += (path !== ""? '&' : '') + 'orderBy=' + this.state.sortBy;
-
-        path = '/searchresults?' + path;
-
-        this.context.router.push({ pathname: path });
+        this.searchServices.UpdateSearchState(newSearchState);
     }
 
-    allSelected() {
-        var skillsConcat = this.state.skillsIds.join(),
-            interestsConcat = this.state.interestsIds.join(),
-            clientsConcat = this.state.clientsIds.join(),
-            levelsConcat = this.state.levelsIds.join(),
-            path = '';
-
-        if (this.state.skillsIds.length > 0)
-            path += (path !== ""? '&' : '') + 'skills=' + skillsConcat;
-
-        if (this.state.interestsIds.length > 0)
-            path += (path !== ""? '&' : '') + 'interests=' + interestsConcat;
-
-        if (this.state.clientsIds.length > 0)
-            path += (path !== ""? '&' : '') + 'clients=' + clientsConcat;
-
-        if (this.state.levelsIds.length > 0)
-            path += (path !== ""? '&' : '') + 'levels=' + levelsConcat;
-
-        path += (path !== ""? '&' : '') + 'orderBy=' + this.state.sortBy;
-
-        path = "/searchresults?" + path;
-
-        this.context.router.push({ pathname: path });
+    allLocationsSelected() {
+				var newSearchState = Object.assign({}, this.state.searchState);
+				newSearchState.locationsIds = [];
+				this.searchServices.UpdateSearchState(newSearchState);
     }
 
     onLevelChanged(levelId, e) {
-        var levelsIds = this.state.levelsIds,
+				var newSearchState = Object.assign({}, this.state.searchState);
+
+        var levelsIds = newSearchState.levelsIds,
             index = levelsIds.indexOf(levelId);
 
         if (index === -1) {
@@ -104,105 +63,56 @@ export default class SearchResults extends BasePage {
             levelsIds.splice(index, 1);
         }
 
-        var skillsConcat = this.state.skillsIds.join(),
-            interestsConcat = this.state.interestsIds.join(),
-            clientsConcat = this.state.clientsIds.join(),
-            locationsConcat = this.state.locationsIds.join(),
-            levelsConcat = this.state.levelsIds.join(),
-            path = "";
-
-        if (this.state.skillsIds.length > 0)
-            path += (path !== ""? '&' : '') + 'skills=' + skillsConcat;
-
-        if (this.state.interestsIds.length > 0)
-            path += (path !== ""? '&' : '') + 'interests=' + interestsConcat;
-
-        if (this.state.clientsIds.length > 0)
-            path += (path !== ""? '&' : '') + 'clients=' + clientsConcat;
-
-        if (this.state.levelsIds.length > 0)
-            path += (path !== ""? '&' : '') + 'levels=' + levelsConcat;
-
-        if (this.state.locationsIds.length > 0)
-            path += (path !== ""? '&' : '') + 'locations=' + locationsConcat;
-
-        path += (path !== ""? '&' : '') + 'orderBy=' + this.state.sortBy;
-
-        path = '/searchresults?' + path;
-
-        this.context.router.push({ pathname: path });
+        this.searchServices.UpdateSearchState(newSearchState);
     }
 
     allLevelsSelected() {
-        var skillsConcat = this.state.skillsIds.join(),
-            interestsConcat = this.state.interestsIds.join(),
-            clientsConcat = this.state.clientsIds.join(),
-            locationsConcat = this.state.locationsIds.join(),
-            path = '';
-
-        // Fix SKLLSRCH-159
-        this.setState({ 'levelsIds': [] });
-
-        if (this.state.skillsIds.length > 0)
-            path += (path !== ""? '&' : '') + 'skills=' + skillsConcat;
-
-        if (this.state.interestsIds.length > 0)
-            path += (path !== ""? '&' : '') + 'interests=' + interestsConcat;
-
-        if (this.state.clientsIds.length > 0)
-            path += (path !== ""? '&' : '') + 'clients=' + clientsConcat;
-
-        if (this.state.locationsIds.length > 0)
-            path += (path !== ""? '&' : '') + 'locations=' + locationsConcat;
-
-        path += (path !== ""? '&' : '') + 'orderBy=' + this.state.sortBy;
-
-        path = "/searchresults?" + path;
-
-        this.context.router.push({ pathname: path });
+			var newSearchState = Object.assign({}, this.state.searchState);
+			newSearchState.levelsIds = [];
+			this.searchServices.UpdateSearchState(newSearchState);
     }
 
     sortBy(sortBy) {
-        this.getData(this.state.skillsIds, this.state.interestsIds, this.state.clientsIds, this.state.locationsIds, this.state.levelsIds, sortBy);
+			var newSearchState = Object.assign({}, this.state.searchState);
+			newSearchState.sortBy = newSearchState.sortBy == sortBy ? 'relevance' : sortBy;
+			this.searchServices.UpdateSearchState(newSearchState);
     }
 
-    getData(skillsIds, interestsIds, clientsIds, locationsIds, levelsIds, sortBy) {
+    getData() {
         let self = this;
 
-        this.setState({data: [], skillsIds: [], interestsIds: [], clientsIds: [], locationsIds: [], skillsCount: 0, searching: true, sortBy: sortBy});
-        if (skillsIds.length > 0 || interestsIds.length > 0 || clientsIds.length > 0) {
-            this.searchServices.GetSearchBySkills(skillsIds, interestsIds, clientsIds, ENV().search.resultsLimit, locationsIds, levelsIds, sortBy).then(data => {
+        this.setState({searching: true});
+
+        if (this.state.searchState.skillsIds.length > 0 || this.state.searchState.interestsIds.length > 0 || this.state.searchState.clientsIds.length > 0) {
+            this.searchServices.GetSearchBySkills(this.state.searchState.skillsIds, this.state.searchState.interestsIds, this.state.searchState.clientsIds, ENV().search.resultsLimit, this.state.searchState.locationsIds, this.state.searchState.levelsIds, this.state.searchState.sortBy).then(data => {
                 self.setState({
                     data: data,
-                    skillsIds: skillsIds,
-                    interestsIds: interestsIds,
-                    locationsIds: locationsIds,
-                    clientsIds: clientsIds,
-                    skillsCount: skillsIds.length,
-                    searching: false,
-                    sortBy:sortBy
+                    skillsCount: this.state.searchState.skillsIds.length,
+                    searching: false
                 });
             }).catch(data => {
                 console.log("Error performing search", data);
             });
         } else {
-            this.setState({data: [], skillsIds: skillsIds, interestsIds: interestsIds, clientsIds: clientsIds, locationsIds: locationsIds, skillsCount: 0, searching: false, sortBy: "relevance"});
+            this.setState({data: [], skillsCount: 0, searching: false});
         }
     }
 
     componentDidMount() {
 				let searchState = this.searchServices.GetSearchStateFromLocationQuery(this.props.location.query);
-        this.getData(searchState.skillsIds, searchState.interestsIds, searchState.clientsIds, searchState.locationsIds, searchState.levelsIds, searchState.sortBy);
+				this.setState({searchState: searchState});
+        this.getData();
     }
 
     componentWillReceiveProps(newProps) {
 				let searchState = this.searchServices.GetSearchStateFromLocationQuery(newProps.location.query);
-        this.getData(searchState.skillsIds, searchState.interestsIds, searchState.clientsIds, searchState.locationsIds, searchState.levelsIds, searchState.sortBy);
+				this.setState({searchState: searchState});
+        this.getData();
     }
 
     render() {
         return (
-            <SearchResultsTable data={this.state.data} skillsCount={this.state.skillsCount} searching={this.state.searching} locations={this.state.locationsIds} levels={this.state.levelsIds} sortBy={this.state.sortBy} onLocationsChanged={this.onLocationsChanged.bind(this)} allSelected={this.allSelected.bind(this)} sortByChanged={this.sortBy.bind(this)} onLevelChanged={this.onLevelChanged.bind(this)} allLevelsSelected={this.allLevelsSelected.bind(this)} />
+            <SearchResultsTable data={this.state.data} skillsCount={this.state.skillsCount} searching={this.state.searching} locations={this.state.searchState.locationsIds} levels={this.state.searchState.levelsIds} sortBy={this.state.searchState.sortBy} onLocationsChanged={this.onLocationsChanged.bind(this)} allSelected={this.allLocationsSelected.bind(this)} sortByChanged={this.sortBy.bind(this)} onLevelChanged={this.onLevelChanged.bind(this)} allLevelsSelected={this.allLevelsSelected.bind(this)} />
         );
     }
 }
