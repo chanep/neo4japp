@@ -2,6 +2,7 @@ import React from "react";
 
 import Results from "./Search/Results";
 import Pill from './Search/Pill';
+import BasePage from '../../pages/BasePage';
 import SearchServices from '../../services/SearchServices';
 import SkillsServices from '../../services/SkillsServices';
 import UserServices from '../../services/UserServices';
@@ -25,6 +26,8 @@ class Search extends React.Component {
           skillsServices = new SkillsServices(),
           userServices = new UserServices();
 
+      console.log('a': props.searchState);
+
       if (this.props.skillsIds != undefined &&
         this.props.skillsIds.length > 0) {
 
@@ -37,10 +40,10 @@ class Search extends React.Component {
         skillsServices.GetSkillsByIds(skillsIds, pillsLimit).then(data =>{
           data.forEach(function (v) {
             if (skillsIds.indexOf(v.id.toString()) != -1) {
-              chosenItems.push({ 
-                "id": v.id, 
-                "name": v.name, 
-                "type": v.group.type 
+              chosenItems.push({
+                "id": v.id,
+                "name": v.name,
+                "type": v.group.type
               });
             }
           });
@@ -61,9 +64,9 @@ class Search extends React.Component {
         userServices.GetInterests('', interestsIds, pillsLimit).then(data =>{
           data.forEach(function (v) {
             chosenItems.push({
-              "id": v.id, 
-              "name": v.name, 
-              "type": 'interest' 
+              "id": v.id,
+              "name": v.name,
+              "type": 'interest'
             });
           });
 
@@ -121,10 +124,17 @@ class Search extends React.Component {
     componentDidMount() {
       let that = this;
 
+      // let base = new BasePage();
+      // console.log(base.GetSearchState());
+
       window.addEventListener('keyup', this.closeSearch, false);
       window.addEventListener('add-pill', function (e) {
         that.externalAddPill(e.detail.id, e.detail.name, e.detail.type);
       }, false);
+    }
+
+    componentWillReceiveProps(newProps) {
+      console.log('b', newProps.searchState);
     }
 
     closeSearch(e) {
@@ -139,7 +149,12 @@ class Search extends React.Component {
     }
 
     componentDidUpdate(){
-      ReactDOM.findDOMNode(this.refs.querySearch).focus(); 
+      ReactDOM.findDOMNode(this.refs.querySearch).focus();
+
+
+
+            // let base = new BasePage();
+            // console.log(base.GetSearchState());
     }
 
     updateQuery(e) {
@@ -150,7 +165,7 @@ class Search extends React.Component {
         this.query(e.target.value);
          this.setState({ word: e.target.value });
         this.setState({ selection: 1 });
-      
+
       } else if (e.target.value.length <= 1) {
         this.hideResults(0);
       }
@@ -303,7 +318,7 @@ class Search extends React.Component {
           //console.log("search data error", data);
       });
 
-     
+
 
 
      /*let source = 'http://localhost:15005/api/resource-manager/search-all?term='+ this.state.query + '&limit=5'
@@ -337,11 +352,11 @@ class Search extends React.Component {
 
       request.send(this.state.query);*/
 
-     
+
 
     }
 
-    
+
 
     hideResults() {
       this.setState({ hasResults: false });
@@ -501,7 +516,7 @@ class Search extends React.Component {
 
           this.setState({ results: results });
         }
-        
+
         document.getElementById('querySearch').value = item;
       }
 
@@ -581,7 +596,7 @@ class Search extends React.Component {
                       return (<Pill name={pillName} key={index} removeSkill={this.removeSkill} index={index} />)
                     })}
                     <input type="text" name="query" ref="querySearch" id="querySearch" onChange={this.updateQuery} onKeyDown={this.move} placeholder="enter search..."/>
-                  </div> 
+                  </div>
                   <span className="search-button-wrapper">
                     <span className="ss-icon-close"><span className="path1"></span><span className="path2" onClick={this.clearSearch.bind(this)}></span></span>
                     <span className="ss-icon-search" onClick={this.makeQuery.bind(this)}></span>
@@ -595,7 +610,7 @@ class Search extends React.Component {
                 })}
               </div>
               */}
-                 
+
             </div>
         );
     }

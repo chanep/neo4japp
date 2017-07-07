@@ -19,7 +19,7 @@ export default class Layout extends React.Component {
 
 		let searchState = this.searchServices.GetSearchStateFromLocationQuery(this.props.location.query);
 
-		this.state = Object.assign({isLoggedIn: false, searchIsAvailable: false, searchState});
+		this.state = Object.assign({isLoggedIn: false, searchIsAvailable: false, searchState: searchState});
 
 		this.alertOptions = {
             offset: 14,
@@ -38,7 +38,7 @@ export default class Layout extends React.Component {
 	}
 
 	componentWillReceiveProps(newProps) {
-		this.setState(this.searchServices.GetSearchStateFromLocationQuery(newProps.location.query));
+		this.setState({searchState: this.searchServices.GetSearchStateFromLocationQuery(newProps.location.query)});
 		console.log(this.state);
 
 		this.basePage._isUserLoggedIn().then(isLoggedIn => {
@@ -51,7 +51,7 @@ export default class Layout extends React.Component {
 		return (
 			<div>
 				<AlertContainer ref={(a) => global.msg = a} {...this.alertOptions} />
-				<Header search={this.state.searchIsAvailable} loggedIn={this.state.isLoggedIn} skillsIds={this.state.skillsIds} interestsIds={this.state.interestsIds} clientsIds={this.state.clientsIds} />
+				<Header search={this.state.searchIsAvailable} loggedIn={this.state.isLoggedIn} searchState={this.state.searchState} skillsIds={this.state.skillsIds} interestsIds={this.state.interestsIds} clientsIds={this.state.clientsIds} />
 				{this.props.children}
 				<Footer />
 			</div>

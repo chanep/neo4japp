@@ -12,6 +12,7 @@ class Header extends React.Component {
 
     this.state = {
       'search': props.search,
+      'searchState': props.searchState,
       'loggedIn': props.loggedIn,
       'userLogged': cookie.load('currentUser')
     }
@@ -20,6 +21,7 @@ class Header extends React.Component {
   componentWillReceiveProps(newProps) {
 		this.setState({
       'search': newProps.search,
+      'searchState': newProps.searchState,
       'loggedIn': newProps.loggedIn,
       'userLogged': cookie.load('currentUser')
     });
@@ -72,7 +74,7 @@ class Header extends React.Component {
               }
             </div>
           </div>
-          { (this.state.search ? <Search skillsIds={this.props.skillsIds} interestsIds={this.props.interestsIds} clientsIds={this.props.clientsIds} /> :
+          { (this.state.search ? <Search searchState={this.props.searchState} skillsIds={this.props.skillsIds} interestsIds={this.props.interestsIds} clientsIds={this.props.clientsIds} /> :
             <div className="no-search-bar"></div>
           )}
         </header>
