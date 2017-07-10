@@ -26,7 +26,8 @@ export default class SkillItem extends React.Component {
             detail: {
                 'id': id,
                 'name': name,
-                'type': type
+                'type': type,
+                'redirectPath': '/searchallskills'
             }
         });
 
@@ -78,7 +79,7 @@ export default class SkillItem extends React.Component {
                         </div>
                     </div>
                 </div>
-                { this.state.showLevels ? 
+                { this.state.showLevels ?
                     <div className="skill-level-grid">
                         {this.state.data.skills.map((skill, key) =>
                             <div className="skill-level-grid__levels col -col-12 -col-no-gutter" key={key}>

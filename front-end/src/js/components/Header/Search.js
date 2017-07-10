@@ -16,94 +16,16 @@ class Search extends React.Component {
     constructor (props) {
       super(props);
 
-      var chosenItems = [],
-          skillsIds = [],
-          interestsIds = [],
-          clientsIds = [],
-          that = this,
-          pillsLimit = ENV().search.pillsLimit,
-          key,
-          skillsServices = new SkillsServices(),
-          userServices = new UserServices();
-
-      console.log('a': props.searchState);
-
-      if (this.props.skillsIds != undefined &&
-        this.props.skillsIds.length > 0) {
-
-        for (var k in this.props.skillsIds) {
-          if (this.props.skillsIds.hasOwnProperty(k)) {
-            skillsIds.push(this.props.skillsIds[k]);
-          }
-        }
-
-        skillsServices.GetSkillsByIds(skillsIds, pillsLimit).then(data =>{
-          data.forEach(function (v) {
-            if (skillsIds.indexOf(v.id.toString()) != -1) {
-              chosenItems.push({
-                "id": v.id,
-                "name": v.name,
-                "type": v.group.type
-              });
-            }
-          });
-
-          this.forceUpdate();
-        });
-      }
-
-      if (this.props.interestsIds != undefined &&
-        this.props.interestsIds.length > 0) {
-
-        for (var k in this.props.interestsIds) {
-          if (this.props.interestsIds.hasOwnProperty(k)) {
-            interestsIds.push(this.props.interestsIds[k]);
-          }
-        }
-
-        userServices.GetInterests('', interestsIds, pillsLimit).then(data =>{
-          data.forEach(function (v) {
-            chosenItems.push({
-              "id": v.id,
-              "name": v.name,
-              "type": 'interest'
-            });
-          });
-
-          this.forceUpdate();
-        });
-      }
-
-      if (this.props.clientsIds != undefined &&
-        this.props.clientsIds.length > 0) {
-
-        for (var k in this.props.clientsIds) {
-          if (this.props.clientsIds.hasOwnProperty(k)) {
-            clientsIds.push(this.props.clientsIds[k]);
-          }
-        }
-
-        userServices.GetClientsByIds(clientsIds, pillsLimit).then(data =>{
-          data.forEach(function (v) {
-            if (clientsIds.indexOf(v.id.toString()) != -1) {
-              chosenItems.push({
-                "id": v.id,
-                "name": v.name,
-                "type": 'client'
-              });
-            }
-          });
-
-          this.forceUpdate();
-        });
-      }
+      console.log('props');
+      console.log(props);
 
       this.state = {
         hasResults: false,
         source:'',
         query:'',
         //skillArr: [],
-        chosenItems: chosenItems,
+        chosenItems: [],
+        tempChosenItems: [],
         results:{},
         selection: 0,
         pointerDirty: false
@@ -115,7 +37,7 @@ class Search extends React.Component {
       this.updateQuery = this.updateQuery.bind(this);
       this.move = this.move.bind(this);
       this.makeQuery = this.makeQuery.bind(this);
-      this.addPill = this.addPill.bind(this);
+      this.addPillFromResults = this.addPillFromResults.bind(this);
       this.clearSearchField = this.clearSearchField.bind(this);
       this.closeSearch = this.closeSearch.bind(this);
       this.externalAddPill = this.externalAddPill.bind(this);
@@ -172,7 +94,7 @@ class Search extends React.Component {
 
       window.addEventListener('keyup', this.closeSearch, false);
       window.addEventListener('add-pill', function (e) {
-        that.externalAddPill(e.detail.id, e.detail.name, e.detail.type);
+        that.externalAddPill(e.detail.id, e.detail.name, e.detail.type, e.detail.redirectPath);
       }, false);
 
       this.updateChosenItemsFromSearchState(this.props.searchState);
@@ -225,9 +147,9 @@ class Search extends React.Component {
       document.getElementById('querySearch').value = "";
     }
 
-    addItem(pillToAdd, redirect) {
+    addItem(pillToAdd, redirectPath) {
       console.log('ADD ITEM');
-      console.log(pillToAdd, redirect);
+      console.log(pillToAdd, redirectPath);
 
       let searchService = new SearchServices();
       let newSearchState = Object.assign({}, this.props.searchState);
@@ -240,7 +162,7 @@ class Search extends React.Component {
         newSearchState.skillsIds.push(pillToAdd.id);
       }
 
-      searchService.UpdateSearchState(newSearchState);
+      searchService.UpdateSearchState(newSearchState, redirectPath);
       this.clearSearchField();
       this.setState({ results: [] });
       this.hideResults();
@@ -411,43 +333,20 @@ class Search extends React.Component {
       this.setState({ chosenItems: []});
     }
 
-    externalAddPill(id, name, type) {
+    externalAddPill(id, name, type, redirectPath) {
       console.log('EXTERNAL ADD PILL');
       console.log(id, name, type);
 
-      var chosenItems = this.state.chosenItems,
-          repeated = false;
-
-      chosenItems.forEach(function (v) {
-        if (v.id == id || v.name == name) {
-          repeated = true;
-        }
-      });
-
-      if (!repeated) {
-        // Add pill only if its a valid item and it has not been added already
-        chosenItems.push({ "id": id, "name": name, "type": type });
-        this.clearSearchField();
-      }
-
-      this.forceUpdate();
+      this.addItem({ "id": id, "name": name, "type": type }, (redirectPath ? redirectPath : false));
     }
 
-    addPill() {
-        // Choose item
+    addPillFromResults() {
         let query = document.getElementById('querySearch').value.trim();
-
-        console.log('ADD PILL');
-        console.log(query);
-
         let pillToAdd = this.state.results.find(result => result.name.trim() == query.trim());
-        console.log(pillToAdd);
 
         if(pillToAdd) {
           this.addItem(pillToAdd);
         }
-
-        return true;
     }
 
     move(e) {
@@ -529,14 +428,14 @@ class Search extends React.Component {
       }
 
       if (e.keyCode == ENTER_KEYCODE) {
-        this.addPill()
+        this.addPillFromResults()
       }
 
       if (e.keyCode == TAB_KEYCODE) {
         e.preventDefault();
         document.getElementById('querySearch').focus();
 
-        this.addPill();
+        this.addPillFromResults();
       }
     }
 
@@ -545,61 +444,20 @@ class Search extends React.Component {
     }
 
     makeQuery() {
-      var chosenItems = this.state.chosenItems,
-          skillsIds = [], interestsIds = [], clientsIds = [], queryConcat = '', path, i,
-          hasUsers = false;
-
-      for (i = 0; i < chosenItems.length; i++) {
-          if (chosenItems[i].type == 'interest')
-            interestsIds.push(chosenItems[i].id);
-          else if (chosenItems[i].type == 'client')
-            clientsIds.push(chosenItems[i].id);
-          else
-            skillsIds.push(chosenItems[i].id);
-
-          if (chosenItems[i].type == 'user') {
-            path = '/employee/' + chosenItems[i].id;
-            hasUsers = true;
-            this.context.router.push({ pathname: path });
-          }
-      }
-
-      if (!hasUsers) {
-        if (skillsIds.length > 0)
-          queryConcat += (queryConcat !== ""? '&': '') + 'skills=' + skillsIds.join();
-
-        if (interestsIds.length > 0)
-          queryConcat += (queryConcat !== ""? '&': '') + 'interests=' + interestsIds.join();
-
-        if (clientsIds.length > 0)
-          queryConcat += (queryConcat !== ""? '&': '') + 'clients=' + clientsIds.join();
-
-        path = '/searchresults' + (queryConcat !== ''? '?' + queryConcat: '');
-        this.context.router.push({ pathname: path });
-      }
-
-      this.state.hasResults = false;
-      this.hideResults();
+      let searchService = new SearchServices();
+      searchService.UpdateSearchState(this.props.searchState);
     }
 
     render () {
-      var pills = [],
-          chosenItems = this.state.chosenItems, i = 0;
 
-      chosenItems.forEach(function (v) {
-        pills[i] = v.name;
-        i++;
-      });
-
-      var self = this;
         return (
             <div className="search">
               <div className="search__input__wrapper">
                 <div className="search__input">
                   { <Results hasResults={this.state.hasResults} results={this.state.results} word={this.state.word} addItem={this.addItem} clearSearch={this.clearSearch} /> }
                   <div className="search-field-wrapper">
-                    {pills.map((pillName, index)=>{
-                      return (<Pill name={pillName} key={index} removeSkill={this.removePill} index={index} />)
+                    {this.state.chosenItems.map((pill, index)=>{
+                      return (<Pill name={pill.name} key={index} removeSkill={this.removePill} index={index} />)
                     })}
                     <input type="text" name="query" ref="querySearch" id="querySearch" onChange={this.updateQuery} onKeyDown={this.move} placeholder="enter search..."/>
                   </div>

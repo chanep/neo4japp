@@ -56,35 +56,36 @@ export default class SearchServices extends ServicesBase {
 		}
 	}
 
-	UpdateSearchState(newSearchState) {
-		var path = '';
+	UpdateSearchState(newSearchState, redirectPath) {
+		var historyState = {
+			query: {},
+			pathname: redirectPath ? redirectPath : '/searchresults'
+		};
 
 		if (newSearchState.skillsIds.length > 0) {
-				path += (path !== ""? '&' : '') + 'skills=' + newSearchState.skillsIds.join();
+			historyState.query.skills = newSearchState.skillsIds.join();
 		}
 
 		if (newSearchState.interestsIds.length > 0) {
-				path += (path !== ""? '&' : '') + 'interests=' + newSearchState.interestsIds.join();
+			historyState.query.interests = newSearchState.interestsIds.join();
 		}
 
 		if (newSearchState.clientsIds.length > 0) {
-				path += (path !== ""? '&' : '') + 'clients=' + newSearchState.clientsIds.join();
+			historyState.query.clients = newSearchState.clientsIds.join();
 		}
 
 		if (newSearchState.levelsIds.length > 0) {
-				path += (path !== ""? '&' : '') + 'levels=' + newSearchState.levelsIds.join();
+			historyState.query.levels = newSearchState.levelsIds.join();
 		}
 
 		if (newSearchState.locationsIds.length > 0) {
-				path += (path !== ""? '&' : '') + 'locations=' + newSearchState.locationsIds.join();
+			historyState.query.locations = newSearchState.locationsIds.join();
 		}
 
 		if (newSearchState.sortBy != 'relevance') {
-			path += (path !== ""? '&' : '') + 'sortBy=' + newSearchState.sortBy;
+			historyState.query.sortBy = newSearchState.sortBy;
 		}
 
-		path = "/searchresults?" + path;
-
-		hashHistory.push({ pathname: path });
+		hashHistory.push(historyState);
 	}
 }
