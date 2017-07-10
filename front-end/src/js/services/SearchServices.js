@@ -62,27 +62,27 @@ export default class SearchServices extends ServicesBase {
 			pathname: redirectPath ? redirectPath : '/searchresults'
 		};
 
-		if (newSearchState.skillsIds.length > 0) {
+		if (newSearchState.skillsIds && newSearchState.skillsIds.length > 0) {
 			historyState.query.skills = newSearchState.skillsIds.join();
 		}
 
-		if (newSearchState.interestsIds.length > 0) {
-			historyState.query.interests = newSearchState.interestsIds.join();
+		if (newSearchState.interestsIds && newSearchState.interestsIds.length > 0) {
+			historyState.query.interests = newSearchState.interestsIds && newSearchState.interestsIds.join();
 		}
 
-		if (newSearchState.clientsIds.length > 0) {
+		if (newSearchState.clientsIds && newSearchState.clientsIds.length > 0) {
 			historyState.query.clients = newSearchState.clientsIds.join();
 		}
 
-		if (newSearchState.levelsIds.length > 0) {
+		if (newSearchState.levelsIds && newSearchState.levelsIds.length > 0) {
 			historyState.query.levels = newSearchState.levelsIds.join();
 		}
 
-		if (newSearchState.locationsIds.length > 0) {
+		if (newSearchState.locationsIds && newSearchState.locationsIds.length > 0) {
 			historyState.query.locations = newSearchState.locationsIds.join();
 		}
 
-		if (newSearchState.sortBy != 'relevance') {
+		if (newSearchState.sortBy && newSearchState.sortBy != 'relevance') {
 			historyState.query.sortBy = newSearchState.sortBy;
 		}
 

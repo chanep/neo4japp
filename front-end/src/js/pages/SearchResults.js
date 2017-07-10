@@ -78,16 +78,16 @@ export default class SearchResults extends BasePage {
 			this.searchServices.UpdateSearchState(newSearchState);
     }
 
-    getData() {
+    getData(searchState) {
         let self = this;
 
-        this.setState({searching: true});
+        this.setState({searching: true, searchState: searchState});
 
-        if (this.state.searchState.skillsIds.length > 0 || this.state.searchState.interestsIds.length > 0 || this.state.searchState.clientsIds.length > 0) {
-            this.searchServices.GetSearchBySkills(this.state.searchState.skillsIds, this.state.searchState.interestsIds, this.state.searchState.clientsIds, ENV().search.resultsLimit, this.state.searchState.locationsIds, this.state.searchState.levelsIds, this.state.searchState.sortBy).then(data => {
+        if (searchState.skillsIds.length > 0 || searchState.interestsIds.length > 0 || searchState.clientsIds.length > 0) {
+            this.searchServices.GetSearchBySkills(searchState.skillsIds, searchState.interestsIds, searchState.clientsIds, ENV().search.resultsLimit, searchState.locationsIds, searchState.levelsIds, searchState.sortBy).then(data => {
                 self.setState({
                     data: data,
-                    skillsCount: this.state.searchState.skillsIds.length,
+                    skillsCount: searchState.skillsIds.length,
                     searching: false
                 });
             }).catch(data => {
@@ -100,14 +100,12 @@ export default class SearchResults extends BasePage {
 
     componentDidMount() {
 				let searchState = this.searchServices.GetSearchStateFromLocationQuery(this.props.location.query);
-				this.setState({searchState: searchState});
-        this.getData();
+        this.getData(searchState);
     }
 
     componentWillReceiveProps(newProps) {
 				let searchState = this.searchServices.GetSearchStateFromLocationQuery(newProps.location.query);
-				this.setState({searchState: searchState});
-        this.getData();
+        this.getData(searchState);
     }
 
     render() {

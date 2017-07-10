@@ -50,7 +50,7 @@ class Search extends React.Component {
 
           console.log('UCIFSS');
           console.log(searchState);
-          console.log(pillsLimit);
+          console.log(this.state.chosenItems);
 
       var skillsPills = searchState.skillsIds.length > 0 ? skillsServices.GetSkillsByIds(searchState.skillsIds, pillsLimit) : Promise.resolve([]),
           interestsPills = searchState.interestsIds.length > 0 ? userServices.GetInterests(searchState.interestsIds, pillsLimit) : Promise.resolve([]),
@@ -152,17 +152,25 @@ class Search extends React.Component {
       console.log(pillToAdd, redirectPath);
 
       let searchService = new SearchServices();
-      let newSearchState = Object.assign({}, this.props.searchState);
 
-      if(pillToAdd.type == 'client' && !newSearchState.clientsIds.includes(pillToAdd.id)) {
-        newSearchState.clientsIds.push(pillToAdd.id);
-      } else if (pillToAdd.type == 'interest' && !newSearchState.interestsIds.includes(pillToAdd.id)) {
-        newSearchState.interestsIds.push(pillToAdd.id);
-      } else if(!newSearchState.skillsIds.includes(pillToAdd.id)) {
-        newSearchState.skillsIds.push(pillToAdd.id);
+
+      if(pillToAdd.type == 'user') {
+        searchService.UpdateSearchState({}, '/employee/' + pillToAdd.id);
+      } else {
+
+        let newSearchState = Object.assign({}, this.props.searchState);
+
+        if(pillToAdd.type == 'client' && !newSearchState.clientsIds.includes(pillToAdd.id)) {
+          newSearchState.clientsIds.push(pillToAdd.id);
+        } else if (pillToAdd.type == 'interest' && !newSearchState.interestsIds.includes(pillToAdd.id)) {
+          newSearchState.interestsIds.push(pillToAdd.id);
+        } else if(!newSearchState.skillsIds.includes(pillToAdd.id)) {
+          newSearchState.skillsIds.push(pillToAdd.id);
+        }
+
+        searchService.UpdateSearchState(newSearchState, redirectPath);
       }
 
-      searchService.UpdateSearchState(newSearchState, redirectPath);
       this.clearSearchField();
       this.setState({ results: [] });
       this.hideResults();
@@ -371,14 +379,12 @@ class Search extends React.Component {
         // Delete last pill when pressing BACKSPACE, only if there's no text in the search field
 
         if (document.getElementById('querySearch').value == '') {
-          chosenItems.pop();
-
-          if (chosenItems.length == 0) {
+          if (chosenItems.length == 1) {
             this.setState({ results: [] });
             this.clearSearch();
           }
 
-          this.setState({ chosenItems: chosenItems });
+          this.removePill('', chosenItems.length-1);
         }
       }
 
