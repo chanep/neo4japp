@@ -34,7 +34,7 @@ header {
             float: right;
             font-size: 14px;
             //padding: 10px 20px 10px 200px;
-            padding: 10px 20px 10px 15px;
+            padding: 11px 20px 10px 15px;
             transition: all .333s .666s ease-in-out;
             position: relative;
             display: block;
@@ -224,6 +224,7 @@ header {
             margin: 0 auto;
             height: 100%;
             position: relative;
+            display: flex;
 
             .search__results {
                 position: absolute;
@@ -235,44 +236,44 @@ header {
                 border: 0;
                 background: transparent;
                 font-size: 20px;
-                height: 100%;
-                width: auto;
                 height: 60px;
                 font-weight: 100;
-                margin-left: 5px;
+                flex: 1;
             }
 
-            .search-button-wrapper {
+            .search-button {
                 background: #f3f3f4;
-                min-width: 90px;
-                position: absolute;
-                top: 0;
-                right: 0;
-                height: 100%;
-                padding: 16px 24px;
+                width: 110px;
+                cursor: pointer;
+                position: relative;
 
-                span {
-                    position: relative;
-                    top: 50%;
-                    transform: translateY(-50%);
-                    color: #000;
-                    &.ss-icon-search {
-                        cursor: pointer;
-                        float: right;
-                    }
+                .ss-icon-search {
+                  position: absolute;
+                  top: 50%;
+                  left: 50%;
+                  transform: translate(-50%, -50%);
+                }
+            }
 
-                    &.ss-icon-close {
-                        cursor: pointer;
-                        margin-right: 28px;
-                    }
+            .clear-button {
+                width: 60px;
+                cursor: pointer;
+                position: relative;
+                background: none;
+
+                .ss-icon-close {
+                  position: absolute;
+                  top: 50%;
+                  left: 50%;
+                  transform: translate(-50%, -50%);
                 }
             }
 
             .search-field-wrapper {
-                display: inline-block;
+                flex: 1;
                 min-height: 60px;
-                margin-left: -5px;
-                width: 88%;
+                display: flex;
+                flex-wrap: wrap;
             }
 
         }
@@ -336,29 +337,20 @@ header {
     }
 
     .search-field-pill {
-        display: inline-block;
-        background-color: white;
-        border-radius: 30px;
-        padding: 4px 12px;
-        margin: 12px 5px 0 5px;
+      background-color: white;
+      border-radius: 30px;
+      padding: 5px 32px 0 14px;
+      margin: 14px 14px 0 0;
+      height: 32px;
+      position: relative;
 
-
-
-        &__close {
-          font-size: 9px;
-          position: relative;
-          display: inline-block;
-          background-color: $DARK-GREY;
-          padding: 3px 5px 3px;
-          border-radius: 20px;
-          color: #fff;
-          height: auto;
-          line-height: 9px;
-          font-weight: 100;
-          margin-left: 5px;
-          top: -2px;
-          cursor: pointer;
-        }
+      .ss-icon-close {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        cursor: pointer;
+        background: none;
+      }
     }
 }
 

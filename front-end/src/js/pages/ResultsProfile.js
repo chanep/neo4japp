@@ -23,9 +23,8 @@ export default class ResultsProfile extends BasePage {
     render() {
         return (
             <div>
-                <Header search={true} loggedIn={true} />
                 <EmployeeHeader />
-                <ResultsProfileTable /> 
+                <ResultsProfileTable />
             </div>
         );
     }
