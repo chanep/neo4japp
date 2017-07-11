@@ -7,12 +7,9 @@ import Header from "../components/Header";
 export default class Allocations extends BasePage {
     render () {
         return (
-            <div>
-                <Header search={true} results={true} loggedIn={true} />
-                <section className="main-content">
-                    <h1>Allocations</h1>
-                </section>
-            </div>
+            <section className="main-content">
+                <h1>Allocations</h1>
+            </section>
         );
     }
 }
