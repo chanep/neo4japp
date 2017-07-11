@@ -351,7 +351,9 @@ class Search extends React.Component {
     clearSearch() {
       this.hideResults();
       this.clearSearchField();
-      this.setState({ chosenItems: []});
+
+      let searchService = new SearchServices();
+      searchService.UpdateSearchState({}, this.props.currentPathname);
     }
 
     externalAddPill(id, name, type, redirectPath) {
@@ -473,17 +475,19 @@ class Search extends React.Component {
             <div className="search">
               <div className="search__input__wrapper">
                 <div className="search__input">
-                  { <Results hasResults={this.state.hasResults} results={this.state.results} word={this.state.word} addItem={this.addItem} clearSearch={this.clearSearch} /> }
+                  <Results hasResults={this.state.hasResults} results={this.state.results} word={this.state.word} addItem={this.addItem} clearSearch={this.clearSearch} />
                   <div className="search-field-wrapper">
                     {this.state.chosenItems.map((pill, index)=>{
                       return (<Pill name={pill.name} key={index} removeSkill={this.removePill} index={index} />)
                     })}
                     <input type="text" name="query" ref="querySearch" id="querySearch" onChange={this.updateQuery} onKeyDown={this.move} placeholder="enter search..."/>
                   </div>
-                  <span className="search-button-wrapper">
-                    <span className="ss-icon-close"><span className="path1"></span><span className="path2" onClick={this.clearSearch.bind(this)}></span></span>
-                    <span className="ss-icon-search" onClick={this.makeQuery.bind(this)}></span>
-                  </span>
+                  <button className="clear-button" onClick={this.clearSearch.bind(this)}>
+                    <span className="ss-icon-close"><span className="path1"></span><span className="path2"></span></span>
+                  </button>
+                  <button className="search-button" onClick={this.makeQuery.bind(this)}>
+                    <span className="ss-icon-search" ></span>
+                  </button>
                 </div>
               </div>
               {/*
