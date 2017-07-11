@@ -14,8 +14,7 @@ export default class Layout extends React.Component {
 		this.basePage = new BasePage();
 		this.searchServices = new SearchServices();
 
-		console.log(this.props.location.query);
-		console.log(this.searchServices.GetSearchStateFromLocationQuery(this.props.location.query));
+		console.log(this.props.location);
 
 		let searchState = this.searchServices.GetSearchStateFromLocationQuery(this.props.location.query);
 
@@ -51,7 +50,7 @@ export default class Layout extends React.Component {
 		return (
 			<div>
 				<AlertContainer ref={(a) => global.msg = a} {...this.alertOptions} />
-				<Header search={this.state.searchIsAvailable} loggedIn={this.state.isLoggedIn} searchState={this.state.searchState} skillsIds={this.state.skillsIds} interestsIds={this.state.interestsIds} clientsIds={this.state.clientsIds} />
+				<Header search={this.state.searchIsAvailable} loggedIn={this.state.isLoggedIn} searchState={this.state.searchState} currentPathname={this.props.location.pathname} />
 				{this.props.children}
 				<Footer />
 			</div>

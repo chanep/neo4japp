@@ -74,7 +74,7 @@ class Header extends React.Component {
               }
             </div>
           </div>
-          { (this.state.search ? <Search searchState={this.props.searchState} skillsIds={this.props.skillsIds} interestsIds={this.props.interestsIds} clientsIds={this.props.clientsIds} /> :
+          { (this.state.search ? <Search searchState={this.props.searchState} currentPathname={this.props.currentPathname} /> :
             <div className="no-search-bar"></div>
           )}
         </header>

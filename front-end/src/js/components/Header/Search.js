@@ -46,7 +46,8 @@ class Search extends React.Component {
     updateChosenItemsFromSearchState(searchState) {
       var skillsServices = new SkillsServices(),
           userServices = new UserServices(),
-          pillsLimit = ENV().search.pillsLimit;
+          pillsLimit = ENV().search.pillsLimit,
+          oldChosenItems = this.state.chosenItems;
 
           console.log('UCIFSS');
           console.log(searchState);
@@ -82,7 +83,19 @@ class Search extends React.Component {
           });
         });
 
-        this.setState({chosenItems: chosenItems});
+
+        var sortedChosenItems = [];
+
+        oldChosenItems.forEach(oldChosenItem => {
+          if(chosenItems.find(newChosenItem => JSON.stringify(newChosenItem) == JSON.stringify(oldChosenItem)) !== undefined) {
+            sortedChosenItems.push(oldChosenItem);
+            chosenItems = chosenItems.filter(newChosenItem => JSON.stringify(newChosenItem) != JSON.stringify(oldChosenItem));
+          }
+        });
+
+        sortedChosenItems = sortedChosenItems.concat(chosenItems);
+
+        this.setState({chosenItems: sortedChosenItems});
       })
     }
 
@@ -189,7 +202,7 @@ class Search extends React.Component {
         newSearchState.skillsIds = newSearchState.skillsIds.filter(id => id != pillToRemove.id);
       }
 
-      searchService.UpdateSearchState(newSearchState);
+      searchService.UpdateSearchState(newSearchState, this.props.currentPathname);
     }
 
     query(queryString) {
