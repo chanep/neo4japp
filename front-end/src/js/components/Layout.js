@@ -14,8 +14,6 @@ export default class Layout extends React.Component {
 		this.basePage = new BasePage();
 		this.searchServices = new SearchServices();
 
-		console.log(this.props.location);
-
 		let searchState = this.searchServices.GetSearchStateFromLocationQuery(this.props.location.query);
 
 		this.state = Object.assign({isLoggedIn: false, searchIsAvailable: false, searchState: searchState});
@@ -28,21 +26,16 @@ export default class Layout extends React.Component {
             transition: 'fade'
         };
 
-		console.log(this.state);
-
 		this.basePage._isUserLoggedIn().then(isLoggedIn => {
 			this.setState({isLoggedIn: isLoggedIn, searchIsAvailable: isLoggedIn && this.basePage._showSearch()});
-			console.log(this.state);
 		});
 	}
 
 	componentWillReceiveProps(newProps) {
 		this.setState({searchState: this.searchServices.GetSearchStateFromLocationQuery(newProps.location.query)});
-		console.log(this.state);
 
 		this.basePage._isUserLoggedIn().then(isLoggedIn => {
 			this.setState({isLoggedIn: isLoggedIn, searchIsAvailable: isLoggedIn && this.basePage._showSearch()});
-			console.log(this.state);
 		});
 	}
 

@@ -5,14 +5,6 @@ import { hashHistory, Link, browserHistory, withRouter } from "react-router";
 
 class Results extends React.Component {
 
-    constructor () {
-      super();
-
-      this.state = {
-        isClicked: false
-      };
-    }
-
     clickingState (event, props, skill) {
       //console.log("SKILLPROPS" ,props); // THIS ONE TELLS THE ELEMENT THAT HAS BEEN CLICKED
 
@@ -20,27 +12,18 @@ class Results extends React.Component {
       //console.log("CLICK-STATE E" , event);
       //console.log("CLICK-STATE P", props);
       //console.log("CLICK-STATE S", skill);
-      this.props.addItem(props, true);
-    }
-
-    showEmployee(self, props, person) {
-      var path = '/employee/' + props.id;
-      this.context.router.push({pathname: path});
-
-      this.setState({ results: [] });
-      this.setState({ pointerDirty: false });
-      this.props.clearSearch(props);
+      this.props.addItem(props);
     }
 
     componentDidMount() {
-     
+
     }
 
     highlightLetters (word) {
       //console.log(word);
       let subcategoryResults = document.getElementsByClassName("subcategory-result");
       if (subcategoryResults.length > 0) {
-        for (let i in subcategoryResults) {         
+        for (let i in subcategoryResults) {
           let result = subcategoryResults[i];
           //debugger;
         }
@@ -88,8 +71,7 @@ class Results extends React.Component {
         return (
           <div className="search__results__wrapper">
 
-          {this.props.hasResults &&
-            (skills.length > 0 || tools.length > 0 || users.length > 0 || interests.length > 0 || industries.length > 0 || clients.length > 0) ?
+          {skills.length > 0 || tools.length > 0 || users.length > 0 || interests.length > 0 || industries.length > 0 || clients.length > 0 ?
             (<div className="search__results">
               <span className="close-suggestion">Press <kbd>ESC</kbd> to close</span>
               {skills.length > 0 ?
@@ -98,11 +80,11 @@ class Results extends React.Component {
                 <li className="subcategory-list">
                   <ul>
                     {
-                     
+
                         skills.map(function (skill, props){
                           return <li data-skill={skill.name} className="subcategory-result" data-suggested={skill.suggested} key={skill.id} onClick={self.clickingState.bind(self, props, skill)}>{skill.name}</li>;
                         })
-                      
+
                     }
                   </ul>
                 </li>
@@ -128,9 +110,9 @@ class Results extends React.Component {
                 <li className="subcategory-list">
                   <ul>
                     {
-                     
+
                         users.map(function (person, props){
-                          return <li key={person.id} className="subcategory-result" data-suggested={person.suggested} data-id={person.id} onClick={self.showEmployee.bind(self, props, person)}>{person.fullname}</li>;
+                          return <li key={person.id} className="subcategory-result" data-suggested={person.suggested} data-id={person.id} onClick={self.clickingState.bind(self, props, person)}>{person.fullname}</li>;
                         })
 
                     }
@@ -144,7 +126,7 @@ class Results extends React.Component {
                 <li className="subcategory-list">
                   <ul>
                     {
-                     
+
                         interests.map(function (interest, props){
                           return <li key={interest.id} className="subcategory-result" data-suggested={interest.suggested} data-id={interest.id} onClick={self.clickingState.bind(self, props, interest)}>{interest.name}</li>;
                         })
@@ -160,7 +142,7 @@ class Results extends React.Component {
                 <li className="subcategory-list">
                   <ul>
                     {
-                     
+
                         industries.map(function (industry, props){
                           return <li key={industry.id} className="subcategory-result" data-suggested={industry.suggested} data-id={industry.id} onClick={self.clickingState.bind(self, props, industry)}>{industry.name}</li>;
                         })
@@ -176,7 +158,7 @@ class Results extends React.Component {
                 <li className="subcategory-list">
                   <ul>
                     {
-                     
+
                         clients.map(function (client, props){
                           return <li key={client.id} className="subcategory-result" data-suggested={client.suggested} data-id={client.id} onClick={self.clickingState.bind(self, props, client)}>{client.name}</li>;
                         })

@@ -57,35 +57,37 @@ export default class SearchServices extends ServicesBase {
 	}
 
 	UpdateSearchState(newSearchState, redirectPath) {
-		var historyState = {
-			query: {},
-			pathname: redirectPath ? redirectPath : '/searchresults'
-		};
+		var path = redirectPath ? redirectPath : '/searchresults',
+				searchParts = [];
 
 		if (newSearchState.skillsIds && newSearchState.skillsIds.length > 0) {
-			historyState.query.skills = newSearchState.skillsIds.join();
+			searchParts.push('skills=' + newSearchState.skillsIds.join(','));
 		}
 
 		if (newSearchState.interestsIds && newSearchState.interestsIds.length > 0) {
-			historyState.query.interests = newSearchState.interestsIds && newSearchState.interestsIds.join();
+			searchParts.push('interests=' + newSearchState.interestsIds.join(','));
 		}
 
 		if (newSearchState.clientsIds && newSearchState.clientsIds.length > 0) {
-			historyState.query.clients = newSearchState.clientsIds.join();
+			searchParts.push('clients=' + newSearchState.clientsIds.join(','));
 		}
 
 		if (newSearchState.levelsIds && newSearchState.levelsIds.length > 0) {
-			historyState.query.levels = newSearchState.levelsIds.join();
+			searchParts.push('levels=' + newSearchState.levelsIds.join(','));
 		}
 
 		if (newSearchState.locationsIds && newSearchState.locationsIds.length > 0) {
-			historyState.query.locations = newSearchState.locationsIds.join();
+			searchParts.push('locations=' + newSearchState.locationsIds.join(','));
 		}
 
 		if (newSearchState.sortBy && newSearchState.sortBy != 'relevance') {
-			historyState.query.sortBy = newSearchState.sortBy;
+			searchParts.push('sortBy=' + newSearchState.sortBy);
 		}
 
-		hashHistory.push(historyState);
+		if(searchParts.length > 0) {
+			path = path + '?' + searchParts.join('&');
+		}
+
+		hashHistory.push(path);
 	}
 }

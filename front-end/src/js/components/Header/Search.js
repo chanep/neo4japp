@@ -16,19 +16,12 @@ class Search extends React.Component {
     constructor (props) {
       super(props);
 
-      console.log('props');
-      console.log(props);
-
       this.state = {
-        hasResults: false,
-        source:'',
         query:'',
         //skillArr: [],
         chosenItems: [],
-        tempChosenItems: [],
         results:{},
-        selection: 0,
-        pointerDirty: false
+        selection: -1
       };
 
       this.addItem = this.addItem.bind(this);
@@ -48,10 +41,6 @@ class Search extends React.Component {
           userServices = new UserServices(),
           pillsLimit = ENV().search.pillsLimit,
           oldChosenItems = this.state.chosenItems;
-
-          console.log('UCIFSS');
-          console.log(searchState);
-          console.log(this.state.chosenItems);
 
       var skillsPills = searchState.skillsIds.length > 0 ? skillsServices.GetSkillsByIds(searchState.skillsIds, pillsLimit) : Promise.resolve([]),
           interestsPills = searchState.interestsIds.length > 0 ? userServices.GetInterests(searchState.interestsIds, pillsLimit) : Promise.resolve([]),
@@ -102,9 +91,6 @@ class Search extends React.Component {
     componentDidMount() {
       let that = this;
 
-      // let base = new BasePage();
-      // console.log(base.GetSearchState());
-
       window.addEventListener('keyup', this.closeSearch, false);
       window.addEventListener('add-pill', function (e) {
         that.externalAddPill(e.detail.id, e.detail.name, e.detail.type, e.detail.redirectPath);
@@ -114,7 +100,6 @@ class Search extends React.Component {
     }
 
     componentWillReceiveProps(newProps) {
-      console.log('b', newProps.searchState);
       this.updateChosenItemsFromSearchState(newProps.searchState);
     }
 
@@ -122,49 +107,37 @@ class Search extends React.Component {
       const ESC_KEYCODE = 27;
 
       if (e.keyCode == ESC_KEYCODE) {
-        this.setState({ results: [] });
-        this.hideResults();
-
+        this.setState({ results: [], selection: -1 });
         this.clearSearchField();
       }
     }
 
     componentDidUpdate(){
       ReactDOM.findDOMNode(this.refs.querySearch).focus();
-
-
-
-            // let base = new BasePage();
-            // console.log(base.GetSearchState());
     }
 
     updateQuery(e) {
       e.preventDefault();
 
+      this.setState({query: e.target.value});
+
       if (e.target.value.length > 1) {
-        this.setState({query: e.target.value});
         this.query(e.target.value);
-         this.setState({ word: e.target.value });
-        this.setState({ selection: 1 });
-
-      } else if (e.target.value.length <= 1) {
-        this.hideResults(0);
-      }
-
-      if (!this.state.hasResults) {
-        this.showResults();
+        this.setState({ selection: -1 });
+      } else {
+        this.setState({ results: [], selection: -1 });
       }
     }
 
     clearSearchField() {
       document.getElementById('querySearch').value = "";
+      this.setState({query: ''});
     }
 
     addItem(pillToAdd, redirectPath) {
-      console.log('ADD ITEM');
-      console.log(pillToAdd, redirectPath);
-
       let searchService = new SearchServices();
+
+      console.log(pillToAdd, redirectPath);
 
 
       if(pillToAdd.type == 'user') {
@@ -185,8 +158,7 @@ class Search extends React.Component {
       }
 
       this.clearSearchField();
-      this.setState({ results: [] });
-      this.hideResults();
+      this.setState({ results: [], selection: -1 });
     }
 
     removePill(skill, index) {
@@ -342,14 +314,8 @@ class Search extends React.Component {
 
     }
 
-
-
-    hideResults() {
-      this.setState({ hasResults: false });
-    }
-
     clearSearch() {
-      this.hideResults();
+      this.setState({ results: [], selection: -1 });
       this.clearSearchField();
 
       let searchService = new SearchServices();
@@ -357,15 +323,14 @@ class Search extends React.Component {
     }
 
     externalAddPill(id, name, type, redirectPath) {
-      console.log('EXTERNAL ADD PILL');
-      console.log(id, name, type);
-
       this.addItem({ "id": id, "name": name, "type": type }, (redirectPath ? redirectPath : false));
     }
 
     addPillFromResults() {
         let query = document.getElementById('querySearch').value.trim();
         let pillToAdd = this.state.results.find(result => result.name.trim() == query.trim());
+
+        console.log(query, this.state.results, pillToAdd);
 
         if(pillToAdd) {
           this.addItem(pillToAdd);
@@ -383,19 +348,17 @@ class Search extends React.Component {
       let chosenItems = this.state.chosenItems;
       let results = this.state.results;
 
-      var selection = this.state.selection,
-          pointerDirty = this.state.pointerDirty;
+      var selection = this.state.selection;
 
       if (e.keyCode == BACKSPACE_KEYCODE) {
 
-        this.setState({ selection: 0 });
-        this.setState({ pointerDirty: false });
+        this.setState({ selection: -1 });
 
         // Delete last pill when pressing BACKSPACE, only if there's no text in the search field
 
         if (document.getElementById('querySearch').value == '') {
           if (chosenItems.length == 1) {
-            this.setState({ results: [] });
+            this.setState({ results: [], selection: -1 });
             this.clearSearch();
           }
 
@@ -405,6 +368,8 @@ class Search extends React.Component {
 
       if (e.keyCode == DOWN_KEYCODE || e.keyCode == UP_KEYCODE) {
         e.preventDefault();
+
+        console.log(selection);
 
         // Iterate through the list
 
@@ -422,14 +387,10 @@ class Search extends React.Component {
           }
         }
 
-        if (this.state.pointerDirty == false) {
-          selection = 0;
-          pointerDirty = true;
-        }
+        console.log(selection);
 
         this.setState({
-          selection: selection,
-          pointerDirty: pointerDirty
+          selection: selection
         });
 
         var item = "";
@@ -460,10 +421,6 @@ class Search extends React.Component {
       }
     }
 
-    showResults () {
-      this.setState({ hasResults: true });
-    }
-
     makeQuery() {
       let searchService = new SearchServices();
       searchService.UpdateSearchState(this.props.searchState);
@@ -475,16 +432,19 @@ class Search extends React.Component {
             <div className="search">
               <div className="search__input__wrapper">
                 <div className="search__input">
-                  <Results hasResults={this.state.hasResults} results={this.state.results} word={this.state.word} addItem={this.addItem} clearSearch={this.clearSearch} />
+                  <Results results={this.state.results} word={this.state.word} addItem={this.addItem} clearSearch={this.clearSearch} />
                   <div className="search-field-wrapper">
                     {this.state.chosenItems.map((pill, index)=>{
                       return (<Pill name={pill.name} key={index} removeSkill={this.removePill} index={index} />)
                     })}
                     <input type="text" name="query" ref="querySearch" id="querySearch" onChange={this.updateQuery} onKeyDown={this.move} placeholder="enter search..."/>
                   </div>
-                  <button className="clear-button" onClick={this.clearSearch.bind(this)}>
-                    <span className="ss-icon-close"><span className="path1"></span><span className="path2"></span></span>
-                  </button>
+                  {(this.state.query.length > 0 || this.state.chosenItems.length > 0) &&
+                    <button className="clear-button" onClick={this.clearSearch.bind(this)}>
+                      <span className="ss-icon-close"><span className="path1"></span><span className="path2"></span></span>
+                    </button>
+                  }
+
                   <button className="search-button" onClick={this.makeQuery.bind(this)}>
                     <span className="ss-icon-search" ></span>
                   </button>
