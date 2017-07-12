@@ -327,6 +327,52 @@ class UserController extends BaseController{
         this._respondPromise(req, res, promise);
     }
 
+    /**
+    @api {get} /api/external-service/user-summary 1 Find user summaries
+    @apiDescription List users with skills, industries and allocation
+    @apiGroup External Services
+
+    @apiParam (Filter) {number} [skip] Skips n Users (for paged result)
+    @apiParam (Filter) {number} [limit] Limits then number or results. Default is 100  (for paged result)
+    @apiParam (HTTP Headers) {string} X-Access-Key Access key for this resource
+
+    @apiSuccessExample {json} Success-Response:
+    HTTP/1.1 200 OK
+    {
+        status: "success",
+        paged: {skip:0 , limit:100, totalCount: 200}
+        data: [{
+            fullname: "Pepe Test4",
+            email: "pepe.test4@rga.com",
+            username: "pepetest4",
+            allocation: {
+                id: 6519,
+                totalHours:120,
+                weekHours:[30,30,30,30],
+                workingWeekHours:[40,40,40,40],
+                startDate: ["09-05-2016","09-12-2016","09-19-2016","09-26-2016"]},
+            skills: [
+                { name: "C++", type: "tool", subGroup: "Languages", group: "Technology", level: 3, want: false, approved: true },
+                {...}
+            ],
+            industries: ["Financial"]
+        }, {
+        ...
+        }]
+    }
+    */
+
+    findUserSummary(req, res, next){
+        let search = this._buildSearch(req);
+        let skip = search.skip || 0;
+        let limit = Math.min(100, search.limit || 100);
+        
+
+        let promise = userDa.findUserSummary(skip, limit);
+
+        this._respondPromise(req, res, promise);
+    }
+
 
 
     _validateUserAccess(loggedUser, userId){

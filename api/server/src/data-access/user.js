@@ -336,6 +336,46 @@ class UserDa extends BaseDa{
         return this._run(cmd)
             .then(r => this._cypher.parseIntResult(r));
     }
+
+     findUserSummary(skip, limit){
+        let userL = this.labelsStr;
+        let skillL = skillModel.labelsStr;
+        let group = skillModel.getRelationByKey("group").label;
+        let parent = skillGroupModel.getRelationByKey("parent").label;
+        let knows = this.model.getRelationByKey("knowledges").label;
+        let allocation = this.model.getRelationByKey("allocation").label;
+
+        let params = {skip: skip, limit: limit};
+
+        let match = `match (n:${userL}) where not(n.disabled)
+                     optional match (n)-[k:${knows}]->(s:${skillL})-[:${group}]->(sg)-[:${parent}]->(g) where sg.type in ["tool", "skill"]
+                     with n, 
+                        (case when s is not null then 
+                            collect ({name: s.name, type: sg.type, subGroup: sg.name, group: g.name, level: k.level, want: k.want, approved: k.approved}) 
+                        else [] end) as skills
+                     optional match (n)-[k2:${knows}]->(i:${skillL})-[:${group}]->(sgi) where sgi.type = "industry"
+                     with n, skills, collect (i.name) as industries
+                     where (size(skills) > 0 or size(industries) > 0)
+                     with n, skills, industries
+                     optional match (n)-[:${allocation}]->(al)
+                     with n, skills, industries, al
+                     `;
+
+        let countCmd = `${match} return count(n) as count`;
+
+        let cmd = `${match}
+                    skip {skip} limit {limit}
+                    return {
+                        username: n.username,
+                        fullname: n.fullname,
+                        email: n.email,
+                        allocation: al,
+                        skills: skills,
+                        industries: industries
+                    }`;
+        return this.queryPaged(cmd, countCmd, params);
+    }
+
 }
 
 module.exports = UserDa;
