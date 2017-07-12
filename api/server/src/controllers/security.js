@@ -30,6 +30,17 @@ class SecurityController extends BaseController{
         }
     }
 
+    checkAccessKey(accessKey) {
+        return (req, res, next) => {
+            if(!req.get('X-Access-Key') || req.get('X-Access-Key') != accessKey){
+                let err = new errors.ForbiddenError('Invalid access key');
+                this._handleError(res, err);
+            } else{
+                next();
+            }
+        }
+    }
+
 } 
 
 module.exports = SecurityController;

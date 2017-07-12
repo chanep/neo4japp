@@ -36,7 +36,8 @@ let config = {
         adminAddress: process.env.MAIL_ADMIN
     },
     isProduction : (process.env.NODE_ENV == 'production'),
-    nodeEnv: process.env.NODE_ENV
+    nodeEnv: process.env.NODE_ENV,
+    serviceAccessKey: process.env.SERVICE_ACCESS_KEY
 };
 
 if(config.mail.overrideAddresses && config.mail.overrideAddresses.trim() != ''){
