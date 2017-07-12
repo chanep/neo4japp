@@ -15,6 +15,12 @@ const officeController = new (require('./controllers/office'));
 const taskController = new (require('./controllers/task'));
 const config = require('./shared/config');
 
+//------------------
+// External Services
+//------------------
+router.get('/external-service/user/summary', security.checkAccessKey(config.serviceAccessKey), userController.findUserSummary.bind(userController));
+
+
 // ---------
 // All Users
 // ---------
@@ -77,10 +83,5 @@ router.put('/resource-manager/approval-request/:employeeId', resourceManagerCont
 router.use('/admin', security.checkRole(roles.admin).bind(security));
 router.get('/admin/task', taskController.status.bind(taskController));
 router.post('/admin/task/:taskName', taskController.run.bind(taskController));
-
-//------------------
-// External Services
-//------------------
-router.get('/external-service/user/summary', security.checkAccessKey(config.serviceAccessKey), userController.findUserSummary.bind(userController));
 
 module.exports = router;
