@@ -13,6 +13,13 @@ const interestController = new (require('./controllers/interest'));
 const clientController = new (require('./controllers/client'));
 const officeController = new (require('./controllers/office'));
 const taskController = new (require('./controllers/task'));
+const config = require('./shared/config');
+
+//------------------
+// External Services
+//------------------
+router.get('/external-service/user/summary', security.checkAccessKey(config.serviceAccessKey), userController.findUserSummary.bind(userController));
+
 
 // ---------
 // All Users

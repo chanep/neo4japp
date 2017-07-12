@@ -1,6 +1,7 @@
 // Dependencies
 import React from 'react';
 import cookie from 'react-cookie';
+import SearchServices from '../services/SearchServices';
 import SessionServices from '../services/SessionServices';
 import { hashHistory, Link, browserHistory, withRouter } from 'react-router';
 
@@ -8,6 +9,7 @@ import { hashHistory, Link, browserHistory, withRouter } from 'react-router';
 class BasePage extends React.Component {
 	constructor(props) {
 		super(props);
+		//console.log('bp:', props);
 	}
 
 	componentDidMount() {
@@ -70,7 +72,7 @@ class BasePage extends React.Component {
 	EmployeeHasRole(roleName) {
 		let data = cookie.load('currentUser');
 
-		return data.roles.includes(roleName);
+		return data ? data.roles.includes(roleName) : false;
 	}
 
 	EmployeeHasAnyRole(roleNameList) {
@@ -97,6 +99,11 @@ class BasePage extends React.Component {
 	SearcherLoggedIn() {
 		return this.EmployeeHasRole('searcher');
 	}
+
+	// GetSearchState() {
+	// 	let searchServices = new SearchServices();
+	// 	return searchServices.GetSearchStateFromLocationQuery(this.props.location.query);
+	// }
 }
 
 BasePage.contextTypes = {

@@ -339,6 +339,50 @@ vows.describe('User api test')
     }
 })
 
+.addBatch({
+    '12. Get user summary': {
+        topic: function () {
+            req({ 
+                url:'external-service/user/summary?skip=0&limit=100',
+                headers: {'X-Access-Key': 'accessKey'} },
+                this.callback);
+        },
+        'response is 200': testHelper.assertSuccess(),
+        'should return user summary list ': function (err, result, body) {
+            if (err) {
+                console.log("error", err);
+                throw err;
+            }
+            let users = body.data;
+
+            console.log("users", JSON.stringify(users));
+
+            assert.isArray(users);
+            let u = users[0];
+            assert(u.email);
+            assert(u.username);
+            assert.isArray(u.skills);
+            let s = u.skills[0];
+            assert(s.name);
+            assert(s.subGroup);
+            assert(s.group);
+            assert.isArray(u.industries);
+        }
+    }
+})
+
+.addBatch({
+    '13. Get user summary wrong access key': {
+        topic: function () {
+            req({ 
+                url:'external-service/user/summary?skip=0&limit=100',
+                headers: {'X-Access-Key': 'wrongAccessKey'} },
+                this.callback);
+        },
+        'response is 403': testHelper.assertHTTPCode(403)
+    }
+})
+
 
 .export(module);
 
