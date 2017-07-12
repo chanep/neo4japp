@@ -49,8 +49,6 @@ class Login extends React.Component {
 
 	render () {
         return (
-          <div>
-	          <Header search={false} loggedIn={false} />
 	    	  <div className="main-content">
 			      <div className="login">
 			        <h1>Welcome!<br />Please log in to continue.</h1>
@@ -64,7 +62,6 @@ class Login extends React.Component {
               : false }
 			      </div>
 		      </div>
-	      </div>
         );
     }
 }

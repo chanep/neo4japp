@@ -42,19 +42,16 @@ export default class ResourceHotspot extends BasePage {
 
     render () {
         return (
-            <div>
-                <Header search={true} loggedIn={true} />
-                <section className="main-content">
-                  <div className="two-col-wrapper resource-manager-map">
-                    <div className="left-col">
-                     <TopSearchedSkills getSkilledUsersByOffice={this.getSkilledUsersByOffice} />
-                    </div>
-                    <div className="right-col">
-                     <Map skilledUsersByOffice={this.state.skilledUsersByOffice} skillId={this.state.skillId} />
-                    </div>
-                  </div>
-                </section>
-            </div>
+            <section className="main-content">
+              <div className="two-col-wrapper resource-manager-map">
+                <div className="left-col">
+                 <TopSearchedSkills getSkilledUsersByOffice={this.getSkilledUsersByOffice} />
+                </div>
+                <div className="right-col">
+                 <Map skilledUsersByOffice={this.state.skilledUsersByOffice} skillId={this.state.skillId} />
+                </div>
+              </div>
+            </section>
         );
     }
 }

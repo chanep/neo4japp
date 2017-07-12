@@ -15,17 +15,14 @@ import Header from '../components/Header';
 export default class Dashboards extends BasePage {
     render() {
         return (
-            <div>
-                <Header search={super._showSearch()} loggedIn={true} />
-                <div className="body-layout dashboards-container">
-                  <Breadcrumbs
-                     routes={this.props.routes}
-                     params={this.props.params}
-                     excludes={['App']}
-                     separator=' / '
-                  />
-                  {this.props.children}
-                </div>
+            <div className="body-layout dashboards-container">
+              <Breadcrumbs
+                 routes={this.props.routes}
+                 params={this.props.params}
+                 excludes={['App']}
+                 separator=' / '
+              />
+              {this.props.children}
             </div>
         );
     }

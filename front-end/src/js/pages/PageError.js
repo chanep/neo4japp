@@ -38,15 +38,12 @@ export default class PageError extends React.Component {
 
     render() {
         return (
-            <div>
-                <Header search={false} loggedIn={false} />
-                <div className="errorPage">
-                    <h2>This is somewhat embarrassing, isn’t it?</h2>
+            <div className="errorPage">
+                <h2>This is somewhat embarrassing, isn’t it?</h2>
 
-                    <div className="errorNumber">
-                    	<div className="number">{this.state.errNumber}</div>
-                    	<div className="string">{this.state.errString}</div>
-                    </div>
+                <div className="errorNumber">
+                	<div className="number">{this.state.errNumber}</div>
+                	<div className="string">{this.state.errString}</div>
                 </div>
             </div>
         )

@@ -2,6 +2,7 @@ import React from "react";
 
 import Results from "./Search/Results";
 import Pill from './Search/Pill';
+import BasePage from '../../pages/BasePage';
 import SearchServices from '../../services/SearchServices';
 import SkillsServices from '../../services/SkillsServices';
 import UserServices from '../../services/UserServices';
@@ -15,107 +16,76 @@ class Search extends React.Component {
     constructor (props) {
       super(props);
 
-      var chosenItems = [],
-          skillsIds = [],
-          interestsIds = [],
-          clientsIds = [],
-          that = this,
-          pillsLimit = ENV().search.pillsLimit,
-          key,
-          skillsServices = new SkillsServices(),
-          userServices = new UserServices();
-
-      if (this.props.skillsIds != undefined &&
-        this.props.skillsIds.length > 0) {
-
-        for (var k in this.props.skillsIds) {
-          if (this.props.skillsIds.hasOwnProperty(k)) {
-            skillsIds.push(this.props.skillsIds[k]);
-          }
-        }
-
-        skillsServices.GetSkillsByIds(skillsIds, pillsLimit).then(data =>{
-          data.forEach(function (v) {
-            if (skillsIds.indexOf(v.id.toString()) != -1) {
-              chosenItems.push({ 
-                "id": v.id, 
-                "name": v.name, 
-                "type": v.group.type 
-              });
-            }
-          });
-
-          this.forceUpdate();
-        });
-      }
-
-      if (this.props.interestsIds != undefined &&
-        this.props.interestsIds.length > 0) {
-
-        for (var k in this.props.interestsIds) {
-          if (this.props.interestsIds.hasOwnProperty(k)) {
-            interestsIds.push(this.props.interestsIds[k]);
-          }
-        }
-
-        userServices.GetInterests('', interestsIds, pillsLimit).then(data =>{
-          data.forEach(function (v) {
-            chosenItems.push({
-              "id": v.id, 
-              "name": v.name, 
-              "type": 'interest' 
-            });
-          });
-
-          this.forceUpdate();
-        });
-      }
-
-      if (this.props.clientsIds != undefined &&
-        this.props.clientsIds.length > 0) {
-
-        for (var k in this.props.clientsIds) {
-          if (this.props.clientsIds.hasOwnProperty(k)) {
-            clientsIds.push(this.props.clientsIds[k]);
-          }
-        }
-
-        userServices.GetClientsByIds(clientsIds, pillsLimit).then(data =>{
-          data.forEach(function (v) {
-            if (clientsIds.indexOf(v.id.toString()) != -1) {
-              chosenItems.push({
-                "id": v.id,
-                "name": v.name,
-                "type": 'client'
-              });
-            }
-          });
-
-          this.forceUpdate();
-        });
-      }
-
       this.state = {
-        hasResults: false,
-        source:'',
         query:'',
         //skillArr: [],
-        chosenItems: chosenItems,
+        chosenItems: [],
         results:{},
-        selection: 0,
-        pointerDirty: false
+        selection: -1
       };
 
       this.addItem = this.addItem.bind(this);
       this.clearSearch = this.clearSearch.bind(this);
-      this.removeSkill = this.removeSkill.bind(this);
+      this.removePill = this.removePill.bind(this);
       this.updateQuery = this.updateQuery.bind(this);
       this.move = this.move.bind(this);
       this.makeQuery = this.makeQuery.bind(this);
-      this.addPill = this.addPill.bind(this);
+      this.addPillFromResults = this.addPillFromResults.bind(this);
       this.clearSearchField = this.clearSearchField.bind(this);
       this.closeSearch = this.closeSearch.bind(this);
       this.externalAddPill = this.externalAddPill.bind(this);
+    }
+
+    updateChosenItemsFromSearchState(searchState) {
+      var skillsServices = new SkillsServices(),
+          userServices = new UserServices(),
+          pillsLimit = ENV().search.pillsLimit,
+          oldChosenItems = this.state.chosenItems;
+
+      var skillsPills = searchState.skillsIds.length > 0 ? skillsServices.GetSkillsByIds(searchState.skillsIds, pillsLimit) : Promise.resolve([]),
+          interestsPills = searchState.interestsIds.length > 0 ? userServices.GetInterests(searchState.interestsIds, pillsLimit) : Promise.resolve([]),
+          clientsPills = searchState.clientsIds.length > 0 ? userServices.GetClientsByIds(searchState.clientsIds, pillsLimit) : Promise.resolve([]),
+          chosenItems = [];
+
+      Promise.all([skillsPills, interestsPills, clientsPills]).then(pills => {
+        pills[0].forEach(function (pill) {
+          chosenItems.push({
+            "id": pill.id,
+            "name": pill.name,
+            "type": pill.group.type
+          });
+        });
+
+        pills[1].forEach(function (pill) {
+          chosenItems.push({
+            "id": pill.id,
+            "name": pill.name,
+            "type": 'interest'
+          });
+        });
+
+        pills[2].forEach(function (pill) {
+          chosenItems.push({
+            "id": pill.id,
+            "name": pill.name,
+            "type": 'client'
+          });
+        });
+
+
+        var sortedChosenItems = [];
+
+        oldChosenItems.forEach(oldChosenItem => {
+          if(chosenItems.find(newChosenItem => JSON.stringify(newChosenItem) == JSON.stringify(oldChosenItem)) !== undefined) {
+            sortedChosenItems.push(oldChosenItem);
+            chosenItems = chosenItems.filter(newChosenItem => JSON.stringify(newChosenItem) != JSON.stringify(oldChosenItem));
+          }
+        });
+
+        sortedChosenItems = sortedChosenItems.concat(chosenItems);
+
+        this.setState({chosenItems: sortedChosenItems});
+      })
     }
 
     componentDidMount() {
@@ -123,85 +93,88 @@ class Search extends React.Component {
 
       window.addEventListener('keyup', this.closeSearch, false);
       window.addEventListener('add-pill', function (e) {
-        that.externalAddPill(e.detail.id, e.detail.name, e.detail.type);
+        that.externalAddPill(e.detail.id, e.detail.name, e.detail.type, e.detail.redirectPath);
       }, false);
+
+      this.updateChosenItemsFromSearchState(this.props.searchState);
+    }
+
+    componentWillReceiveProps(newProps) {
+      this.updateChosenItemsFromSearchState(newProps.searchState);
     }
 
     closeSearch(e) {
       const ESC_KEYCODE = 27;
 
       if (e.keyCode == ESC_KEYCODE) {
-        this.setState({ results: [] });
-        this.hideResults();
-
+        this.setState({ results: [], selection: -1 });
         this.clearSearchField();
       }
     }
 
     componentDidUpdate(){
-      ReactDOM.findDOMNode(this.refs.querySearch).focus(); 
+      ReactDOM.findDOMNode(this.refs.querySearch).focus();
     }
 
     updateQuery(e) {
       e.preventDefault();
 
-      if (e.target.value.length > 1) {
-        this.setState({query: e.target.value});
-        this.query(e.target.value);
-         this.setState({ word: e.target.value });
-        this.setState({ selection: 1 });
-      
-      } else if (e.target.value.length <= 1) {
-        this.hideResults(0);
-      }
+      this.setState({query: e.target.value});
 
-      if (!this.state.hasResults) {
-        this.showResults();
+      if (e.target.value.length > 1) {
+        this.query(e.target.value);
+        this.setState({ selection: -1 });
+      } else {
+        this.setState({ results: [], selection: -1 });
       }
     }
 
     clearSearchField() {
       document.getElementById('querySearch').value = "";
+      this.setState({query: ''});
     }
 
-    addItem(item, redirect) {
-      redirect = redirect || false; // 'redirect' determines whether the search
-                                    // should be performed when adding the pill
+    addItem(pillToAdd, redirectPath) {
+      let searchService = new SearchServices();
 
-      let currentChosenItems = this.state.chosenItems;
+      console.log(pillToAdd, redirectPath);
 
-      var repeated = false;
 
-      currentChosenItems.forEach(function (v) {
-        if (v.id == item.id) {
-          repeated = true;
+      if(pillToAdd.type == 'user') {
+        searchService.UpdateSearchState({}, '/employee/' + pillToAdd.id);
+      } else {
+
+        let newSearchState = Object.assign({}, this.props.searchState);
+
+        if(pillToAdd.type == 'client' && !newSearchState.clientsIds.includes(pillToAdd.id)) {
+          newSearchState.clientsIds.push(pillToAdd.id);
+        } else if (pillToAdd.type == 'interest' && !newSearchState.interestsIds.includes(pillToAdd.id)) {
+          newSearchState.interestsIds.push(pillToAdd.id);
+        } else if(!newSearchState.skillsIds.includes(pillToAdd.id)) {
+          newSearchState.skillsIds.push(pillToAdd.id);
         }
-      });
 
-      if (!repeated) {
-        currentChosenItems.push(item);
+        searchService.UpdateSearchState(newSearchState, redirectPath);
       }
 
       this.clearSearchField();
-      this.setState({ chosenItems: currentChosenItems });
-      this.setState({ results: [] });
-      this.hideResults();
-
-      if (redirect) {
-        this.makeQuery();
-      }
+      this.setState({ results: [], selection: -1 });
     }
 
-    removeSkill(skill, index) {
-      let currentChosenItems = this.state.chosenItems;
-      currentChosenItems.splice(index, 1);
-      this.setState({ chosenItems: currentChosenItems });
+    removePill(skill, index) {
+      let searchService = new SearchServices();
+      let newSearchState = Object.assign({}, this.props.searchState);
+      let pillToRemove = this.state.chosenItems[index];
 
-      if (currentChosenItems.length == 0) {
-          this.setState({ results: [] });
-          this.setState({ pointerDirty: false });
-          this.clearSearch();
+      if(pillToRemove.type == 'client') {
+        newSearchState.clientsIds = newSearchState.clientsIds.filter(id => id != pillToRemove.id);
+      } else if (pillToRemove.type == 'interest') {
+        newSearchState.interestsIds = newSearchState.interestsIds.filter(id => id != pillToRemove.id);
+      } else {
+        newSearchState.skillsIds = newSearchState.skillsIds.filter(id => id != pillToRemove.id);
       }
+
+      searchService.UpdateSearchState(newSearchState, this.props.currentPathname);
     }
 
     query(queryString) {
@@ -303,7 +276,7 @@ class Search extends React.Component {
           //console.log("search data error", data);
       });
 
-     
+
 
 
      /*let source = 'http://localhost:15005/api/resource-manager/search-all?term='+ this.state.query + '&limit=5'
@@ -337,94 +310,31 @@ class Search extends React.Component {
 
       request.send(this.state.query);*/
 
-     
 
-    }
 
-    
-
-    hideResults() {
-      this.setState({ hasResults: false });
     }
 
     clearSearch() {
-      this.hideResults();
+      this.setState({ results: [], selection: -1 });
       this.clearSearchField();
-      this.setState({ chosenItems: []});
+
+      let searchService = new SearchServices();
+      searchService.UpdateSearchState({}, this.props.currentPathname);
     }
 
-    externalAddPill(id, name, type) {
-      var chosenItems = this.state.chosenItems,
-          repeated = false;
-
-      chosenItems.forEach(function (v) {
-        if (v.id == id || v.name == name) {
-          repeated = true;
-        }
-      });
-
-      if (!repeated) {
-        // Add pill only if its a valid item and it has not been added already
-        chosenItems.push({ "id": id, "name": name, "type": type });
-        this.clearSearchField();
-      }
-
-      this.forceUpdate();
+    externalAddPill(id, name, type, redirectPath) {
+      this.addItem({ "id": id, "name": name, "type": type }, (redirectPath ? redirectPath : false));
     }
 
-    addPill(chosenItems) {
-        // Choose item
+    addPillFromResults() {
         let query = document.getElementById('querySearch').value.trim();
+        let pillToAdd = this.state.results.find(result => result.name.trim() == query.trim());
 
-        var valid = false,
-            results = this.state.results,
-            chosenItems = this.state.chosenItems,
-            name, id, type, repeated = false;
+        console.log(query, this.state.results, pillToAdd);
 
-        for (var i = 0; i < results.length; i++) {
-          var element = results[i];
-
-          if (element.name.trim() == query.trim()) {
-            name = element.name; // Copy to mantain letter case
-            id = element.id;
-            type = element.type;
-            valid = true;
-
-            break; // No need to keep looking
-          }
+        if(pillToAdd) {
+          this.addItem(pillToAdd);
         }
-
-        if (type == 'user') {
-          var path = '/employee/' + id;
-          this.context.router.push({ pathname: path });
-          this.clearSearch();
-
-          return false;
-        } else {
-          if (valid) {
-            chosenItems.forEach(function (v) {
-              if (v.id == id || v.name == name) {
-                repeated = true;
-              }
-            });
-
-            if (!repeated) {
-              // Add pill only if its a valid item and it has not been added already
-              chosenItems.push({ "id": id, "name": name, "type": type });
-
-              results.forEach(function (v) { delete v.suggested });
-
-              this.setState({ pointerDirty: false });
-              this.setState({ chosenItems: chosenItems });
-              this.setState({ results: [] });
-              this.hideResults();
-
-              this.clearSearchField();
-            }
-          }
-        }
-
-        return true;
     }
 
     move(e) {
@@ -438,30 +348,28 @@ class Search extends React.Component {
       let chosenItems = this.state.chosenItems;
       let results = this.state.results;
 
-      var selection = this.state.selection,
-          pointerDirty = this.state.pointerDirty;
+      var selection = this.state.selection;
 
       if (e.keyCode == BACKSPACE_KEYCODE) {
 
-        this.setState({ selection: 0 });
-        this.setState({ pointerDirty: false });
+        this.setState({ selection: -1 });
 
         // Delete last pill when pressing BACKSPACE, only if there's no text in the search field
 
         if (document.getElementById('querySearch').value == '') {
-          chosenItems.pop();
-
-          if (chosenItems.length == 0) {
-            this.setState({ results: [] });
+          if (chosenItems.length == 1) {
+            this.setState({ results: [], selection: -1 });
             this.clearSearch();
           }
 
-          this.setState({ chosenItems: chosenItems });
+          this.removePill('', chosenItems.length-1);
         }
       }
 
       if (e.keyCode == DOWN_KEYCODE || e.keyCode == UP_KEYCODE) {
         e.preventDefault();
+
+        console.log(selection);
 
         // Iterate through the list
 
@@ -479,14 +387,10 @@ class Search extends React.Component {
           }
         }
 
-        if (this.state.pointerDirty == false) {
-          selection = 0;
-          pointerDirty = true;
-        }
+        console.log(selection);
 
         this.setState({
-          selection: selection,
-          pointerDirty: pointerDirty
+          selection: selection
         });
 
         var item = "";
@@ -501,101 +405,59 @@ class Search extends React.Component {
 
           this.setState({ results: results });
         }
-        
+
         document.getElementById('querySearch').value = item;
       }
 
       if (e.keyCode == ENTER_KEYCODE) {
-        if (this.addPill(chosenItems)) {
-          this.makeQuery();
-        }
+        this.addPillFromResults()
       }
 
       if (e.keyCode == TAB_KEYCODE) {
         e.preventDefault();
         document.getElementById('querySearch').focus();
 
-        this.addPill(chosenItems);
+        this.addPillFromResults();
       }
-    }
-
-    showResults () {
-      this.setState({ hasResults: true });
     }
 
     makeQuery() {
-      var chosenItems = this.state.chosenItems,
-          skillsIds = [], interestsIds = [], clientsIds = [], queryConcat = '', path, i,
-          hasUsers = false;
-
-      for (i = 0; i < chosenItems.length; i++) {
-          if (chosenItems[i].type == 'interest')
-            interestsIds.push(chosenItems[i].id);
-          else if (chosenItems[i].type == 'client')
-            clientsIds.push(chosenItems[i].id);
-          else
-            skillsIds.push(chosenItems[i].id);
-
-          if (chosenItems[i].type == 'user') {
-            path = '/employee/' + chosenItems[i].id;
-            hasUsers = true;
-            this.context.router.push({ pathname: path });
-          }
-      }
-
-      if (!hasUsers) {
-        if (skillsIds.length > 0)
-          queryConcat += (queryConcat !== ""? '&': '') + 'skills=' + skillsIds.join();
-
-        if (interestsIds.length > 0)
-          queryConcat += (queryConcat !== ""? '&': '') + 'interests=' + interestsIds.join();
-
-        if (clientsIds.length > 0)
-          queryConcat += (queryConcat !== ""? '&': '') + 'clients=' + clientsIds.join();
-
-        path = '/searchresults' + (queryConcat !== ''? '?' + queryConcat: '');
-        this.context.router.push({ pathname: path });
-      }
-
-      this.state.hasResults = false;
-      this.hideResults();
+      let searchService = new SearchServices();
+      searchService.UpdateSearchState(this.props.searchState);
     }
 
     render () {
-      var pills = [],
-          chosenItems = this.state.chosenItems, i = 0;
 
-      chosenItems.forEach(function (v) {
-        pills[i] = v.name;
-        i++;
-      });
-
-      var self = this;
         return (
             <div className="search">
               <div className="search__input__wrapper">
                 <div className="search__input">
-                  { <Results hasResults={this.state.hasResults} results={this.state.results} word={this.state.word} addItem={this.addItem} clearSearch={this.clearSearch} /> }
+                  <Results results={this.state.results} word={this.state.word} addItem={this.addItem} clearSearch={this.clearSearch} />
                   <div className="search-field-wrapper">
-                    {pills.map((pillName, index)=>{
-                      return (<Pill name={pillName} key={index} removeSkill={this.removeSkill} index={index} />)
+                    {this.state.chosenItems.map((pill, index)=>{
+                      return (<Pill name={pill.name} key={index} removeSkill={this.removePill} index={index} />)
                     })}
                     <input type="text" name="query" ref="querySearch" id="querySearch" onChange={this.updateQuery} onKeyDown={this.move} placeholder="enter search..."/>
-                  </div> 
-                  <span className="search-button-wrapper">
-                    <span className="ss-icon-close"><span className="path1"></span><span className="path2" onClick={this.clearSearch.bind(this)}></span></span>
-                    <span className="ss-icon-search" onClick={this.makeQuery.bind(this)}></span>
-                  </span>
+                  </div>
+                  {(this.state.query.length > 0 || this.state.chosenItems.length > 0) &&
+                    <button className="clear-button" onClick={this.clearSearch.bind(this)}>
+                      <span className="ss-icon-close"><span className="path1"></span><span className="path2"></span></span>
+                    </button>
+                  }
+
+                  <button className="search-button" onClick={this.makeQuery.bind(this)}>
+                    <span className="ss-icon-search" ></span>
+                  </button>
                 </div>
               </div>
               {/*
               <div className="search-pill-wrapper">
                 {pills.map((pillName, index)=>{
-                  return (<Pill name={pillName} removeSkill={this.removeSkill} index={index} />)
+                  return (<Pill name={pillName} removePill={this.removePill} index={index} />)
                 })}
               </div>
               */}
-                 
+
             </div>
         );
     }
