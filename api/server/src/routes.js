@@ -19,6 +19,7 @@ const config = require('./shared/config');
 // External Services
 //------------------
 router.get('/external-service/user/summary', security.checkAccessKey(config.serviceAccessKey), userController.findUserSummary.bind(userController));
+router.get('/external-service/skill', security.checkAccessKey(config.serviceAccessKey), skillController.find.bind(skillController));
 
 
 // ---------
