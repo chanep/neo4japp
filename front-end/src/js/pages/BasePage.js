@@ -16,26 +16,26 @@ class BasePage extends React.Component {
 		this._checkLoggedIn();
 	}
 
-	shouldComponentUpdate(nextProps, nextState) {
-		var result = this._checkLoggedIn().then(() => {
-			return resolve(true);
-		}).catch(() => {
-			return resolve(false);
-		});
-
-		return result;
-	}
+	// shouldComponentUpdate(nextProps, nextState) {
+	// 	var result = this._checkLoggedIn().then(() => {
+	// 		return resolve(true);
+	// 	}).catch(() => {
+	// 		return resolve(false);
+	// 	});
+	//
+	// 	return result;
+	// }
 
 	_checkLoggedIn() {
 		return this._isUserLoggedIn().then(trueOrFalse => {
 			if (!trueOrFalse) {
-				this.context.router.push({pathname: '/login'});
-				resolve();
+				hashHistory.push({pathname: '/login'});
+				//resolve();
 			}
 		}).catch(err => {
 			console.log("err", err);
-			this.context.router.push({pathname: '/error'});
-			reject();
+			hashHistory.push({pathname: '/error'});
+			//reject();
 		});
 	}
 
@@ -51,12 +51,11 @@ class BasePage extends React.Component {
 	}
 
 	GetUserLogged() {
-		let data = cookie.load('currentUser');
-		return data;
+		return cookie.load('currentUser');
 	}
 
 	GetCurrentUserType() {
-		let data = cookie.load('currentUser');
+		let data = this.GetUserLogged();
 
 		if (data === undefined || data.roles === undefined || data === null || data.roles === null)
 			return null;
@@ -70,7 +69,7 @@ class BasePage extends React.Component {
 	}
 
 	EmployeeHasRole(roleName) {
-		let data = cookie.load('currentUser');
+		let data = this.GetUserLogged();
 
 		return data ? data.roles.includes(roleName) : false;
 	}
@@ -81,14 +80,12 @@ class BasePage extends React.Component {
 
 	GetMyRootPath() {
 		let currentUserType = this.GetCurrentUserType();
-		if (currentUserType === null)
-			return '/login';
-
+		if (currentUserType === null) return '/login';
 		if (currentUserType === 'resourcemanager') return '/resourceshotspot';
 		if (currentUserType === 'approver') return '/managerhome';
 		if (currentUserType === 'employee' || currentUserType === 'searcher' || currentUserType === 'admin') return '/myprofile';
 
-        return '/';
+    return '/';
 	}
 
 	ResourceManagerLoggedIn() {
@@ -98,6 +95,28 @@ class BasePage extends React.Component {
 
 	SearcherLoggedIn() {
 		return this.EmployeeHasRole('searcher');
+	}
+
+	LogIn(username, password) {
+		return new Promise((resolve, reject) => {
+			let session = new SessionServices();
+	    session.Login(username, password).then(data => {
+	      cookie.save('currentUser', data);
+	      hashHistory.push({pathname: this.GetMyRootPath()});
+				resolve();
+	    }).catch((e) => {
+				reject()
+			});
+		});
+	}
+
+	LogOut() {
+		let session = new SessionServices();
+
+    session.Logout().then(data => {
+      cookie.remove('currentUser', { path: '/' });
+      hashHistory.push({pathname: '/'});
+    });
 	}
 
 	// GetSearchState() {

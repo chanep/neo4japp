@@ -1,7 +1,6 @@
 import React from "react";
 
 import Search from "./Header/Search";
-import cookie from 'react-cookie';
 import { hashHistory, Link, IndexLink, browserHistory, withRouter } from 'react-router';
 import SessionServices from '../services/SessionServices';
 import BasePage from '../pages/BasePage';
@@ -10,11 +9,13 @@ class Header extends React.Component {
   constructor (props) {
     super(props);
 
+    this.base = new BasePage();
+
     this.state = {
       'search': props.search,
       'searchState': props.searchState,
       'loggedIn': props.loggedIn,
-      'userLogged': cookie.load('currentUser')
+      'userLogged': props.userData
     }
   }
 
@@ -23,27 +24,21 @@ class Header extends React.Component {
       'search': newProps.search,
       'searchState': newProps.searchState,
       'loggedIn': newProps.loggedIn,
-      'userLogged': cookie.load('currentUser')
+      'userLogged': newProps.userData
     });
 	}
 
   logout(e) {
 
-    let session = new SessionServices();
-
-    session.Logout().then(data => {
-      cookie.remove('currentUser', { path: '/' });
-      this.context.router.push({pathname: '/'});
-    });
+    this.base.LogOut();
   }
 
   render () {
-    let base = new BasePage();
 
     return (
         <header>
           <div className="header-wrapper">
-            <Link to={base.GetMyRootPath()}><h1><img src="img/rga-logo.png"></img></h1></Link>
+            <Link to={this.base.GetMyRootPath()}><h1><img src="img/rga-logo.png"></img></h1></Link>
             <div className="header-menu-wrapper">
               {this.state.loggedIn &&
                 <div className="allocations-btn">
@@ -62,10 +57,10 @@ class Header extends React.Component {
                     <div className="header-menu__item--title">{this.state.userLogged.fullname}</div>
                     <div className="header-menu__item-list">
                       <Link to="/myprofile" activeClassName="active">My Skills</Link>
-                      {base.EmployeeHasAnyRole(['admin','resourceManager','resourcemanager','searcher']) ? <IndexLink to="/dashboards" activeClassName="active">Dashboards</IndexLink> : null}
-                      {base.EmployeeHasAnyRole(['admin','approver','employee']) ? <a href={'http://square/people/' + this.state.userLogged.username + '/'} target="_blank">My Work</a> : null}
-                      {base.EmployeeHasAnyRole(['admin','approver','employee']) ? <a href="http://reporter/newallocations/EmployeeAllocation.aspx" target="_blank">My Allocations</a>: null}
-                      {base.EmployeeHasAnyRole(['approver']) ? <Link to="/managerhome" activeClassName="active">My Team</Link> : null}
+                      {this.base.EmployeeHasAnyRole(['admin','resourceManager','resourcemanager','searcher']) ? <IndexLink to="/dashboards" activeClassName="active">Dashboards</IndexLink> : null}
+                      {this.base.EmployeeHasAnyRole(['admin','approver','employee']) ? <a href={'http://square/people/' + this.state.userLogged.username + '/'} target="_blank">My Work</a> : null}
+                      {this.base.EmployeeHasAnyRole(['admin','approver','employee']) ? <a href="http://reporter/newallocations/EmployeeAllocation.aspx" target="_blank">My Allocations</a>: null}
+                      {this.base.EmployeeHasAnyRole(['approver']) ? <Link to="/managerhome" activeClassName="active">My Team</Link> : null}
                       <input type="button" onClick={this.logout.bind(this)} value="Log Out" />
                     </div>
                   </div>

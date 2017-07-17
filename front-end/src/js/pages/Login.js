@@ -4,7 +4,6 @@ import { hashHistory, Link, browserHistory, withRouter } from 'react-router'
 
 import Header from "../components/Header";
 import SessionServices from '../services/SessionServices'
-import cookie from 'react-cookie';
 import BasePage from "./BasePage";
 
 class Login extends React.Component {
@@ -30,18 +29,13 @@ class Login extends React.Component {
 
   loginSubmit(e) {
     let self = this;
+		let basePage = new BasePage();
+
 		e.preventDefault();
 
     this.setState({ "attempting": true });
 
-    let session = new SessionServices();
-    session.Login(self.state.username, self.state.password).then(data => {
-      cookie.save('currentUser', data);
-      let basePage = new BasePage();
-      this.setState({ "attempting": false });
-      this.context.router.push({pathname: basePage.GetMyRootPath()});
-
-    }).catch(data => {
+    basePage.LogIn(self.state.username, self.state.password).catch(data => {
       this.setState({ "failedAttempt": true });
       this.setState({ "attempting": false });
     });
