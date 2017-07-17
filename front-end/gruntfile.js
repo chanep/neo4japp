@@ -1,6 +1,11 @@
 module.exports = function (grunt) {
     'use strict';
 
+    require("matchdep").filterAll("grunt-*").forEach(grunt.loadNpmTasks);
+  	var webpack = require("webpack");
+  	var webpackConfig = require("./webpack.config.js");
+    var path = require('path');
+
     grunt.initConfig({
         'pkg': grunt.file.readJSON('package.json'),
         'sass': {
@@ -29,26 +34,22 @@ module.exports = function (grunt) {
             }
         },
         'watch': {
-            'css': {
+            options: {
+               livereload: true,
+             },
+            'scss': {
                 'files': ['src/**/*.scss'],
                 'tasks': ['sass'],
-                'options': {
-                    'livereload': true
-                }
+                  options: {
+                     livereload: false,
+                   },
             },
-            'js': {
-                'files': ['src/**/*.js'],
-                'tasks': ['sass', 'copy', 'webpack'],
-                'options': {
-                    'livereload': true
-                }
+            'css': {
+                'files': ['dist/css/*.css']
             },
             'html': {
                 'files': ['src/**/*.html'],
-                'tasks': ['copy'],
-                'options': {
-                    'livereload': true
-                }
+                'tasks': ['copy']
             }
         },
         'copy': {
@@ -65,76 +66,51 @@ module.exports = function (grunt) {
             }
         },
         'webpack': {
-            'build': {
-
-                // webpack options
-                'entry': './src/js/client.js',
-                'output': {
-                    'path': 'dist/js/',
-                    'filename': 'client.min.js'
-                },
-                'module': {
-                    'loaders': [{
-                        'test': /\.js$/,
-                        'exclude': /(node_modules)/,
-                        'loader': 'babel-loader',
-                        'query': {
-                            'presets': ['react', 'es2015']
-                        }
-                    }]
-                },
-                'progress': false, // Don't show progress
-                // Defaults to true
-                'failOnError': false, // don't report error to grunt if webpack find errors
-                // Use this if webpack errors are tolerable and grunt should continue
-                'watch': false // use webpacks watcher
-                // You need to keep the grunt process alive
-
-                // // Use this when you need to fallback to poll based watching (webpack 1.9.1+ only)
-                // keepalive: true, // don't finish the grunt task
-                // // Use this in combination with the watch option
-                // inline: true,  // embed the webpack-dev-server runtime into the bundle
-                // // Defaults to false
-                // hot: true, // adds the HotModuleReplacementPlugin and switch the server to hot mode
-                // // Use this in combination with the inline option
-            }
+          options: {
+            stats: !process.env.NODE_ENV || process.env.NODE_ENV === 'development'
+          },
+          prod: Object.assign({
+    				plugins:[
+              new webpack.DefinePlugin({
+                'process.env.NODE_ENV': JSON.stringify('production')
+              }),
+    					new webpack.optimize.ModuleConcatenationPlugin(),
+    					new webpack.optimize.UglifyJsPlugin()
+    				]}, webpackConfig),
+          dev: Object.assign({ watch: true }, webpackConfig)
         },
-        'http-server': {
-
-            'dev': {
-
-                // the server root directory
-                'root': './dist',
-
-                // the server port
-                // can also be written as a function, e.g.
-                // port: function() { return 8282; }
-                'port': 8282,
-
-                // the host ip address
-                // If specified to, for example, "127.0.0.1" the server will
-                // only be available on that ip.
-                // Specify "0.0.0.0" to be available everywhere
-                'host': '0.0.0.0',
-
-                // server default file extension
-                'ext': 'html',
-
-                // run in parallel with other tasks
-                'runInBackground': true,
-
-                // Tell grunt task to open the browser
-                'openBrowser': true
-            }
-
+        'webpack-dev-server': {
+    			options: {
+    				webpack: webpackConfig,
+            publicPath: '/js/',
+            contentBase: path.join(__dirname, "dist"),
+            compress: true,
+            port: 8282
+    			},
+    			start: {
+    				webpack: {
+    					devtool: "eval"
+    				}
+    			}
+    		},
+        concurrent: {
+      		serve: {
+      			tasks: ['webpack-dev-server:start', 'watch'],
+      			options: {
+      				logConcurrentOutput: true
+      			}
+      		}
+      	},
+        dom_munger: {
+          serve: {
+            options: {
+                remove: ['script[data-remove="true"]', 'link[data-remove="true"]']
+            },
+            src: 'dist/index.html'
+          }
         }
     });
-    grunt.loadNpmTasks('grunt-postcss');
-    grunt.loadNpmTasks('grunt-sass');
-    grunt.loadNpmTasks('grunt-contrib-copy');
-    grunt.loadNpmTasks('grunt-webpack');
-    grunt.loadNpmTasks('grunt-http-server');
-    grunt.loadNpmTasks('grunt-contrib-watch');
-    grunt.registerTask('default', ['http-server', 'sass', 'webpack', 'copy', 'watch']);
-    grunt.registerTask('build', ['sass', 'webpack', 'copy']);
+
+    grunt.registerTask('default', ['sass', 'copy', 'concurrent:serve']);
+    grunt.registerTask('build', ['sass', 'copy', 'dom_munger', 'webpack:prod']);
 };

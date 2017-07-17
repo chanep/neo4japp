@@ -37,6 +37,10 @@ class Search extends React.Component {
     }
 
     updateChosenItemsFromSearchState(searchState) {
+      if(typeof searchState !== 'object') {
+        //return;
+      }
+
       var skillsServices = new SkillsServices(),
           userServices = new UserServices(),
           pillsLimit = ENV().search.pillsLimit,
