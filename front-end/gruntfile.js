@@ -100,9 +100,17 @@ module.exports = function (grunt) {
       				logConcurrentOutput: true
       			}
       		}
-      	}
+      	},
+        dom_munger: {
+          serve: {
+            options: {
+                remove: ['script[data-remove="true"]', 'link[data-remove="true"]']
+            },
+            src: 'dist/index.html'
+          }
+        }
     });
 
     grunt.registerTask('default', ['sass', 'copy', 'concurrent:serve']);
-    grunt.registerTask('build', ['sass', 'copy', 'webpack:prod']);
+    grunt.registerTask('build', ['sass', 'copy', 'dom_munger', 'webpack:prod']);
 };
