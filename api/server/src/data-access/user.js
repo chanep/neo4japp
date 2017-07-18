@@ -74,7 +74,9 @@ class UserDa extends BaseDa{
 
                     return {
                                 id: id(n), username: n.username, type: n.type, email: n.email, phonelistId: n.phonelistId,
-                                fullname: n.fullname, roles: n.roles, phone: n.phone, image: n.image, disabled: n.disabled, lastUpdate: n.lastUpdate, lastLogin: n.lastLogin,
+                                fullname: n.fullname, roles: n.roles, phone: n.phone, 
+                                image: case (n.image) when (n.image is not null) then n.image else null end,
+                                disabled: n.disabled, lastUpdate: n.lastUpdate, lastLogin: n.lastLogin,
                                 office: case when (o is not null) then {id: id(o), name: o.name, country: o.country, acronym: o.acronym} else null end,
                                 department: case when (d is not null) then {id: id(d), name: d.name} else null end,
                                 position: case when (p is not null) then {id: id(p), name: p.name} else null end,
@@ -113,7 +115,8 @@ class UserDa extends BaseDa{
         order by score desc limit {limit}
         return {
                 id: id(n), username: n.username, email: n.email,
-                fullname: n.fullname, image: n.image,
+                fullname: n.fullname, 
+                image: case (n.image) when (n.image is not null) then n.image else null end,
                 office: {id: id(o), name: o.name, country: o.country, acronym: o.acronym},
                 department: {id: id(d), name: d.name},
                 position: {id: id(p), name: p.name},
