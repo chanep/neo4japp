@@ -17,6 +17,7 @@
     "react-breadcrumbs": "^1.6.6",
     "react-cookie": "^0.4.8",
     "react-dom": "^15.6.1",
+    "react-ga": "^2.2.0",
     "react-modal": "^1.5.2",
     "react-router": "^2.8.0",
     "react-tooltip": "^3.2.1",

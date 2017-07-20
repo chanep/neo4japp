@@ -29,7 +29,7 @@ export default class ResourceHotspot extends BasePage {
         var skilledUsersByOffice = [];
 
         offices.forEach(function (office) {
-          console.log(office);
+          // console.log(office);
           skilledUsersByOffice[office.acronym] = [office.id, office.skilledUserCount];
         });
 

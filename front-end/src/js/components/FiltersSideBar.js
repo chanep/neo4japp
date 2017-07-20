@@ -6,6 +6,7 @@
 import React from 'react';
 
 import UserServices from '../services/UserServices';
+import {gaEmployeeViewFilter} from '../services/GoogleAnalytics';
 
 // Class: SearchResults
 export default class FiltersSideBar extends React.Component {
@@ -39,9 +40,10 @@ export default class FiltersSideBar extends React.Component {
         this.getOffices(nextProps.locations);
     }
 
-    handleChange(refVal, e) {
-        let locationId = refVal;
+    handleChange(refVal, officeName, e) {
+        gaEmployeeViewFilter(officeName, ""+this.props.skillsCount);
 
+        let locationId = refVal;
         this.props.onLocationsChanged(locationId);
     }
 
@@ -63,7 +65,7 @@ export default class FiltersSideBar extends React.Component {
 
                             return <li key={office.id} className="filter-option">
                                 <label>
-                                    <input type="checkbox" id={office.id} value={office.id} checked={self.state.locationsIds.indexOf(office.id.toString()) !== -1} onChange={self.handleChange.bind(self, office.id.toString())} /> {officeName}
+                                    <input type="checkbox" id={office.id} value={office.id} checked={self.state.locationsIds.indexOf(office.id.toString()) !== -1} onChange={self.handleChange.bind(self, office.id.toString(), officeName)} /> {officeName}
                                 </label>
                             </li>
                         })

@@ -12,6 +12,7 @@ import AlertContainer from 'react-alert';
 import ReactTooltip from 'react-tooltip'
 
 import ReactDOM from "react-dom";
+import {gaDashboardCharacteristics, gaDashboardSkillEdit} from "../../services/GoogleAnalytics";
 
 export default class EmployeeHeader extends React.Component {
     constructor(){
@@ -88,6 +89,7 @@ export default class EmployeeHeader extends React.Component {
     }
 
     editPastClients () {
+        gaDashboardCharacteristics("PastClient", this.basePage.GetCurrentUserType());
         this.setState({ 'editingPastClients': true });
     }
 
@@ -156,10 +158,14 @@ export default class EmployeeHeader extends React.Component {
     }
 
     editInterests() {
+        gaDashboardCharacteristics("Interest", this.basePage.GetCurrentUserType());
+
         this.setState({ editingInterests: true }); 
     }
 
     editIndustries() {
+        gaDashboardCharacteristics("Industry", this.basePage.GetCurrentUserType());
+
         this.userData.GetIndustries().then(data => {
             this.setState({ industries: data, editingIndustries: true });
         }).catch(data => {
@@ -678,7 +684,7 @@ export default class EmployeeHeader extends React.Component {
                             this.state.showActions?
                                 this.state.addSkills?
                                     <div className="employee-skills-add">
-                                        <Link to="/myprofile/myskills">ADD / REMOVE SKILLS</Link>
+                                        <Link to="/myprofile/myskills" onClick={gaDashboardSkillEdit.bind(this, ""+this.state.skillsCount, this.basePage.GetCurrentUserType())}>ADD / REMOVE SKILLS</Link>
                                     </div>
                                     :
                                     <div className="employee-skills-add">
