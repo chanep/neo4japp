@@ -332,6 +332,7 @@ class UserDa extends BaseDa{
 
     setImage(userId, imageUrl){
         let updated = 0;
+        if (!imageUrl || typeof imageUrl == "undefined" || imageUrl == null) imageUrl = "";
         let cmd = `MATCH (u:User) WHERE id(u) = ${userId}
                     SET u.image = "${imageUrl}"
                     return count(u)`;
