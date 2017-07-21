@@ -344,25 +344,32 @@ class UserDa extends BaseDa{
      findUserSummary(skip, limit){
         let userL = this.labelsStr;
         let skillL = skillModel.labelsStr;
+        let approverRelL = this.model.getRelationByKey("approvers").label;
         let group = skillModel.getRelationByKey("group").label;
         let parent = skillGroupModel.getRelationByKey("parent").label;
         let knows = this.model.getRelationByKey("knowledges").label;
         let allocation = this.model.getRelationByKey("allocation").label;
+        let clientRelL = this.model.getRelationByKey("clients").label;
 
         let params = {skip: skip, limit: limit};
 
         let match = `match (n:${userL}) where not(n.disabled)
+                     optional match (n)-[:${approverRelL}]->(a)
                      optional match (n)-[k:${knows}]->(s:${skillL})-[:${group}]->(sg)-[:${parent}]->(g) where sg.type in ["tool", "skill"]
-                     with n, 
+                     with n, collect(distinct {email: a.email}) as approvers,
                         (case when s is not null then 
-                            collect ({name: s.name, type: sg.type, subGroup: sg.name, group: g.name, level: k.level, want: k.want, approved: k.approved}) 
+                            collect (distinct {name: s.name, type: sg.type, subGroup: sg.name, group: g.name, level: k.level, want: k.want, approved: k.approved}) 
                         else [] end) as skills
                      optional match (n)-[k2:${knows}]->(i:${skillL})-[:${group}]->(sgi) where sgi.type = "industry"
-                     with n, skills, collect (i.name) as industries
+                     with n, approvers, skills, collect (i.name) as industries
                      where (size(skills) > 0 or size(industries) > 0)
-                     with n, skills, industries
+                     
+                     with n, approvers, skills, industries
                      optional match (n)-[:${allocation}]->(al)
-                     with n, skills, industries, al
+                     optional match (n)-[:${clientRelL}]->(c)
+                     
+                     with n, approvers, skills, industries, al,
+                        collect(c.name) as clients
                      `;
 
         let countCmd = `${match} return count(n) as count`;
@@ -373,9 +380,11 @@ class UserDa extends BaseDa{
                         username: n.username,
                         fullname: n.fullname,
                         email: n.email,
+                        approvers: approvers,
                         allocation: al,
                         skills: skills,
-                        industries: industries
+                        industries: industries,
+                        clients: clients
                     }`;
         return this.queryPaged(cmd, countCmd, params);
     }

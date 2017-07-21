@@ -355,7 +355,7 @@ vows.describe('User api test')
             }
             let users = body.data;
 
-            console.log("users", JSON.stringify(users));
+            //console.log("users", JSON.stringify(users));
 
             assert.isArray(users);
             let u = users[0];
