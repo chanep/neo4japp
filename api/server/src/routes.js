@@ -19,7 +19,9 @@ const config = require('./shared/config');
 // External Services
 //------------------
 router.get('/external-service/user/summary', security.checkAccessKey(config.serviceAccessKey), userController.findUserSummary.bind(userController));
-
+router.get('/external-service/skill', security.checkAccessKey(config.serviceAccessKey), skillController.find.bind(skillController));
+router.get('/external-service/skill/all-groups', security.checkAccessKey(config.serviceAccessKey), skillController.findAllGroups.bind(skillController));
+router.get('/external-service/skill/by-group-type/:type', security.checkAccessKey(config.serviceAccessKey), skillController.findByType.bind(skillController));
 
 // ---------
 // All Users

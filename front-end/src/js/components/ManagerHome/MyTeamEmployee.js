@@ -5,6 +5,7 @@
 // Dependencies
 import React from 'react';
 import { Link } from 'react-router';
+import {gaTeamEmployee} from '../../services/GoogleAnalytics';
 
 // Class: MyTeemEmployee
 export default class MyTeemEmployee extends React.Component {
@@ -42,7 +43,7 @@ export default class MyTeemEmployee extends React.Component {
         });
 
         return(
-            <Link to={"/employee/" + this.state.employee.id + "/verification"}>
+            <Link to={"/employee/" + this.state.employee.id + "/verification"} onClick={gaTeamEmployee.bind(this, this.state.employee.office.acronym, skillsCount)}>
                 <div className="grid zebra-table lined-table manager-home-employee">
                     <div className="col -col-7 title">
                         <div className="name">{this.state.employee.fullname}</div>

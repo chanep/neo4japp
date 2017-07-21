@@ -16,7 +16,12 @@ export default class Layout extends React.Component {
 
 		let searchState = this.searchServices.GetSearchStateFromLocationQuery(this.props.location.query);
 
-		this.state = Object.assign({isLoggedIn: false, searchIsAvailable: false, searchState: searchState});
+		this.state = Object.assign({
+			isLoggedIn: false,
+			userData: {},
+			searchIsAvailable: false,
+			searchState: searchState
+		});
 
 		this.alertOptions = {
             offset: 14,
@@ -27,7 +32,11 @@ export default class Layout extends React.Component {
         };
 
 		this.basePage._isUserLoggedIn().then(isLoggedIn => {
-			this.setState({isLoggedIn: isLoggedIn, searchIsAvailable: isLoggedIn && this.basePage._showSearch()});
+			this.setState({
+				isLoggedIn: isLoggedIn,
+				userData: isLoggedIn ? this.basePage.GetUserLogged() : {},
+				searchIsAvailable: isLoggedIn && this.basePage._showSearch()
+			});
 		});
 	}
 
@@ -35,7 +44,11 @@ export default class Layout extends React.Component {
 		this.setState({searchState: this.searchServices.GetSearchStateFromLocationQuery(newProps.location.query)});
 
 		this.basePage._isUserLoggedIn().then(isLoggedIn => {
-			this.setState({isLoggedIn: isLoggedIn, searchIsAvailable: isLoggedIn && this.basePage._showSearch()});
+			this.setState({
+				isLoggedIn: isLoggedIn,
+				userData: isLoggedIn ? this.basePage.GetUserLogged() : {},
+				searchIsAvailable: isLoggedIn && this.basePage._showSearch()
+			});
 		});
 	}
 
@@ -43,7 +56,7 @@ export default class Layout extends React.Component {
 		return (
 			<div>
 				<AlertContainer ref={(a) => global.msg = a} {...this.alertOptions} />
-				<Header search={this.state.searchIsAvailable} loggedIn={this.state.isLoggedIn} searchState={this.state.searchState} currentPathname={this.props.location.pathname} />
+				<Header search={this.state.searchIsAvailable} loggedIn={this.state.isLoggedIn} userData={this.state.userData} searchState={this.state.searchState} currentPathname={this.props.location.pathname} />
 				{this.props.children}
 				<Footer />
 			</div>

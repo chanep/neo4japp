@@ -1,34 +1,26 @@
 var debug = process.env.NODE_ENV !== "production";
 var webpack = require('webpack');
+var path = require('path');
 
 module.exports = {
-  context: __dirname,
-  devtool: debug ? "inline-sourcemap" : null,
-  entry: __dirname + "/src/js/client.js",
+  entry: './src/js/client.js',
+  output: {
+    filename: 'client.min.js',
+    path: path.resolve(__dirname, 'dist/js'),
+    publicPath: '/js/'
+  },
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.js$/,
-        exclude: /(node_modules)/,
-        loader: 'babel-loader',
-        query: {
-          presets: ['react', 'es2015']
+        exclude: /(node_modules|bower_components)/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['env', 'react']
+          }
         }
       }
     ]
-  },
-  output: {
-    path: __dirname + "/dist/js/",
-    publicPath: "/dist",
-    filename: "client.min.js"
-  },
-  devServer: {
-    contentBase: "./dist",
-    hot: true
-  },
-  plugins: debug ? [] : [
-    new webpack.optimize.DedupePlugin(),
-    new webpack.optimize.OccurenceOrderPlugin(),
-    new webpack.optimize.UglifyJsPlugin({ mangle: false, sourcemap: false }),
-  ],
+  }
 };

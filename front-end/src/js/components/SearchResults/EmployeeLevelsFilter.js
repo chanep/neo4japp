@@ -6,6 +6,7 @@
 import React from 'react';
 
 import UserServices from '../../services/UserServices';
+import {gaEmployeeViewFilter} from '../../services/GoogleAnalytics';
 
 // Class: SearchResults
 export default class EmployeeLevelsFilter extends React.Component {
@@ -41,7 +42,7 @@ export default class EmployeeLevelsFilter extends React.Component {
 
     handleChange(refVal, e) {
         let levelId = refVal;
-
+        gaEmployeeViewFilter(levelId, ""+this.props.skillsCount);
         this.props.onLevelChanged(levelId);
     }
 

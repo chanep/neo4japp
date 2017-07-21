@@ -1,20 +1,21 @@
 import React from "react";
-
 import Search from "./Header/Search";
-import cookie from 'react-cookie';
 import { hashHistory, Link, IndexLink, browserHistory, withRouter } from 'react-router';
 import SessionServices from '../services/SessionServices';
 import BasePage from '../pages/BasePage';
+import {gaDashboardMenu} from "../services/GoogleAnalytics";
 
 class Header extends React.Component {
   constructor (props) {
     super(props);
 
+    this.base = new BasePage();
+
     this.state = {
       'search': props.search,
       'searchState': props.searchState,
       'loggedIn': props.loggedIn,
-      'userLogged': cookie.load('currentUser')
+      'userLogged': props.userData
     }
   }
 
@@ -23,30 +24,28 @@ class Header extends React.Component {
       'search': newProps.search,
       'searchState': newProps.searchState,
       'loggedIn': newProps.loggedIn,
-      'userLogged': cookie.load('currentUser')
+      'userLogged': newProps.userData
     });
 	}
 
+  sendMenuEvent(clickText){
+    gaDashboardMenu(clickText, this.base.GetCurrentUserType());
+  }
+
   logout(e) {
-
-    let session = new SessionServices();
-
-    session.Logout().then(data => {
-      cookie.remove('currentUser', { path: '/' });
-      this.context.router.push({pathname: '/'});
-    });
+    this.sendMenuEvent("Log Out");
+    this.base.LogOut();
   }
 
   render () {
-    let base = new BasePage();
 
     return (
         <header>
           <div className="header-wrapper">
-            <Link to={base.GetMyRootPath()}><h1><img src="img/rga-logo.png"></img></h1></Link>
+            <Link to={this.base.GetMyRootPath()}><h1><img src="img/rga-logo.png"></img></h1></Link>
             <div className="header-menu-wrapper">
               {this.state.loggedIn &&
-                <div className="allocations-btn">
+                <div className="allocations-btn" onMouseEnter={this.sendMenuEvent.bind(this, "")}>
                   {/*<span className="ss-icon-view"></span>View Allocations*/}
                   {(this.state.userLogged && this.state.userLogged.image ?
                     <div className="header-menu--opener">
@@ -61,11 +60,11 @@ class Header extends React.Component {
                   <div className="header-menu">
                     <div className="header-menu__item--title">{this.state.userLogged.fullname}</div>
                     <div className="header-menu__item-list">
-                      <Link to="/myprofile" activeClassName="active">My Skills</Link>
-                      {base.EmployeeHasAnyRole(['admin','resourceManager','resourcemanager','searcher']) ? <IndexLink to="/dashboards" activeClassName="active">Dashboards</IndexLink> : null}
-                      {base.EmployeeHasAnyRole(['admin','approver','employee']) ? <a href={'http://square/people/' + this.state.userLogged.username + '/'} target="_blank">My Work</a> : null}
-                      {base.EmployeeHasAnyRole(['admin','approver','employee']) ? <a href="http://reporter/newallocations/EmployeeAllocation.aspx" target="_blank">My Allocations</a>: null}
-                      {base.EmployeeHasAnyRole(['approver']) ? <Link to="/managerhome" activeClassName="active">My Team</Link> : null}
+                      <Link to="/myprofile" activeClassName="active" onClick={this.sendMenuEvent.bind(this, "My Skills")}>My Skills</Link>
+                      {this.base.EmployeeHasAnyRole(['admin','resourceManager','resourcemanager','searcher']) ? <IndexLink to="/dashboards" activeClassName="active" onClick={this.sendMenuEvent.bind(this, "Dashboards")}>Dashboards</IndexLink> : null}
+                      {this.base.EmployeeHasAnyRole(['admin','approver','employee']) ? <a href={'http://square/people/' + this.state.userLogged.username + '/'} target="_blank" onClick={this.sendMenuEvent.bind(this, "My Work")}>My Work</a> : null}
+                      {this.base.EmployeeHasAnyRole(['admin','approver','employee']) ? <a href="http://reporter/newallocations/EmployeeAllocation.aspx" target="_blank" onClick={this.sendMenuEvent.bind(this, "My Allocations")}>My Allocations</a>: null}
+                      {this.base.EmployeeHasAnyRole(['approver']) ? <Link to="/managerhome" activeClassName="active" onClick={this.sendMenuEvent.bind(this, "My Team")}>My Team</Link> : null}
                       <input type="button" onClick={this.logout.bind(this)} value="Log Out" />
                     </div>
                   </div>
@@ -73,6 +72,7 @@ class Header extends React.Component {
                 </div>
               }
             </div>
+            
           </div>
           { (this.state.search ? <Search searchState={this.props.searchState} currentPathname={this.props.currentPathname} /> :
             <div className="no-search-bar"></div>

@@ -345,6 +345,7 @@ class UserController extends BaseController{
             fullname: "Pepe Test4",
             email: "pepe.test4@rga.com",
             username: "pepetest4",
+            approvers: [{email: "boss@rga.com"}]
             allocation: {
                 id: 6519,
                 totalHours:120,
@@ -355,7 +356,8 @@ class UserController extends BaseController{
                 { name: "C++", type: "tool", subGroup: "Languages", group: "Technology", level: 3, want: false, approved: true },
                 {...}
             ],
-            industries: ["Financial"]
+            industries: ["Financial"],
+            clients: ["Nike", "Patagonia"]
         }, {
         ...
         }]

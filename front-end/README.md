@@ -5,8 +5,8 @@
 1. To install the dependencies:
 `npm install`
 
-2. To compile React and run the server:
-`npm start`
+2. To run the server with live reloading of html/js/css:
+`grunt`
 
-3. To compile SASS files and 'watch' for changes:
-`grunt watch`
+3. To compile a production build:
+`grunt build`

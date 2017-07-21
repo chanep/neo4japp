@@ -7,6 +7,7 @@ import React from 'react';
 import { Link } from 'react-router'
 import EmployeeSkill from "./EmployeeSkill";
 import ApproverEmployeeSkill from "./ApproverEmployeeSkill";
+import {gaVerifyViewSkill} from "../../services/GoogleAnalytics";
 
 export default class EmployeeSkillSubGroup extends React.Component {
     constructor(props) {
@@ -28,8 +29,10 @@ export default class EmployeeSkillSubGroup extends React.Component {
     }
 
     onSkillApproved(id) {
-        if (this.props.onSkillApproved !== undefined)
+        if (this.props.onSkillApproved !== undefined){
+            gaVerifyViewSkill();
             this.props.onSkillApproved(id);
+        }
     }
 
     render() {

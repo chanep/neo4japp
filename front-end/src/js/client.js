@@ -2,7 +2,6 @@ import React from "react";
 import ReactDOM from "react-dom";
 import Modal from "react-modal";
 import { Router, Route, IndexRoute, Redirect, hashHistory } from "react-router";
-
 import Layout from "./components/Layout";
 import ResourceHotspot from "./pages/ResourceHotspot";
 import Allocations from "./pages/Allocations";
@@ -22,12 +21,13 @@ import ActiveGroupDetail from "./components/ComplianceDashboard/ActiveGroupDetai
 import InactiveGroupDetail from "./components/ComplianceDashboard/InactiveGroupDetail";
 import FAQ from "./pages/FAQ";
 import PageError from "./pages/PageError";
+import startGoogleAnalytics, {logPageView} from './services/GoogleAnalytics.js';
 
 const app = document.getElementById('app');
-
+startGoogleAnalytics();
 
 ReactDOM.render(
-	<Router history={hashHistory}>
+	<Router history={hashHistory} onUpdate={logPageView}>
 		<Route path="/" component={Layout} name="App">
 			<IndexRoute component={Login}></IndexRoute>
 			<Route path="/login" component={Login}></Route>

@@ -73,8 +73,9 @@ class UserPhotoImportTask extends BaseTask{
         return asyncEach(users, (user, callback) => {
             this._getPhoto(user.phonelistId)
                 .then(photoUrl => {
-                    if (photoUrl.length > 0) 
+                    if (photoUrl && photoUrl.length > 0 ) {
                         user.image = "https://phonelist.ny.rga.com" + photoUrl;
+                    }
                     callback();
                 })
         })
