@@ -46,6 +46,22 @@ class ApproverController extends BaseController{
     }
 
     /**
+    @api {get} /api/external-service/approver/:approverId/my-team Approver's team
+    @apiDescription List the usernames of members of the team of the given approver
+    @apiGroup Approvers
+
+    @apiUse teamResponse
+    */
+    findDirectReports(req, res, next){
+        let approverId = req.params.approverId; //username
+        let search = this._buildSearch(req);
+
+        let promise = approverDa.findDirectReports(approverId);
+
+        this._respondPromise(req, res, promise);
+    }
+
+    /**
     @api {put} /api/approver/approve 4 Approve
     @apiDescription An Approver (manager) approves (verify) a employee's skill knowledge
     @apiGroup Approvers
