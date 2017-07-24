@@ -55,8 +55,17 @@ class ResourceManagerDa extends UserDa{
           }`
       let params = {id: resourceManagerId};
       return this.query(cmd, params);
-
   }
+
+  allResourceManagers(){
+    let label = this.labelsStr;
+    let resourceManagersRelL = this.model.getRelationByKey("resourceManagers").label;
+
+    let cmd = `match (n:${label})-[:${resourceManagersRelL}]->(me:${label}) where not(n.disabled)
+        return n.username order by n.username ASC`
+    return this.query(cmd, {});
+  }
+
 
     findUsersBySkill(skillIds, filters, skip, limit, orderBy){
         let label = this.labelsStr;

@@ -40,6 +40,12 @@ class ResourceManagerController extends BaseController{
         this._respondPromise(req, res, promise);
     }
 
+    allResourceManagers(req, res, next){
+        let promise = resourceManagerDa.allResourceManagers();
+
+        this._respondPromise(req, res, promise);
+    }
+
     /**
     @api {get} /api/resource-manager/skill-by-user 1 Find users with skills by office or deparment
     @apiDescription List amount of skills by users (sorted by fullname)
