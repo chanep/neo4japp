@@ -75,7 +75,7 @@ export default class AddSkillsFilter extends React.Component {
 
 								return (
 									<li className="filter-option" key={key}>
-										<label><input type="radio" name="skillstools" checked={checked} onChange={self.onValueChanged.bind(self, obj.id, obj.name)} /> {obj.name} ({countPerSkill})</label>
+										<label className="filter-option-clickel"><input type="radio" name="skillstools" checked={checked} onChange={self.onValueChanged.bind(self, obj.id, obj.name)} /> {obj.name} ({countPerSkill})</label>
 									</li>
 								)
 							})
@@ -100,7 +100,7 @@ export default class AddSkillsFilter extends React.Component {
 
 								return (
 									<li className="filter-option" key={key}>
-										<label><input type="radio" name="skillstools" checked={checked} onChange={self.onValueChanged.bind(self, obj.id, obj.name)} /> {obj.name} ({countPerSkill})</label>
+										<label className="addskill-filter-clickel"><input type="radio" name="skillstools" checked={checked} onChange={self.onValueChanged.bind(self, obj.id, obj.name)} /> {obj.name} ({countPerSkill})</label>
 									</li>
 								)
 							})

@@ -64,7 +64,7 @@ export default class EmployeeLevelsFilter extends React.Component {
                         this.state.levels.map((level) => {
                             if (level !== null) {
                                 return <li key={level} className="filter-option">
-                                    <label>
+                                    <label className="searchskills-level-filter-clickel">
                                         <input type="checkbox" id={level} value={level} checked={self.state.levelsSelected.indexOf(level.toString()) !== -1} onChange={self.handleChange.bind(self, level.toString())} /> {level}
                                     </label>
                                 </li>

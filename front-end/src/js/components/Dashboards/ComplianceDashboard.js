@@ -178,6 +178,7 @@ export default class ComplianceDashboard extends React.Component {
 
               </div>
 
+            <span className='dashboard-name' style={{display: 'none'}}>Compliance</span>
               {this.renderChildren(this.state)}
             </div>
           </div>

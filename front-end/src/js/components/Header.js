@@ -29,11 +29,11 @@ class Header extends React.Component {
 	}
 
   sendMenuEvent(clickText){
-    gaDashboardMenu(clickText, this.base.GetCurrentUserType());
+    // gaDashboardMenu(clickText, this.base.GetCurrentUserType());
   }
 
   logout(e) {
-    this.sendMenuEvent("Log Out");
+    // this.sendMenuEvent("Log Out");
     this.base.LogOut();
   }
 
@@ -45,7 +45,9 @@ class Header extends React.Component {
             <Link to={this.base.GetMyRootPath()}><h1><img src="img/rga-logo.png"></img></h1></Link>
             <div className="header-menu-wrapper">
               {this.state.loggedIn &&
-                <div className="allocations-btn" onMouseEnter={this.sendMenuEvent.bind(this, "")}>
+                <div className="allocations-btn" onMouseEnter={function(){dataLayer.push({
+              'event': 'gtm.hover',
+              'gtm.element': this})}}>
                   {/*<span className="ss-icon-view"></span>View Allocations*/}
                   {(this.state.userLogged && this.state.userLogged.image ?
                     <div className="header-menu--opener">
@@ -60,12 +62,12 @@ class Header extends React.Component {
                   <div className="header-menu">
                     <div className="header-menu__item--title">{this.state.userLogged.fullname}</div>
                     <div className="header-menu__item-list">
-                      <Link to="/myprofile" activeClassName="active" onClick={this.sendMenuEvent.bind(this, "My Skills")}>My Skills</Link>
-                      {this.base.EmployeeHasAnyRole(['admin','resourceManager','resourcemanager','searcher']) ? <IndexLink to="/dashboards" activeClassName="active" onClick={this.sendMenuEvent.bind(this, "Dashboards")}>Dashboards</IndexLink> : null}
-                      {this.base.EmployeeHasAnyRole(['admin','approver','employee']) ? <a href={'http://square/people/' + this.state.userLogged.username + '/'} target="_blank" onClick={this.sendMenuEvent.bind(this, "My Work")}>My Work</a> : null}
-                      {this.base.EmployeeHasAnyRole(['admin','approver','employee']) ? <a href="http://reporter/newallocations/EmployeeAllocation.aspx" target="_blank" onClick={this.sendMenuEvent.bind(this, "My Allocations")}>My Allocations</a>: null}
-                      {this.base.EmployeeHasAnyRole(['approver']) ? <Link to="/managerhome" activeClassName="active" onClick={this.sendMenuEvent.bind(this, "My Team")}>My Team</Link> : null}
-                      <input type="button" onClick={this.logout.bind(this)} value="Log Out" />
+                      <Link to="/myprofile" className="header_menu_item" activeClassName="active" onClick={this.sendMenuEvent.bind(this, "My Skills")}>My Skills</Link>
+                      {this.base.EmployeeHasAnyRole(['admin','resourceManager','resourcemanager','searcher']) ? <IndexLink className="header_menu_item" to="/dashboards" activeClassName="active" onClick={this.sendMenuEvent.bind(this, "Dashboards")}>Dashboards</IndexLink> : null}
+                      {this.base.EmployeeHasAnyRole(['admin','approver','employee']) ? <a className="header_menu_item" href={'http://square/people/' + this.state.userLogged.username + '/'} target="_blank" onClick={this.sendMenuEvent.bind(this, "My Work")}>My Work</a> : null}
+                      {this.base.EmployeeHasAnyRole(['admin','approver','employee']) ? <a className="header_menu_item" href="http://reporter/newallocations/EmployeeAllocation.aspx" target="_blank" onClick={this.sendMenuEvent.bind(this, "My Allocations")}>My Allocations</a>: null}
+                      {this.base.EmployeeHasAnyRole(['approver']) ? <Link className="header_menu_item" to="/managerhome" activeClassName="active" onClick={this.sendMenuEvent.bind(this, "My Team")}>My Team</Link> : null}
+                      <input type="button" className="header_menu_item" onClick={this.logout.bind(this)} value="Log Out" />
                     </div>
                   </div>
 

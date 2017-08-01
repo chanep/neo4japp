@@ -33,7 +33,7 @@ module.exports = function() {
             "Technology": "Technology",
             "Visual Design": "Design"
         },
-        googleAnalyticsIdentifier: "UA-796906-21" //UA-102776558-1 for dev
+        googleAnalyticsIdentifier: "UA-796906-22" //UA-102776558-1 for dev
     }
 
     return ENV;

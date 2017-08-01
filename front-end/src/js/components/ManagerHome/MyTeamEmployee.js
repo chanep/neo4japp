@@ -50,9 +50,10 @@ export default class MyTeemEmployee extends React.Component {
                         <div className="position">{this.state.employee.position.name}</div>
                     </div>
                     <div className="col -col-2">
-                        <span className="table-row">{this.state.employee.office.acronym}</span>
+                        <span className="table-row location">{this.state.employee.office.acronym}</span>
                     </div>
                     <div className="col -col-2">
+                        <span className="skills_hidden" style={{'display': 'none'}}>{skillsCount}</span>
                         <span className="table-row">{skillsCount} {skillsPendingValidation > 0? <i className="validate-pending" title={skillsPendingValidation + " pending skills for validation"}></i>: null}</span>
                     </div>
                     <div className="col -col-1 -col-arrow">

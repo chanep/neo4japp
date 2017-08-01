@@ -64,7 +64,7 @@ export default class FiltersSideBar extends React.Component {
                             if (officeName === "Bucuresti") officeName = "Bucharest";
 
                             return <li key={office.id} className="filter-option">
-                                <label>
+                                <label className="searchskills-filter-clickel">
                                     <input type="checkbox" id={office.id} value={office.id} checked={self.state.locationsIds.indexOf(office.id.toString()) !== -1} onChange={self.handleChange.bind(self, office.id.toString(), officeName)} /> {officeName}
                                 </label>
                             </li>

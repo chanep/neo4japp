@@ -4,13 +4,13 @@ import ENV from '../../config';
 const debug = process.env.NODE_ENV === 'dev';
 
 const startGoogleAnalytics = () => {
-  ReactGA.initialize(ENV().googleAnalyticsIdentifier, {
-    debug
-  });
-  if (debug) {
-    ReactGA.ga('set', 'sendHitTask', null);
-  }
-  logPageView();
+  // ReactGA.initialize(ENV().googleAnalyticsIdentifier, {
+  //   debug
+  // });
+  // if (debug) {
+  //   ReactGA.ga('set', 'sendHitTask', null);
+  // }
+  // logPageView();
 };
 
 const hashToPath = path => {
@@ -22,17 +22,17 @@ const hashToPath = path => {
 * Keeps track of which pages are visited. 
 */
 const logPageView = () => {
-  const pagePath = hashToPath(location.pathname + location.search  + location.hash);
-  ReactGA.set({ page: pagePath });
-  ReactGA.pageview(pagePath);
+  // const pagePath = hashToPath(location.pathname + location.search  + location.hash);
+  // ReactGA.set({ page: pagePath });
+  // ReactGA.pageview(pagePath);
 }
 
 
 const gaEvent = (category, action, label) => {
-  let args = {category: category, action: action};
-  if (label) args.label = label;
+  // let args = {category: category, action: action};
+  // if (label) args.label = label;
 
-  ReactGA.event( args );
+  // ReactGA.event( args );
 }
 
 /**
