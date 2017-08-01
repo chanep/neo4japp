@@ -61,8 +61,9 @@ class ResourceManagerDa extends UserDa{
     let label = this.labelsStr;
     let resourceManagersRelL = this.model.getRelationByKey("resourceManagers").label;
 
-    let cmd = `match (n:${label})-[:${resourceManagersRelL}]->(me:${label}) where not(n.disabled)
-        return n.username order by n.username ASC`
+    let cmd = `match (n:${label})-[:${resourceManagersRelL}]->(me:${label}) 
+        where ['resourceManager'] IN me.roles
+        return DISTINCT me.username order by me.username ASC`
     return this.query(cmd, {});
   }
 

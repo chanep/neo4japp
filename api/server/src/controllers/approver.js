@@ -46,17 +46,17 @@ class ApproverController extends BaseController{
     }
 
     /**
-    @api {get} /api/external-service/approver/:approverId/my-team Approver's team
+    @api {get} /api/external-service/approver/:approverUsername/my-team Approver's team
     @apiDescription List the usernames of members of the team of the given approver
     @apiGroup Approvers
 
     @apiUse teamResponse
     */
     findDirectReports(req, res, next){
-        let approverId = req.params.approverId; //username
+        let approverUsername = req.params.approverUsername;
         let search = this._buildSearch(req);
 
-        let promise = approverDa.findDirectReports(approverId);
+        let promise = approverDa.findDirectReports(approverUsername);
 
         this._respondPromise(req, res, promise);
     }
