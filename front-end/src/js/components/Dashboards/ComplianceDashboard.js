@@ -41,11 +41,11 @@ export default class ComplianceDashboard extends React.Component {
     if(groupShortName && this.userHasGroup(userData, groupShortName)) {
       this.setState(this.getUserDataForGroup(userData, groupShortName));
     } else if(this.userHasGroup(userData, 'myresources')) {
-      hashHistory.push('/dashboards/compliance/myresources/');
+      hashHistory.push('/dashboards/compliance/myresources');
     } else if(this.userHasGroup(userData, 'myteam')) {
-      hashHistory.push('/dashboards/compliance/myteam/');
+      hashHistory.push('/dashboards/compliance/myteam');
     } else {
-      hashHistory.push('/dashboards/compliance/all/');
+      hashHistory.push('/dashboards/compliance/all');
     }
 
 
