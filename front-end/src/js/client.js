@@ -43,13 +43,14 @@ ReactDOM.render(
 			<Route path="/searchallskills" component={SearchAllSkills}></Route>
 			<Route path="/dashboards" component={Dashboards} name="Dashboards">
 				<IndexRoute component={DashboardList}/>
+				<Route path="/dashboards/compliance" component={ComplianceDashboard} name="Compliance" staticName={true}></Route>
+				<Route path="/dashboards/compliance/" component={ComplianceDashboard} name="Compliance" staticName={true}></Route>
 				<Route path="/dashboards/compliance/:employeeGroup" component={ComplianceDashboard} name="Compliance" staticName={true}>
 					<IndexRoute component={GroupOverview}/>
 					<Route path="active" component={ActiveGroupDetail} name="Active Users" />
 					<Route path="inactive" component={InactiveGroupDetail} name="Inactive Users" />
 				</Route>
 			</Route>
-			<Redirect from="/dashboards/compliance" to="/dashboards/compliance/myteam" />
 
 			<Route path="/faq" component={FAQ}></Route>
 			<Route path="/error" component={PageError}></Route>
