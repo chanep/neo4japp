@@ -198,7 +198,7 @@ export default class ComplianceDashboard extends React.Component {
             <div className="compliance-dashboard__content col -col-9 -col-no-gutter">
               <div className="compliance-dashboard__content-header">
                 {this.state.activeGroup.name}
-                {this.state.activeGroup.shortName !== 'all' && this.state.activeGroup.shortName !== 'myteam' ? <OfficeMap office={this.state.activeGroup.shortName} /> : ''}
+                {this.state.activeGroup.shortName !== 'all' && this.state.activeGroup.shortName !== 'myteam' && this.state.activeGroup.shortName !== 'myresources' ? <OfficeMap office={this.state.activeGroup.shortName} /> : ''}
 
               </div>
 
