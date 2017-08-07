@@ -3,7 +3,6 @@ import Search from "./Header/Search";
 import { hashHistory, Link, IndexLink, browserHistory, withRouter } from 'react-router';
 import SessionServices from '../services/SessionServices';
 import BasePage from '../pages/BasePage';
-import {gaDashboardMenu} from "../services/GoogleAnalytics";
 
 class Header extends React.Component {
   constructor (props) {
@@ -28,12 +27,8 @@ class Header extends React.Component {
     });
 	}
 
-  sendMenuEvent(clickText){
-    // gaDashboardMenu(clickText, this.base.GetCurrentUserType());
-  }
 
   logout(e) {
-    // this.sendMenuEvent("Log Out");
     this.base.LogOut();
   }
 
@@ -62,12 +57,12 @@ class Header extends React.Component {
                   <div className="header-menu">
                     <div className="header-menu__item--title">{this.state.userLogged.fullname}</div>
                     <div className="header-menu__item-list">
-                      <Link to="/myprofile" className="header_menu_item" activeClassName="active" onClick={this.sendMenuEvent.bind(this, "My Skills")}>My Skills</Link>
-                      {this.base.EmployeeHasAnyRole(['admin','resourceManager','resourcemanager','searcher']) ? <IndexLink className="header_menu_item" to="/dashboards" activeClassName="active" onClick={this.sendMenuEvent.bind(this, "Dashboards")}>Dashboards</IndexLink> : null}
-                      {this.base.EmployeeHasAnyRole(['admin','approver','employee']) ? <a className="header_menu_item" href={'http://square/people/' + this.state.userLogged.username + '/'} target="_blank" onClick={this.sendMenuEvent.bind(this, "My Work")}>My Work</a> : null}
-                      {this.base.EmployeeHasAnyRole(['admin','approver','employee']) ? <a className="header_menu_item" href="http://reporter/newallocations/EmployeeAllocation.aspx" target="_blank" onClick={this.sendMenuEvent.bind(this, "My Allocations")}>My Allocations</a>: null}
-                      {this.base.EmployeeHasAnyRole(['approver']) ? <Link className="header_menu_item" to="/managerhome" activeClassName="active" onClick={this.sendMenuEvent.bind(this, "My Team")}>My Team</Link> : null}
-                      <input type="button" className="header_menu_item" onClick={this.logout.bind(this)} value="Log Out" />
+                      <Link to="/myprofile" className="header_menu_item" activeClassName="active">My Skills</Link>
+                      {this.base.EmployeeHasAnyRole(['admin','resourceManager','resourcemanager','searcher']) ? <IndexLink className="header_menu_item" to="/dashboards" activeClassName="active">Dashboards</IndexLink> : null}
+                      {this.base.EmployeeHasAnyRole(['admin','approver','employee']) ? <a className="header_menu_item" href={'http://square/people/' + this.state.userLogged.username + '/'} target="_blank">My Work</a> : null}
+                      {this.base.EmployeeHasAnyRole(['admin','approver','employee']) ? <a className="header_menu_item" href="http://reporter/newallocations/EmployeeAllocation.aspx" target="_blank" >My Allocations</a>: null}
+                      {this.base.EmployeeHasAnyRole(['approver']) ? <Link className="header_menu_item" to="/managerhome" activeClassName="active" >My Team</Link> : null}
+                      <input type="button" className="header_menu_item" value="Log Out" />
                     </div>
                   </div>
 

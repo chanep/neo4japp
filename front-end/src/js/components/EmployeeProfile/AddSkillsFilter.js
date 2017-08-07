@@ -5,8 +5,6 @@
 // Dependencies
 import React from 'react';
 import { Link } from 'react-router';
-import BasePage from '../../pages/BasePage';
-import {gaAddSkillsFilter} from '../../services/GoogleAnalytics';
 
 export default class AddSkillsFilter extends React.Component {
     constructor(props) {
@@ -16,7 +14,6 @@ export default class AddSkillsFilter extends React.Component {
         	data: [],
         	idSelected: null
         };
-        this.basePage = new BasePage();
     }
 
     componentDidMount() {
@@ -36,8 +33,6 @@ export default class AddSkillsFilter extends React.Component {
 	}
 
   onValueChanged(refVal, newText, e) {
-    gaAddSkillsFilter(newText, this.basePage.GetCurrentUserType());
-    
 		this.setState({
 			idSelected: refVal
 		});

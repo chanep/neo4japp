@@ -3,7 +3,6 @@ import { Router, Route, Link } from 'react-router'
 import SkillResult from '../../components/SearchResults/SkillResult';
 import update from 'react-addons-update';
 import AllocationData from './AllocationData';
-import {gaEmployeeViewEmployeeSearch} from '../../services/GoogleAnalytics';
 
 // Class: SearchResult
 export default class SearchResult extends React.Component {
@@ -31,8 +30,6 @@ export default class SearchResult extends React.Component {
     }
 
     expandContract() {
- 			gaEmployeeViewEmployeeSearch(this.state.obj.fullname, ""+this.state.skillsCount);
-
 			var newState = update(this.state, {
 			  showDetails: {$set: !this.state.showDetails}
 			});

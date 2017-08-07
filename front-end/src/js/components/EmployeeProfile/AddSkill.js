@@ -9,8 +9,6 @@ import update from 'react-addons-update';
 import UserServices from '../../services/UserServices';
 import AlertContainer from 'react-alert';
 import ReactTooltip from 'react-tooltip'
-import BasePage from '../../pages/BasePage';
-import {gaAddSkillSkill} from '../../services/GoogleAnalytics';
 
 export default class AddSkill extends React.Component {
     constructor(props) {
@@ -28,7 +26,6 @@ export default class AddSkill extends React.Component {
         };
 
         this.userServices = new UserServices();
-        this.basePage = new BasePage();
     }
 
     componentDidMount() {
@@ -164,8 +161,6 @@ export default class AddSkill extends React.Component {
     }
 
     openLevels() {
-        gaAddSkillSkill(this.state.skill.name, this.basePage.GetCurrentUserType());
-
         let levelsOpen = this.state.levelsOpen;
         this.setState({ levelsOpen: !levelsOpen });
 

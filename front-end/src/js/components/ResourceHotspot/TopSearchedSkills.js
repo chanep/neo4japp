@@ -3,7 +3,6 @@ import React from "react";
 import { Link } from "react-router";
 import SkillsServices from '../../services/SkillsServices';
 import ENV from '../../../config';
-import {gaSearchSkillSearch} from '../../services/GoogleAnalytics';
 
 export default class TopSearchedSkills extends React.Component {
     constructor() {
@@ -61,7 +60,7 @@ export default class TopSearchedSkills extends React.Component {
                 {
                   this.state.data.map(function (x, i, props) {
                     return <li className={(this.state.hoveredSkillId === x.id ? 'highlighted' : '')} onMouseOver={() => self.highlightSkill(props, x.id)} onMouseOut={() => self.clear()} key={i}>
-                        <Link className="top-searched-skill" onClick={gaSearchSkillSearch.bind(this, x.name)} to={'/searchresults?skills=' + x.id}>{x.name}</Link></li>
+                        <Link className="top-searched-skill" to={'/searchresults?skills=' + x.id}>{x.name}</Link></li>
                   }, this)
                 }
               </ul>

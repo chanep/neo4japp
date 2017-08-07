@@ -6,7 +6,6 @@
 import React from 'react';
 
 import UserServices from '../services/UserServices';
-import {gaEmployeeViewFilter} from '../services/GoogleAnalytics';
 
 // Class: SearchResults
 export default class FiltersSideBar extends React.Component {
@@ -41,8 +40,6 @@ export default class FiltersSideBar extends React.Component {
     }
 
     handleChange(refVal, officeName, e) {
-        gaEmployeeViewFilter(officeName, ""+this.props.skillsCount);
-
         let locationId = refVal;
         this.props.onLocationsChanged(locationId);
     }

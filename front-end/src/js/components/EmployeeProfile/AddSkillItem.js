@@ -6,8 +6,6 @@
 import React from 'react';
 import { Link } from 'react-router';
 import AddSkill from './AddSkill';
-import BasePage from '../../pages/BasePage';
-import {gaAddSkillSkill} from '../../services/GoogleAnalytics';
 
 export default class AddSkillItem extends React.Component {
     constructor(props) {
@@ -19,8 +17,6 @@ export default class AddSkillItem extends React.Component {
             open: false,
         	clicksCount: 0
         };
-
-        this.basePage = new BasePage();
     }
 
     componentDidMount() {
@@ -41,8 +37,6 @@ export default class AddSkillItem extends React.Component {
 	}
 
     openClose() {
-        gaAddSkillSkill(this.state.data.name, this.basePage.GetCurrentUserType());
-
         let isOpen = this.state.open;
         this.setState({
             open: !isOpen
