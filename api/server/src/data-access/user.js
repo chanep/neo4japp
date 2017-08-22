@@ -364,8 +364,6 @@ class UserDa extends BaseDa{
                         else [] end) as skills
                      optional match (n)-[k2:${knows}]->(i:${skillL})-[:${group}]->(sgi) where sgi.type = "industry"
                      with n, approvers, resourceManagers, skills, collect (i.name) as industries
-                     where (size(skills) > 0 or size(industries) > 0)
-                     
                      with n, approvers, resourceManagers, skills, industries
                      optional match (n)-[:${allocation}]->(al)
                      optional match (n)-[:${clientRelL}]->(c)
