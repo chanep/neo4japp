@@ -4,7 +4,7 @@
 
 // Dependencies
 import React from 'react';
-import { Link } from "react-router";
+import { Link, hashHistory } from "react-router";
 
 import SkillsServices from "../../services/SkillsServices";
 import UserServices from "../../services/UserServices";
@@ -30,8 +30,28 @@ export default class ComplianceDashboard extends React.Component {
     this.userServices = new UserServices();
 
     this.userData = this.fetchUserData();
-    this.userData.then(userData => this.setState(this.getUserDataForGroup(userData, this.props.params.employeeGroup)));
+    this.userData.then(userData => this.openGroup(userData, this.props.params.employeeGroup));
   }
+
+  userHasGroup(userData, groupShortName) {
+    return userData.groups.some(group => group.shortName == groupShortName);
+  }
+
+  openGroup(userData, groupShortName) {
+    if(groupShortName && this.userHasGroup(userData, groupShortName)) {
+      this.setState(this.getUserDataForGroup(userData, groupShortName));
+    } else if(this.userHasGroup(userData, 'myresources')) {
+      hashHistory.push('/dashboards/compliance/myresources');
+    } else if(this.userHasGroup(userData, 'myteam')) {
+      hashHistory.push('/dashboards/compliance/myteam');
+    } else {
+      hashHistory.push('/dashboards/compliance/all');
+    }
+
+
+  }
+
+
 
   getUserDataForGroup(userData, groupShortName) {
     function filterData(users) {
@@ -74,9 +94,9 @@ export default class ComplianceDashboard extends React.Component {
           inactiveUsers: data[0],
           activeUsers: data[1],
           myTeam: data[2] ? data[2].map(user => user.id) : [],
-          hasTeam: data[2] ? true : false,
+          hasTeam: data[2].length > 0,
           myResources: data[3] ? data[3].map(user => user.id) : [],
-          hasResources: data[3].length > 0 ? true : false,
+          hasResources: data[3].length > 0
         }
 
         let groupList = [];
@@ -142,15 +162,19 @@ export default class ComplianceDashboard extends React.Component {
           });
         }
 
+
+
         userData.groups = groupList;
+
+        console.log(userData);
 
         resolve(userData);
       });
     });
   }
 
-  componentWillReceiveProps(newProps ){
-    this.userData.then(userData => this.setState(this.getUserDataForGroup(userData, newProps.params.employeeGroup)));
+  componentWillReceiveProps(newProps){
+    this.userData.then(userData => this.openGroup(userData, newProps.params.employeeGroup)); //this.setState(this.getUserDataForGroup(userData, newProps.params.employeeGroup)));
   }
 
   renderChildren(data) {
@@ -174,10 +198,11 @@ export default class ComplianceDashboard extends React.Component {
             <div className="compliance-dashboard__content col -col-9 -col-no-gutter">
               <div className="compliance-dashboard__content-header">
                 {this.state.activeGroup.name}
-                {this.state.activeGroup.shortName !== 'all' && this.state.activeGroup.shortName !== 'myteam' ? <OfficeMap office={this.state.activeGroup.shortName} /> : ''}
+                {this.state.activeGroup.shortName !== 'all' && this.state.activeGroup.shortName !== 'myteam' && this.state.activeGroup.shortName !== 'myresources' ? <OfficeMap office={this.state.activeGroup.shortName} /> : ''}
 
               </div>
 
+            <span className='dashboard-name' style={{display: 'none'}}>Compliance</span>
               {this.renderChildren(this.state)}
             </div>
           </div>

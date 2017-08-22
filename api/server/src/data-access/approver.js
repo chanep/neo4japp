@@ -57,6 +57,23 @@ class ApproverDa extends UserDa{
 
     }
 
+    /**
+    * Find the usernames (primarily) as well as ids and emails of a given user. For external use. 
+    */
+    findDirectReports(approverUsername){
+        let label = this.labelsStr;
+        let approverRelL = this.model.getRelationByKey("approvers").label;
+        console.log(approverUsername);
+
+        let cmd = `match (n:${label})-[:${approverRelL}]->(me:${label}) 
+            where me.username = {username}
+            return {
+                id: id(n), username: n.username, email: n.email
+            }`
+        let params = {username: approverUsername};
+        return this.query(cmd, params);
+    }
+
 
     /**
      * Returns true if the user is the approver of the employee

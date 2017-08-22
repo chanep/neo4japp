@@ -22,6 +22,8 @@ router.get('/external-service/user/summary', security.checkAccessKey(config.serv
 router.get('/external-service/skill', security.checkAccessKey(config.serviceAccessKey), skillController.find.bind(skillController));
 router.get('/external-service/skill/all-groups', security.checkAccessKey(config.serviceAccessKey), skillController.findAllGroups.bind(skillController));
 router.get('/external-service/skill/by-group-type/:type', security.checkAccessKey(config.serviceAccessKey), skillController.findByType.bind(skillController));
+router.get('/external-service/approver/:approverUsername/myTeam', security.checkAccessKey(config.serviceAccessKey), approverController.findDirectReports.bind(approverController));
+router.get('/external-service/resource-managers', security.checkAccessKey(config.serviceAccessKey), resourceManagerController.allResourceManagers.bind(resourceManagerController));
 
 // ---------
 // All Users

@@ -2,7 +2,6 @@ import React from "react";
 import { Link } from "react-router";
 
 import DonutChart from '../DonutChart';
-import {gaDashboardViewDashboard} from '../../services/GoogleAnalytics';
 
 export default class GroupOverview extends React.Component {
   render () {
@@ -14,12 +13,12 @@ export default class GroupOverview extends React.Component {
       <div className="compliance-dashboard-item">
         <div className="compliance-dashboard-item__header">Searchable Employees</div>
         <div className="compliance-dashboard-item__detail-list">
-          <Link to={this.props.location.pathname + '/active'} className="compliance-dashboard-item__detail" onClick={gaDashboardViewDashboard.bind(this, "Compliance", "Active Users")}>
+          <Link to={this.props.location.pathname + '/active'} className="compliance-dashboard-item__detail">
             <div className="compliance-dashboard-item__detail-title">Active Users</div>
             <div className="compliance-dashboard-item__detail-value">{this.props.data.activeUsers.length}</div>
             <div className="compliance-dashboard-item__detail-cta">more <span className="ss-icon-right-arrow"></span></div>
           </Link>
-          <Link to={this.props.location.pathname + '/inactive'} className="compliance-dashboard-item__detail" onClick={gaDashboardViewDashboard.bind(this, "Compliance", "Inactive Users")}>
+          <Link to={this.props.location.pathname + '/inactive'} className="compliance-dashboard-item__detail">
             <div className="compliance-dashboard-item__detail-title">Inactive Users</div>
             <div className="compliance-dashboard-item__detail-value">{this.props.data.inactiveUsers.length}</div>
             <div className="compliance-dashboard-item__detail-cta">more <span className="ss-icon-right-arrow"></span></div>

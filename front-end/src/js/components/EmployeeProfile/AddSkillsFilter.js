@@ -5,8 +5,6 @@
 // Dependencies
 import React from 'react';
 import { Link } from 'react-router';
-import BasePage from '../../pages/BasePage';
-import {gaAddSkillsFilter} from '../../services/GoogleAnalytics';
 
 export default class AddSkillsFilter extends React.Component {
     constructor(props) {
@@ -16,7 +14,6 @@ export default class AddSkillsFilter extends React.Component {
         	data: [],
         	idSelected: null
         };
-        this.basePage = new BasePage();
     }
 
     componentDidMount() {
@@ -36,8 +33,6 @@ export default class AddSkillsFilter extends React.Component {
 	}
 
   onValueChanged(refVal, newText, e) {
-    gaAddSkillsFilter(newText, this.basePage.GetCurrentUserType());
-    
 		this.setState({
 			idSelected: refVal
 		});
@@ -75,7 +70,7 @@ export default class AddSkillsFilter extends React.Component {
 
 								return (
 									<li className="filter-option" key={key}>
-										<label><input type="radio" name="skillstools" checked={checked} onChange={self.onValueChanged.bind(self, obj.id, obj.name)} /> {obj.name} ({countPerSkill})</label>
+										<label className="filter-option-clickel"><input type="radio" name="skillstools" checked={checked} onChange={self.onValueChanged.bind(self, obj.id, obj.name)} /> {obj.name} ({countPerSkill})</label>
 									</li>
 								)
 							})
@@ -100,7 +95,7 @@ export default class AddSkillsFilter extends React.Component {
 
 								return (
 									<li className="filter-option" key={key}>
-										<label><input type="radio" name="skillstools" checked={checked} onChange={self.onValueChanged.bind(self, obj.id, obj.name)} /> {obj.name} ({countPerSkill})</label>
+										<label className="addskill-filter-clickel"><input type="radio" name="skillstools" checked={checked} onChange={self.onValueChanged.bind(self, obj.id, obj.name)} /> {obj.name} ({countPerSkill})</label>
 									</li>
 								)
 							})

@@ -55,8 +55,18 @@ class ResourceManagerDa extends UserDa{
           }`
       let params = {id: resourceManagerId};
       return this.query(cmd, params);
-
   }
+
+  allResourceManagers(){
+    let label = this.labelsStr;
+    let resourceManagersRelL = this.model.getRelationByKey("resourceManagers").label;
+
+    let cmd = `match (n:${label})-[:${resourceManagersRelL}]->(me:${label}) 
+        where ['resourceManager'] IN me.roles
+        return DISTINCT me.username order by me.username ASC`
+    return this.query(cmd, {});
+  }
+
 
     findUsersBySkill(skillIds, filters, skip, limit, orderBy){
         let label = this.labelsStr;

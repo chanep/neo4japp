@@ -5,7 +5,6 @@
 // Dependencies
 import React from 'react';
 import { Link } from 'react-router';
-import {gaTeamEmployee} from '../../services/GoogleAnalytics';
 
 // Class: MyTeemEmployee
 export default class MyTeemEmployee extends React.Component {
@@ -43,16 +42,17 @@ export default class MyTeemEmployee extends React.Component {
         });
 
         return(
-            <Link to={"/employee/" + this.state.employee.id + "/verification"} onClick={gaTeamEmployee.bind(this, this.state.employee.office.acronym, skillsCount)}>
+            <Link to={"/employee/" + this.state.employee.id + "/verification"} >
                 <div className="grid zebra-table lined-table manager-home-employee">
                     <div className="col -col-7 title">
                         <div className="name">{this.state.employee.fullname}</div>
                         <div className="position">{this.state.employee.position.name}</div>
                     </div>
                     <div className="col -col-2">
-                        <span className="table-row">{this.state.employee.office.acronym}</span>
+                        <span className="table-row location">{this.state.employee.office.acronym}</span>
                     </div>
                     <div className="col -col-2">
+                        <span className="skills_hidden" style={{'display': 'none'}}>{skillsCount}</span>
                         <span className="table-row">{skillsCount} {skillsPendingValidation > 0? <i className="validate-pending" title={skillsPendingValidation + " pending skills for validation"}></i>: null}</span>
                     </div>
                     <div className="col -col-1 -col-arrow">

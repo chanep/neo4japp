@@ -81,9 +81,9 @@ export default class SearchResultsTable extends React.Component {
 
                     {/*FILTERS SIDE BAR*/}
                     <div className="addSkillsFilter filters col -col-3 filters__backgrounded">
-                        <FiltersSideBar locations={this.state.locationsIds} skillsCount={this.state.skillsCount} onLocationsChanged={this.onLocationsChanged.bind(this)} allSelected={this.allSelected.bind(this)} />
+                        <FiltersSideBar locations={this.state.locationsIds} onLocationsChanged={this.onLocationsChanged.bind(this)} allSelected={this.allSelected.bind(this)} />
 
-                        <EmployeeLevelsFilter levels={this.state.levelsIds} skillsCount={this.state.skillsCount} onLevelChanged={this.onLevelChanged.bind(this)} allSelected={this.allLevelsSelected.bind(this)} />
+                        <EmployeeLevelsFilter levels={this.state.levelsIds} onLevelChanged={this.onLevelChanged.bind(this)} allSelected={this.allLevelsSelected.bind(this)} />
                     </div>
 
                     <ul className="results col -col-9 -col-no-gutter">

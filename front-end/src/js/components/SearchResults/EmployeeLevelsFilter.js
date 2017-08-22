@@ -6,7 +6,6 @@
 import React from 'react';
 
 import UserServices from '../../services/UserServices';
-import {gaEmployeeViewFilter} from '../../services/GoogleAnalytics';
 
 // Class: SearchResults
 export default class EmployeeLevelsFilter extends React.Component {
@@ -42,7 +41,7 @@ export default class EmployeeLevelsFilter extends React.Component {
 
     handleChange(refVal, e) {
         let levelId = refVal;
-        gaEmployeeViewFilter(levelId, ""+this.props.skillsCount);
+        
         this.props.onLevelChanged(levelId);
     }
 
@@ -64,7 +63,7 @@ export default class EmployeeLevelsFilter extends React.Component {
                         this.state.levels.map((level) => {
                             if (level !== null) {
                                 return <li key={level} className="filter-option">
-                                    <label>
+                                    <label className="searchskills-level-filter-clickel">
                                         <input type="checkbox" id={level} value={level} checked={self.state.levelsSelected.indexOf(level.toString()) !== -1} onChange={self.handleChange.bind(self, level.toString())} /> {level}
                                     </label>
                                 </li>

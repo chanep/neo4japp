@@ -22,13 +22,16 @@ class CwBaseTask extends BaseTask{
         let reqPost = P.promisify(req.post);
 
         return reqPost('session', {body: { 
-                        "username": config.user, 
-                        "password": config.pass
+                        username: config.user, 
+                        password: config.pass,
+                        method: 'jwt'
             }})
             .then(result => {
-                let cookie = result.headers['set-cookie'].pop().replace(/.*(id\.api\.cw\.rga\.com=[^;]*).*/, '$1');
-                //console.log("cookie", cookie);  
-                reqDefaults.headers.Cookie = [cookie];           
+                // let cookie = result.headers['set-cookie'].pop().replace(/.*(id\.api\.cw\.rga\.com=[^;]*).*/, '$1');
+                // //console.log("cookie", cookie);  
+                // reqDefaults.headers.Cookie = [cookie];  
+                let accessToken = result.body.access_token;
+                reqDefaults.headers.authorization = 'Bearer ' + accessToken;                
                 let reqAux = request.defaults(reqDefaults);
                 return {
                     get: P.promisify(reqAux.get),

@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import Modal from "react-modal";
 import { Router, Route, IndexRoute, Redirect, hashHistory } from "react-router";
+
 import Layout from "./components/Layout";
 import ResourceHotspot from "./pages/ResourceHotspot";
 import Allocations from "./pages/Allocations";
@@ -21,13 +22,11 @@ import ActiveGroupDetail from "./components/ComplianceDashboard/ActiveGroupDetai
 import InactiveGroupDetail from "./components/ComplianceDashboard/InactiveGroupDetail";
 import FAQ from "./pages/FAQ";
 import PageError from "./pages/PageError";
-import startGoogleAnalytics, {logPageView} from './services/GoogleAnalytics.js';
 
 const app = document.getElementById('app');
-startGoogleAnalytics();
 
 ReactDOM.render(
-	<Router history={hashHistory} onUpdate={logPageView}>
+	<Router history={hashHistory}>
 		<Route path="/" component={Layout} name="App">
 			<IndexRoute component={Login}></IndexRoute>
 			<Route path="/login" component={Login}></Route>
@@ -43,13 +42,14 @@ ReactDOM.render(
 			<Route path="/searchallskills" component={SearchAllSkills}></Route>
 			<Route path="/dashboards" component={Dashboards} name="Dashboards">
 				<IndexRoute component={DashboardList}/>
+				<Route path="/dashboards/compliance" component={ComplianceDashboard} name="Compliance" staticName={true}></Route>
+				<Route path="/dashboards/compliance/" component={ComplianceDashboard} name="Compliance" staticName={true}></Route>
 				<Route path="/dashboards/compliance/:employeeGroup" component={ComplianceDashboard} name="Compliance" staticName={true}>
 					<IndexRoute component={GroupOverview}/>
 					<Route path="active" component={ActiveGroupDetail} name="Active Users" />
 					<Route path="inactive" component={InactiveGroupDetail} name="Inactive Users" />
 				</Route>
 			</Route>
-			<Redirect from="/dashboards/compliance" to="/dashboards/compliance/myteam" />
 
 			<Route path="/faq" component={FAQ}></Route>
 			<Route path="/error" component={PageError}></Route>

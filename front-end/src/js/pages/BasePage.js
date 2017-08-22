@@ -102,6 +102,7 @@ class BasePage extends React.Component {
 			let session = new SessionServices();
 	    session.Login(username, password).then(data => {
 	      cookie.save('currentUser', data);
+	      cookie.save('currentUserType', this.GetCurrentUserType());
 	      hashHistory.push({pathname: this.GetMyRootPath()});
 				resolve();
 	    }).catch((e) => {

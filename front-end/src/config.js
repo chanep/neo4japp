@@ -32,8 +32,7 @@ module.exports = function() {
             "Prototype Studio": "Technology",
             "Technology": "Technology",
             "Visual Design": "Design"
-        },
-        googleAnalyticsIdentifier: "UA-796906-21" //UA-102776558-1 for dev
+        }
     }
 
     return ENV;
