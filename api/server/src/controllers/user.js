@@ -345,7 +345,8 @@ class UserController extends BaseController{
             fullname: "Pepe Test4",
             email: "pepe.test4@rga.com",
             username: "pepetest4",
-            approvers: [{email: "boss@rga.com"}]
+            approvers: [{email: "boss@rga.com"}],
+            resourceManagers: [{email: "res.man@rga.com"}],
             allocation: {
                 id: 6519,
                 totalHours:120,

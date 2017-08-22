@@ -345,6 +345,7 @@ class UserDa extends BaseDa{
         let userL = this.labelsStr;
         let skillL = skillModel.labelsStr;
         let approverRelL = this.model.getRelationByKey("approvers").label;
+        let rManagerRelL = this.model.getRelationByKey("resourceManagers").label;
         let group = skillModel.getRelationByKey("group").label;
         let parent = skillGroupModel.getRelationByKey("parent").label;
         let knows = this.model.getRelationByKey("knowledges").label;
@@ -355,20 +356,21 @@ class UserDa extends BaseDa{
 
         let match = `match (n:${userL}) where not(n.disabled)
                      optional match (n)-[:${approverRelL}]->(a)
+                     optional match (n)-[:${rManagerRelL}]->(rm)
                      optional match (n)-[k:${knows}]->(s:${skillL})-[:${group}]->(sg)-[:${parent}]->(g) where sg.type in ["tool", "skill"]
-                     with n, collect(distinct {email: a.email}) as approvers,
+                     with n, collect(distinct {email: a.email}) as approvers, collect(distinct {email: rm.email}) as resourceManagers,
                         (case when s is not null then 
                             collect (distinct {name: s.name, type: sg.type, subGroup: sg.name, group: g.name, level: k.level, want: k.want, approved: k.approved}) 
                         else [] end) as skills
                      optional match (n)-[k2:${knows}]->(i:${skillL})-[:${group}]->(sgi) where sgi.type = "industry"
-                     with n, approvers, skills, collect (i.name) as industries
+                     with n, approvers, resourceManagers, skills, collect (i.name) as industries
                      where (size(skills) > 0 or size(industries) > 0)
                      
-                     with n, approvers, skills, industries
+                     with n, approvers, resourceManagers, skills, industries
                      optional match (n)-[:${allocation}]->(al)
                      optional match (n)-[:${clientRelL}]->(c)
                      
-                     with n, approvers, skills, industries, al,
+                     with n, approvers, resourceManagers, skills, industries, al,
                         collect(c.name) as clients
                      `;
 
@@ -381,6 +383,7 @@ class UserDa extends BaseDa{
                         fullname: n.fullname,
                         email: n.email,
                         approvers: approvers,
+                        resourceManagers: resourceManagers,
                         allocation: al,
                         skills: skills,
                         industries: industries,
