@@ -97,7 +97,7 @@ export default class SearchResult extends React.Component {
 				        </ul>
 				        <div className="samples grid">
 				            <div className="col -col-8">
-				                <a href={'http://square/people/' + this.state.obj.username + '/'} target="_blank">View work samples &gt;</a>
+				                <a href={'http://square/people/' + this.state.obj.username + '/'} target="_blank">View Portfolio &gt;</a>
 				            </div>
 				        </div>
 				    </div>
