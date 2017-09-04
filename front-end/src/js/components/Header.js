@@ -59,7 +59,7 @@ class Header extends React.Component {
                     <div className="header-menu__item-list">
                       <Link to="/myprofile" className="header_menu_item" activeClassName="active">My Skills</Link>
                       {this.base.EmployeeHasAnyRole(['admin','resourceManager','resourcemanager','searcher']) ? <IndexLink className="header_menu_item" to="/dashboards" activeClassName="active">Dashboards</IndexLink> : null}
-                      {this.base.EmployeeHasAnyRole(['admin','approver','employee']) ? <a className="header_menu_item" href={'http://square/people/' + this.state.userLogged.username + '/'} target="_blank">My Work</a> : null}
+                      {this.base.EmployeeHasAnyRole(['admin','approver','employee']) ? <a className="header_menu_item" href={'https://portfolio.ny.rga.com/people/' + this.state.userLogged.username + '/'} target="_blank">My Portfolio</a> : null}
                       {this.base.EmployeeHasAnyRole(['admin','approver','employee']) ? <a className="header_menu_item" href="http://reporter/newallocations/EmployeeAllocation.aspx" target="_blank" >My Allocations</a>: null}
                       {this.base.EmployeeHasAnyRole(['approver']) ? <Link className="header_menu_item" to="/managerhome" activeClassName="active" >My Team</Link> : null}
                       <input type="button" className="header_menu_item" value="Log Out" />
@@ -69,7 +69,7 @@ class Header extends React.Component {
                 </div>
               }
             </div>
-            
+
           </div>
           { (this.state.search ? <Search searchState={this.props.searchState} currentPathname={this.props.currentPathname} /> :
             <div className="no-search-bar"></div>

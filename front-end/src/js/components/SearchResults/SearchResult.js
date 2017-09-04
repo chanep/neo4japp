@@ -63,7 +63,7 @@ export default class SearchResult extends React.Component {
 			            <i className="ss-icon-down-arrow"></i>
 			        </div>
 			    </div>
-			    {this.state.showDetails ? 
+			    {this.state.showDetails ?
 				    <div className="content grid" ref="employeeData">
 				        <div className="col -col-9 manager">
 				            <span>Manager: <strong>{self.state.obj.approvers.length > 0? <Link to={"/employee/" + self.state.obj.approvers[0].id}>{self.state.obj.approvers[0].fullname}</Link>: "----"}</strong></span>
@@ -97,7 +97,7 @@ export default class SearchResult extends React.Component {
 				        </ul>
 				        <div className="samples grid">
 				            <div className="col -col-8">
-				                <a href={'http://square/people/' + this.state.obj.username + '/'} target="_blank">View work samples &gt;</a>
+				                <a href={'https://portfolio.ny.rga.com/people/' + this.state.obj.username + '/'} target="_blank">View Portfolio &gt;</a>
 				            </div>
 				        </div>
 				    </div>
