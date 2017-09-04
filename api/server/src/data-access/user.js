@@ -74,7 +74,7 @@ class UserDa extends BaseDa{
 
                     return {
                                 id: id(n), username: n.username, type: n.type, email: n.email, phonelistId: n.phonelistId,
-                                fullname: n.fullname, roles: n.roles, phone: n.phone, 
+                                fullname: n.fullname, roles: n.roles, phone: n.phone,
                                 image: case (n.image) when (n.image is not null) then n.image else null end,
                                 disabled: n.disabled, lastUpdate: n.lastUpdate, lastLogin: n.lastLogin,
                                 office: case when (o is not null) then {id: id(o), name: o.name, country: o.country, acronym: o.acronym} else null end,
@@ -115,7 +115,7 @@ class UserDa extends BaseDa{
         order by score desc limit {limit}
         return {
                 id: id(n), username: n.username, email: n.email,
-                fullname: n.fullname, 
+                fullname: n.fullname,
                 image: case (n.image) when (n.image is not null) then n.image else null end,
                 office: {id: id(o), name: o.name, country: o.country, acronym: o.acronym},
                 department: {id: id(d), name: d.name},
@@ -344,6 +344,7 @@ class UserDa extends BaseDa{
      findUserSummary(skip, limit){
         let userL = this.labelsStr;
         let skillL = skillModel.labelsStr;
+        let interestRelL = this.model.getRelationByKey("interests").label;
         let approverRelL = this.model.getRelationByKey("approvers").label;
         let rManagerRelL = this.model.getRelationByKey("resourceManagers").label;
         let group = skillModel.getRelationByKey("group").label;
@@ -357,18 +358,19 @@ class UserDa extends BaseDa{
         let match = `match (n:${userL}) where not(n.disabled)
                      optional match (n)-[:${approverRelL}]->(a)
                      optional match (n)-[:${rManagerRelL}]->(rm)
+                     optional match (n)-[:${interestRelL}]->(i)
                      optional match (n)-[k:${knows}]->(s:${skillL})-[:${group}]->(sg)-[:${parent}]->(g) where sg.type in ["tool", "skill"]
                      with n, collect(distinct {email: a.email}) as approvers, collect(distinct {email: rm.email}) as resourceManagers,
-                        (case when s is not null then 
-                            collect (distinct {name: s.name, type: sg.type, subGroup: sg.name, group: g.name, level: k.level, want: k.want, approved: k.approved}) 
-                        else [] end) as skills
-                     optional match (n)-[k2:${knows}]->(i:${skillL})-[:${group}]->(sgi) where sgi.type = "industry"
-                     with n, approvers, resourceManagers, skills, collect (i.name) as industries
-                     with n, approvers, resourceManagers, skills, industries
+                        (case when s is not null then
+                            collect (distinct {name: s.name, type: sg.type, subGroup: sg.name, group: g.name, level: k.level, want: k.want, approved: k.approved})
+                        else [] end) as skills, collect(distinct i.name) as interests
+                     optional match (n)-[k2:${knows}]->(ind:${skillL})-[:${group}]->(sgi) where sgi.type = "industry"
+                     with n, approvers, resourceManagers, skills, interests, collect (ind.name) as industries
+                     with n, approvers, resourceManagers, skills, interests, industries
                      optional match (n)-[:${allocation}]->(al)
                      optional match (n)-[:${clientRelL}]->(c)
-                     
-                     with n, approvers, resourceManagers, skills, industries, al,
+
+                     with n, approvers, resourceManagers, skills, interests, industries, al,
                         collect(c.name) as clients
                      `;
 
@@ -380,6 +382,7 @@ class UserDa extends BaseDa{
                         username: n.username,
                         fullname: n.fullname,
                         email: n.email,
+                        interests: interests,
                         approvers: approvers,
                         resourceManagers: resourceManagers,
                         allocation: al,
